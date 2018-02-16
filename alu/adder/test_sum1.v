@@ -105,7 +105,7 @@ module TOP;
          if(error_free == 1)
             $display("\n*** WOOT! TEST PASS! ***\n");      
       end
-    
+     
    initial `runtime $finish;
    
    // Dump all waveforms to d_latch.dump.vpd
@@ -119,8 +119,8 @@ module TOP;
    
    always @(error)
       if(error == 1)
-      $strobe ("error at: a = %x, b = %x, c = %x, sum = %x", 
-          a, b, c, sum1);
+      $strobe ("time: %0d found error at: a = %x, b = %x, c = %x, sum = %x", 
+          $time a, b, c, sum1);
 
    sum1 sum1_test(sum1, a, b, c);
 

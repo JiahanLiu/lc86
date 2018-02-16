@@ -70,8 +70,8 @@ module TOP;
    
    always @(error)
       if(error == 1)
-      $strobe ("error at: a = %x, b = %x, propagate1 = %x", 
-          a, b, p);
+      $strobe ("time: %0d found error at: a = %x, b = %x, propagate1 = %x", 
+          $time, a, b, p);
 
    sum1 propagate1(p, a, b);
 

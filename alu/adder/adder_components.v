@@ -37,7 +37,7 @@ endmodule // sum1
 
 module propagate1 (p, a, b);
 	output p;
-	input a. b;
+	input a, b;
 
 	or2$ or_to_p (p, a, b);
 
@@ -66,7 +66,7 @@ endmodule // generate1
 
 //-----------------------------------------------------
 // Functionality: Kogge-Stone Component 
-// Combinational Delay: 0.7ns?
+// Combinational Delay: 0.7ns theory -> 0.71 actual
 //
 
 module gp_group1 (g_out, p_out, g_in_high, p_in_high, g_in_low, p_in_low);
@@ -77,7 +77,7 @@ module gp_group1 (g_out, p_out, g_in_high, p_in_high, g_in_low, p_in_low);
 
 	and2$ and_to_propagate (p_out, p_in_low, p_in_high);
 	and2$ and_prev_generate (prev_generate, g_in_low, p_in_high);
-	and2$ or_to_generate (g_out, prev_generate, g_in_high);
+	or2$ or_to_generate (g_out, prev_generate, g_in_high);
 
 endmodule // gp_group1
 
