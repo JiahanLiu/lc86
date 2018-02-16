@@ -73,7 +73,7 @@ module TOP;
       $strobe ("time: %0d found error at: a = %x, b = %x, propagate1 = %x", 
           $time, a, b, p);
 
-   propagate1 propagate1_test(p, a, b);
+   sum1 propagate1(p, a, b);
 
    
 endmodule
