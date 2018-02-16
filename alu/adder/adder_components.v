@@ -36,8 +36,8 @@ endmodule // sum1
 //
 
 module sum32 (sum, a, b, c);
-	output [32] sum;
-	input [32] a, b, c;
+	output [31:0] sum;
+	input [31:0] a, b, c;
 
 	sum1 sum1_31 (sum[31], a[31], b[31], c[31]); //31
 	sum1 sum1_30 (sum[30], a[31], b[31], c[31]);
@@ -137,10 +137,10 @@ module propagate32 (p, a, b);
 	propagate1 propagate22 (p[22], a[22], b[22]);
 	propagate1 propagate23 (p[23], a[23], b[23]);
 
-	propagate1 propagate24 (p[25], a[24], b[24]); //6
-	propagate1 propagate25 (p[26], a[25], b[25]);
-	propagate1 propagate26 (p[27], a[26], b[26]);
-	propagate1 propagate27 (p[28], a[27], b[27]);
+	propagate1 propagate24 (p[24], a[24], b[24]); //6
+	propagate1 propagate25 (p[25], a[25], b[25]);
+	propagate1 propagate26 (p[26], a[26], b[26]);
+	propagate1 propagate27 (p[27], a[27], b[27]);
 
 	propagate1 propagate28 (p[28], a[28], b[28]); //7
 	propagate1 propagate29 (p[29], a[29], b[29]);
@@ -209,10 +209,10 @@ module generate32 (g, a, b);
 	generate1 generate22 (g[22], a[22], b[22]);
 	generate1 generate23 (g[23], a[23], b[23]);
 
-	generate1 generate24 (g[25], a[24], b[24]); //6
-	generate1 generate25 (g[26], a[25], b[25]);
-	generate1 generate26 (g[27], a[26], b[26]);
-	generate1 generate27 (g[28], a[27], b[27]);
+	generate1 generate24 (g[24], a[24], b[24]); //6
+	generate1 generate25 (g[25], a[25], b[25]);
+	generate1 generate26 (g[26], a[26], b[26]);
+	generate1 generate27 (g[27], a[27], b[27]);
 
 	generate1 generate28 (g[28], a[28], b[28]); //7
 	generate1 generate29 (g[29], a[29], b[29]);
@@ -407,7 +407,7 @@ module gp_group32 (c, g, p);
 	gp_group1 gp_r3_12(wire_r3_g[12], wire_r3_p[12], wire_r2_g[12], wire_r2_p[12], wire_r2_g[4], wire_r2_p[4]);
 	gp_group1 gp_r3_11(wire_r3_g[11], wire_r3_p[11], wire_r2_g[11], wire_r2_p[11], wire_r1_g[3], wire_r1_p[3]);
 	gp_group1 gp_r3_10(wire_r3_g[10], wire_r3_p[10], wire_r2_g[10], wire_r2_p[10], wire_r1_g[2], wire_r1_p[2]);
-	gp_group1 gp_r3_9(wire_r3_g[9], wire_r3_p[9], wire_r2_g[9], wire_r2_p[9], wire_r1_g[1], wire_r1_p[1]);
+	gp_group1 gp_r3_9(wire_r3_g[9], wire_r3_p[9], wire_r2_g[9], wire_r2_p[9], wire_r0_g[1], wire_r0_p[1]);
 	gp_group1 gp_r3_8(wire_r3_g[8], wire_r3_p[8], wire_r2_g[8], wire_r2_p[8], g[0], p[0]);
 
 	assign c[8] = wire_r3_g[8];
@@ -436,7 +436,7 @@ module gp_group32 (c, g, p);
 	gp_group1 gp_r4_20(c[20], trash_propagate[20], wire_r3_g[31], wire_r3_p[31], wire_r2_g[4], wire_r2_p[4]);
 	gp_group1 gp_r4_19(c[19], trash_propagate[19], wire_r3_g[31], wire_r3_p[31], wire_r1_g[3], wire_r1_p[3]);
 	gp_group1 gp_r4_18(c[18], trash_propagate[18], wire_r3_g[31], wire_r3_p[31], wire_r1_g[2], wire_r1_p[2]);
-	gp_group1 gp_r4_17(c[17], trash_propagate[17], wire_r3_g[31], wire_r3_p[31], wire_r1_g[1], wire_r1_p[1]);
+	gp_group1 gp_r4_17(c[17], trash_propagate[17], wire_r3_g[31], wire_r3_p[31], wire_r0_g[1], wire_r0_p[1]);
 	gp_group1 gp_r4_16(c[16], trash_propagate[16], wire_r3_g[31], wire_r3_p[31], g[0], p[0]);
 
 
