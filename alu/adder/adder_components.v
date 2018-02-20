@@ -147,45 +147,13 @@ module generate32 (g, a, b);
 	output [31:0] g;
 	input [31:0] a, b;
 
-	generate1 generate0 (g[0], a[0], b[0]); //0
-	generate1 generate1 (g[1], a[1], b[1]);
-	generate1 generate2 (g[2], a[2], b[2]);
-	generate1 generate3 (g[3], a[3], b[3]);
-
-	generate1 generate4 (g[4], a[4], b[4]); //1
-	generate1 generate5 (g[5], a[5], b[5]);
-	generate1 generate6 (g[6], a[6], b[6]);
-	generate1 generate7 (g[7], a[7], b[7]);
-
-	generate1 generate8 (g[8], a[8], b[8]); //2
-	generate1 generate9 (g[9], a[9], b[9]);
-	generate1 generate10 (g[10], a[10], b[10]);
-	generate1 generate11 (g[11], a[11], b[11]);
-
-	generate1 generate12 (g[12], a[12], b[12]); //3
-	generate1 generate13 (g[13], a[13], b[13]);
-	generate1 generate14 (g[14], a[14], b[14]);
-	generate1 generate15 (g[15], a[15], b[15]);
-
-	generate1 generate16 (g[16], a[16], b[16]); //4
-	generate1 generate17 (g[17], a[17], b[17]);
-	generate1 generate18 (g[18], a[18], b[18]);
-	generate1 generate19 (g[19], a[19], b[19]);
-
-	generate1 generate20 (g[20], a[20], b[20]); //5
-	generate1 generate21 (g[21], a[21], b[21]);
-	generate1 generate22 (g[22], a[22], b[22]);
-	generate1 generate23 (g[23], a[23], b[23]);
-
-	generate1 generate24 (g[24], a[24], b[24]); //6
-	generate1 generate25 (g[25], a[25], b[25]);
-	generate1 generate26 (g[26], a[26], b[26]);
-	generate1 generate27 (g[27], a[27], b[27]);
-
-	generate1 generate28 (g[28], a[28], b[28]); //7
-	generate1 generate29 (g[29], a[29], b[29]);
-	generate1 generate30 (g[30], a[30], b[30]);
-	generate1 generate31 (g[31], a[31], b[31]);
+	genvar i;
+	generate 
+		for(i = 0; i < 32; i = i + 1)
+		begin : generate1_m
+			generate1 generate1_m (g[i], a[i], b[i]);
+		end
+	endgenerate
 
 endmodule // generate32
 
