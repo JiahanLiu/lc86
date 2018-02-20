@@ -1,4 +1,4 @@
-`define cycle .35
+`define cycle 0.36
 `define error_time 1.0
 `define runtime #2000
 

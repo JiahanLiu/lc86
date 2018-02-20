@@ -83,7 +83,7 @@ endmodule // sum32
 
 //-----------------------------------------------------
 // Functionality: Can a carry possibily propgate?
-// Combinational Delay: 0.35ns
+// Combinational Delay: 0.35ns, tested 0.36ns
 //
 
 module propagate1 (p, a, b);
@@ -100,52 +100,20 @@ endmodule // propagate1
 
 //-----------------------------------------------------
 // Functionality: Can a carry possibily propgate?
-// Combinational Delay: 0.35ns
+// Combinational Delay: 0.35ns, tested 0.36ns
 //
 
 module propagate32 (p, a, b);
 	output [31:0] p;
 	input [31:0] a, b;
 
-	propagate1 propagate0 (p[0], a[0], b[0]); //0
-	propagate1 propagate1 (p[1], a[1], b[1]);
-	propagate1 propagate2 (p[2], a[2], b[2]);
-	propagate1 propagate3 (p[3], a[3], b[3]);
-
-	propagate1 propagate4 (p[4], a[4], b[4]); //1
-	propagate1 propagate5 (p[5], a[5], b[5]);
-	propagate1 propagate6 (p[6], a[6], b[6]);
-	propagate1 propagate7 (p[7], a[7], b[7]);
-
-	propagate1 propagate8 (p[8], a[8], b[8]); //2
-	propagate1 propagate9 (p[9], a[9], b[9]);
-	propagate1 propagate10 (p[10], a[10], b[10]);
-	propagate1 propagate11 (p[11], a[11], b[11]);
-
-	propagate1 propagate12 (p[12], a[12], b[12]); //3
-	propagate1 propagate13 (p[13], a[13], b[13]);
-	propagate1 propagate14 (p[14], a[14], b[14]);
-	propagate1 propagate15 (p[15], a[15], b[15]);
-
-	propagate1 propagate16 (p[16], a[16], b[16]); //4
-	propagate1 propagate17 (p[17], a[17], b[17]);
-	propagate1 propagate18 (p[18], a[18], b[18]);
-	propagate1 propagate19 (p[19], a[19], b[19]);
-
-	propagate1 propagate20 (p[20], a[20], b[20]); //5
-	propagate1 propagate21 (p[21], a[21], b[21]);
-	propagate1 propagate22 (p[22], a[22], b[22]);
-	propagate1 propagate23 (p[23], a[23], b[23]);
-
-	propagate1 propagate24 (p[24], a[24], b[24]); //6
-	propagate1 propagate25 (p[25], a[25], b[25]);
-	propagate1 propagate26 (p[26], a[26], b[26]);
-	propagate1 propagate27 (p[27], a[27], b[27]);
-
-	propagate1 propagate28 (p[28], a[28], b[28]); //7
-	propagate1 propagate29 (p[29], a[29], b[29]);
-	propagate1 propagate30 (p[30], a[30], b[30]);
-	propagate1 propagate31 (p[31], a[31], b[31]);
+	genvar i;
+	generate
+		for(i = 0; i < 32; i = i + 1)
+		begin : propagate_m
+			propagate1 propagate_m (p[i], a[i], b[i]);
+		end 
+	endgenerate
 
 endmodule // propagate32
 
