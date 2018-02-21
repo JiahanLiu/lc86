@@ -39,41 +39,15 @@ module sum32 (sum, a, b, c);
 	output [31:0] sum;
 	input [31:0] a, b, c;
 
-	sum1 sum1_31 (sum[31], a[31], b[31], c[31]); //31
-	sum1 sum1_30 (sum[30], a[31], b[31], c[31]);
-	sum1 sum1_29 (sum[29], a[31], b[31], c[31]);
-	sum1 sum1_28 (sum[28], a[31], b[31], c[31]);
-	sum1 sum1_27 (sum[27], a[31], b[31], c[31]); 
-	sum1 sum1_26 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_25 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_24 (sum[31], a[31], b[31], c[31]);
-
-	sum1 sum1_23 (sum[31], a[31], b[31], c[31]); //23
-	sum1 sum1_22 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_21 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_20 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_19 (sum[31], a[31], b[31], c[31]); 
-	sum1 sum1_18 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_17 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_16 (sum[31], a[31], b[31], c[31]);
-
-	sum1 sum1_15 (sum[31], a[31], b[31], c[31]); //15
-	sum1 sum1_14 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_13 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_12 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_11 (sum[31], a[31], b[31], c[31]); 
-	sum1 sum1_10 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_9 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_8 (sum[31], a[31], b[31], c[31]);
-
-	sum1 sum1_7 (sum[31], a[31], b[31], c[31]); //7
-	sum1 sum1_6 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_5 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_4 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_3 (sum[31], a[31], b[31], c[31]); 
-	sum1 sum1_2 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_1 (sum[31], a[31], b[31], c[31]);
-	sum1 sum1_0 (sum[31], a[31], b[31], c[31]);
+	sum1 sum1_0 (sum[0], a[0], b[0], 1'b0);
+	
+	genvar i;
+	generate
+		for(i = 1; i < 32; i = i + 1)
+		begin : sum_m
+			sum1 sum1_m (sum[i], a[i], b[i], c[i-1]);
+		end 
+	endgenerate
 
 endmodule // sum32
 
@@ -184,7 +158,7 @@ endmodule // gp_group1
 
 //-----------------------------------------------------
 // Functionality: Kogge-Stone Carry Look Ahead Unit
-// Combinational Delay: 
+// Combinational Delay: eta 7ns?
 //
 
 module gp_group32 (c, g, p);
@@ -358,26 +332,39 @@ module gp_group32 (c, g, p);
 		//row 4
 	//sample gp_r0_30(g_out, p_out, g_in_high, p_in_high, g_in_low, p_in_low);		
 	gp_group1 gp_r4_31(c[31], trash_propagate[31], wire_r3_g[31], wire_r3_p[31], wire_r3_g[15], wire_r3_p[15]);
-	gp_group1 gp_r4_30(c[30], trash_propagate[30], wire_r3_g[31], wire_r3_p[31], wire_r3_g[14], wire_r3_p[14]);
-	gp_group1 gp_r4_29(c[29], trash_propagate[29], wire_r3_g[31], wire_r3_p[31], wire_r3_g[13], wire_r3_p[13]);
-	gp_group1 gp_r4_28(c[28], trash_propagate[28], wire_r3_g[31], wire_r3_p[31], wire_r3_g[12], wire_r3_p[12]);
-	gp_group1 gp_r4_27(c[27], trash_propagate[27], wire_r3_g[31], wire_r3_p[31], wire_r3_g[11], wire_r3_p[11]);
-	gp_group1 gp_r4_26(c[26], trash_propagate[26], wire_r3_g[31], wire_r3_p[31], wire_r3_g[10], wire_r3_p[10]);
-	gp_group1 gp_r4_25(c[25], trash_propagate[25], wire_r3_g[31], wire_r3_p[31], wire_r3_g[9], wire_r3_p[9]);
-	gp_group1 gp_r4_24(c[24], trash_propagate[24], wire_r3_g[31], wire_r3_p[31], wire_r3_g[8], wire_r3_p[8]);
+	gp_group1 gp_r4_30(c[30], trash_propagate[30], wire_r3_g[30], wire_r3_p[30], wire_r3_g[14], wire_r3_p[14]);
+	gp_group1 gp_r4_29(c[29], trash_propagate[29], wire_r3_g[29], wire_r3_p[29], wire_r3_g[13], wire_r3_p[13]);
+	gp_group1 gp_r4_28(c[28], trash_propagate[28], wire_r3_g[28], wire_r3_p[28], wire_r3_g[12], wire_r3_p[12]);
+	gp_group1 gp_r4_27(c[27], trash_propagate[27], wire_r3_g[27], wire_r3_p[27], wire_r3_g[11], wire_r3_p[11]);
+	gp_group1 gp_r4_26(c[26], trash_propagate[26], wire_r3_g[26], wire_r3_p[26], wire_r3_g[10], wire_r3_p[10]);
+	gp_group1 gp_r4_25(c[25], trash_propagate[25], wire_r3_g[25], wire_r3_p[25], wire_r3_g[9], wire_r3_p[9]);
+	gp_group1 gp_r4_24(c[24], trash_propagate[24], wire_r3_g[24], wire_r3_p[24], wire_r3_g[8], wire_r3_p[8]);
 	//sample gp_r4_30(g_out, p_out, g_in_high, p_in_high, g_in_low, p_in_low);
-	gp_group1 gp_r4_23(c[23], trash_propagate[23], wire_r3_g[31], wire_r3_p[31], wire_r2_g[7], wire_r2_p[7]);
-	gp_group1 gp_r4_22(c[22], trash_propagate[22], wire_r3_g[31], wire_r3_p[31], wire_r2_g[6], wire_r2_p[6]);
-	gp_group1 gp_r4_21(c[21], trash_propagate[21], wire_r3_g[31], wire_r3_p[31], wire_r2_g[5], wire_r2_p[5]);
-	gp_group1 gp_r4_20(c[20], trash_propagate[20], wire_r3_g[31], wire_r3_p[31], wire_r2_g[4], wire_r2_p[4]);
-	gp_group1 gp_r4_19(c[19], trash_propagate[19], wire_r3_g[31], wire_r3_p[31], wire_r1_g[3], wire_r1_p[3]);
-	gp_group1 gp_r4_18(c[18], trash_propagate[18], wire_r3_g[31], wire_r3_p[31], wire_r1_g[2], wire_r1_p[2]);
-	gp_group1 gp_r4_17(c[17], trash_propagate[17], wire_r3_g[31], wire_r3_p[31], wire_r0_g[1], wire_r0_p[1]);
-	gp_group1 gp_r4_16(c[16], trash_propagate[16], wire_r3_g[31], wire_r3_p[31], g[0], p[0]);
+	gp_group1 gp_r4_23(c[23], trash_propagate[23], wire_r3_g[23], wire_r3_p[23], wire_r2_g[7], wire_r2_p[7]);
+	gp_group1 gp_r4_22(c[22], trash_propagate[22], wire_r3_g[22], wire_r3_p[22], wire_r2_g[6], wire_r2_p[6]);
+	gp_group1 gp_r4_21(c[21], trash_propagate[21], wire_r3_g[21], wire_r3_p[21], wire_r2_g[5], wire_r2_p[5]);
+	gp_group1 gp_r4_20(c[20], trash_propagate[20], wire_r3_g[20], wire_r3_p[20], wire_r2_g[4], wire_r2_p[4]);
+	gp_group1 gp_r4_19(c[19], trash_propagate[19], wire_r3_g[19], wire_r3_p[19], wire_r1_g[3], wire_r1_p[3]);
+	gp_group1 gp_r4_18(c[18], trash_propagate[18], wire_r3_g[18], wire_r3_p[18], wire_r1_g[2], wire_r1_p[2]);
+	gp_group1 gp_r4_17(c[17], trash_propagate[17], wire_r3_g[17], wire_r3_p[17], wire_r0_g[1], wire_r0_p[1]);
+	gp_group1 gp_r4_16(c[16], trash_propagate[16], wire_r3_g[16], wire_r3_p[16], g[0], p[0]);
 
 
 endmodule
 
+module adder32(sum, flag, a, b);
+	output [31:0] sum;
+	output [3:0] flag;
+	input [31:0] a,b;
+
+	wire [31:0] propagate32_result, generate32_result, c;
+
+	generate32 generate32_m (generate32_result, a, b);
+  	propagate32 propagate32_m (propagate32_result, a, b);
+   	gp_group32 kogge_stone_lookahead (c, generate32_result, propagate32_result);
+   	sum32 sum32_m (sum, a, b, c);
+
+endmodule
 
 
 
