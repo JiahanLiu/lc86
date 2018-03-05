@@ -1,3 +1,6 @@
 /csrc
 /DVEfiles
 /simv.daidir
+*.bak
+pipeline/transcript
+/pipeline/work/
