@@ -1,6 +1,6 @@
-# on OSX
-# gcc -m32 test_and_to_not.S -o test_and_to_not
-# objdump -d test_and_to_not
+# confirmed tested on OSX
+# gcc -m32 test_and_to_mov.S -o test_and_to_mov
+# objdump -d test_and_to_mov
 # made in loving memory of the numbers 4, 2, 0
 
 .data
