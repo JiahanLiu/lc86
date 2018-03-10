@@ -111,8 +111,50 @@ myfunc1:
 		#jcc
 		jnbe myfunc1 #op 77
 		jne myfunc1 #op 75
-		jnbe myfunc0 
-		jne myfunc0
+		jnbe myfunc0 #op 0f 87, operand override
+		jnbe myfunc0 #op 0f 87
+		jne myfunc0 #op 0f 85
+		jne myfunc0 #op 0f 85, operand override
+
+		#jmp
+		jmp myfunc1 #op eb
+		jmp myfunc0 #op e9, operand override
+		jmp *0x04200420 #op e9
+		jmp *%ax #op ff, operand override, register
+		jmpw *0x4204(%eax, %eax, 0x8) #op ff, operand override, memory
+		jmp *%bx #op ff, register
+		jmpl *0x4204(%eax, %eax, 0x8) #op ff, memory
+		jmpw $0x4444,$0x2222 #op ea, pointer16:16
+		jmpl $0x4444,$0x22220000#op ea, pointer16:32
+
+		#mov
+		mov $1, %al #op 88
+		mov $0x0fff, %ax #op 89, operand override
+		mov $0x0fffffffffffffff, %eax #op 89 
+		mov $0x24, %bl #op 8a, register
+		movb $0xff, -0x20(%ebx, %ebx, 0x4) #op 8a memory
+		mov $0x0204, %sp #op 8a, operand override, register
+		movw $0x0abc, 0x2ffa(%eax, %ebx, 0x8) #op 8a, operand override, memory
+		mov $0x1234, %ebp #op 8b, register
+		movl $0x0abc, 0x9ffa(%ecx, %eax, 0x1)#op 8b, memory
+		mov $0x2, %ax #op 8b, operand override, register
+		movw $0x8, 0x1ffa(%eax, %ebx, 0x8) #op 8b, operand override, memory
+		mov $0x2, %eax #op 8c, register
+		movl $0x8, 0x3ffa(%eax, %ebx, 0x2) #op 8c, memory
+		mov %dh, %ah #op B0, register
+		mov %dh, 0x0aaa(%eax, %ebx, 0x8) #op B0, memory
+		mov %bp, %cx #op B8, operand override, register
+		mov %ax, 0x0bba(%eax, %ebx, 0x1) #op B8, operand override, memory
+		mov %ebp, %ecx #op B8, register
+		mov %ecx, 0x0c9a(%eax, %ebx, 0x8) #op B8, memory
+		mov %dl, %bl #op C6, register,
+		mov 0x0420(%eax, %eax, 0x4), %bl #op C6, memory
+		mov %di, %si #op C7, operand override, register
+		mov 0x0024(%eax, %ebx, 0x4), %sp #op C7, operand override, memory
+		mov %edi, %esi #op C7, register
+		mov 0x0420(%eax, %ebx, 0x4), %eax #op C7, memory
+
+
 
 
 
