@@ -4,3 +4,4 @@
 *.bak
 pipeline/transcript
 /pipeline/work/
+*transcript
