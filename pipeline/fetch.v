@@ -42,7 +42,7 @@ mux4_128$(mux_array[2],array[8],array[9],array[10],array[11],amnt[0],amnt[1]);
 mux4_128$(mux_array[3],array[12],array[13],array[14],array[15],amnt[0],amnt[1]);
 
 //last round of muxes
-mux4_16$(Dout,mux_array[0],mux_array[0],mux_array[0],mux_array[0],amnt[2],amnt[3]);
+mux4_128$(Dout,mux_array[0],mux_array[0],mux_array[0],mux_array[0],amnt[2],amnt[3]);
 	
 
 endmodule
