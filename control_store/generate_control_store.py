@@ -56,6 +56,9 @@ def generate_signals(filename):
                         opcode_full = signal
                         if "+r" in signal:
                             entries = 8
+                            if "+r7" in signal:
+                                entries = 7
+                            # TODO: change +r to have different registers encoded
                     if col_num == addrcol:
                         opcode = int(signal, 16)
                         rom_addr = opcode & 0x1F
