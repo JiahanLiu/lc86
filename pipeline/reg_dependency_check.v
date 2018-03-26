@@ -1,5 +1,5 @@
 
-module cmp_regid (OUT, REG1, REG2, V_LD_REG2)
+module cmp_regid (OUT, REG1, REG2, V_LD_REG2);
    input [2:0] REG1, REG2;
    input V_LD_REG2;
 
@@ -8,7 +8,7 @@ module cmp_regid (OUT, REG1, REG2, V_LD_REG2)
    wire [2:0] xnor_out;
 
    xnor2$ xnor0 [2:0] (xnor_out, REG1, REG2);
-   and4$ and0 (OUT, xor_out[0], xor_out[1], xor_out[2], V_LD_REG2);
+   and4$ and0 (OUT, xnor_out[0], xnor_out[1], xnor_out[2], V_LD_REG2);
 
 endmodule;
 
@@ -24,10 +24,10 @@ module chk_needed (
 
    wire and_v_reg_needed_out;
 
-   cmd_regid 
+   cmp_regid 
       cmp_reg_s1_drid (cmp_reg_s1_drid_out, REG, S1_DRID, V_S1_LD_REG),
       cmp_reg_s2_drid (cmp_reg_s2_drid_out, REG, S2_DRID, V_S2_LD_REG),
-      cmp_reg_s3_drid (cmp_reg_s3_drid_out, REG, S3_DRID, V_S3_LD_REG),
+      cmp_reg_s3_drid (cmp_reg_s3_drid_out, REG, S3_DRID, V_S3_LD_REG);
 
    and2$
       and_v_reg_needed (and_v_reg_needed_out, REG_NEEDED, STAGE_V);
@@ -67,7 +67,7 @@ module reg_dependency_check (
    || (SR2_ID == AG_DRID1 AND V_AG_LD_MM) ... AND MM2_NEEDED
     */
    wire [2:0] buf_seg1, buf_seg2, buf_sr1, buf_sr2, buf_sr3, buf_sib_i;
-   wire [2:0] bug_ag_drid1, buf_ag_drid2, buf_me_drid1, buf_me_drid2, buf_ex_drid1, buf_ex_drid2;
+   wire [2:0] buf_ag_drid1, buf_ag_drid2, buf_me_drid1, buf_me_drid2, buf_ex_drid1, buf_ex_drid2;
    wire       buf_stage_v;
 
    bufferH16$ 
@@ -119,7 +119,7 @@ module reg_dependency_check (
    or4$
       or_chk1 (or_chk1_out, u_chk_seg1_out, u_chk_seg2_out, u_chk_sr1_gpr1_out, u_chk_sr1_gpr2_out),
       or_chk2 (or_chk2_out, u_chk_sr2_gpr1_out, u_chk_sr2_gpr2_out, u_chk_sr3_gpr1_out, u_chk_sr3_gpr2_out),
-      or_chk3 (or_chk3_out, u_chk_sr4_gpr1_out, u_chk_sr4_gpr2_out, u_chk_mm1_out, u_chk_mm2_out),
+      or_chk3 (or_chk3_out, u_chk_sr4_gpr1_out, u_chk_sr4_gpr2_out, u_chk_mm1_out, u_chk_mm2_out);
 
    or3$
       or_chk4 (DEP_STALL, or_chk1_out, or_chk2_out, or_chk3_out);
