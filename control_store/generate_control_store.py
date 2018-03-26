@@ -20,7 +20,7 @@ def generate_signals(filename):
     opcodecol = desccol + 1
     addrcol = opcodecol + 1
     signalcol = addrcol + 1
-    maxcol = 59
+    maxcol = signalcol + 65
     with open(filename, 'rb') as csvfile:
         csvreader = csv.reader(csvfile, delimiter=',', quotechar='"')
         row_num = 1
@@ -32,7 +32,7 @@ def generate_signals(filename):
                 signal_pos = 63
                 for signal in row:
                     if col_num >= signalcol and col_num <= maxcol:
-                        if signal:
+                        if signal or pos == -1:
                             if pos < 63:
                                 assignfile.write(assign_str % (signal_name, signal_pos, pos+1))
                                 if signal_pos == (pos+1):
