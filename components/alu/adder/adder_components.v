@@ -352,9 +352,8 @@ module gp_group32 (c, g, p);
 
 endmodule
 
-module adder32(sum, flag, a, b);
+module adder32(sum, a, b);
 	output [31:0] sum;
-	output [3:0] flag;
 	input [31:0] a,b;
 
 	wire [31:0] propagate32_result, generate32_result, c;
