@@ -7,6 +7,7 @@ module TOP;
    reg [31:0] a, b;
 
    wire [31:0] sum;
+   wire carry;
 
    reg error;
    reg error_free;
@@ -76,7 +77,7 @@ module TOP;
       $strobe ("correct: time: %0d: a = %x, b = %x, sum = %x", 
           $time, a, b, sum);
 
-    adder32 adder32_m (sum, a, b);
+    adder32 adder32_m (sum, carry, a, b);
 
    
 endmodule

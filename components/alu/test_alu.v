@@ -8,7 +8,7 @@ module TOP;
    reg [3:0] op;
 
    wire [31:0] out;
-   wire [3:0] flags;
+   wire [6:0] flags;
 
    reg error;
    reg error_free;
@@ -79,6 +79,6 @@ module TOP;
       $strobe ("correct: time: %0d: a = %x, b = %x, out = %x", 
           $time, a, b, out);
 
-    alu alu_test (out, flags, a, b, op);
+    alu u_alu_test (out, flags, a, b, op);
 
 endmodule
