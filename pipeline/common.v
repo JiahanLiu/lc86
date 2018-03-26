@@ -71,3 +71,28 @@ module adder32 (out, cout, a, b, cin);
      add31_28 (a[31:28], b[31:28], co6, 1'b1, 4'd9, cout, out[31:28]);
 
 endmodule // add32
+
+module alu32 (
+   input [31:0] A, B,
+   input [2:0] sel,
+
+   output [31:0] OUT
+);
+endmodule
+
+module alu64 (
+   input [63:0] A, B,
+   input [2:0] sel,
+
+   output [63:0] OUT
+);
+endmodule
+
+module shf32 (
+   input [31:0] A,
+   input [4:0] AMT,
+   input DIR,
+
+   output [31:0] OUT
+);
+endmodule
