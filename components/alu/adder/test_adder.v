@@ -1,4 +1,4 @@
-`define cycle 100
+`define cycle 4.2
 `define error_time 1.0
 `define runtime #2000
 
@@ -18,7 +18,7 @@ module TOP;
             error_free = 1;
             error = 0;
             a = 32'hffffffff;
-            b = 32'h00000000;
+            b = 32'h00000001;
          #`cycle //1
             if(sum != (a + b)) 
             begin
@@ -27,8 +27,8 @@ module TOP;
             end
          #`error_time //2
             error = 0;
-            a = 32'ha47ba47b;
-            b = 32'h5c915c91;
+            a = 32'hffffffff;
+            b = 32'h00000000;
          #`cycle //3
             if(sum != (a + b)) 
             begin
@@ -56,7 +56,7 @@ module TOP;
                error = 1;
             end
          if(error_free == 1)
-            $display("\n*** WOOT! TEST PASS! ***\n");      
+            $display("\n*** WOOT! TEST PASS! %3.2F ns cycle time ***\n", `cycle);      
       end
     
    initial `runtime $finish;

@@ -1,4 +1,4 @@
 /home/projects/courses/spring_18/ee382n-16120/lib/time -v 
 /home/projects/courses/spring_18/ee382n-16120/lib/lib1 
 adder_components.v
-test_adder.v
+test_kogge_stone_lookahead.v
