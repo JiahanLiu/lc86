@@ -32,9 +32,23 @@ module sal32 (out, in, cnt);
 
 endmodule // sal32
 
+module comp4 (out, out_bar, in0, in1);
+   input [3:0] in0, in1;
+
+   output out, out_bar;
+
+   wire [3:0] xnor_out;
+
+   xnor2$ xnor0 [3:0] (xnor_out, in0, in1);
+   and4$ and0 (out, xnor_out[3], xnor_out[2], xnor_out[1], xnor_out[0]);
+   nand4$ nand0 (out_bar, xnor_out[3], xnor_out[2], xnor_out[1], xnor_out[0]);
+
+endmodule
+
 module comp16 (out, out_bar, in0, in1);
    input [15:0] in0, in1;
 
+   // outputs EQ or NEQ
    output out, out_bar;
 
    wire [15:0] xnor_out;
@@ -49,6 +63,63 @@ module comp16 (out, out_bar, in0, in1);
       and4 (out, and0_out, and1_out, and2_out, and3_out);
    
    nand4$ nand0 (out_bar, and0_out, and1_out, and2_out, and3_out);
+endmodule
+
+//module mag_comp8$(A, B, AGB, BGA);
+module mag_comp32 (A, B, AGB, BGA, EQ);
+   input [31:0] A, B;
+
+   output AGB, BGA, EQ;
+
+   wire AGB_lolo, AGB_lohi, AGB_hilo, AGB_hihi;
+   wire BGA_lolo_, BGA_lohi, BGA_hilo, BGA_hihi;
+
+   wire hihi_eq, lohi_eq, hi_eq, lo_eq;
+   wire agb0, agb1, agb2, bga0, bga1, bga2;
+
+   wire eq[7:0];
+
+   mag_comp8$
+      mag_comp_lolo (A[7:0], B[7:0], AGB_lolo, BGA_lolo),
+      mag_comp_lohi (A[15:8], B[15:8], AGB_lohi, BGA_lohi),
+      mag_comp_hilo (A[23:16], B[23:16], AGB_hilo, BGA_hilo),
+      mag_comp_hihi (A[31:24], B[31:24], AGB_hihi, BGA_hihi);
+
+   // assign AGB = AGB_hihi or (hihi_eq and AGB_hilo) or (hihi_eq and hilo_eq and AGB_lohi) or (hihi_eq and hilo_eq and lohi_eq and AGB_lolo)
+
+   generate
+      genvar i;
+      for (i = 0; i < 32; i = i + 4) begin: gen_comp4
+         comp4 u_comp4 (eq[i/4], , A[i+3:i], B[i+3:i]);
+      end
+   endgenerate
+
+   and2$
+      and0 (hihi_eq, eq[7], eq[6]),
+      and1 (lohi_eq, eq[3], eq[2]);
+
+   and4$
+      and4_0 (hi_eq, eq[7], eq[6], eq[5], eq[4]),
+      and4_1 (lo_eq, eq[3], eq[2], eq[1], eq[0]);
+
+   and2$
+      and3 (agb0, hihi_eq, AGB_hilo),
+      and4 (agb1, hi_eq, AGB_lohi),
+
+      and6 (bga0, hihi_eq, BGA_hilo),
+      and7 (bga1, hi_eq, BGA_lohi);
+
+   and3$
+      and3_0 (agb2, hi_eq, lohi_eq, AGB_lolo),
+      and3_1 (bga2, hi_eq, lohi_eq, BGA_lolo);
+
+   or4$
+      or0 (AGB, AGB_hihi, agb0, agb1, agb2),
+      or1 (BGA, BGA_hihi, bga0, bga1, bga2);
+
+   and2$
+      and_eq (EQ, hi_eq, lo_eq);
+
 endmodule
 
 module adder32 (out, cout, a, b, cin);
@@ -321,8 +392,8 @@ module carry_lookahead32 (sum, p, g, cout, v, a, b, cin, AF);
     wire w1, w2, w5, w10;
     wire co1, co2;
 
-    carry_lookahead16_AF f0 (sum[15:0], p0, g0, co1, a[15:0], b[15:0], cin, AF);
-    carry_lookahead16_sat f1 (sum[31:16], p1, g1, co2, v, a[31:16], b[31:16], c1);
+    //carry_lookahead16_AF f0 (sum[15:0], p0, g0, co1, a[15:0], b[15:0], cin, AF);
+    //carry_lookahead16_sat f1 (sum[31:16], p1, g1, co2, v, a[31:16], b[31:16], c1);
 
     inv1$ inv1 (g0_b, g0),
           inv2 (g1_b, g1);
