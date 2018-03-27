@@ -212,4 +212,6 @@ module full_adder (sum, p, g, a, b, cin);
           xor2 (sum, p, cin);
 
     nand2$ nand1 (w1, a, b),
+           nand2 (g, w1, w1);
+
 endmodule          
