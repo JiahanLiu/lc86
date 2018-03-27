@@ -8,7 +8,7 @@ module TOP;
    reg [3:0] op;
 
    wire [31:0] out;
-   wire [6:0] flags;
+   wire [31:0] flags;
 
    reg error;
    reg error_free;

@@ -354,7 +354,7 @@ endmodule
 
 module adder32(sum, carry, a, b);
 	output [31:0] sum;
-	output carry; 
+	output [31:0] carry; 
 
 	input [31:0] a,b;
 
@@ -365,7 +365,7 @@ module adder32(sum, carry, a, b);
    	gp_group32 kogge_stone_lookahead (c, generate32_result, propagate32_result);
    	sum32 sum32_m (sum, a, b, c);
 
-   	assign carry = c[31];
+   	assign carry = c;
 
 
 endmodule
