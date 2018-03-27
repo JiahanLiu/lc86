@@ -98,9 +98,26 @@ module shf32 (
 endmodule
 
 
+
+// Full_adder with propagate and generate bits
+// Gate delay: p=3, g=2, s=6
+module full_adder (sum, p, g, a, b, cin);
+    input a, b, cin;
+    output sum, p, g;
+
+    wire w1;
+
+    xor2$ xor1 (p, a, b),
+          xor2 (sum, p, cin);
+
+    nand2$ nand1 (w1, a, b),
+           nand2 (g, w1, w1);
+
+endmodule     
+
+
 // 4-bit carry look ahead adder
 // Worst case delay -> 12 nand gate for SUM
-
 module carry_lookahead (sum, p, g, cout, a, b, cin);
     input cin;
     input [3:0] a, b;
@@ -160,9 +177,137 @@ module carry_lookahead (sum, p, g, cout, a, b, cin);
           nand19 (w18, w17, p3),
 
           nand20 (g, w18, w12);
+endmodule
+
+// 16-bit carry look ahead saturating adder
+module carry_lookahead16_sat (sum, p, g, cout, v, a, b, cin);
+    input cin;
+    input [15:0] a, b;
+    output [15:0] sum;
+    output p, g, cout, v;
+
+    wire p0, p1, p2, p3, g0, g1, g2, g3, c1, c2, c3;
+    wire g0_b, g1_b, g2_b, g3_b;
+    wire w1, w2, w3, w4, w5, w6, w7, w8, w9, w10;
+    wire w11, w12, w13, w14, w15, w16, w17, w18, w19;
+    wire co1, co2, co3, co4;
+
+    carry_lookahead f0 (sum[3:0], p0, g0, co1, a[3:0], b[3:0], cin);
+    carry_lookahead f1 (sum[7:4], p1, g1, co2, a[7:4], b[7:4], c1);
+    carry_lookahead f2 (sum[11:8], p2, g2, co3, a[11:8], b[11:8], c2);
+    carry_lookahead_sat f3 (sum[15:12], p3, g3, co4, v, a[15:12], b[15:12], c3);
+
+    not_n inv1 (g0_b, g0),
+           inv2 (g1_b, g1),
+           inv3 (g2_b, g2),
+           inv4 (g3_b, g3);
+
+    // Calculate the carry bits
+    nand2$ nand1 (w1, p0, cin),
+           nand2 (c1, w1, g0_b),
+
+           nand3 (w2, c1, p1),
+           nand4 (c2, w2, g1_b),
+
+           nand5 (w3, c2, p2),
+           nand6 (c3, w3, g2_b),
+
+           nand7 (w4, c3, p3),
+           nand8 (cout, w4, g3_b);
+
+    // Calculate the PG bit
+    nand2$ nand9 (w5, p0, p1),
+          inv5 (w6, w5, w5),
+
+          nand10 (w7, p2, p3),
+          inv6 (w8, w7, w7),
+
+          nand11 (w9, w6, w8),
+          nand12 (p, w9, w9);
+
+    // Calculate the GG bit
+    nand2$ nand13 (w10, g2, p3),
+          nand14 (w11, w10, g3_b),
+          inv7 (w12, w11, w11),
+
+          nand15 (w13, p1, p2),
+          inv8 (w14, w13, w13),
+          nand16 (w15, w14, g0),
+
+          nand17 (w16, g1, p2),
+
+          nand18 (w17, w15, w16),
+          nand19 (w18, w17, p3),
+
+          nand20 (g, w18, w12);
 
 endmodule
 
+// 16-bit carry look ahead adder with AF flag calculation
+module carry_lookahead16_AF (sum, p, g, cout, a, b, cin, AF);
+    input cin, AF;
+    input [15:0] a, b;
+    output [15:0] sum;
+    output p, g, cout;
+
+    wire p0, p1, p2, p3, g0, g1, g2, g3, c1, c2, c3;
+    wire g0_b, g1_b, g2_b, g3_b;
+    wire w1, w2, w3, w4, w5, w6, w7, w8, w9, w10;
+    wire w11, w12, w13, w14, w15, w16, w17, w18, w19;
+    wire co1, co2, co3, co4;
+
+    assign AF = co1;
+
+    carry_lookahead f0 (sum[3:0], p0, g0, co1, a[3:0], b[3:0], cin);
+    carry_lookahead f1 (sum[7:4], p1, g1, co2, a[7:4], b[7:4], c1);
+    carry_lookahead f2 (sum[11:8], p2, g2, co3, a[11:8], b[11:8], c2);
+    carry_lookahead f3 (sum[15:12], p3, g3, co4, a[15:12], b[15:12], c3);
+
+    not_n inv1 (g0_b, g0),
+           inv2 (g1_b, g1),
+           inv3 (g2_b, g2),
+           inv4 (g3_b, g3);
+
+    // Calculate the carry bits
+    nand2$ nand1 (w1, p0, cin),
+           nand2 (c1, w1, g0_b),
+
+           nand3 (w2, c1, p1),
+           nand4 (c2, w2, g1_b),
+
+           nand5 (w3, c2, p2),
+           nand6 (c3, w3, g2_b),
+
+           nand7 (w4, c3, p3),
+           nand8 (cout, w4, g3_b);
+
+    // Calculate the PG bit
+    nand2$ nand9 (w5, p0, p1),
+          inv5 (w6, w5, w5),
+
+          nand10 (w7, p2, p3),
+          inv6 (w8, w7, w7),
+
+          nand11 (w9, w6, w8),
+          nand12 (p, w9, w9);
+
+    // Calculate the GG bit
+    nand2$ nand13 (w10, g2, p3),
+          nand14 (w11, w10, g3_b),
+          inv7 (w12, w11, w11),
+
+          nand15 (w13, p1, p2),
+          inv8 (w14, w13, w13),
+          nand16 (w15, w14, g0),
+
+          nand17 (w16, g1, p2),
+
+          nand18 (w17, w15, w16),
+          nand19 (w18, w17, p3),
+
+          nand20 (g, w18, w12);
+
+endmodule
 
 // 32-bit carry look ahead adder
 module carry_lookahead32 (sum, p, g, cout, v, a, b, cin, AF);
@@ -199,19 +344,4 @@ module carry_lookahead32 (sum, p, g, cout, v, a, b, cin, AF);
 
 endmodule
 
-
-// Full_adder with propagate and generate bits
-// Gate delay: p=3, g=2, s=6
-module full_adder (sum, p, g, a, b, cin);
-    input a, b, cin;
-    output sum, p, g;
-
-    wire w1;
-
-    xor2$ xor1 (p, a, b),
-          xor2 (sum, p, cin);
-
-    nand2$ nand1 (w1, a, b),
-           nand2 (g, w1, w1);
-
-endmodule          
+     
