@@ -1,5 +1,31 @@
 //-----------------------------------------------------
 
+// Kogge Stone 32 bit adder without flags
+
+//-----------------------------------------------------
+// Functionality: KG
+// Combinational Delay: 4.2ns
+//
+module adder32(sum, carry, a, b);
+	output [31:0] sum;
+	output [31:0] carry; 
+
+	input [31:0] a,b;
+
+	wire [31:0] propagate32_result, generate32_result, c;
+
+	generate32 generate32_m (generate32_result, a, b);
+  	propagate32 propagate32_m (propagate32_result, a, b);
+   	gp_group32 kogge_stone_lookahead (c, generate32_result, propagate32_result);
+   	sum32 sum32_m (sum, a, b, c);
+
+   	assign carry = c;
+
+
+endmodule
+
+//-----------------------------------------------------
+
 // 1-bit Adder
 
 //-----------------------------------------------------
@@ -348,24 +374,6 @@ module gp_group32 (c, g, p);
 	gp_group1 gp_r4_18(c[18], trash_propagate[18], wire_r3_g[18], wire_r3_p[18], wire_r1_g[2], wire_r1_p[2]);
 	gp_group1 gp_r4_17(c[17], trash_propagate[17], wire_r3_g[17], wire_r3_p[17], wire_r0_g[1], wire_r0_p[1]);
 	gp_group1 gp_r4_16(c[16], trash_propagate[16], wire_r3_g[16], wire_r3_p[16], g[0], p[0]);
-
-
-endmodule
-
-module adder32(sum, carry, a, b);
-	output [31:0] sum;
-	output [31:0] carry; 
-
-	input [31:0] a,b;
-
-	wire [31:0] propagate32_result, generate32_result, c;
-
-	generate32 generate32_m (generate32_result, a, b);
-  	propagate32 propagate32_m (propagate32_result, a, b);
-   	gp_group32 kogge_stone_lookahead (c, generate32_result, propagate32_result);
-   	sum32 sum32_m (sum, a, b, c);
-
-   	assign carry = c;
 
 
 endmodule

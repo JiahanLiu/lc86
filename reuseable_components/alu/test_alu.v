@@ -5,7 +5,7 @@
 module TOP;
    //ALU inputs
    reg [31:0] a, b;
-   reg [3:0] op;
+   reg [2:0] op;
 
    wire [31:0] out;
    wire [31:0] flags;

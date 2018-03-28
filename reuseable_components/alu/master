@@ -1,7 +1,8 @@
 /home/projects/courses/spring_18/ee382n-16120/lib/time -v 
 /home/projects/courses/spring_18/ee382n-16120/lib/lib1 
 /home/projects/courses/spring_18/ee382n-16120/lib/lib4 
-../basic_components/gates.v
-./adder/adder_components.v
+../basic_components/basic_components.v
+../basic_components/eflags.v
+./adder/adder.v
 alu.v
 test_alu.v

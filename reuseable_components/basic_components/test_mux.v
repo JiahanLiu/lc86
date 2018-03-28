@@ -124,7 +124,7 @@ module TOP;
       $strobe ("correct: time: %0d: selection = %x, out = %x", 
          $time, s, out);
 
-    mux32_8way mux_test(out, a, b, c, d, e, f, g, h, s[0], s[1], s[2]);
+    mux32_8way mux_test(out, a, b, c, d, e, f, g, h, s);
 
    
 endmodule
