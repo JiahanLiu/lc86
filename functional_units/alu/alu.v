@@ -181,42 +181,42 @@ module daa_double_digit (
 endmodule
 
 module alu_and (
-	output [31:0] not_result,
+	output [31:0] and_result,
 	output [31:0] flags,
 	input [31:0] a, b
 	);
 
-	//or32_2way or32_2way (or_result, a, b);
+	and32_2way and32_2way (and_result, a, b);
 
 	wire OF, DF, SF, ZF, AF, PF, CF;  
 
 	assign OF = 0;
 	assign DF = 0;
-	//assign SF = or_result[31];
-	//ZF_logic(ZF, or_result[31:0]);
+	assign SF = and_result[31];
+	ZF_logic u_ZF_logic(ZF, and_result[31:0]);
 	assign AF = 0;
-	//PF_logic(PF, or_result[7:0]);
+	PF_logic(PF, and_result[7:0]);
 	assign CF = 0;
 
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
 endmodule
 
 module alu_cld (
-	output [31:0] not_result,
+	output [31:0] cld_result,
 	output [31:0] flags,
 	input [31:0] a, b
 	);
 
-	//module or32_2way (or_result, a, b);
+	assign cld_result = 32'h0000_0000;
 
 	wire OF, DF, SF, ZF, AF, PF, CF;  
 
 	assign OF = 0;
 	assign DF = 0;
-	//assign SF = or_result[31];
-	//ZF_logic(ZF, or_result[31:0]);
+	assign SF = 0;
+	assign ZF = 0;
 	assign AF = 0;
-	//PF_logic(PF, or_result[7:0]);
+	assign PF = 0;
 	assign CF = 0;
 
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
@@ -244,21 +244,21 @@ module alu_cmp (
 endmodule
 
 module alu_std (
-	output [31:0] chk_if_zero_result,
+	output [31:0] std_result,
 	output [31:0] flags,
 	input [31:0] a, b
 	);
 
-	//module or32_2way (or_result, a, b);
+	assign std_result = 32'h0000_0000;
 
 	wire OF, DF, SF, ZF, AF, PF, CF;  
 
 	assign OF = 0;
-	assign DF = 0;
-	//assign SF = or_result[31];
-	//ZF_logic(ZF, or_result[31:0]);
+	assign DF = 1;
+	assign SF = 0;
+	assign ZF = 0;
 	assign AF = 0;
-	//PF_logic(PF, or_result[7:0]);
+	assign PF = 0;
 	assign CF = 0;
 
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	

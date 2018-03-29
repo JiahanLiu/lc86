@@ -50,6 +50,22 @@ module or32_2way (
 
 endmodule
 
+module and32_2way (
+	output [31:0] and_out, 
+	input [31:0] a,
+	input [31:0] b
+	);
+
+	genvar i;
+	generate
+		for(i = 0; i < 32; i = i + 1)
+		begin : u_and
+			and2$ u_and (and_out[i], a[i], b[i]);
+		end 
+	endgenerate
+
+endmodule
+
 module not32_2way (
 	output [31:0] not_out, 
 	input [31:0] a

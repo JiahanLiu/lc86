@@ -6,23 +6,24 @@
 // Functionality: KG
 // Combinational Delay: 4.2ns
 //
-module adder32(sum, carry, a, b);
+module adder32(sum, carry_out, a, b);
 	output [31:0] sum;
-	output [31:0] carry; 
+	output [31:0] carry_out; 
 
 	input [31:0] a,b;
 
-	wire [31:0] propagate32_result, generate32_result, c;
+	wire [31:0] propagate32_result, generate32_result, internal_carry;
 
 	generate32 generate32_m (generate32_result, a, b);
   	propagate32 propagate32_m (propagate32_result, a, b);
-   	gp_group32 kogge_stone_lookahead (c, generate32_result, propagate32_result);
-   	sum32 sum32_m (sum, a, b, c);
+   	gp_group32 kogge_stone_lookahead (internal_carry, generate32_result, propagate32_result);
+   	sum32 sum32_m (sum, a, b, internal_carry);
 
-   	assign carry = c;
-
+   	assign carry_out = internal_carry;
 
 endmodule
+
+
 
 //-----------------------------------------------------
 

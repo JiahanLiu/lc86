@@ -18,8 +18,8 @@ module TOP;
             error_free = 1;
             error = 0;
             op = 3'b000;
-            a = 32'hffffffff;
-            b = 32'h00000000;
+            a = 32'hffff_ffff;
+            b = 32'h0000_0000;
          #`cycle //1
             if(out != (a + b)) 
             begin
