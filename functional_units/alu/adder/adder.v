@@ -3,27 +3,55 @@
 // Kogge Stone 32 bit adder without flags
 
 //-----------------------------------------------------
-// Functionality: KG
+// Functionality: Adds two numbers, doesn't allow for carry in
 // Combinational Delay: 4.2ns
+// Critical Notes: This generate and propagate doesn't account for carry in 
+//                 so it is faster.
 //
 module adder32(sum, carry_out, a, b);
 	output [31:0] sum;
 	output [31:0] carry_out; 
-
 	input [31:0] a,b;
+	wire carry_in;
+
+	assign carry_in = 0; 
 
 	wire [31:0] propagate32_result, generate32_result, internal_carry;
 
 	generate32 generate32_m (generate32_result, a, b);
   	propagate32 propagate32_m (propagate32_result, a, b);
    	gp_group32 kogge_stone_lookahead (internal_carry, generate32_result, propagate32_result);
-   	sum32 sum32_m (sum, a, b, internal_carry);
+   	sum32 sum32_m (sum, a, b, internal_carry, carry_in);
 
    	assign carry_out = internal_carry;
 
 endmodule
 
+//-----------------------------------------------------
 
+// Kogge Stone 32 bit adder with carry in 
+
+//-----------------------------------------------------
+// Functionality: Adds two numbers, but allows for carry in
+// Combinational Delay: ~4.4ns
+//
+module adder32_w_carry_in(sum, carry_out, a, b, carry_in);
+	output [31:0] sum;
+	output [31:0] carry_out; 
+	input [31:0] a,b;
+	input carry_in;
+
+
+	wire [31:0] propagate32_result, generate32_result, internal_carry;
+
+	generate32_w_carry_in generate32_m (generate32_result, a, b, carry_in);
+  	propagate32_w_carry_in propagate32_m (propagate32_result, a, b, carry_in);
+   	gp_group32 kogge_stone_lookahead (internal_carry, generate32_result, propagate32_result);
+   	sum32 sum32_m (sum, a, b, internal_carry, carry_in);
+
+   	assign carry_out = internal_carry;
+
+endmodule
 
 //-----------------------------------------------------
 
@@ -62,11 +90,12 @@ endmodule // sum1
 // Combinational Delay: 1.0ns
 //
 
-module sum32 (sum, a, b, c);
+module sum32 (sum, a, b, c, carry_in);
 	output [31:0] sum;
 	input [31:0] a, b, c;
+	input carry_in;
 
-	sum1 sum1_0 (sum[0], a[0], b[0], 1'b0);
+	sum1 sum1_0 (sum[0], a[0], b[0], carry_in);
 	
 	genvar i;
 	generate
@@ -95,6 +124,23 @@ module propagate1 (p, a, b);
 
 endmodule // propagate1
 
+
+//-----------------------------------------------------
+
+// 1-bit Propgate with Carry-in
+
+//-----------------------------------------------------
+// Functionality: Can a carry possibily propgate?
+// Combinational Delay: 0.35ns, tested 0.36ns
+//
+module propagate1_w_carry_in (p, a, b, carry_in);
+	output p;
+	input a, b, carry_in;
+
+	or3$ or_to_p (p, a, b, carry_in);
+
+endmodule
+
 //-----------------------------------------------------
 
 // 32-bit Propgate
@@ -111,6 +157,32 @@ module propagate32 (p, a, b);
 	genvar i;
 	generate
 		for(i = 0; i < 32; i = i + 1)
+		begin : propagate_m
+			propagate1 propagate_m (p[i], a[i], b[i]);
+		end 
+	endgenerate
+
+endmodule // propagate32
+
+//-----------------------------------------------------
+
+// 32-bit Propagate with carry_in
+
+//-----------------------------------------------------
+// Functionality: Can a carry possibily propgate allowing for carry_in
+// Combinational Delay: 0.35ns, tested 0.36ns
+//
+
+module propagate32_w_carry_in (p, a, b, carry_in);
+	output [31:0] p;
+	input [31:0] a, b;
+	input carry_in;
+
+	propagate1_w_carry_in(p[0], a[0], b[0], carry_in);
+
+	genvar i;
+	generate
+		for(i = 1; i < 32; i = i + 1)
 		begin : propagate_m
 			propagate1 propagate_m (p[i], a[i], b[i]);
 		end 
@@ -137,6 +209,29 @@ endmodule // generate1
 
 //-----------------------------------------------------
 
+// 1-bit Generate with Carry-In
+
+//-----------------------------------------------------
+// Functionality: Generate carry allowing for carry_in
+// Combinational Delay: 0.35ns
+//
+
+module generate1_w_carry_in (g, a, b, carry_in);
+	output g;
+	input a, b, carry_in;
+
+	wire a_b_comp, a_c_comp, b_c_comp;
+
+	and2$ u_and_a_b(a_b_comp, a, b);
+	and2$ u_and_a_c(a_c_comp, a, carry_in);
+	and2$ u_and_b_c(b_c_comp, b, carry_in);
+
+	or3$ and_to_g (g, a_b_comp, a_c_comp, b_c_comp);
+
+endmodule // generate1
+
+//-----------------------------------------------------
+
 // 32-bit Generate
 
 //-----------------------------------------------------
@@ -151,6 +246,32 @@ module generate32 (g, a, b);
 	genvar i;
 	generate 
 		for(i = 0; i < 32; i = i + 1)
+		begin : generate1_m
+			generate1 generate1_m (g[i], a[i], b[i]);
+		end
+	endgenerate
+
+endmodule // generate32
+
+//-----------------------------------------------------
+
+// 32-bit Generate with Carry In
+
+//-----------------------------------------------------
+// Functionality: Generate carry immediately
+// Combinational Delay: 0.35ns
+//
+
+module generate32_w_carry_in (g, a, b, carry_in);
+	output [31:0] g;
+	input [31:0] a, b;
+	input carry_in;
+
+	generate1_w_carry_in u_first_generate(g[0], a[0], b[0], carry_in);
+
+	genvar i;
+	generate 
+		for(i = 1; i < 32; i = i + 1)
 		begin : generate1_m
 			generate1 generate1_m (g[i], a[i], b[i]);
 		end
@@ -198,7 +319,6 @@ module gp_group32 (c, g, p);
 	wire [31:4] wire_r2_g, wire_r2_p;
 	wire [31:8] wire_r3_g, wire_r3_p;
 	wire [31:16] trash_propagate;
-
 
 	assign c[0] = g[0];
 

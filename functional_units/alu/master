@@ -4,5 +4,6 @@
 ../basic_components/basic_components.v
 ../basic_components/eflags.v
 ./adder/adder.v
+other_operation_units.v
 alu.v
 test_alu.v

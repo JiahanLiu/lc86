@@ -7,33 +7,31 @@ module alu (alu_out, flags, a, b, op);
 	wire [31:0] adder_result, or_result, not_result, daa_result, and_result, cld_result, cmp_result, std_result;
 	wire [31:0] adder_flags, or_flags, not_flags, daa_flags, and_flags, cld_flags, cmp_flags, std_flags;
 
-	assign and_result = 32'h00000000;
-	assign cld_result = 32'h00000000;
-	assign cmp_result = 32'h00000000;
-	assign std_result = 32'h00000000;
+	wire add_carry_in; 
+	assign add_carry_in = 0;
 
-	assign and_flags = 32'h00000000;
-	assign cld_flags = 32'h00000000;
-	assign cmp_flags = 32'h00000000;
-	assign std_flags = 32'h00000000;
-
-	alu_adder u_alu_adder (adder_result, adder_flags, a, b);
+	alu_adder u_alu_adder (adder_result, adder_flags, a, b, add_carry_in);
 	alu_or u_alu_or (or_result, or_flags, a, b);
 	alu_not u_alu_not (not_result, not_flags, a);
 	alu_daa u_alu_daa (daa_result, daa_flags, a);
+	alu_and u_alu_and (and_result, and_flags, a, b);
+	alu_cld u_alu_cld (cld_result, cld_flags);
+	alu_cmp u_alu_cmp (cmp_result, cmp_flags, a, b);
+	alu_std u_alu_std (std_result, std_flags);
 
 	mux32_8way out_selection(alu_out, adder_result, or_result, not_result, daa_result, and_result, cld_result, cmp_result, std_result, op[2:0]);
 	mux32_8way flag_selection(flags, adder_flags, or_flags, not_flags, daa_flags, and_flags, cld_flags, cmp_flags, std_flags, op[2:0]);
 
 endmodule // alu
 
-module alu_adder (adder_result, flags, a, b);
+module alu_adder (adder_result, flags, a, b, carry_in);
 	output [31:0] adder_result;
 	output [31:0] flags;
 	input [31:0] a, b;
+	input carry_in;
 
 	wire [31:0] adder_carry; 
-	adder32 u_adder32(adder_result, adder_carry, a, b);  
+	adder32 u_adder32(adder_result, adder_carry, a, b, carry_in);  
 
 	wire OF, DF, SF, ZF, AF, PF, CF; 
 
@@ -203,8 +201,7 @@ endmodule
 
 module alu_cld (
 	output [31:0] cld_result,
-	output [31:0] flags,
-	input [31:0] a, b
+	output [31:0] flags
 	);
 
 	assign cld_result = 32'h0000_0000;
@@ -228,25 +225,24 @@ module alu_cmp (
 	input [31:0] a, b
 	);
 
-	//module or32_2way (or_result, a, b);
+	subtract32 u_subtract32 (not_result, a, b);
 
 	wire OF, DF, SF, ZF, AF, PF, CF;  
 
-	assign OF = 0;
+	OF_logic u_OF_logic(OF, adder_result[31], a[31], b[31]);
 	assign DF = 0;
-	//assign SF = or_result[31];
-	//ZF_logic(ZF, or_result[31:0]);
-	assign AF = 0;
-	//PF_logic(PF, or_result[7:0]);
-	assign CF = 0;
+	assign SF = adder_result[31];
+	ZF_logic u_ZF_logic(ZF, adder_result[31:0]);
+	assign AF = adder_carry[3];
+	PF_logic u_PF_logic(PF, adder_result[7:0]);
+	assign CF = adder_carry[31];
 
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
 endmodule
 
 module alu_std (
 	output [31:0] std_result,
-	output [31:0] flags,
-	input [31:0] a, b
+	output [31:0] flags
 	);
 
 	assign std_result = 32'h0000_0000;

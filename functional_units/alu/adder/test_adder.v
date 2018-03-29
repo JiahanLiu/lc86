@@ -5,21 +5,25 @@
 module TOP;
    //ALU inputs
    reg [31:0] a, b;
+   reg carry_in;
 
    wire [31:0] sum;
-   wire carry;
+   wire [31:0] sum_w_carry;
+   wire [31:0] carry_out;
+   wire [31:0] carry_out_w_carry;
 
    reg error;
    reg error_free;
 
    initial
       begin
+            carry_in = 1;
             error_free = 1;
             error = 0;
             a = 32'hffffffff;
             b = 32'h00000001;
          #`cycle //1
-            if(sum != (a + b)) 
+            if(sum != (a + b) || sum_w_carry != (a + b + 1)) 
             begin
                error_free = 0;
                error = 1;
@@ -29,7 +33,7 @@ module TOP;
             a = 32'hffffffff;
             b = 32'h00000000;
          #`cycle //3
-            if(sum != (a + b)) 
+            if(sum != (a + b) || sum_w_carry != (a + b + 1)) 
             begin
                error_free = 0;
                error = 1;
@@ -39,7 +43,7 @@ module TOP;
             a = 32'hbcdabcda;
             b = 32'h79867986;
          #`cycle //5
-            if(sum != (a + b)) 
+            if(sum != (a + b) || sum_w_carry != (a + b + 1)) 
             begin
                error_free = 0;
                error = 1;
@@ -49,7 +53,7 @@ module TOP;
             a = 32'h96579657;
             b = 32'h34563456;
          #`cycle //7
-            if(sum != (a + b)) 
+            if(sum != (a + b) || sum_w_carry != (a + b + 1)) 
             begin
                error_free = 0;
                error = 1;
@@ -77,7 +81,7 @@ module TOP;
       $strobe ("correct: time: %0d: a = %x, b = %x, sum = %x", 
           $time, a, b, sum);
 
-    adder32 adder32_m (sum, carry, a, b);
-
+    adder32 u_adder32 (sum, carry_out, a, b);
+    adder32_w_carry_in u_adder32_w_carry_in (sum_w_carry, carry_out_w_carry, a, b, carry_in);
    
 endmodule
