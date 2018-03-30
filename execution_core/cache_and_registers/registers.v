@@ -10,6 +10,7 @@ module register_file (CLK,
 		      SEGDOUT1, SEGDOUT2, MMDOUT1, MMDOUT2,
 		      GPRDOUT0, GPRDOUT1, GPRDOUT2, GPRDOUT3,
 		      CSDOUT, EIPDOUT, EFLAGSDOUT);
+
    input CLK;
    
    input [15:0] SEG_DIN;

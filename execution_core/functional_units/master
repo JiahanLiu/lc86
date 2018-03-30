@@ -1,9 +1,10 @@
 /home/projects/courses/spring_18/ee382n-16120/lib/time -v 
-/home/projects/courses/spring_18/ee382n-16120/lib/lib1 
+/home/projects/courses/spring_18/ee382n-16120/lib/lib1
+/home/projects/courses/spring_18/ee382n-16120/lib/lib2 
 /home/projects/courses/spring_18/ee382n-16120/lib/lib4 
 ../basic_components/basic_components.v
 ../basic_components/eflags.v
 ./adder/adder.v
 other_operation_units.v
 alu.v
-test_alu.v
+test_inc_by_1.v

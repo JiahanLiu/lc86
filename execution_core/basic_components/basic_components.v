@@ -1,3 +1,12 @@
+module assign_wire1(
+	output out,
+	input in
+	);
+
+	assign out = in;
+
+endmodule
+
 module mux32_8way(
 	output [31:0] mux_out,
 	input [31:0] a, b, c, d, e, f, g, h,
@@ -137,3 +146,16 @@ module or1_6way (
 	or2$ u_or_final (or_out, intermediate_3side_1, intermediate_3side_2);
 
 endmodule
+
+module buffer32 (
+	output [31:0] out,
+	input [31:0] in
+	);
+
+	buffer16$ u_buffu_high(out[31:16], in[31:16]);
+	buffer16$ u_buff_low(out[15:0], in[15:0]);
+
+endmodule
+
+
+

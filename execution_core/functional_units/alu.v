@@ -31,7 +31,7 @@ module alu_adder (adder_result, flags, a, b, carry_in);
 	input carry_in;
 
 	wire [31:0] adder_carry; 
-	adder32 u_adder32(adder_result, adder_carry, a, b, carry_in);  
+	adder32_w_carry_in u_adder32_w_carry_in(adder_result, adder_carry, a, b, carry_in);  
 
 	wire OF, DF, SF, ZF, AF, PF, CF; 
 
@@ -193,7 +193,7 @@ module alu_and (
 	assign SF = and_result[31];
 	ZF_logic u_ZF_logic(ZF, and_result[31:0]);
 	assign AF = 0;
-	PF_logic(PF, and_result[7:0]);
+	PF_logic u_PF_logic(PF, and_result[7:0]);
 	assign CF = 0;
 
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
@@ -220,22 +220,23 @@ module alu_cld (
 endmodule
 
 module alu_cmp (
-	output [31:0] not_result,
+	output [31:0] cmp_result,
 	output [31:0] flags,
 	input [31:0] a, b
 	);
 
-	subtract32 u_subtract32 (not_result, a, b);
+	wire [31:0] carry_out;
+	subtract32 u_subtract32 (cmp_result, carry_out ,a, b);
 
 	wire OF, DF, SF, ZF, AF, PF, CF;  
 
-	OF_logic u_OF_logic(OF, adder_result[31], a[31], b[31]);
+	OF_logic u_OF_logic(OF, cmp_result[31], a[31], b[31]);
 	assign DF = 0;
-	assign SF = adder_result[31];
-	ZF_logic u_ZF_logic(ZF, adder_result[31:0]);
-	assign AF = adder_carry[3];
-	PF_logic u_PF_logic(PF, adder_result[7:0]);
-	assign CF = adder_carry[31];
+	assign SF = cmp_result[31];
+	ZF_logic u_ZF_logic(ZF, cmp_result[31:0]);
+	assign AF = carry_out[3];
+	PF_logic u_PF_logic(PF, cmp_result[7:0]);
+	assign CF = cmp_result[31];
 
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
 endmodule
