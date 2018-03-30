@@ -18,14 +18,14 @@ module instruction_length_decoder (
 wire imm_size1_b, imm_size0_b, off_size1_b, off_size0_b;
 wire opcode_size_b, disp_size_b;
 wire [2:0] imm_l;
-wire off_l0, prefix_l1, prefix_l0, disp_l2, disp_l0;
+wire off_l2, off_l1, off_l0, prefix_l1, prefix_l0, disp_l2, disp_l0;
 wire [3:0] opcode_lp, prefix_lp, disp_lp, imm_lp, offset_lp, modrm_lp, sib_lp;
 wire [3:0] out1c, out2c, out3c, out4c, out5c;
 
 inv1$ inv1 (imm_size1_b, imm_size[1]);
 inv1$ inv2 (imm_size0_b, imm_size[0]);
 inv1$ inv3 (off_size1_b, offset_size[1]);
-inv1$ inv4 (off_size0_b, offset_size[1]);
+inv1$ inv4 (off_size0_b, offset_size[0]);
 
 // Logic for imm_length
 // imm_l2 = (imm_size1 &!imm_size0);
@@ -39,6 +39,8 @@ and3$ and3 (imm_l[0], imm_size1_b, imm_size0_b, imm_present);
 // off_l2 = (off_size1);
 // off_l1 = (off_size0);
 // off_l0 = (!off_size1 &!off_size0);
+and2$ and_of1 (off_l2, offset_size[1], offset_present);
+and2$ and_of2 (off_l1, offset_size[0], offset_present);
 and3$ and4 (off_l0, off_size1_b, off_size0_b, offset_present);
 
 // Logic for disp_length
@@ -62,7 +64,7 @@ and2$ and8 (disp_l0, disp_present, disp_size);
 assign disp_lp = {1'b0, disp_l2, 1'b0, disp_l0};
 
 assign imm_lp = {1'b0, imm_l[2], imm_l[1], imm_l[0]};
-assign offset_lp = {1'b0, offset_size[1], offset_size[0], off_l0};
+assign offset_lp = {1'b0, off_l2, off_l1, off_l0};
 assign modrm_lp = {1'b0, 1'b0, 1'b0, modrm_present};
 assign sib_lp = {1'b0, 1'b0, 1'b0, sib_present};
 

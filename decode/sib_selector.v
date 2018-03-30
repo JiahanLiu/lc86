@@ -10,11 +10,11 @@ wire [7:0] byte7, byte3, byte4, byte5, byte6;
 wire sib_sel0, sib_sel1, sib_sel2;
 wire [7:0] out1m;
 
-assign byte7 = instr_buf[39:32];
-assign byte6 = instr_buf[31:24];
+assign byte3 = instr_buf[39:32];
+assign byte4 = instr_buf[31:24];
 assign byte5 = instr_buf[23:16];
-assign byte4 = instr_buf[15:8];
-assign byte3 = instr_buf[7:0];
+assign byte6 = instr_buf[15:8];
+assign byte7 = instr_buf[7:0];
 
 bufferH16$ buf1 (sib_sel0, sib_sel[0]);
 bufferH16$ buf2 (sib_sel1, sib_sel[1]);

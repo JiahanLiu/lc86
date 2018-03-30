@@ -7,7 +7,7 @@ module full_adder (sum, p, g, a, b, cin);
 
     wire w1;
 
-    xor_n xor1 (p, a, b),
+    xor2$ xor1 (p, a, b),
           xor2 (sum, p, cin);
 
     nand2$ nand1 (w1, a, b),

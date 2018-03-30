@@ -22,6 +22,10 @@ module decode_stage1 (
     output [2:0] segID,
     output [7:0] modrm, sib,
     output [2:0] modrm_sel
+//    output [31:0] sum,
+//    input cin,
+//    input [31:0] a, b,
+//    output cout
 );
 
 // Prefix Checker
@@ -63,7 +67,7 @@ prefix_checker u_prefix_checker4 (.instr_byte(IR[103:96]), .isPrefix(isPrefix4),
     .repeat_prefix(), .segID()
 );
 
-prefix_checker u_prefix_checker5 (.instr_byte(IR[95:88]), .isPrefix(isPrefix4), .isOpcode(isOpcode4),
+prefix_checker u_prefix_checker5 (.instr_byte(IR[95:88]), .isPrefix(isPrefix5), .isOpcode(isOpcode5),
     .operand_override(), .segment_override(),
     .repeat_prefix(), .segID()
 );
@@ -105,6 +109,9 @@ modrm_selector u_modrm_selector (.instr_buf(IR[119:80]), .modrm_sel(modrm_sel), 
 sib_disp_detector u_sib_disp_detector (.modrm(modrm), .disp_present(disp_present), .disp_size(disp_size),
     .sib_present(sib_present)
 );
+
+//carry_lookahead u_cl (sum, , , cout, a, b, cin);
+//adder32 u_adder32 (sum, carry, a, b);
 
 sib_selector u_sib_selector (.instr_buf(IR[111:72]), .sib_sel(modrm_sel), .sib(sib) );
 

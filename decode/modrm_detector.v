@@ -45,6 +45,15 @@ bufferH16$ buf10 (op4_b, op4_bf);
 bufferH16$ buf11 (op5_b, op5_bf);
 bufferH16$ buf12 (op6_b, op6_bf);
 
+//assign op7 = opcode[7];
+//assign op6 = opcode[6];
+//assign op5 = opcode[5];
+//assign op4 = opcode[4];
+//assign op3 = opcode[3];
+//assign op2 = opcode[2];
+//assign op1 = opcode[1];
+//assign op0 = opcode[0];
+
 and4$ and1 (out1a, op15_b, op14_b, op13_b, op12_b);
 and4$ and2 (out2a, opcode[11], opcode[10], opcode[9], opcode[8]);
 and2$ and3 (out3a, out1a, out2a);
@@ -93,6 +102,7 @@ or2$ or3 (out3r, out1r, out2r);
 //      &op4 &!op3 &!op2 &!op1) | (!op7 &op6 &op5 &op3 &op2 &op1 &op0) | (!op7 &op6 &op5
 //      &op4 &!op3 &!op2 &!op1 &!op0) | (op7 &op6 &op5 &op3 &op2 &!op1 &op0) | (op7 &op6
 //      &op5 &op4 &op3 &op2 &op1 &!op0);
+
 and4$ andp1 (out1p, op7_b, op6_buf, op5_b, op4_b);
 and4$ andp2 (out2p, op3_b, op2_b, op1_buf, op0_b);
 and2$ andp3 (out3p, out1p, out2p);
@@ -107,11 +117,11 @@ and3$ andp9 (out9p, opcode[0], out7p, out8p);
 
 and4$ andp10 (out10p, op7_b, op6_buf, op5_buf, op4_buf);
 and4$ andp11 (out11p, op3_b, op2_b, op1_b, op0_b);
-and2$ andp12 (out12p, out2p, out11p);
+and2$ andp12 (out12p, out10p, out11p);
 
 and3$ andp13 (out13p, op7_buf, op6_buf, op5_buf);
 and3$ andp14 (out14p, op3_buf, op2_buf, op1_b);
-and3$ andp15 (out15p, opcode[0], out13p, out6p);
+and3$ andp15 (out15p, opcode[0], out13p, out14p);
 
 and4$ andp16 (out16p, op7_buf, op6_buf, op5_buf, op4_buf);
 and4$ andp17 (out17p, op3_buf, op2_buf, op1_buf, op0_b);
@@ -122,7 +132,8 @@ or3$ or5 (out5r, out4r, out15p, out18p);
 
 // ModRM present??
 // Assuming that opcode[15:8] is either 0F or 00
-and2$ andm1 (outm1, out5r, out3a);
-or2$ or6 (modrm_present, outm1, out3r);
+//and2$ andm1 (outm1, out5r, out3a);
+mux2$ mux1 (modrm_present, out3r, out5r, out3a);
+//or2$ or6 (modrm_present, outm1, out3r);
 
 endmodule

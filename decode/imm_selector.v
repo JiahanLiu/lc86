@@ -1,5 +1,10 @@
+// Sign extend for 83 and 6A
+// Assuming that we do not have invalid opcodes, there is no 0F 83 and 0F 6A,
+// so we dont care about opcode size
+
 module imm_selector (
     input [127:0] IR,
+    input [15:0] opcode,
     input [3:0] imm_sel,
     input [1:0] imm_size,
     output [31:0] imm
@@ -12,9 +17,11 @@ wire [7:0] out1m, out2m, out3m, out4m, out5m, out6m;
 wire [7:0] out7m, out8m, out9m, out10m, out11m, out12m;
 wire [7:0] out13m, out14m, out15m, out16m;
 wire imm_sel0, imm_sel1, imm_sel2, imm_sel3;
-wire imm_size0_b, imm_size1_b;
-wire out1r, out2a, out8a, out2r;
-wire out1r_buf, out2r_buf, out1a_buf;
+wire out1r;
+wire out1c, out2c, out3c, out4c, out5c, out6c;
+wire sign_extend, imm_sign;
+wire [7:0] imm_sign8;
+wire op7_b, op6_b, op5_b, op4_b, op3_b, op2_b, op1_b, op0_b;
 
 assign byte2 = IR[119:112];
 assign byte3 = IR[111:104];
@@ -35,6 +42,27 @@ bufferH256$ buf4 (imm_sel0, imm_sel[0]);
 bufferH256$ buf5 (imm_sel1, imm_sel[1]);
 bufferH64$ buf6 (imm_sel2, imm_sel[2]);
 bufferH64$ buf7 (imm_sel3, imm_sel[3]);
+
+inv1$ inv1 (op7_b, opcode[7]);
+inv1$ inv2 (op6_b, opcode[6]);
+inv1$ inv3 (op5_b, opcode[5]);
+inv1$ inv4 (op4_b, opcode[4]);
+inv1$ inv5 (op3_b, opcode[3]);
+inv1$ inv6 (op2_b, opcode[2]);
+inv1$ inv7 (op1_b, opcode[1]);
+inv1$ inv8 (op0_b, opcode[0]);
+
+// Check if opcode is 6A or 83
+// t = (!b7 &b6 &b5 &!b4 &b3 &!b2 &b1 &!b0) | (b7 &!b6 &!b5 &!b4 &!b3 &!b2 &b1 &b0);
+and4$ and1c (out1c, op7_b, opcode[6], opcode[5], op4_b);
+and4$ and2c (out2c, opcode[3], op2_b, opcode[1], op0_b);
+and2$ and3c (out3c, out1c, out2c);
+
+and4$ and4c (out4c, opcode[7], op6_b, op5_b, op4_b);
+and4$ and5c (out5c, op3_b, op2_b, opcode[1], opcode[0]);
+and2$ and6c (out6c, out4c, out5c);
+
+or2$ or1c (sign_extend, out3c, out6c);
 
 mux4_8$ mux1_l1 (out1m, , byte2, byte3, byte4, imm_sel0, imm_sel1);
 mux4_8$ mux1_l2 (out2m, , byte3, byte4, byte5, imm_sel0, imm_sel1);
@@ -57,27 +85,18 @@ mux4_8$ mux2_l3 (out15m, out3m, out7m, out11m, , imm_sel2, imm_sel3);
 mux4_8$ mux2_l4 (out16m, out4m, out8m, out12m, , imm_sel2, imm_sel3);
 
 // Logic for masking the output
-// b4 = (s1 &!s0);
-// b3 = (s1 &!s0);
-// b2 = (!s1 &s0) | (s1 &!s0);
-// b1 = (!s1 &s0) | (!s0);
-inv1$ inv1 (imm_size0_b, imm_size[0]);
-inv1$ inv2 (imm_size1_b, imm_size[1]);
+// b4 = (s1);
+// b3 = (s1);
+// b2 = (s0) | (s1);
+// b1 = ();
 
-and2$ and1 (out1a, imm_size[1], imm_size0_b);
-and2$ and2 (out2a, imm_size1_b, imm_size[0]);
+assign imm_sign = out13m[7];
+assign imm_sign8 = {imm_sign, imm_sign, imm_sign, imm_sign, imm_sign, imm_sign, imm_sign, imm_sign};
+or2$ or1 (out1r, imm_size[1], imm_size[0]);
 
-and2$ and8 (out8a, imm_size[1], imm_size0_b);
-or2$ or1 (out1r, out2a, out8a);
-or2$ or2 (out2r, out2a, imm_size0_b);
-
-bufferH16$ buf1 (out1a_buf, out1a);
-bufferH16$ buf2 (out1r_buf, out1r);
-bufferH16$ buf3 (out2r_buf, out2r);
-
-and2$ and3[7:0] (imm[7:0], out2r_buf, out13m);
-and2$ and4[7:0] (imm[15:8], out1r_buf, out14m);
-and2$ and5[7:0] (imm[23:16], out1a_buf, out15m);
-and2$ and6[7:0] (imm[31:24], out1a_buf, out16m);
+assign imm[7:0] = out13m;
+mux4_8$ mux1f (imm[15:8], 8'b0, out14m, imm_sign8, imm_sign8, out1r, sign_extend);
+mux4_8$ mux2f (imm[23:16], 8'b0, out15m, imm_sign8, imm_sign8, imm_size[1], sign_extend);
+mux4_8$ mux3f (imm[31:24], 8'b0, out16m, imm_sign8, imm_sign8, imm_size[1], sign_extend);
 
 endmodule

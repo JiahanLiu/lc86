@@ -12,13 +12,15 @@ wire out1a, out2a, out3a, out4a, out5a, out6a, out7a, out8a;
 wire out9a, out10a, out11a, out12a, out13a, out14a, out15a;
 wire out16a, out17a, out18a, out19a, out20a, out21a, out22a;
 wire out23a, out24a, out25a;
-wire out1r, out2r, out3r, out5r, out7r, out8r;
+wire out1r, out2r, out3r, out4r, out5r, out7r, out8r;
 wire out1p, out2p, out3p, out4p, out5p, out6p, out7p, out8p;
 wire out9p, out10p, out11p, out12p, out13p, out14p, out15p;
 wire out16p, out17p, out18p, out19p;
 wire out1s, out2s, out3s, out4s, out5s, out6s, out7s, out8s;
 wire out9s, out10s, out11s, out12s, out13s, out14s, out15s;
 wire out16s, out17s;
+wire out1k, out2k, out3k, out4k, out5k, out6k;
+wire op15_b, op14_b, op13_b, op12_b;
 
 // Buffering for signals having fanout > 4
 bufferH16$ buf0 (op0_buf, opcode[0]);
@@ -40,6 +42,10 @@ inv1$ inv5 (op5_bf, op5_buf);
 inv1$ inv6 (op6_bf, op6_buf);
 inv1$ inv7 (op7_bf, op7_buf);
 inv1$ inv8 (operand_override_bf, operand_override_buf);
+inv1$ inv15 (op15_b, opcode[15]);
+inv1$ inv14 (op14_b, opcode[14]);
+inv1$ inv13 (op13_b, opcode[13]);
+inv1$ inv12 (op12_b, opcode[12]);
 
 // Buffering for signals having fanout > 4
 bufferH16$ buf8 (op0_b, op0_bf);
@@ -52,17 +58,33 @@ bufferH16$ buf14 (op6_b, op6_bf);
 bufferH16$ buf15 (op7_b, op7_bf);
 bufferH16$ buf17 (operand_override_b, operand_override_bf);
 
+//assign op7 = opcode[7];
+//assign op6 = opcode[6];
+//assign op5 = opcode[5];
+//assign op4 = opcode[4];
+//assign op3 = opcode[3];
+//assign op2 = opcode[2];
+//assign op1 = opcode[1];
+//assign op0 = opcode[0];
+
+
+// Logic for opcode[15:8] = 0F70
+and4$ and1k (out1k, op15_b, op14_b, op13_b, op12_b);
+and4$ and2k (out2k, opcode[11], opcode[10], opcode[9], opcode[8]);
+and2$ and3k (out3k, out1k, out2k);
+
+and4$ and4k (out4k, op7_b, op6_buf, op5_buf, op4_buf);
+and4$ and5k (out5k, op3_b, op2_b, op1_b, op0_b);
+and2$ and6k (out6k, out5k, out4k);
+
+
 // Logic for imm_present
-// imm_present = (!op7 &op6 &op5 &op4 &!op3 &!op2 &!op1 &!op0) | (op7 &op6 &!op5 &!op4
-//      &!op3 &op2 &op1 &op0 &!override_prefix_present) | (op7 &op6 &!op5 &!op4 &!op3
-//      &op2 &op1 &op0 &override_prefix_present) | (!op7 &op6 &op5 &!op4 &op3 &!op2
-//      &!op0) | (op7 &op6 &!op5 &!op4 &!op3 &op1 &!op0) | (op7 &op6 &!op5 &!op4 &!op2
-//      &op1 &!op0) | (op7 &!op6 &!op5 &!op4 &!op3 &!op2 &op0) | (!op7 &!op6 &!op4 &!op3
-//      &op2 &!op1) | (!op7 &!op6 &!op5 &!op4 &op2 &!op1) | (op7 &!op5 &!op4 &!op3 &!op2
-//      &!op1) | (op7 &!op6 &op5 &op4);
-and4$ and1 (out1a, op7_b, op6_buf, op5_buf, op4_buf);
-and4$ and2 (out2a, op3_b, op2_b, op1_b, op0_b);
-and2$ and3 (out3a, out1a, out2a);
+//assign out4r = (op7 &op6 &!op5 &!op4 &!op3 &op2 &op1 &op0 &!operand_override) | (
+//    op7 &op6 &!op5 &!op4 &!op3 &op2 &op1 &op0 &operand_override) | (!op7
+//     &op6 &op5 &!op4 &op3 &!op2 &!op0) | (op7 &op6 &!op5 &!op4 &!op3 &op1 &!op0) | (
+//    op7 &op6 &!op5 &!op4 &!op2 &op1 &!op0) | (op7 &!op6 &!op5 &!op4 &!op3 &!op2 &op0) | (
+//    !op7 &!op6 &!op4 &!op3 &op2 &!op1) | (op7 &!op5 &!op4 &!op3 &!op2 &!op1) | (
+//    !op7 &!op6 &!op5 &!op4 &op2 &!op1) | (op7 &!op6 &op5 &op4);
 
 and4$ and4 (out4a, op7_buf, op6_buf, op5_b, op4_b);
 and4$ and5 (out5a, op3_b, op2_buf, op1_buf, op0_buf);
@@ -96,18 +118,20 @@ and3$ and23 (out23a, op2_b, op1_b, out22a);
 and3$ and24 (out24a, op7_buf, op6_b, op5_buf);
 and2$ and25 (out25a, op4_buf, out24a);
 
-or4$ or1 (out1r, out3a, out6a, out9a, out11a);
+or3$ or1 (out1r, out6a, out9a, out11a);
 or4$ or2 (out2r, out13a, out15a, out17a, out19a);
 or3$ or3 (out3r, out21a, out23a, out25a);
-or3$ or4 (imm_present, out1r, out2r, out3r);
+or3$ or4 (out4r, out1r, out2r, out3r);
 
-// size_of_imm1 = (!op7 &op6 &op5 &!op4 &op3 &!op2 &!op1 &!op0
-//      &!override_prefix_present) | (op7 &op6 &!op5 &!op4 &!op3 &op2 &op1 &op0
-//      &!override_prefix_present) | (op7 &!op6 &!op5 &!op4 &!op3 &!op2 &!op1 &op0
-//      &!override_prefix_present) | (!op7 &!op6 &!op4 &!op3 &op2 &!op1 &op0
-//      &!override_prefix_present) | (!op7 &!op6 &!op5 &!op4 &op2 &!op1 &op0
-//      &!override_prefix_present) | (op7 &!op6 &op5 &op4 &op3
-//      &!override_prefix_present);
+mux2$ mux1 (imm_present, out4r, out6k, out3k);
+
+//assign imm_size[1] = (!op7 &op6 &op5 &!op4 &op3 &!op2 &!op1 &!op0
+//      &!operand_override) | (op7 &op6 &!op5 &!op4 &!op3 &op2 &op1 &op0
+//      &!operand_override) | (op7 &!op6 &!op5 &!op4 &!op3 &!op2 &!op1 &op0
+//      &!operand_override) | (!op7 &!op6 &!op4 &!op3 &op2 &!op1 &op0
+//      &!operand_override) | (!op7 &!op6 &!op5 &!op4 &op2 &!op1 &op0
+//      &!operand_override) | (op7 &!op6 &op5 &op4 &op3
+//      &!operand_override);
 and4$ and1s (out1s, op7_b, op6_buf, op5_buf, op4_b);
 and4$ and2s (out2s, op3_buf, op2_b, op1_b, op0_b);
 and3$ and3s (out3s, out1s, out2s, operand_override_b);
@@ -134,13 +158,13 @@ and3$ and17s (out17s, op3_buf, operand_override_b, out16s);
 or4$ or5 (out5r, out3s, out6s, out9s, out12s);
 or3$ or6 (imm_size[1], out15s, out17s, out5r);
 
-// size_of_imm0 = (!op7 &op6 &op5 &!op4 &op3 &!op2 &!op1 &!op0
-//      &override_prefix_present) | (op7 &op6 &!op5 &!op4 &!op3 &op2 &op1 &op0
-//      &override_prefix_present) | (op7 &!op6 &!op5 &!op4 &!op3 &!op2 &!op1 &op0
-//      &override_prefix_present) | (!op7 &!op6 &!op4 &!op3 &op2 &!op1 &op0
-//      &override_prefix_present) | (!op7 &!op6 &!op5 &!op4 &op2 &!op1 &op0
-//      &override_prefix_present) | (op7 &!op6 &op5 &op4 &op3
-//      &override_prefix_present) | (op7 &op6 &!op5 &!op4 &!op2 &op1 &!op0);
+//assign imm_size[0] = (!op7 &op6 &op5 &!op4 &op3 &!op2 &!op1 &!op0
+//      &operand_override) | (op7 &op6 &!op5 &!op4 &!op3 &op2 &op1 &op0
+//      &operand_override) | (op7 &!op6 &!op5 &!op4 &!op3 &!op2 &!op1 &op0
+//      &operand_override) | (!op7 &!op6 &!op4 &!op3 &op2 &!op1 &op0
+//      &operand_override) | (!op7 &!op6 &!op5 &!op4 &op2 &!op1 &op0
+//      &operand_override) | (op7 &!op6 &op5 &op4 &op3
+//      &operand_override) | (op7 &op6 &!op5 &!op4 &!op2 &op1 &!op0);
 and4$ and1p (out1p, op7_b, op6_buf, op5_buf, op4_b);
 and4$ and2p (out2p, op3_buf, op2_b, op1_b, op0_b);
 and3$ and3p (out3p, out1p, out2p, operand_override_buf);
@@ -165,7 +189,7 @@ and4$ and16p (out16p, op7_buf, op6_b, op5_buf, op4_buf);
 and3$ and17p (out17p, op3_buf, operand_override_buf, out16p);
 
 and4$ and18p (out18p, op7_buf, op6_buf, op5_b, op4_b);
-and3$ and19p (out19p, op2_b, op1_buf, op0_b);
+and4$ and19p (out19p, op2_b, op1_buf, op0_b, out18p);
 
 or3$ or7 (out7r, out3p, out6p, out9p);
 or3$ or8 (out8r, out12p, out15p, out17p);

@@ -38,7 +38,7 @@ imm_sel, disp_sel, offset_present, opcode_size, offset_size, segID, modrm, sib, 
         reset=0;
         set=1;
 
-        #4
+        #5
         reset=1;
         set=1;
         IR = 128'h83c00a00000000000000000000000000;
@@ -50,15 +50,34 @@ imm_sel, disp_sel, offset_present, opcode_size, offset_size, segID, modrm, sib, 
         $vcdpluson(0, TOP);
     end
 
-    initial #100 $finish;
+    initial #30 $finish;
 
     always @(posedge clk) begin
         $strobe ("at time %0d, opcode = %h", $time, opcode);
         $strobe ("at time %0d, modrm_sel = %h", $time, modrm_sel);
         $strobe ("at time %0d, instr_length_updt = %h", $time, instr_length_updt);
+        $strobe ("at time %0d, prefix_size = %h", $time, prefix_size);
+        $strobe ("at time %0d, prefix_present = %h", $time, prefix_present);
+        $strobe ("at time %0d, segment_override = %h", $time, segment_override);
+        $strobe ("at time %0d, operand_override = %h", $time, operand_override);
+        $strobe ("at time %0d, repeat_prefix = %h", $time, repeat_prefix);
+        $strobe ("at time %0d, modrm_present = %h", $time, modrm_present);
+        $strobe ("at time %0d, imm_present = %h", $time, imm_present);
+        $strobe ("at time %0d, imm_size = %h", $time, imm_size);
+        $strobe ("at time %0d, sib_present = %h", $time, sib_present);
+        $strobe ("at time %0d, disp_present = %h", $time, disp_present);
+        $strobe ("at time %0d, disp_size = %h", $time, disp_size);
+        $strobe ("at time %0d, imm_sel = %h", $time, imm_sel);
+        $strobe ("at time %0d, disp_sel = %h", $time, disp_sel);
+        $strobe ("at time %0d, offset_present = %h", $time, offset_present);
+        $strobe ("at time %0d, offset_size = %h", $time, offset_size);
+        $strobe ("at time %0d, segID = %h", $time, segID);
+        $strobe ("at time %0d, modrm = %h", $time, modrm);
+        $strobe ("at time %0d, sib = %h", $time, sib);
+        $strobe ("at time %0d, modrm_sel = %h", $time, modrm_sel);
     end
 
     always 
-        #4 clk = !clk;
+        #5 clk = !clk;
 
 endmodule

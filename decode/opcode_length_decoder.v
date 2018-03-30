@@ -67,7 +67,7 @@ or2$ or1 (opcode_sel[0], outa16, outa17);
 and3$ and18 (outa18, isOpcode1_b, isOpcode2_b, isOpcode3);
 or2$ or2 (opcode_sel[1], outa16, outa18);
 
-and2$ and19 (outa19, isOpcode5, outa14);
+and3$ and19 (outa19, isOpcode5, outa14, outa16);
 and3$ and21 (outa21, isOpcode4, outa13, outa18);
 and3$ and22 (outa22, isOpcode1, isOpcode2, outa11);
 and4$ and23 (outa23, isOpcode1_b, isOpcode2, isOpcode3, outa12);

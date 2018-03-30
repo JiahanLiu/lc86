@@ -10,11 +10,11 @@ wire [7:0] byte2, byte3, byte4, byte5, byte6;
 wire [7:0] out1m;
 wire modrm_sel0, modrm_sel1, modrm_sel2;
 
-assign byte6 = instr_buf[39:32];
-assign byte5 = instr_buf[31:24];
+assign byte2 = instr_buf[39:32];
+assign byte3 = instr_buf[31:24];
 assign byte4 = instr_buf[23:16];
-assign byte3 = instr_buf[15:8];
-assign byte2 = instr_buf[7:0];
+assign byte5 = instr_buf[15:8];
+assign byte6 = instr_buf[7:0];
 
 bufferH16$ buf1 (modrm_sel0, modrm_sel[0]);
 bufferH16$ buf2 (modrm_sel1, modrm_sel[1]);

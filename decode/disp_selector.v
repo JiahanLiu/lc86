@@ -11,6 +11,8 @@ wire [7:0] out1m, out2m, out3m, out4m, out5m, out6m;
 wire [7:0] out7m, out8m, out9m, out10m, out11m, out12m;
 wire disp_sel0, disp_sel1, disp_sel2;
 wire disp_size_bf, disp_size_b;
+wire disp_sign;
+wire [7:0] disp_sign8;
 
 assign byte3 = IR[111:104];
 assign byte4 = IR[103:96];
@@ -51,11 +53,12 @@ bufferH64$ buf4 (disp_size_b, disp_size_bf);
 
 assign disp[7:0] = out9m;
 bufferH64$ buf5 (disp_sign, out9m[7]);
+assign disp_sign8 = {disp_sign, disp_sign, disp_sign, disp_sign, disp_sign, disp_sign, disp_sign, disp_sign};
 
 // Sign extended disp
-mux_8$ muxc1 (disp[15:8], disp_sign, out10m, disp_size_b);
-mux_8$ muxc2 (disp[23:16], disp_sign, out11m, disp_size_b);
-mux_8$ muxc3 (disp[31:24], disp_sign, out12m, disp_size_b);
+mux2_8$ muxc1 (disp[15:8], disp_sign8, out10m, disp_size_b);
+mux2_8$ muxc2 (disp[23:16], disp_sign8, out11m, disp_size_b);
+mux2_8$ muxc3 (disp[31:24], disp_sign8, out12m, disp_size_b);
 
 
 endmodule
