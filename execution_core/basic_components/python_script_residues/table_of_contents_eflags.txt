@@ -1,0 +1,14 @@
+
+//-------------------------------------------------------------------------------------
+// file_name
+// --------------------
+// EE382N, Spring 2018
+// Apruv Narkhede, Nelson Wu, Steven Flolid, Jiahan Liu
+//
+// OF_logic                         - Overflow Flag                  
+// PF_logic                         - Parity Flag                    
+// ZF_logic                         - Zero Flag                      
+// ZF_logic_daa                     - Zero Flag for DAA instruction  
+// assign_flags                     - Assigns individual flag bits to 32 bit flag register
+//
+//-------------------------------------------------------------------------------------

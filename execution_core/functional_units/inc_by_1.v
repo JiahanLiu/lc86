@@ -1,24 +1,27 @@
-module subtract32 (
-	output [31:0] difference, carry_out,  
-	input [31:0] a, b
-	);
 
-	wire [31:0] b_not;
-	wire carry_in;
-
-	not32_2way u_not_b(b_not, b);
-
-	adder32_w_carry_in adder32_w_carry_in(difference, carry_out, a, b_not, 1'b1);
-
-endmodule
-
-//-----------------------------------------------------
+//-------------------------------------------------------------------------------------
+// inc_by_1.v
+// --------------------
+// EE382N, Spring 2018
+// Apruv Narkhede, Nelson Wu, Steven Flolid, Jiahan Liu
 //
-// Increments input a by 1, Does generate flags
+// functional_unit_inc_by_1         - Increments a32 by 1, produces flags
+// inc_by_1                         - Increments a32 by 1, NO flags produced
+// a_plus_carry32                   - Adds Carry32 to a32+b1         
+// a_plus_carry1                    - determines sum1 based on a1+1 with carry_in1
+// inc_by_1_lookahead               - Lookahead for inc_by_1 modeled after Kogge Stone
 //
-//-----------------------------------------------------
-// Functionality: Use inc_by_1 if you need flags
-// Combinational Delay: 
+//-------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
+//
+// 							   Increment by 1 (YES flags)
+//
+//-------------------------------------------------------------------------------------
+// Functionality: Increments a32 by 1, produces flags
+//
+// Note: Use faster module: inc_by_1 if flags aren't required 
+//
+// Combinational Delay: 4.2ns
 //
 module functional_unit_inc_by_1 (
 	output [31:0] sum, 
@@ -48,13 +51,16 @@ module functional_unit_inc_by_1 (
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
 endmodule
 
-//-----------------------------------------------------
+//-------------------------------------------------------------------------------------
 //
-// Increments input a by 1, doesn't generate flags
+// 							   Increment by 1 (NO flags)
 //
-//-----------------------------------------------------
-// Functionality: 
-// Combinational Delay: 
+//-------------------------------------------------------------------------------------
+// Functionality: Increments a32 by 1, NO flags produced
+//
+// Note: fastest increment by 1, same idea as Kogge Stone
+//
+// Combinational Delay: 4.2ns
 //
 module inc_by_1 (
 	output [31:0] sum,
@@ -74,40 +80,14 @@ module inc_by_1 (
 
 endmodule
 
-//-----------------------------------------------------
+//-------------------------------------------------------------------------------------
 //
-// Adds 1-bit carry to a 1-bit number
+// 							   Adds a32 + b1 + carry31
 //
-//-----------------------------------------------------
-// Functionality: 
-// Combinational Delay: 
+//-------------------------------------------------------------------------------------
+// Functionality: Adds Carry32 to a32+b1
 //
-module a_plus_carry1 (
-	output sum,
-	input a, carry_in
-	);
-
-	wire a_not, c_not;
-
-	inv1$ not_a (a_not, a);
-	inv1$ not_c (c_not, carry_in);
-
-	wire comp1, comp2;
-
-	and2$ and_comp1 (comp1, a, c_not);
-	and2$ and_comp2 (comp2, a_not, c);
-
-	or2$ or_final (sum, comp1, comp2);
-
-endmodule
-
-//-----------------------------------------------------
-//
-// Adds 32-bit carry to a 32-bit num1 (a) with 1 bit num2 (b)
-//
-//-----------------------------------------------------
-// Functionality: 
-// Combinational Delay: 
+// Combinational Delay: 4.2ns
 //
 module a_plus_carry32 (
 	output [31:0] sum,    
@@ -128,6 +108,43 @@ module a_plus_carry32 (
 
 endmodule
 
+//-------------------------------------------------------------------------------------
+//
+// 							   Adds 1-bit a to 1 with Carry In
+//
+//-------------------------------------------------------------------------------------
+// Functionality: determines sum1 based on a1+1 with carry_in1
+//
+// Combinational Delay: 4.2ns
+//
+module a_plus_carry1 (
+	output sum,
+	input a, carry_in
+	);
+
+	wire a_not, c_not;
+
+	inv1$ not_a (a_not, a);
+	inv1$ not_c (c_not, carry_in);
+
+	wire comp1, comp2;
+
+	and2$ and_comp1 (comp1, a, c_not);
+	and2$ and_comp2 (comp2, a_not, c);
+
+	or2$ or_final (sum, comp1, comp2);
+
+endmodule
+
+//-------------------------------------------------------------------------------------
+//
+// 							   Lookahead for increment by 1
+//
+//-------------------------------------------------------------------------------------
+// Functionality: Lookahead for inc_by_1 modeled after Kogge Stone
+//
+// Combinational Delay: 4.2ns
+//
 module inc_by_1_lookahead (
 	output [31:0] carry_found_by_lookahead,
 	input [31:0] a
@@ -162,27 +179,6 @@ module inc_by_1_lookahead (
 			and2$ and2_m (ct_level1_size2[k], bufferedA[k*4], bufferedA[k*4+1]);
 		end 
 	endgenerate
-
-	/*
-	genvar l;
-	generate
-		for(l = 0; l < 8; l = l + 1)
-		begin : assign_wire_m
-			assign_wire1 assign_wire_m(ct_level1_size1[l], bufferedA[l*4]);
-		end 
-	endgenerate
-	*/
-	/*
-	assign_wire1 assign_wire_0(ct_level1_size1[0], bufferedA[0]);
-	assign_wire1 assign_wire_1(ct_level1_size1[1], bufferedA[4]);
-	assign_wire1 assign_wire_2(ct_level1_size1[2], bufferedA[8]);
-	assign_wire1 assign_wire_3(ct_level1_size1[3], bufferedA[12]);
-
-	assign_wire1 assign_wire_4(ct_level1_size1[4], bufferedA[16]);
-	assign_wire1 assign_wire_5(ct_level1_size1[5], bufferedA[20]);
-	assign_wire1 assign_wire_6(ct_level1_size1[6], bufferedA[24]);
-	assign_wire1 assign_wire_7(ct_level1_size1[7], bufferedA[28]);
-	*/
 
 	assign ct_level1_size1[0] = bufferedA[0];
 	assign ct_level1_size1[1] = bufferedA[4];
@@ -273,5 +269,3 @@ module inc_by_1_lookahead (
 	assign carry_found_by_lookahead[0] = ct_level1_size1[0];
 
 endmodule
-
-

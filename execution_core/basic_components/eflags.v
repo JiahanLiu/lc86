@@ -1,9 +1,32 @@
-/***************************************
-*
-* 		Reference: Vol1, pg 60
-*
-****************************************/
 
+//-------------------------------------------------------------------------------------
+//
+// 					 		Reference: Intel Vol1, pg 60
+//
+//-------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
+// eflags.v
+// --------------------
+// EE382N, Spring 2018
+// Apruv Narkhede, Nelson Wu, Steven Flolid, Jiahan Liu
+//
+// OF_logic                         - Overflow Flag                  
+// PF_logic                         - Parity Flag                    
+// ZF_logic                         - Zero Flag                      
+// ZF_logic_daa                     - Zero Flag for DAA instruction  
+// assign_flags                     - Assigns individual flag bits to 32 bit flag register
+//
+//-------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------------------
+//
+// 					 				OF_Logic
+//
+//-------------------------------------------------------------------------------------
+// Functionality: Overflow Flag
+//
+// Combinational Delay: 
+//
 module OF_logic (
 	output OF,
 	input adder_result_high_bit, // Clock Enable
@@ -19,6 +42,15 @@ module OF_logic (
 
 endmodule
 
+//-------------------------------------------------------------------------------------
+//
+// 					 				PF_Logic
+//
+//-------------------------------------------------------------------------------------
+// Functionality: Parity Flag
+//
+// Combinational Delay: 
+//
 module PF_logic (
 	output PF,    // Clock
 	input [7:0] adder_result // Clock Enable
@@ -40,6 +72,17 @@ module PF_logic (
 
 endmodule
 
+//-------------------------------------------------------------------------------------
+//
+// 					 				ZF_Logic
+//
+//-------------------------------------------------------------------------------------
+// Functionality: Zero Flag
+// 
+// Notes: Use a different one for DAA
+// 
+// Combinational Delay: 
+//
 module ZF_logic (
 	output ZF,    
 	input [31:0] adder_result
@@ -66,6 +109,17 @@ module ZF_logic (
 
 endmodule
 
+//-------------------------------------------------------------------------------------
+//
+// 					 			ZF_Logic for DAA
+//
+//-------------------------------------------------------------------------------------
+// Functionality: Zero Flag for DAA instruction
+// 
+// Notes: Use a different one for DAA
+// 
+// Combinational Delay: 
+//
 module ZF_logic_daa (
 	output ZF,    
 	input [7:0] adder_result
@@ -81,6 +135,15 @@ module ZF_logic_daa (
 
 endmodule
 
+//-------------------------------------------------------------------------------------
+//
+// 					 		Assign 1 bit Flags to 32 Bit Register
+//
+//-------------------------------------------------------------------------------------
+// Functionality: Assigns individual flag bits to 32 bit flag register
+// 
+// Combinational Delay: 
+//
 module assign_flags (
 	output [31:0] flags,
 	input OF,

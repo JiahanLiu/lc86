@@ -1,4 +1,36 @@
-module alu (alu_out, flags, a, b, op);
+
+//-------------------------------------------------------------------------------------
+// alu.v
+// --------------------
+// EE382N, Spring 2018
+// Apruv Narkhede, Nelson Wu, Steven Flolid, Jiahan Liu
+//
+// alu32                            - 32-bit ALU                     
+// alu_adder                        - adds a and b, produces flags   
+// alu_or                           - 32-bitwise OR, produces flags  
+// alu_not                          - 32-bitwise NOT, produces flags 
+// alu_daa                          - decimal adjust, produces flags 
+// daa_single_digit                 - decimal adjust for 1-digit (4 bits)
+// daa_double_digit                 - decimal adjust for 2-digit (8 bits), produces flags
+// alu_and                          - 32-bitwise AND, produces flags 
+// alu_cld                          - produces a 32-bit flag with DF = 0
+// alu_cmp                          - does a compare by subtracting, produces flags
+// alu_std                          - produces a 32-bit flag with DF = 1
+//
+//-------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
+//
+// 									  ALU32
+//
+//-------------------------------------------------------------------------------------
+// Functionality: 32-bit ALU
+//
+// Operations 0 = ADD | 1 == OR | 2 = NOT | 3 = DAA | 4 = AND
+//            | 5 = CLD | 6 = CMP | 7 = STD
+//
+// Combinational Delay: 4.2ns
+//
+module alu32 (alu_out, flags, a, b, op);
 	output [31:0] alu_out;
 	output [31:0] flags;
 	input [31:0] a, b;
@@ -24,6 +56,15 @@ module alu (alu_out, flags, a, b, op);
 
 endmodule // alu
 
+//-------------------------------------------------------------------------------------
+//
+// 									  ALU_Adder32
+//
+//-------------------------------------------------------------------------------------
+// Functionality: adds a and b, produces flags
+//
+// Combinational Delay: 4.2ns
+//
 module alu_adder (adder_result, flags, a, b, carry_in);
 	output [31:0] adder_result;
 	output [31:0] flags;
@@ -47,6 +88,15 @@ module alu_adder (adder_result, flags, a, b, carry_in);
 
 endmodule
 
+//-------------------------------------------------------------------------------------
+//
+// 									  ALU_OR32
+//
+//-------------------------------------------------------------------------------------
+// Functionality: 32-bitwise OR, produces flags
+//
+// Combinational Delay: 4.2ns
+//
 module alu_or (
 	output [31:0] or_result,
 	output [31:0] flags,
@@ -68,13 +118,22 @@ module alu_or (
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
 endmodule
 
+//-------------------------------------------------------------------------------------
+//
+// 									  ALU_NOT32
+//
+//-------------------------------------------------------------------------------------
+// Functionality: 32-bitwise NOT, produces flags
+//
+// Combinational Delay: 4.2ns
+//
 module alu_not (
 	output [31:0] not_result,
 	output [31:0] flags,
 	input [31:0] a
 	);
 
-	not32_2way u_not32_2way(not_result, a);
+	not32_1way u_not32_1way(not_result, a);
 
 	wire OF, DF, SF, ZF, AF, PF, CF;  
 
@@ -89,6 +148,15 @@ module alu_not (
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
 endmodule
 
+//-------------------------------------------------------------------------------------
+//
+// 									  ALU_DAA32
+//
+//-------------------------------------------------------------------------------------
+// Functionality: decimal adjust, produces flags
+//
+// Combinational Delay: 4.2ns
+//
 module alu_daa (
 	output [31:0] daa_result,
 	output [31:0] flags,
@@ -111,6 +179,15 @@ module alu_daa (
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
 endmodule
 
+//-------------------------------------------------------------------------------------
+//
+// 									 DAA for Single Digit
+//
+//-------------------------------------------------------------------------------------
+// Functionality: decimal adjust for 1-digit (4 bits)
+//
+// Combinational Delay: 4.2ns
+//
 module daa_single_digit (
 	output [3:0] digit_out, 
 	output carry_out, 
@@ -121,7 +198,7 @@ module daa_single_digit (
 	wire [3:0] a_not;
 	wire carry_in_not;
 
-	not4_2way not_a(a_not, a);
+	not4_1way not_a(a_not, a);
 	inv1$ not_carry_in(carry_in_not, carry_in);
 
 	wire and3_comp1, and3_comp2, and3_comp3;
@@ -163,6 +240,15 @@ module daa_single_digit (
 
 endmodule
 
+//-------------------------------------------------------------------------------------
+//
+// 									 DAA for Double Digit
+//
+//-------------------------------------------------------------------------------------
+// Functionality: decimal adjust for 2-digit (8 bits), produces flags
+//
+// Combinational Delay: 4.2ns
+//
 module daa_double_digit (
 	output [7:0] digits_out,
 	output [1:0] carry_out, 
@@ -178,6 +264,15 @@ module daa_double_digit (
 
 endmodule
 
+//-------------------------------------------------------------------------------------
+//
+// 									  ALU_AND32
+//
+//-------------------------------------------------------------------------------------
+// Functionality: 32-bitwise AND, produces flags
+//
+// Combinational Delay: 4.2ns
+//
 module alu_and (
 	output [31:0] and_result,
 	output [31:0] flags,
@@ -199,6 +294,15 @@ module alu_and (
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
 endmodule
 
+//-------------------------------------------------------------------------------------
+//
+// 									 ALU_CLD32
+//
+//-------------------------------------------------------------------------------------
+// Functionality: produces a 32-bit flag with DF = 0
+//
+// Combinational Delay: 4.2ns
+//
 module alu_cld (
 	output [31:0] cld_result,
 	output [31:0] flags
@@ -219,6 +323,15 @@ module alu_cld (
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
 endmodule
 
+//-------------------------------------------------------------------------------------
+//
+// 									 ALU_CMP32
+//
+//-------------------------------------------------------------------------------------
+// Functionality: does a compare by subtracting, produces flags
+//
+// Combinational Delay: 4.2ns
+//
 module alu_cmp (
 	output [31:0] cmp_result,
 	output [31:0] flags,
@@ -241,6 +354,15 @@ module alu_cmp (
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
 endmodule
 
+//-------------------------------------------------------------------------------------
+//
+// 									 ALU_STD32
+//
+//-------------------------------------------------------------------------------------
+// Functionality: produces a 32-bit flag with DF = 1
+//
+// Combinational Delay: 4.2ns
+//
 module alu_std (
 	output [31:0] std_result,
 	output [31:0] flags

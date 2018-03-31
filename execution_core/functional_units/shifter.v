@@ -1,13 +1,40 @@
+
+//-------------------------------------------------------------------------------------
+// shifter.v
+// --------------------
+// EE382N, Spring 2018
+// Apruv Narkhede, Nelson Wu, Steven Flolid, Jiahan Liu
+//
+// shift_arithmetic_left_w_flags    - SAL with flags output          
+// shift_arithmetic_right_w_flags   - SAR with flags output          
+// shift_arithmetic_left            - SAL and outputs the last digit shifted out
+// shift_arithmetic_right           - SAR and outputs the last digit shifted out
+// calculate_carry_out              - specialized logic to determine last digit carried out 
+// SAR32_by_1                       - SAR 1x w/carry                 
+// SAR32_by_2                       - SAR 2x w/carry                 
+// SAR32_by_4                       - SAR 4x w/carry                 
+// SAR32_by_8                       - SAR 8x w/carry                 
+// SAR32_by_16                      - SAR 16x w/carry                
+// SAL32_by_1                       - SAL 1x w/carry                 
+// SAL32_by_2                       - SAL 2x w/carry                 
+// SAL32_by_4                       - SAL 4x w/carry                 
+// SAL32_by_8                       - SAL 8x w/carry                 
+// SAL32_by_16                      - SAL 1x w/carry                 
+//
+//-------------------------------------------------------------------------------------
+
 //-------------------------------------------------------------------------------------
 //
 // 							Shift Arthemtic Left w/ Flags
 //
 //-------------------------------------------------------------------------------------
-// Functionality: Shifts a by b times. Also Outputs Flags 
+// Functionality: SAL with flags output
+//
 // Flags: Note that for non-zero count the AF flag is undefined, this will be 
 // determined in decode since flag overwrite mask is produce in decode. 
 // Also the OF flag is only affect for 1 bit shift, the overwrite mask to 
 // make this happen also happens in decode. 
+//
 // Combinational Delay: 
 //
 module shift_arithmetic_left_w_flags(
@@ -34,11 +61,13 @@ endmodule
 // 							Shift Arthemtic Right w/ Flags
 //
 //-------------------------------------------------------------------------------------
-// Functionality: Shifts a by b times. Also Outputs Flags 
+// Functionality: SAR with flags output
+//
 // Flags: Note that for non-zero count the AF flag is undefined, this will be 
 // determined in decode since flag overwrite mask is produce in decode. 
 // Also the OF flag is only affect for 1 bit shift, the overwrite mask to 
 // make this happen also happens in decode. 
+//
 // Combinational Delay: 
 //
 module shift_arithmetic_right_w_flags(
@@ -65,7 +94,8 @@ endmodule
 // 									Shift Arthemtic Left
 //
 //-------------------------------------------------------------------------------------
-// Functionality: Shifts a by b times. Saves the last digit shifted out.
+// Functionality: SAL and outputs the last digit shifted out
+//
 // Combinational Delay: 
 //
 module shift_arithmetic_left(
@@ -103,7 +133,8 @@ endmodule
 // 									Shift Arthemtic Right
 //
 //-------------------------------------------------------------------------------------
-// Functionality: Shifts a by b times. Saves the last digit shifted out.
+// Functionality: SAR and outputs the last digit shifted out
+//
 // Combinational Delay: 
 //
 module shift_arithmetic_right(
@@ -141,8 +172,8 @@ endmodule
 // 									Calculate Carry out
 //
 //-------------------------------------------------------------------------------------
-// Functionality: Given the number of times shifted (count_operand), calculate the 
-// last digit shifted out (aka lost). 
+// Functionality: specialized logic to determine last digit carried out 
+//
 // Combinational Delay: 
 //
 module calculate_carry_out (
@@ -174,7 +205,8 @@ endmodule
 // 										SAR by 1
 //
 //-------------------------------------------------------------------------------------
-// Functionality: Arithmetic Shift by 1. Leftover bit is last bit shifted out.
+// Functionality: SAR 1x w/carry
+//
 // Combinational Delay: 
 //
 module SAR32_by_1 (
@@ -194,7 +226,8 @@ endmodule
 // 										SAR by 2
 //
 //-------------------------------------------------------------------------------------
-// Functionality: Arithmetic Shift by 2. Leftover bit is last bit shifted out.
+// Functionality: SAR 2x w/carry
+//
 // Combinational Delay: 
 //
 module SAR32_by_2 (
@@ -209,12 +242,13 @@ module SAR32_by_2 (
 
 endmodule
 
-//---------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
 //
 // 										SAR by 4
 //
-//---------------------------------------------------------------------------------------
-// Functionality: Arithmetic Shift by 4. Leftover bit is last bit shifted out.
+//-------------------------------------------------------------------------------------
+// Functionality: SAR 4x w/carry
+//
 // Combinational Delay: 
 //
 module SAR32_by_4 (
@@ -229,12 +263,13 @@ module SAR32_by_4 (
 
 endmodule
 
-//---------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
 //
 // 										SAR by 8
 //
-//---------------------------------------------------------------------------------------
-// Functionality: Arithmetic Shift by 8. Leftover bit is last bit shifted out.
+//-------------------------------------------------------------------------------------
+// Functionality: SAR 8x w/carry
+//
 // Combinational Delay: 
 //
 module SAR32_by_8 (
@@ -249,12 +284,13 @@ module SAR32_by_8 (
 
 endmodule
 
-//---------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
 //
 // 										SAR by 16
 //
-//---------------------------------------------------------------------------------------
-// Functionality: Arithmetic Shift by 16. Leftover bit is last bit shifted out.
+//-------------------------------------------------------------------------------------
+// Functionality: SAR 16x w/carry
+//
 // Combinational Delay: 
 //
 module SAR32_by_16 (
@@ -274,7 +310,8 @@ endmodule
 // 										SAL by 1
 //
 //-------------------------------------------------------------------------------------
-// Functionality: Arithmetic Shift by 1. Leftover bit is last bit shifted out.
+// Functionality: SAL 1x w/carry
+//
 // Combinational Delay: 
 //
 module SAL32_by_1 (
@@ -294,7 +331,8 @@ endmodule
 // 										SAL by 2
 //
 //-------------------------------------------------------------------------------------
-// Functionality: Arithmetic Shift by 2. Leftover bit is last bit shifted out.
+// Functionality: SAL 2x w/carry
+//
 // Combinational Delay: 
 //
 module SAL32_by_2 (
@@ -309,12 +347,13 @@ module SAL32_by_2 (
 
 endmodule
 
-//---------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
 //
 // 										SAL by 4
 //
-//---------------------------------------------------------------------------------------
-// Functionality: Arithmetic Shift by 4. Leftover bit is last bit shifted out.
+//-------------------------------------------------------------------------------------
+// Functionality: SAL 4x w/carry
+//
 // Combinational Delay: 
 //
 module SAL32_by_4 (
@@ -329,12 +368,13 @@ module SAL32_by_4 (
 
 endmodule
 
-//---------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
 //
 // 										SAL by 8
 //
-//---------------------------------------------------------------------------------------
-// Functionality: Arithmetic Shift by 8. Leftover bit is last bit shifted out.
+//-------------------------------------------------------------------------------------
+// Functionality: SAL 8x w/carry
+//
 // Combinational Delay: 
 //
 module SAL32_by_8 (
@@ -349,12 +389,13 @@ module SAL32_by_8 (
 
 endmodule
 
-//---------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
 //
 // 										SAL by 16
 //
-//---------------------------------------------------------------------------------------
-// Functionality: Arithmetic Shift by 16. Leftover bit is last bit shifted out.
+//-------------------------------------------------------------------------------------
+// Functionality: SAL 1x w/carry
+//
 // Combinational Delay: 
 //
 module SAL32_by_16 (
