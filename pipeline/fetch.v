@@ -19,6 +19,39 @@ module fetch (
     output [127:0] IR
 );
 
+//The four buffers for the fetch unit
+wire [127:0] FE_buf_0_in, FE_buf_1_in, FE_buf_2_in, FE_buf_3_in;	//the buffer register inputs
+wire [127:0] FE_buf_0_out, FE_buf_1_out, FE_buf_2_out, FE_buf_3_out;
+wire FE_buf_0_en, FE_buf_1_en, FE_buf_2_en, FE_buf_3_en;
+reg128e$ u_FE_buf_0(clk, FE_buf_0_in, FE_buf_0_out, , reset, set, FE_buf_0_en);
+reg128e$ u_FE_buf_1(clk, FE_buf_1_in, FE_buf_1_out, , reset, set, FE_buf_1_en);
+reg128e$ u_FE_buf_2(clk, FE_buf_2_in, FE_buf_2_out, , reset, set,FE_buf_2_en);
+reg128e$ u_FE_buf_3(clk, FE_buf_3_in, FE_buf_3_out, , reset, set, FE_buf_3_en);
+
+
+wire [5:0] read_ptr;
+//temporary read_ptr assign until the fetch is finished
+assign read_ptr = 0;
+//Values of the fetch buffers until the fetch unit is finished
+assign FE_buf_0_in = 128'hFEEDBEEF;
+assign FE_buf_1_in = 128'hABCD1234;
+assign FE_buf_2_in = 128'hABCD1234;
+assign FE_buf_3_in = 128'hABCD1234;
+FE_full_shifter(FE_buf_0_out, FE_buf_1_out, FE_buf_2_out, FE_buf_3_out, read_ptr, IR);
+
+endmodule
+
+module FE_full_shifter(input [127:0] A, B, C, D,
+			input [5:0] address,
+			output [127:0] Output);
+wire [127:0] AB_out, BC_out, CD_out, DA_out;
+shift126$ AB(A, B, , address[3:0], AB_out);
+shift126$ BC(B, C, , address[3:0], BC_out);
+shift126$ CD(C, D, , address[3:0], CD_out);
+shift128$ DA(D, A, , address[3:0], DA_out);
+
+mux4_128$ selector(Output, AB_out, BC_out, CD_out, DA_out, address[4], address[5]);
+	
 endmodule
 
 module shift128$(input [127:0] Din_low,
@@ -47,6 +80,7 @@ mux4_128$(Dout,mux_array[0],mux_array[0],mux_array[0],mux_array[0],amnt[2],amnt[
 
 endmodule
 
+
 module mux4_128$(output [127:0] Y,
 		input [127:0] IN0,input [127:0] IN1, input [127:0] IN2,input [127:0] IN3,
 		input S0, input S1);
@@ -57,6 +91,18 @@ for(i=0;i<8;i=i+1)
 			S0, S1);
   end
 
+endmodule
+
+
+module reg128e$(input CLK,
+		input [127:0] Din,
+		output [127:0] Q,
+		output [127:0] QBAR,
+		input CLR,
+		input PRE,
+		input en);
+reg64e$ low(CLK, Din[63:0], Q[63:0], QBAR[63:0], CLR, PRE, en);
+reg64e$ high(CLK, Din[127:64], Q[127:64], QBAR[127:64], CLR, PRE, en);
 endmodule
 
 
