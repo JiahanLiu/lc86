@@ -7,7 +7,6 @@ module fetch (
     input icache_ready,
     input [31:0] jmp_fp, trap_fp,
     input [15:0] CS,
-    input [3:0] instr_length_updt,
     input [1:0] fp_mux,
     input load_eip,
 
@@ -45,9 +44,9 @@ module FE_full_shifter(input [127:0] A, B, C, D,
 			input [5:0] address,
 			output [127:0] Output);
 wire [127:0] AB_out, BC_out, CD_out, DA_out;
-shift126$ AB(A, B, , address[3:0], AB_out);
-shift126$ BC(B, C, , address[3:0], BC_out);
-shift126$ CD(C, D, , address[3:0], CD_out);
+shift128$ AB(A, B, , address[3:0], AB_out);
+shift128$ BC(B, C, , address[3:0], BC_out);
+shift128$ CD(C, D, , address[3:0], CD_out);
 shift128$ DA(D, A, , address[3:0], DA_out);
 
 mux4_128$ selector(Output, AB_out, BC_out, CD_out, DA_out, address[4], address[5]);

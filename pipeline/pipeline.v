@@ -50,92 +50,101 @@ register_file (CLK,
 
 //*******CACHE FILES*******//
 //Cache file systems to be used by the system
-icache u_icache (CLK, RST, PADDR, R, DOUT);
-dcache u_dcache(CLK, RST, PADDR, DIN, SIZE, WE, R, DOUT);
+wire [127:0] IC_DOUT, DC_IN, DC_DOUT;
+wire [31:0] IC_PADDR, DC_PADDR;
+wire IC_EN, DC_WE, IC_R, DC_R;	//IC_EN needs to be included
+icache u_icache (CLK, RST, IC_PADDR, IC_R, IC_DOUT);
+dcache u_dcache(CLK, RST, DC_PADDR, DC_DIN, DC_SIZE, DC_WE, DC_R, DC_DOUT);
 
 
+ 
 //*******FETCH STAGE*******//
-fetch u_fetch(
-    input clk, set, reset,
-    input [31:0] EIP,
-    input [127:0] icache_data,
-    input icache_ready,
-    input [31:0] jmp_fp, trap_fp,
-    input [15:0] CS,
-    input [3:0] instr_length_updt,
-    input [1:0] fp_mux,
-    input load_eip,
+wire [31:0] FE_EIP_IN;	//this signal should be coming out of WB, does not need a latch
+wire [31:0] FE_JMP_FP, FE_TRAP_FP;//not sure where these signals come from yet
+wire [1:0] FE_FP_MUX;//not sure where this signal comes from yet
+wire FE_LD_EIP;//update the EIP!
+wire FE_SEG_LIM_EXC;//The fetch unit has an exception, needs more support
 
-    output [31:0] EIP_OUT,
-    output [15:0] CS_OUT,
-    output icache_en,
-    output [31:0] icache_address,
-    output segment_limit_exception,
-    output [127:0] IR
-);
+wire DE_PRE_PRES_IN, DE_SEG_OVR_IN, DE_OP_OVR_IN, DE_RE_PRE_IN, DE_MODRM_PRES_IN, DE_IMM_PRES_IN, DE_SIB_PRES_IN;
+wire DE_DISP_PRES_IN, DE_DISP_SIZE_IN, DE_OFFSET_PRES_IN, DE_OP_SIZE_IN;
+wire [1:0] DE_IMM_SIZE_IN, DE_OFFSET_SIZE, DE_PRE_SIZE_IN;
+wire [2:0] DE_DISP_SEL_IN, DE_SEGID_IN, DE_MODRM_SEL_IN;
+wire [3:0] DE_IMM_SEL_IN;
+wire [7:0] DE_MODRM_IN, DE_SIB_IN;
+wire [15:0] DE_OPCODE_IN, DE_CS_IN;
+wire [31:0] DE_EIP_IN, DE_EIP_OUT, DE_EIP_OUT_BAR;
+wire [127:0] IR_IN;
+fetch u_fetch(CLK, PRE, CLR, FE_EIP_IN, IC_DOUT, IC_R,
+    FE_JMP_FP, FE_TRAP_FP,
+    CSDOUT,
+    FE_FP_MUX,
+    FE_LD_EIP,
 
+    DE_EIP_IN,
+    DE_CS_IN,
+    IC_EN,
+    IC_PADDR,
+    FE_SEG_LIM_EXC,
+    IR_IN
+);  
+    
 //Latches between fetch and decode
-wire [127:0] IR_IN, IR_OUT, IR_BAR_OUT, DE_V_OUT_T, DE_V_OUT_T_BAR;
+wire [31:0] DE_V_OUT_T, DE_V_OUT_T_BAR, DE_OP_CS_OUT_T, DE_OP_CS_OUT_T_BAR, MOD_SIB_OUT, MOD_SIB_OUT_BAR;	//temp wires
+wire [127:0] IR_OUT, IR_BAR_OUT;
+reg32e$ MOD_SIB(CLK, {16'b0, DE_MODRM_IN, DE_SIB_IN}, MOD_SIB_OUT, MOD_SIB_OUT_BAR, CLR, PRE, EN);
 reg32e$ IR_3(CLK, IR_IN[127:96], IR_OUT[127:96], IR_BAR_OUT[127:96], CLR, PRE, EN);
 reg32e$ IR_2(CLK, IR_IN[95:64], IR_OUT[95:64], IR_BAR_OUT[95:64], CLR, PRE, EN);
 reg32e$ IR_1(CLK, IR_IN[63:32], IR_OUT[63:32], IR_BAR_OUT[63:32], CLR, PRE, EN);
 reg32e$ IR_0(CLK, IR_IN[31:0], IR_OUT[31:0], IR_BAR_OUT[31:0], CLR, PRE, EN);
-reg32e$ DE_V(CLK, {{31{1'b0}},DE_V_IN}, DE_V_OUT_T, DE_V_OUT_T_BAR, CLR, PRE, EN);
-assign DE_V_OUT = DE_V_OUT_T[0];
+reg32e$ DE_EIP(CLK, DE_EIP_IN, DE_EIP_OUT, DE_EIP_OUT_BAR, CLR, PRE, EN);
+reg32e$ DE_V(CLK, {1'b0, DE_DISP_PRES_IN, DE_DISP_SIZE_IN, DE_OFFSET_PRES_IN, DE_OP_SIZE_IN, DE_PRE_PRES_IN, DE_SEG_OVR_IN, DE_OP_OVR_IN, DE_RE_PRE_IN, DE_MODRM_PRES_IN, 
+			DE_IMM_PRES_IN, DE_SIB_PRES_IN, DE_IMM_SEL_IN, DE_DISP_SEL_IN, DE_SEGID_IN, DE_MODRM_SEL_IN, DE_IMM_SIZE_IN, DE_OFFSET_SIZE, DE_PRE_SIZE_IN,DE_V_IN}, DE_V_OUT_T, DE_V_OUT_T_BAR, CLR, PRE, EN);	//used for various values 
+reg32e$ DE_OP_CS(CLK, {DE_OPCODE_IN, DE_CS_IN}, DE_OP_CS_OUT_T, DE_OP_CS_OUT_T_BAR, CLR, PRE, EN); 
+wire DE_V_OUT = DE_V_OUT_T[0];
+wire [1:0] DE_PRE_SIZE_OUT = DE_V_OUT_T[2:1];
+wire [1:0] DE_OFFSET_SIZE_OUT = DE_V_OUT_T[4:3];
+wire [1:0] DE_IMM_SIZE_OUT = DE_V_OUT_T[6:5];
+wire [2:0] DE_MODRM_SEL_OUT = DE_V_OUT_T[9:7];
+wire [2:0] DE_SEGID_OUT = DE_V_OUT_T[12:10];
+wire [2:0] DE_DISP_SEL_OUT = DE_V_OUT_T[15:13];
+wire [3:0] DE_IMM_SEL_OUT = DE_V_OUT_T[19:16];
+wire DE_SIB_PRES_OUT = DE_V_OUT_T[20];
+wire DE_IMM_PRES_OUT = DE_V_OUT_T[21]; 
+wire DE_MODRM_PRES_OUT = DE_V_OUT_T[22];
+wire DE_RE_PRE_OUT = DE_V_OUT_T[23]; 
+wire DE_OP_OVR_OUT = DE_V_OUT_T[24]; 
+wire DE_SEG_OVR_OUT = DE_V_OUT_T[25];
+wire DE_PRE_PRES_OUT = DE_V_OUT_T[26]; 
+wire DE_OP_SIZE_OUT = DE_V_OUT_T[27]; 
+wire DE_OFFSET_PRES_OUT = DE_V_OUT_T[28];
+wire DE_DISP_SIZE_OUT = DE_V_OUT_T[29]; 
+wire DE_DISP_PRES_OUT = DE_V_OUT_T[30];
+wire DE_SIB_OUT = MOD_SIB_OUT[7:0];
+wire DE_MODRM_OUT = MOD_SIB_OUT[15:8];
 
-
-//*******DECODE STAGE 1*******//
-decode_stage1 u_decode_stage1(
-    input clk, set, reset, 
-    input [127:0] IR, 
-    input [31:0] EIP,
-    input [15:0] CS,
-
-    output [31:0] EIP_OUT, 
-    output [15:0] CS_OUT,
-    output [127:0] IR_OUT,
-    output [3:0] instr_length_updt,
-    output [15:0] opcode, 
-    output [1:0] prefix_size,
-    output prefix_present, segment_override, operand_override, repeat_prefix, 
-    output modrm_present, imm_present,
-    output [1:0] imm_size,
-    output sib_present, disp_present, disp_size,
-    output [3:0] imm_sel,
-    output [2:0] disp_sel,
-    output offset_present,
-    output opcode_size, 
-    output [1:0] offset_size,
-    output [2:0] segID,
-    output [7:0] modrm, sib,
-    output [2:0] modrm_sel
-//    output [31:0] sum,
-//    input cin,
-//    input [31:0] a, b,
-//    output cout
-);
-
+wire [15:0] DE_OPCODE_OUT = DE_OP_CS_OUT_T[31:16];
+wire [15:0] DE_CS_OUT = DE_OP_CS_OUT_T[15:0];
 
 //*******DECODE STAGE 2*******//
 decode_stage2 u_decode_stage2(
-    input clk, set, reset,
-    input [127:0] IR, 
-    input [31:0] EIP,
-    input [15:0] CS,
-    input [15:0] opcode, 
-    input [1:0] prefix_size,
-    input prefix_present, segment_override, operand_override, repeat_prefix, 
-    input modrm_present, imm_present,
-    input [1:0] imm_size,
-    input sib_present, disp_present, disp_size,
-    input [3:0] imm_sel,
-    input [2:0] disp_sel,
-    input [1:0] modrm_sel,
-    input offset_present,
-    input opcode_size, 
-    input [1:0] offset_size,
-    input [2:0] segID,
-    input [7:0] modrm, sib,
+    CLK, PRE, CLR,
+    IR_OUT, 
+    DE_EIP_OUT,
+    DE_CS_OUT,
+    DE_OPCODE_OUT, 
+    DE_PRE_SIZE_OUT,
+    DE_PRE_PRES_OUT, DE_SEG_OVR_OUT, DE_OP_OVR_OUT, DE_RE_PRE_OUT, 
+    DE_MODRM_PRES_OUT, DE_IMM_PRES_OUT,
+    DE_IMM_SIZE_OUT,
+    DE_SIB_PRES_OUT, DE_DISP_PRES_OUT, DE_DISP_SIZE_OUT,
+    DE_IMM_SEL_OUT,
+    DE_DISP_SEL_OUT,
+    DE_MODRM_SEL_OUT,
+    DE_OFFSET_PRES_OUT,
+    DE_OP_SIZE_OUT, 
+    DE_OFFSET_SIZE_OUT,
+    DE_SEGID_OUT,
+    DE_MODRM_OUT, DE_SIB_OUT,
 
     output [31:0] EIP_OUT, 
     output [15:0] CS_OUT,
@@ -165,7 +174,7 @@ decode_stage2 u_decode_stage2(
 
 );
 
-
+/*	THIS IS HOW FAR WE HAV DEBUGGED THE BASIC PIPELINE
 //Latches between decode and address generation
 wire [2:0] AG_SR, AG_DR, AG_BASE, AG_INDEX, AG_MM_SR, AG_MM_DR, AG_SEG_SR, AG_SEG_DR;
 wire [1:0] AG_SCALE, AG_DATA_SIZE;
@@ -177,10 +186,7 @@ reg32e$ AG_IMM(CLK, AG_IMM_IN, AG_IMM_OUT, AG_IMM_OUT_BAR, CLR, PRE, EN);
 reg32e$ AG_DISP(CLK, AG_DISP_IN, AG_DISP_OUT, AG_DISP_OUT_BAR, CLR, PRE, EN);
 
 
-
-
-
-//*******ADDRESS GENERATION STAGE*******//
+//*******ADDRESS GENERATION STAGE*******.//
 address_generation u_address_generation(
    input CLK, SET, RST, V,
 
@@ -255,7 +261,7 @@ assign REG_DEST_COM_OUT = D_REG_DEST[0];
 assign ALUK_COM_OUT = D_ALUK[0];
 assign V_COM_OUT = D_V_COM[0];
 
-//*******MEMORY STAGE*******//
+//*******MEMORY STAGE*******.//
 memory_stage u_memory_stage(
    input CLK, SET, RST,
 
@@ -302,7 +308,7 @@ memory_stage u_memory_stage(
 
 
 
-//*******EXECUTE STAGE*******//
+//*******EXECUTE STAGE*******.//
 execute u_execute(
    input CLK, SET, RST,
 
@@ -346,7 +352,7 @@ execute u_execute(
 
 
 
-//*******WRITE BACK STAGE*******//
+//*******WRITE BACK STAGE*******.//
 writeback u_writeback(
    input CLK, SET, RST,
 
@@ -386,6 +392,6 @@ writeback u_writeback(
 
    output V_MEM_WR, WB_STALL
 );
-
+*/
 
 endmodule

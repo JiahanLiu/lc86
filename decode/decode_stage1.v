@@ -1,11 +1,7 @@
 module decode_stage1 (
     input clk, set, reset, 
     input [127:0] IR, 
-    input [31:0] EIP,
-    input [15:0] CS,
-
-    output [31:0] EIP_OUT, 
-    output [15:0] CS_OUT,
+    
     output [127:0] IR_OUT,
     output [3:0] instr_length_updt,
     output [15:0] opcode, 
@@ -43,8 +39,6 @@ wire [1:0] segID_sel;
 wire [2:0] opcode_sel;
 wire [7:0] out1m, out2m;
 
-assign CS_OUT = CS;
-assign EIP_OUT = EIP;
 assign IR_OUT = IR;
 
 prefix_checker u_prefix_checker1 (.instr_byte(IR[127:120]), .isPrefix(isPrefix1), .isOpcode(isOpcode1),
