@@ -22,7 +22,7 @@ module chk_needed (
    output OUT
 );
 
-   wire and_v_reg_needed_out;
+   wire and_v_reg_needed_out, or_cmp_out;
 
    cmp_regid 
       cmp_reg_s1_drid (cmp_reg_s1_drid_out, REG, S1_DRID, V_S1_LD_REG),
@@ -32,8 +32,11 @@ module chk_needed (
    and2$
       and_v_reg_needed (and_v_reg_needed_out, REG_NEEDED, STAGE_V);
 
-   and4$
-      and_reg_needed (OUT, and_v_reg_needed_out, cmp_reg_s1_drid_out, cmp_reg_s2_drid_out, cmp_reg_s3_drid_out);
+   or3$
+     or_cmp (or_cmp_out, cmp_reg_s1_drid_out, cmp_reg_s2_drid_out, cmp_reg_s3_drid_out);
+   
+   and2$
+      and_reg_needed (OUT, and_v_reg_needed_out, or_cmp_out);
 
 endmodule
 
@@ -56,6 +59,7 @@ module reg_dependency_check (
    output DEP_STALL
 );
 
+   // If DATA_SIZE == 8, zero out REG_ID[2] for dependency check
    // Compare SEG1, SEG2 only with DRID1
    /* (SEG1_ID == AG_DRID1 AND V_AG_LD_SEG) || (SEG1_ID == ME_DRID1 AND V_ME_LD_SEG) || (SEG1_ID == EX_DRID1 AND V_EX_LD_SEG) AND SEG1_NEEDED
    || (SEG2_ID == AG_DRID1 AND V_AG_LD_SEG) || (SEG2_ID == ME_DRID1 AND V_ME_LD_SEG) || (SEG2_ID == EX_DRID1 AND V_EX_LD_SEG) AND SEG2_NEEDED
@@ -87,7 +91,17 @@ module reg_dependency_check (
 
       bufferH16_stage_v [2:0] (buf_stage_v, STAGE_V);
 
-   or2$ 
+   // TODO: check data size with right inputs to registers
+   // CMPS should automatically be no checking for data_size
+   //or3$
+   //   or_ag_data_size (or_ag_data_size_out, V_AG_D2_CMPS, AG_DATA_SIZE[1], AG_DATA_SIZE[0]),
+   //   or_me_data_size (or_me_data_size_out, V_ME_D2_CMPS, ME_DATA_SIZE[1], ME_DATA_SIZE[0]),
+   //   or_ex_data_size (or_ex_data_size_out, V_EX_D2_CMPS, EX_DATA_SIZE[1], EX_DATA_SIZE[0]);
+
+   //and2$
+   //   and_ag_drid1_2 (ag_drid1_
+   
+   or2$
       or_ag_seg_cseg (or_ag_seg_cseg_out, V_AG_LD_SEG, V_AG_LD_CSEG),
       or_me_seg_cseg (or_me_seg_cseg_out, V_ME_LD_SEG, V_ME_LD_CSEG),
       or_ex_seg_cseg (or_ex_seg_cseg_out, V_EX_LD_SEG, V_EX_LD_CSEG);

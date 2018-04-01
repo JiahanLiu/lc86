@@ -153,5 +153,9 @@ module address_generation (
                               EX_DRID1, EX_DRID2, V_EX_LD_GPR1, V_EX_LD_GPR2, V_EX_LD_SEG, V_EX_LD_CSEG, V_EX_LD_MM,
                               DEP_STALL_OUT);
  
+   segment_limit_check
+      u_seg_limit_check (V, D2_MEM_RD_ME, D2_MEM_WR_ME, SEG1, DATA_SIZE, add_base_disp_out, mux_sib_si_out,
+                         SEG_LIMIT_EXC_OUT);
+
 endmodule
 

@@ -8,31 +8,49 @@
 /*
 ES = 000
 CS = 001
-SS = 010
+SS = 010 // no checking for SS
 DS = 011
 FS = 100
 GS  = 101
 */
 
+// first_addr <= seg_limit - (size-1)
 module segment_limit_check (
+   input V, MEM_RD, MEM_WR,
+
    input [2:0] SEG1_ID,
- 
+   input [1:0] DATA_SIZE,
    input [31:0] ADD_BASE_DISP, MUX_SIB_SI, 
+
+   output EXC
 );
 
+   wire [31:0] mux_seg1_out, mux_seg2_out, mux_seg_out;
+   wire [31:0] add_sib_si_out, mux_data_size_out, add_limit_out;
+
+   wire or_mem_out, and_v_out, mag_comp32_limit_out;
+
    mux4$
-      mux_seg1 [31:0] (mux_seg1_out, {12'h000, `ES_LIMIT_REGISTER}, {12'h000, `CS_LIMIT_REGISTER}, 32'hFFFFFFFF, {12'h000, `DS_LIMIT_REGISTER}, SEG1_ID[1:0]),
-      mux_seg2 [31:0] (mux_seg2_out, {12'h000, `FS_LIMIT_REGISTER}, {12'h000, `GS_LIMIT_REGISTER}, 32'hFFFFFFFF, 32'hFFFFFFFF, SEG1_ID[1:0]);
+      mux_seg1 [31:0] (mux_seg1_out, {12'h000, `ES_LIMIT_REGISTER}, {12'h000, `CS_LIMIT_REGISTER}, 32'hFFFFFFFF, {12'h000, `DS_LIMIT_REGISTER}, SEG1_ID[0], SEG1_ID[1]),
+      mux_seg2 [31:0] (mux_seg2_out, {12'h000, `FS_LIMIT_REGISTER}, {12'h000, `GS_LIMIT_REGISTER}, 32'hFFFFFFFF, 32'hFFFFFFFF, SEG1_ID[0], SEG1_ID[1]);;
    mux2$
       mux_seg [31:0] (mux_seg_out, mux_seg1_out, mux_seg2_out, SEG1_ID[2]);
-   inv1$
-      inv_seg [31:0] (seg_limit_bar, mux_seg_out);
 
-   mux4$ mux_data_size [2:0] (mux_data_size_out, 3'b000, 3'b001, 3'b011, 3'b111);
+   // select to subtract 0, 1, 3, 7 from segment limit
+   mux4$ mux_data_size [31:0] (mux_data_size_out, 32'h00000000, 32'hFFFFFFFF, 32'hFFFFFFFD, 32'hFFFFFFF9, DATA_SIZE[0], DATA_SIZE[1]);
 
    adder32
-      add_sib_si (add_sib_si_out, , ADD_BASE_DISP, MUX_SIB_SI),
-      add_seg (add_seg_out, , seg_limit_bar, mux_data_size_out),
-      add_limit (add_limit_out, , add_sib_si_out, add_seg_out);
+      add_sib_si (add_sib_si_out, , ADD_BASE_DISP, MUX_SIB_SI, 1'b0),
+      add_limit (add_limit_out, , mux_seg_out, mux_data_size_out, 1'b0);
+ 
+   // assume invalid segment register ID not given
+   mag_comp32
+      mag_comp32_limit (add_sib_si_out, add_limit_out, mag_comp32_limit_out, , );
+
+   or2$ or_mem (or_mem_out, MEM_RD, MEM_WR);
+   and2$ and_v (and_v_out, V, or_mem_out);
+
+   and2$ and_exc (EXC, mag_comp32_limit_out, and_v_out);
+
 endmodule
-   
+ 
