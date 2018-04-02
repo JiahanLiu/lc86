@@ -12,7 +12,8 @@
 // or32_2way                        - a32 | b32                      
 // not4_1way                        - !a4                            
 // not32_1way                       - !a32                           
-// buffer32                         - 32-Bit 1x->4x Buffer           
+// buffer32_4x                      - 32-Bit 1x->4x Buffer   
+// buffer32_16x						- 32-Bit 1x->16x Buffer        
 //
 //-------------------------------------------------------------------------------------
 
@@ -192,7 +193,7 @@ endmodule
 //
 // Combinational Delay: 
 //
-module buffer32 (
+module buffer32_4way (
 	output [31:0] out,
 	input [31:0] in
 	);
@@ -202,3 +203,26 @@ module buffer32 (
 
 endmodule
 
+//-------------------------------------------------------------------------------------
+//
+// 					 		 32-Bit 1-Input Buffer 
+//
+//-------------------------------------------------------------------------------------
+// Functionality: 32-Bit 1x->16x Buffer
+//
+// Combinational Delay: 
+//
+module buffer32_16way (
+	output [31:0] out0, out1, out2, out3,
+	input [31:0] in
+	);
+
+	wire [31:0] level_1_intermediate; 
+
+	buffer32_4way buffer_level1_0(level_1_intermediate, in);
+
+	buffer32_4way buffer_level2_0(out0, level_1_intermediate);
+	buffer32_4way buffer_level2_1(out1, level_1_intermediate);
+	buffer32_4way buffer_level2_2(out2, level_1_intermediate);
+	buffer32_4way buffer_level2_3(out3, level_1_intermediate);
+endmodule

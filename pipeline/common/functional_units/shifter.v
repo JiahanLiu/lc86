@@ -5,10 +5,10 @@
 // EE382N, Spring 2018
 // Apruv Narkhede, Nelson Wu, Steven Flolid, Jiahan Liu
 //
-// shift_arithmetic_left_w_flags    - SAL with flags output          
-// shift_arithmetic_right_w_flags   - SAR with flags output          
-// shift_arithmetic_left            - SAL and outputs the last digit shifted out
-// shift_arithmetic_right           - SAR and outputs the last digit shifted out
+// shift_arithmetic_left    		- SAL with flags output          
+// shift_arithmetic_right 		    - SAR with flags output          
+// shift_arithmetic_left_w_carry    - SAL and outputs the last digit shifted out
+// shift_arithmetic_right_w_carry   - SAR and outputs the last digit shifted out
 // calculate_carry_out              - specialized logic to determine last digit carried out 
 // SAR32_by_1                       - SAR 1x w/carry                 
 // SAR32_by_2                       - SAR 2x w/carry                 
@@ -22,83 +22,88 @@
 // SAL32_by_16                      - SAL 1x w/carry                 
 //
 //-------------------------------------------------------------------------------------
-
-//-------------------------------------------------------------------------------------
-//
-// 							Shift Arthemtic Left w/ Flags
-//
-//-------------------------------------------------------------------------------------
-// Functionality: SAL with flags output
-//
-// Flags: Note that for non-zero count the AF flag is undefined, this will be 
-// determined in decode since flag overwrite mask is produce in decode. 
-// Also the OF flag is only affect for 1 bit shift, the overwrite mask to 
-// make this happen also happens in decode. 
-//
-// Combinational Delay: 
-//
-module shift_arithmetic_left_w_flags(
-	output [31:0] sal_result, flags,
-	input [31:0] a, b
-	);
-
-	wire carry_out;
-
-	shift_arithmetic_left(sal_result, carry_out, a, b);
-
-	OF_logic u_OF_logic(OF, sal_result[31], a[31], b[31]);
-	assign DF = 0; 
-	assign SF = sal_result[31];
-	ZF_logic u_ZF_logic(ZF, sal_result);
-	assign AF = 0; //undefined
-	PF_logic u_PF_logic(PF, sal_result[7:0]);
-	assign CF = carry_out;
-
-endmodule
-
-//-------------------------------------------------------------------------------------
-//
-// 							Shift Arthemtic Right w/ Flags
-//
-//-------------------------------------------------------------------------------------
-// Functionality: SAR with flags output
-//
-// Flags: Note that for non-zero count the AF flag is undefined, this will be 
-// determined in decode since flag overwrite mask is produce in decode. 
-// Also the OF flag is only affect for 1 bit shift, the overwrite mask to 
-// make this happen also happens in decode. 
-//
-// Combinational Delay: 
-//
-module shift_arithmetic_right_w_flags(
-	output [31:0] sar_result, flags,
-	input [31:0] a, b
-	);
-
-	wire carry_out;
-
-	shift_arithmetic_right(sar_result, carry_out, a, b);
-
-	OF_logic u_OF_logic(OF, sar_result[31], a[31], b[31]);
-	assign DF = 0; 
-	assign SF = sar_result[31];
-	ZF_logic u_ZF_logic(ZF, sar_result);
-	assign AF = 0; //undefined
-	PF_logic u_PF_logic(PF, sar_result[7:0]);
-	assign CF = carry_out;
-
-endmodule
-
 //-------------------------------------------------------------------------------------
 //
 // 									Shift Arthemtic Left
+//
+//-------------------------------------------------------------------------------------
+// Functionality: SAL
+//
+// Combinational Delay: 
+//
+module shift_arithmetic_left_w_carry(
+	output [31:0] sal_result,
+	output carry_out, 
+	input [31:0] a, b
+	);
+
+	wire bufferedA;
+
+	buffer32 u_bufferA (bufferedA, a);
+	
+	wire [31:0] post_shift_1, post_shift_2, post_shift_4, post_shift_8, post_shift_16;
+	wire [31:0] post_mux_1, post_mux_2, post_mux_4, post_mux_8;
+	wire [4:0] leftover;
+
+	SAL32_by_1 u_sar32_by_1(post_shift_1, leftover[0], bufferedA);
+	SAL32_by_2 u_sar32_by_2(post_shift_2, leftover[1], post_mux_1);
+	SAL32_by_4 u_sar32_by_4(post_shift_4, leftover[2], post_mux_2);
+	SAL32_by_8 u_sar32_by_8(post_shift_8, leftover[3], post_mux_4);
+	SAL32_by_16 u_sar32_by_16(post_shift_16, leftover[4], post_mux_8);
+
+	mux32_2way u_mux_1(post_mux_1, bufferedA, post_shift_1, b[0]);
+	mux32_2way u_mux_2(post_mux_2, post_mux_1, post_shift_2, b[1]);
+	mux32_2way u_mux_4(post_mux_4, post_mux_2, post_shift_4, b[2]);
+	mux32_2way u_mux_8(post_mux_8, post_mux_4, post_shift_8, b[3]);
+	mux32_2way u_mux_16(sar_result, post_mux_8, post_shift_16, b[4]);
+
+endmodule
+//-------------------------------------------------------------------------------------
+//
+// 							  Shift Arthemtic Right Carry
+//
+//-------------------------------------------------------------------------------------
+// Functionality: SAR and outputs the last digit shifted out
+//
+// Combinational Delay: 
+//
+module shift_arithmetic_right(
+	output [31:0] sar_result,
+	output carry_out, 
+	input [31:0] a, b
+	);
+
+	wire bufferedA;
+
+	buffer32 u_bufferA (bufferedA, a);
+	
+	wire [31:0] post_shift_1, post_shift_2, post_shift_4, post_shift_8, post_shift_16;
+	wire [31:0] post_mux_1, post_mux_2, post_mux_4, post_mux_8;
+	wire [4:0] leftover;
+
+	SAR32_by_1 u_sar32_by_1(post_shift_1, leftover[0], bufferedA);
+	SAR32_by_2 u_sar32_by_2(post_shift_2, leftover[1], post_mux_1);
+	SAR32_by_4 u_sar32_by_4(post_shift_4, leftover[2], post_mux_2);
+	SAR32_by_8 u_sar32_by_8(post_shift_8, leftover[3], post_mux_4);
+	SAR32_by_16 u_sar32_by_16(post_shift_16, leftover[4], post_mux_8);
+
+	mux32_2way u_mux_1(post_mux_1, bufferedA, post_shift_1, b[0]);
+	mux32_2way u_mux_2(post_mux_2, post_mux_1, post_shift_2, b[1]);
+	mux32_2way u_mux_4(post_mux_4, post_mux_2, post_shift_4, b[2]);
+	mux32_2way u_mux_8(post_mux_8, post_mux_4, post_shift_8, b[3]);
+	mux32_2way u_mux_16(sar_result, post_mux_8, post_shift_16, b[4]);
+	
+endmodule
+//-------------------------------------------------------------------------------------
+//
+// 						  Shift Arthemtic Left W/ Carry
 //
 //-------------------------------------------------------------------------------------
 // Functionality: SAL and outputs the last digit shifted out
 //
 // Combinational Delay: 
 //
-module shift_arithmetic_left(
+module shift_arithmetic_left_w_carry(
 	output [31:0] sal_result,
 	output carry_out, 
 	input [31:0] a, b
@@ -137,7 +142,7 @@ endmodule
 //
 // Combinational Delay: 
 //
-module shift_arithmetic_right(
+module shift_arithmetic_right_w_carry(
 	output [31:0] sar_result,
 	output carry_out, 
 	input [31:0] a, b
@@ -166,7 +171,6 @@ module shift_arithmetic_right(
 	calculate_carry_out u_calculate_carry_out(carry_out, b[4:0], leftover);
 	
 endmodule
-
 //-------------------------------------------------------------------------------------
 //
 // 									Calculate Carry out

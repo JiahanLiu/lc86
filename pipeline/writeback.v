@@ -42,13 +42,16 @@ module writeback (
 `include "../control_store/control_store_wires.v"
 `include "../control_store/control_store_signals.v"
 
+   
+   
+
    wire [31:0] mux_sr1_data_out, mux_mem_out;
    wire and_sz_64_out;
 
    assign EIP_DATA_OUT = NEIP;
 
    mux4$ mux_sr1_data [31:0] (mux_sr1_data_out, ALU_RESULT, SR1_DATA, NEIP, EFLAGS_DATA, CS_MUX_SR1_MEM_DATA_WB[0], CS_MUX_SR1_MEM_DATA_WB[1]);
-   assign SR1_DATA_OUT = mux_sr1_data_out;
+   assign s = mux_sr1_data_out;
    assign SR2_DATA_OUT = SP_XCHG_DATA;
    assign MM_DATA_OUT = MM_RESULT;
    assign SEG_DATA_OUT = mux_sr1_data_out[15:0];
