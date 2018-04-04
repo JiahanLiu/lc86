@@ -1,0 +1,9 @@
+/home/projects/courses/spring_18/ee382n-16120/lib/time -v 
+/home/projects/courses/spring_18/ee382n-16120/lib/lib1 
+/home/projects/courses/spring_18/ee382n-16120/lib/lib2 
+/home/projects/courses/spring_18/ee382n-16120/lib/lib4 
+/home/projects/courses/spring_18/ee382n-16120/lib/lib5 
+../../../basic_components/muxes.v
+../../../basic_components/logic_gates.v
+../../shifter.v
+test_shifter.v
