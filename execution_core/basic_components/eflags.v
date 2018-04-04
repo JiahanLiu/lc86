@@ -90,7 +90,7 @@ module ZF_logic (
 
 	//ZF
 	wire ZF_31_28, ZF_27_24, ZF_23_20, ZF_19_16, ZF_15_12, ZF_11_8, ZF_7_4, ZF_3_0;
-	wire ZF_31_16, ZF_15_0; 
+	wire ZF_31_16, ZF_15_0, ZF_N; 
 	//layer 1
 	or4$ u_or_zf_31_28(ZF_31_28, adder_result[31], adder_result[30], adder_result[29], adder_result[28]);
 	or4$ u_or_zf_27_24(ZF_27_24, adder_result[27], adder_result[26], adder_result[25], adder_result[24]);
@@ -105,7 +105,8 @@ module ZF_logic (
 	or4$ u_or_zf_31_16(ZF_31_16, ZF_31_28, ZF_27_24, ZF_23_20, ZF_19_16);
 	or4$ u_or_zf_15_0(ZF_15_0, ZF_15_12, ZF_11_8, ZF_7_4, ZF_3_0);
 	//layer 3
-	or2$ u_or_zf_31_0(ZF, ZF_31_16, ZF_15_0);
+	or2$ u_or_zf_31_0(ZF_N, ZF_31_16, ZF_15_0);
+    inv1$ inv1 (ZF, ZF_N);
 
 endmodule
 
