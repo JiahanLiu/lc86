@@ -3,32 +3,34 @@
 `define runtime #2000
 
 module TOP;
-   //input control signals
+   //control store
    reg cs_is_cmps_first_uop_all; //0
    reg cs_is_cmps_second_uop_all; //1
-   reg [1:0] de_datasize_all; //2-3
-   reg cs_is_first_of_repne; //4
-   reg de_dr1_write_wb; //5
-   reg de_dr2_write_wb; //6
-   reg de_dr3_write_wb; //7
-   reg [6:0] de_flags_affected_wb; //8-14
-   reg [2:0] de_aluk_ex; //15-17
-   //inputs latches
-   reg CLK, SET, RST;
-   
-   reg EX_V; 
+   reg cs_is_first_of_repne_wb; //2
+   reg cs_ld_gpr2_wb; //3
+   reg cs_ld_gpr3_wb; //4
+
+   reg CLK, SET, RST; //not uesd SET/RST
+
+   reg EX_V;
    reg [31:0] EX_NEIP;
    reg [15:0] EX_NCS;
    wire [63:0] EX_CONTROL_STORE;
+   //pseudo-control store signals not from control store but generated in decode
+   reg [1:0] de_datasize_all;
+   reg [2:0] de_aluk_ex;
+   reg de_mem_wr_wb;
+   reg de_ld_gpr1_wb;
+   reg [6:0] de_flags_affected_wb;
 
    reg [31:0] EX_A, EX_B;
    reg [31:0] EX_COUNT;
+   reg [63:0] EX_MM_A, EX_MM_B;
 
    reg [31:0] EX_ADDRESS;
 
    reg [2:0] EX_DR1, EX_DR2, EX_DR3;
 
-   //outputs
    wire WB_V;
    wire [31:0] WB_NEIP;
    wire [15:0] WB_NCS;
@@ -46,16 +48,12 @@ module TOP;
    reg error_free;
 
    make_control_store_line u_make(
-   EX_CONTROL_STORE,
-    cs_is_cmps_first_uop_all, //0
-    cs_is_cmps_second_uop_all, //1
-    de_datasize_all, //2-3
-    cs_is_first_of_repne, //4
-    de_dr1_write_wb, //5
-    de_dr2_write_wb, //6
-    de_dr3_write_wb, //7
-    de_flags_affected_wb, //8-14
-    de_aluk_ex //15-17
+      EX_CONTROL_STORE,
+      cs_is_cmps_first_uop_all, //0
+      cs_is_cmps_second_uop_all, //1
+      cs_is_first_of_repne_wb, //only used in wb
+      cs_ld_gpr2_wb, //only used in wb
+      cs_ld_gpr3_wb //only used in wb
    );
 
    initial
@@ -148,9 +146,16 @@ module TOP;
    EX_NEIP,
    EX_NCS,
    EX_CONTROL_STORE,
+   //pseudo-control store signals not from control store but generated in decode
+   de_datasize_all,
+   de_aluk_ex, 
+   de_mem_wr_wb, 
+   de_ld_gpr1_wb,
+   de_flags_affected_wb,
 
    EX_A, EX_B,
    EX_COUNT, 
+   EX_MM_A, EX_MM_B,
 
    EX_ADDRESS,
 

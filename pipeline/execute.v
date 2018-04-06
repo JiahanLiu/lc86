@@ -7,13 +7,28 @@ module execute (
    input [31:0] EX_NEIP,
    input [15:0] EX_NCS,
    input [63:0] EX_CONTROL_STORE,
+   //pseudo-control store signals not from control store but generated in decode
+   input [1:0] de_datasize_all,
+   input [2:0] de_aluk_ex, 
+   input de_mem_wr_wb, 
+   input de_ld_gpr1_wb,
+   input de_dcache_write_wb, 
+   input [6:0] de_flags_affected_wb,
 
    input [31:0] EX_A, EX_B,
    input [31:0] EX_COUNT, 
+   input [63:0] EX_MM_A, EX_MM_B,
 
    input [31:0] EX_ADDRESS,
 
    input [2:0] EX_DR1, EX_DR2, EX_DR3,
+
+   output [1:0] out_de_datasize_all,
+   output [2:0] out_de_aluk_ex, 
+   output out_de_mem_wr_wb, 
+   output out_de_ld_gpr1_wb,
+   output out_de_dcache_write_wb, 
+   output [6:0] out_de_flags_affected_wb,
 
    output WB_V,
    output [31:0] WB_NEIP, 
@@ -29,33 +44,27 @@ module execute (
 );
    
    //control store
-   wire cs_is_cmps_first_uop_all; //0
-   wire cs_is_cmps_second_uop_all; //1
-   wire [1:0] de_datasize_all; //2-3
-   wire cs_is_first_of_repne; //4
-   wire de_dr1_write_wb; //5
-   wire de_dr2_write_wb; //6
-   wire de_dr3_write_wb; //7
-   wire [6:0] de_flags_affected_wb; //8-14
-   wire [2:0] de_aluk_ex; //15-17
+  wire cs_is_cmps_first_uop_all;
+  wire cs_is_cmps_second_uop_all; 
+  wire cs_is_first_of_repne_wb; 
+  wire cs_ld_gpr2_wb; 
+  wire cs_ld_gpr3_wb; 
+  wire cs_ld_flags_wb; 
 
-   //internal wires
-   wire [31:0] a, b;
-   wire [31:0] cmps_first_mem;
+  //internal wires
+  wire [31:0] a, b;
+  wire [31:0] cmps_first_mem;
 
 
-   undo_control_store u_undo_control_store(
-       cs_is_cmps_first_uop_all, //0
-       cs_is_cmps_second_uop_all, //1
-       de_datasize_all, //2-3
-       cs_is_first_of_repne, //4
-       de_dr1_write_wb, //5
-       de_dr2_write_wb, //6
-       de_dr3_write_wb, //7
-       de_flags_affected_wb, //8-14
-       de_aluk_ex, //15-17
-      EX_CONTROL_STORE
-   );
+  undo_control_store u_undo_control_store(
+    cs_is_cmps_first_uop_all, 
+    cs_is_cmps_second_uop_all, 
+    cs_is_first_of_repne_wb, 
+    cs_ld_gpr2_wb, 
+    cs_ld_gpr3_wb, 
+    cs_ld_flags_wb, 
+    EX_CONTROL_STORE
+  );
 
    //Operand_Select_EX
    assign a = EX_A;

@@ -38,19 +38,13 @@ module alu32 (alu_out, flags, a, b, op);
 	wire [31:0] adder_result, or_result, not_result, daa_result, and_result, cld_result, cmp_result, std_result;
 	wire [31:0] adder_flags, or_flags, not_flags, daa_flags, and_flags, cld_flags, cmp_flags, std_flags;
 
-	wire [31:0] bufferedA [3:0];
-	wire [31:0] bufferedB[3:0];
-
-	buffer32_16way u_bufferA(bufferedA[0], bufferedA[1], bufferedA[2], bufferedA[3], a);
-	buffer32_16way u_bufferB(bufferedB[0], bufferedB[1], bufferedB[2], bufferedB[3], b);
-
-	alu_adder u_alu_adder (adder_result, adder_flags, bufferedA[0], bufferedB[0]);
-	alu_or u_alu_or (or_result, or_flags, bufferedA[0], bufferedB[0]);
-	alu_not u_alu_not (not_result, not_flags, bufferedA[0]);
-	alu_daa u_alu_daa (daa_result, daa_flags, bufferedA[0]);
-	alu_and u_alu_and (and_result, and_flags, bufferedA[1], bufferedB[1]);
+	alu_adder u_alu_adder (adder_result, adder_flags, a, b);
+	alu_or u_alu_or (or_result, or_flags, a, b);
+	alu_not u_alu_not (not_result, not_flags, a);
+	alu_daa u_alu_daa (daa_result, daa_flags, a);
+	alu_and u_alu_and (and_result, and_flags, a, b);
 	alu_cld u_alu_cld (cld_result, cld_flags);
-	alu_cmp u_alu_cmp (cmp_result, cmp_flags, bufferedB[1], bufferedA[1]); //inverted because of how Nelson gives me the data
+	alu_cmp u_alu_cmp (cmp_result, cmp_flags, b, a); //inverted because of how Nelson gives me the data
 	alu_std u_alu_std (std_result, std_flags);
 
 	mux32_8way out_selection(alu_out, adder_result, or_result, not_result, daa_result, and_result, cld_result, cmp_result, std_result, op[2:0]);

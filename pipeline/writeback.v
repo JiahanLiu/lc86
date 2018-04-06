@@ -1,76 +1,108 @@
-// Control signals from writeback stage need to be defined
+//Flags is a 32 bit register. Here each flag's location within the register:
+/*
+assign flags[11] = OF; 
+assign flags[10] = DF; 
 
+assign flags[7] = SF; 
+assign flags[6] = ZF; 
+
+assign flags[4] = AF; 
+assign flags[2] = PF; 
+assign flags[0] = CF; 
+*/
 module writeback (
-   input CLK, SET, RST,
+   input CLK, SET, RST, //not uesd SET/RST
 
-   input V,
-   input [31:0] NEIP,
-   input [15:0] NCS,
-   input [63:0] CONTROL_STORE,
+   input WB_V,
+   input [31:0] WB_NEIP,
+   input [15:0] WB_NCS,
+   input [63:0] WB_CONTROL_STORE,
+   //pseudo-control store signals not from control store but generated in decode
+   input [1:0] de_datasize_all,
+   input [2:0] de_aluk_ex, 
+   input de_mem_wr_wb, 
+   input de_ld_gpr1_wb,
+   input de_dcache_write_wb, 
+   input [6:0] de_flags_affected_wb,
 
-   input [31:0] SR1_DATA,
-   input [31:0] ALU_RESULT,
-   input [63:0] MM_RESULT,
-   input [31:0] SP_XCHG_DATA,
+   input [31:0] WB_ALU32_RESULTS,
+   input [31:0] WB_COUNT, 
+   input [63:0] WB_MM_A, WB_MM_B,
 
-   input [31:0] MEM_WR_ADDR,
-   input [1:0] DATA_SIZE,
+   input [31:0] WB_ADDRESS,
 
-   input [1:0] DE_ALUK_EX,
-   input [2:0] DRID1, DRID2,
+   input [2:0] WB_DR1, WB_DR2, WB_DR3,
 
-   input D2_MEM_WR_WB, D2_LD_GPR1_WB, D2_LD_MM_WB,
-
-   input [31:0] EFLAGS_DATA,
-   input DCACHE_READY,
-
-   output [31:0] EIP_DATA_OUT,
-
-   output [31:0] SR1_DATA_OUT, SR2_DATA_OUT,
-   output [63:0] MM_DATA_OUT,
-   output [15:0] SEG_DATA_OUT, CSEG_DATA_OUT,
-   output [63:0] MEM_DATA_OUT,
-
-   output [1:0] DATA_SIZE_OUT,
-   output [2:0] DRID1_OUT, DRID2_OUT,
-
-   output V_LD_EIP, V_LD_CSEG, V_LD_GPR1, V_LD_GPR2,
-   output V_LD_SEG, V_LD_MM, 
-
-   output V_MEM_WR, WB_STALL
+   output [2:0] Out_DR1, Out_DR2, Out_DR3,
+   output [31:0] Out_DR1_Data, Out_DR2_Data, Out_DR3_Data, 
+   output out_v_de_ld_gpr1_wb, out_v_cs_ld_gpr2_wb, out_v_cs_ld_gpr3_wb,
+   output [1:0] out_de_datasize,
+   output [31:0] Out_Dcache_Data, Out_Dcache_Address
 );
-`include "../control_store/control_store_wires.v"
-`include "../control_store/control_store_signals.v"
 
+   //control store
+   wire cs_is_cmps_first_uop_all; //0
+   wire cs_is_cmps_second_uop_all; //1
+   wire cs_is_first_of_repne_wb; //2
+   wire cs_ld_gpr2_wb; //3
+   wire cs_ld_gpr3_wb; //4 
+   wire cs_ld_flags_wb; 
+
+   //internal wires for each box output in schematic
+      //
+   wire [31:0] cmps_updated_pointer, cmps_first_pointer;
+   wire [31:0] internal_count;
+   wire ex_repne_termination_all;
+      //validate writeback signals for GPR and DCACHE
+   wire v_de_ld_gpr1_wb, v_cs_ld_gpr2_wb, v_cs_ld_gpr3_wb, v_de_dache_write_wb, v_cs_ld_flags_wb;
+      //internal data
+   wire [31:0] current_flags; 
+   wire data1, data2, data3; 
+
+   undo_control_store u_undo_control_store(
+      cs_is_cmps_first_uop_all, //0
+      cs_is_cmps_second_uop_all, //1
+      cs_is_first_of_repne_wb, //2
+      cs_ld_gpr2_wb, //3
+      cs_ld_gpr3_wb, //4
+      cs_ld_flags_wb,
+      EX_CONTROL_STORE
+   );
+
+   CMPS_POINTER_LOGIC (cmps_updated_pointer, WB_CMPS_POINTER, de_datasize_all, current_flags[11]); 
    
+   reg32e$ cmps_temp_pointer (CLK, cmps_updated_pointer, cmps_first_pointer, , 1'b1, 1'b1, cs_is_cmps_first_uop_all);
    
+   Flags_WB(current_flags, CLK, v_cs_ld_flags_wb, de_flags_affected_wb, WB_FLAGS);
 
-   wire [31:0] mux_sr1_data_out, mux_mem_out;
-   wire and_sz_64_out;
+   repne_and_cmps (internal_count, WB_COUNT, cs_is_first_of_repne_wb, cs_is_cmps_second_uop_all, current_flags[6]);
 
-   assign EIP_DATA_OUT = NEIP;
+   and2$ u_validate_gpr1(v_de_ld_gpr1_wb, WB_V, de_ld_gpr1_wb);
+   and2$ u_validate_gpr2(v_cs_ld_gpr2_wb, WB_V, cs_ld_gpr2_wb);
+   and2$ u_validate_gpr3(v_cs_ld_gpr3_wb, WB_V, cs_ld_gpr3_wb);
+   and2$ u_validate_mem_writes(v_de_dache_write_wb, WB_V, de_dcache_write_wb);
+   and2$ u_validate_flag_writes(v_cs_ld_flags_wb, WB_V, cs_ld_flags_wb);
 
-   mux4$ mux_sr1_data [31:0] (mux_sr1_data_out, ALU_RESULT, SR1_DATA, NEIP, EFLAGS_DATA, CS_MUX_SR1_MEM_DATA_WB[0], CS_MUX_SR1_MEM_DATA_WB[1]);
-   assign s = mux_sr1_data_out;
-   assign SR2_DATA_OUT = SP_XCHG_DATA;
-   assign MM_DATA_OUT = MM_RESULT;
-   assign SEG_DATA_OUT = mux_sr1_data_out[15:0];
-   assign CSEG_DATA_OUT = NCS;
+   //Desination Select_WB
 
-   and2$ and_sz_64 (and_sz_64_out, DATA_SIZE[0], DATA_SIZE[1]);
-   mux2$ mux_mem [31:0] (mux_mem_out, mux_sr1_data_out, MM_RESULT[31:0], and_sz_64_out);
-   assign MEM_DATA_OUT = {MM_RESULT[63:32], mux_mem_out};
-   assign DATA_SIZE_OUT = DATA_SIZE;
+   mux32_2way u_mux_d1(data1, WB_ALU32_RESULTS, cmps_first_pointer, cs_is_cmps_first_uop_all);
+   assign data2 = cmps_updated_pointer;
+   assign data3 = internal_count; 
 
-   assign DRID1_OUT = DRID1; // To GPRs, SEGRs, MMX registers
-   assign DRID2_OUT = DRID2; // to GPRs only
+   //REG_FILE32 outputs
+   assign Out_DR1 = WB_DR1;
+   assign Out_DR2 = WB_DR2;
+   assign Out_DR3 = WB_DR3; 
+   assign Out_DR1_data = data1;
+   assign Out_DR2_data = data2;
+   assign Out_DR3_data = data3;
+   assign out_v_de_ld_gpr1_wb = v_de_ld_gpr1_wb; 
+   assign out_v_cs_ld_gpr2_wb = v_cs_ld_gpr2_wb;
+   assign out_v_de_ld_gpr3_wb = v_cs_ld_gpr3_wb; 
 
-   and2$
-      and_v_ld_eip (V_LD_EIP, V, CS_LD_EIP_WB),
-      and_v_ld_cseg (V_LD_CSEG, V, CS_LD_CSEG_WB),
-      and_v_ld_gpr1 (V_LD_GPR1, V, D2_LD_GPR1_WB),
-      and_v_ld_gpr2 (V_LD_GPR2, V, CS_LD_GPR2_WB),
-      and_v_ld_mm (V_LD_MM, V, D2_LD_MM_WB),
-      and_v_ld_seg (V_LD_SEG, V, CS_LD_SEG_WB),
-      and_v_mem_wr (V_MEM_WR, V, D2_MEM_WR_WB);
+   //DCACHE outputs
+   assign out_de_datasize = de_datasize_all;
+   assign Out_Dcache_Data = data1; 
+   assign Out_Dcache_Address = WB_ADDRESS; 
+
 endmodule

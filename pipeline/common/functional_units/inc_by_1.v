@@ -22,18 +22,22 @@
 //
 // Combinational Delay: 4.2ns
 //
+// To: fix logic
 module inc_by_1 (
 	output [31:0] sum,
 	output carry_out,
 	input [31:0] a
 	);
 
+	adder32(sum, carry_out, a, 32'h0001);
+/*
 	wire [31:0] lookahead_carry;
 
 	inc_by_1_lookahead u_lookahead(lookahead_carry, a);
 
 	a_plus_carry32 u_add(sum, a, lookahead_carry, 1'b1);
 	assign carry_out = lookahead_carry[31];
+*/
 
 endmodule
 
