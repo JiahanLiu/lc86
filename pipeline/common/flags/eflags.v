@@ -18,6 +18,19 @@
 //
 //-------------------------------------------------------------------------------------
 
+//Flags is a 32 bit register. Here each flag's location within the register:
+/*
+assign flags[11] = OF; 
+assign flags[10] = DF; 
+
+assign flags[7] = SF; 
+assign flags[6] = ZF; 
+
+assign flags[4] = AF; 
+assign flags[2] = PF; 
+assign flags[0] = CF; 
+*/
+
 //-------------------------------------------------------------------------------------
 //
 // 					 				OF_Logic

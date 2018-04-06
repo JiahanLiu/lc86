@@ -1,0 +1,12 @@
+/home/projects/courses/spring_18/ee382n-16120/lib/time -v 
+/home/projects/courses/spring_18/ee382n-16120/lib/lib1 
+/home/projects/courses/spring_18/ee382n-16120/lib/lib2 
+/home/projects/courses/spring_18/ee382n-16120/lib/lib4 
+../../../common/functional_units/adder.v
+../../../common/functional_units/subtract.v
+../../../common/functional_units/inc_by_1.v
+../../alu.v
+../../../common/basic_components/muxes.v
+../../../common/basic_components/logic_gates.v
+../../../common/flags/eflags.v
+test_inc_by_1.v

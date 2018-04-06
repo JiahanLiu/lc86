@@ -1,95 +1,72 @@
 // Control store width needs to be adjusted
 
 module execute (
-   input CLK, SET, RST,
+   input CLK, SET, RST, //not uesd SET/RST
 
-   input V,
-   input [31:0] NEIP,
-   input [15:0] NCS,
-   input [63:0] CONTROL_STORE,
+   input EX_V,
+   input [31:0] EX_NEIP,
+   input [15:0] EX_NCS,
+   input [63:0] EX_CONTROL_STORE,
 
-   input [31:0] A, B,
-   input [63:0] MM_A, MM_B,
-   input [31:0] SP_XCHG_DATA,
+   input [31:0] EX_A, EX_B,
+   input [31:0] EX_COUNT, 
 
-   input [31:0] MEM_WR_ADDR,
-   input [1:0] DATA_SIZE,
+   input [31:0] EX_ADDRESS,
 
-   input [2:0] DE_ALUK_EX,
-   input [2:0] DRID1, DRID2,
+   input [2:0] EX_DR1, EX_DR2, EX_DR3,
 
-   input D2_MEM_WR_WB, D2_LD_GPR1_WB, D2_LD_MM_WB,
-   input DF_FLAG,
+   output WB_V,
+   output [31:0] WB_NEIP, 
+   output [15:0] WB_NCS,
+   output [63:0] WB_CONTROL_STORE,
 
-   output [31:0] NEIP_OUT,
-   output [15:0] NCS_OUT,
-   output [63:0] CONTROL_STORE_OUT,
+   output [31:0] WB_ALU32_RESULT,
+   output [31:0] WB_FLAGS,
+   output [31:0] WB_CMPS_POINTER,
+   output [31:0] WB_COUNT, 
 
-   output [31:0] SR1_DATA_OUT,
-   output [31:0] ALU_RESULT_OUT,
-   output [63:0] MM_RESULT_OUT,
-   output [31:0] SP_XCHG_DATA_OUT,
-
-   output [31:0] MEM_WR_ADDR_OUT,
-   output [1:0] DATA_SIZE_OUT,
-
-   output [2:0] DE_ALUK_EX_OUT,
-   output [2:0] DRID1_OUT, DRID2_OUT,
-
-   output D2_MEM_WR_WB_OUT, D2_LD_GPR1_WB_OUT, D2_LD_MM_WB_OUT
+   output [2:0] WB_DR1, WB_DR2, WB_DR3
 );
-`include "../control_store/control_store_wires.v"
-`include "../control_store/control_store_signals.v"
+   
+   //control store
+   wire cs_is_cmps_first_uop_all; //0
+   wire cs_is_cmps_second_uop_all; //1
+   wire [1:0] de_datasize_all; //2-3
+   wire cs_is_first_of_repne; //4
+   wire de_dr1_write_wb; //5
+   wire de_dr2_write_wb; //6
+   wire de_dr3_write_wb; //7
+   wire [6:0] de_flags_affected_wb; //8-14
+   wire [2:0] de_aluk_ex; //15-17
 
-   wire [2:0] mux_sz_pos_out, mux_sz_neg_out;
-   wire [31:0] mux_sz_out, add_sz_out;
+   //internal wires
+   wire [31:0] a, b;
+   wire [31:0] cmps_first_mem;
 
-   wire [31:0] temp_reg_out, mux_b_out;
 
-   wire [2:0] mux_pop_sz_out;
-   wire [31:0] mux_pop_out, add_pop_out;
+   undo_control_store u_undo_control_store(
+       cs_is_cmps_first_uop_all, //0
+       cs_is_cmps_second_uop_all, //1
+       de_datasize_all, //2-3
+       cs_is_first_of_repne, //4
+       de_dr1_write_wb, //5
+       de_dr2_write_wb, //6
+       de_dr3_write_wb, //7
+       de_flags_affected_wb, //8-14
+       de_aluk_ex, //15-17
+      EX_CONTROL_STORE
+   );
 
-   wire [31:0] u_alu32_out, u_shf_out;
+   //Operand_Select_EX
+   assign a = EX_A;
+   mux32_2way u_select_b(b, EX_B, cmps_first_mem, cs_is_cmps_second_uop_all); 
+   
+   //String_Support
+   reg32e$ u_cmps_temp_mem (CLK, EX_A, cmps_first_mem, , 1'b1, 1'b1, cs_is_cmps_first_uop_all);
+   assign WB_CMPS_POINTER = EX_B; 
+   assign WB_COUNT = EX_COUNT; 
 
-   mux2$ mux_neip [31:0] (NEIP_OUT, NEIP, A, CS_MUX_NEXT_EIP_EX);
-   mux2$ mux_ncs [15:0] (NCS_OUT, NCS, A[15:0], CS_MUX_NEXT_CSEG_EX);
-
-   assign CONTROL_STORE_OUT = CONTROL_STORE;
-
-   mux4$
-      mux_sz_pos [2:0] (mux_sz_pos_out, 3'b001, 3'b010, 3'b100, , DATA_SIZE[0], DATA_SIZE[1]),
-      mux_sz_neg [2:0] (mux_sz_neg_out, 3'b111, 3'b110, 3'b100, , DATA_SIZE[0], DATA_SIZE[1]);
-   mux2$ mux_sz [31:0] (mux_sz_out, {29'b0, mux_sz_pos_out}, {29'b1, mux_sz_neg_out}, DF_FLAG);
-   adder32 add_sz (add_sz_out, , B, mux_sz_out, 1'b0);
-   mux2$ mux_sr1_data [31:0] (SR1_DATA_OUT, SP_XCHG_DATA, add_sz_out, CS_MUX_SR1_DATA_EX);
-
-// module reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
-   reg32e$ temp (CLK, A, temp_reg_out, , 1'b1, 1'b1, CS_LD_TEMP_EX);
-   mux2$ mux_b [31:0] (mux_b_out, B, temp_reg_out, CS_MUX_B_EX);
-
-   alu32 u_alu32 (.A(A), .B(mux_b_out), .sel(DE_ALUK_EX), .OUT(u_alu32_out));
-   shf32 u_shf32 (.A(A), .AMT(B[4:0]), .DIR(DE_ALUK_EX[2]), .OUT(u_shf_out));
-
-   mux2$ mux_result [31:0] (ALU_RESULT_OUT, u_alu32_out, u_shf_out, CS_MUX_RESULT_EX);
-
-   alu64 u_alu64 (.A(MM_A), .B(MM_B), .sel(DE_ALUK_EX), .OUT(MM_RESULT_OUT));
-
-   mux2$
-      mux_pop_sz [2:0] (mux_pop_sz_out, 3'b010, 3'b100, DATA_SIZE[1]),
-      mux_pop [31:0] (mux_pop_out, 32'b0, {29'b0, mux_pop_sz_out}, CS_MUX_SP_POP_EX);
-   adder32 add_pop (add_pop_out, , SP_XCHG_DATA, mux_pop_out, 1'b0);
-
-   mux2$ mux_sp_xchg [31:0] (SP_XCHG_DATA_OUT, add_pop_out, A, CS_MUX_SP_XCHG_DATA_EX);
-
-   assign MEM_WR_ADDR_OUT = MEM_WR_ADDR;
-   assign DATA_SIZE_OUT = DATA_SIZE;
-
-   assign DE_ALUK_EX_OUT = DE_ALUK_EX;
-   assign DRID1_OUT = DRID1;
-   assign DRID2_OUT = DRID2;
-
-   assign D2_MEM_WR_WB_OUT = D2_MEM_WR_WB;
-   assign D2_LD_GPR1_WB_OUT = D2_LD_GPR1_WB;
-   assign D2_LD_MM_WB_OUT = D2_LD_MM_WB;
+   //ALU32
+   alu32 u_alu32(WB_ALU32_RESULT, WB_FLAGS, a, b, de_aluk_ex);
 
 endmodule

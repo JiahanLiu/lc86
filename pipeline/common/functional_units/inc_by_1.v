@@ -5,52 +5,12 @@
 // EE382N, Spring 2018
 // Apruv Narkhede, Nelson Wu, Steven Flolid, Jiahan Liu
 //
-// functional_unit_inc_by_1         - Increments a32 by 1, produces flags
 // inc_by_1                         - Increments a32 by 1, NO flags produced
 // a_plus_carry32                   - Adds Carry32 to a32+b1         
 // a_plus_carry1                    - determines sum1 based on a1+1 with carry_in1
 // inc_by_1_lookahead               - Lookahead for inc_by_1 modeled after Kogge Stone
 //
 //-------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------
-//
-// 							   Increment by 1 (YES flags)
-//
-//-------------------------------------------------------------------------------------
-// Functionality: Increments a32 by 1, produces flags
-//
-// Note: Use faster module: inc_by_1 if flags aren't required 
-//
-// Combinational Delay: 4.2ns
-//
-module functional_unit_inc_by_1 (
-	output [31:0] sum, 
-	output [31:0] flags,
-	output carry_out, 
-	input [31:0] a
-	);
-	
-	wire [31:0] internal_sum;
-	wire [31:0] internal_carry_out;
-
-	assign sum = internal_sum;
-	assign carry_out = internal_carry_out;
-
-	inc_by_1 u_inc_by_1(sum, carry_out, a);
-
-	wire OF, DF, SF, ZF, AF, PF, CF; 
-
-	OF_logic u_OF_logic(OF, adder_result[31], a[31], b[31]);
-	assign DF = 0;
-	assign SF = adder_result[31];
-	ZF_logic u_ZF_logic(ZF, adder_result[31:0]);
-	assign AF = internal_carry_out[3];
-	PF_logic u_PF_logic(PF, adder_result[7:0]);
-	assign CF = 0;
-
-	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
-endmodule
-
 //-------------------------------------------------------------------------------------
 //
 // 							   Increment by 1 (NO flags)
@@ -68,14 +28,11 @@ module inc_by_1 (
 	input [31:0] a
 	);
 
-	wire [31:0] bufferedA;
-	buffer32 buff_A(bufferedA, a);
-
 	wire [31:0] lookahead_carry;
 
-	inc_by_1_lookahead u_lookahead(lookahead_carry, bufferedA);
+	inc_by_1_lookahead u_lookahead(lookahead_carry, a);
 
-	a_plus_carry32 u_add(sum, bufferedA, lookahead_carry, 1'b1);
+	a_plus_carry32 u_add(sum, a, lookahead_carry, 1'b1);
 	assign carry_out = lookahead_carry[31];
 
 endmodule
@@ -150,16 +107,17 @@ module inc_by_1_lookahead (
 	input [31:0] a
 	);
 
-	wire [31:0] bufferedA;
-	buffer32 buffer_A(bufferedA, a);
-
 	wire [7:0] ct_level1_size4, ct_level1_size3, ct_level1_size2, ct_level1_size1;
+	wire [1:0] ct_level2_size4 [3:0];
+	wire [1:0] ct_level2_size3 [3:0];
+	wire [1:0] ct_level2_size2 [3:0];
+	wire [1:0] ct_level2_size1 [3:0];
 
 	genvar i;
 	generate
 		for(i = 0; i < 8; i = i + 1)
 		begin : and4_m
-			and4$ and4_m (ct_level1_size4[i], bufferedA[i*4], bufferedA[i*4+1], bufferedA[i*4+2], bufferedA[i*4+3]);
+			and4$ and4_m (ct_level1_size4[i], a[i*4], a[i*4+1], a[i*4+2], a[i*4+3]);
 		end 
 	endgenerate
 
@@ -167,7 +125,7 @@ module inc_by_1_lookahead (
 	generate
 		for(j = 0; j < 8; j = j + 1)
 		begin : and3_m
-			and3$ and3_m (ct_level1_size3[j], bufferedA[j*4], bufferedA[j*4+1], bufferedA[j*4+2]);
+			and3$ and3_m (ct_level1_size3[j], a[j*4], a[j*4+1], a[j*4+2]);
 		end 
 	endgenerate	
 
@@ -176,58 +134,32 @@ module inc_by_1_lookahead (
 	generate
 		for(k = 0; k < 8; k = k + 1)
 		begin : and2_m
-			and2$ and2_m (ct_level1_size2[k], bufferedA[k*4], bufferedA[k*4+1]);
+			and2$ and2_m (ct_level1_size2[k], a[k*4], a[k*4+1]);
 		end 
 	endgenerate
 
-	assign ct_level1_size1[0] = bufferedA[0];
-	assign ct_level1_size1[1] = bufferedA[4];
-	assign ct_level1_size1[2] = bufferedA[8];
-	assign ct_level1_size1[3] = bufferedA[12];
+	assign ct_level1_size1[0] = a[0];
+	assign ct_level1_size1[1] = a[4];
+	assign ct_level1_size1[2] = a[8];
+	assign ct_level1_size1[3] = a[12];
 
-	assign ct_level1_size1[4] = bufferedA[16];
-	assign ct_level1_size1[5] = bufferedA[20];
-	assign ct_level1_size1[6] = bufferedA[24];
-	assign ct_level1_size1[7] = bufferedA[28]; 
+	assign ct_level1_size1[4] = a[16];
+	assign ct_level1_size1[5] = a[20];
+	assign ct_level1_size1[6] = a[24];
+	assign ct_level1_size1[7] = a[28]; 
 
+	and4$ level2_size4_1 (ct_level2_size4[1], ct_level1_size4[7], ct_level1_size4[6], ct_level1_size4[5], ct_level1_size4[4]);
+	and4$ level2_size4_0 (ct_level2_size4[0], ct_level1_size4[3], ct_level1_size4[2], ct_level1_size4[1], ct_level1_size4[0]);
 
-	wire [1:0] prebuff_ct_level2_size4, prebuff_ct_level2_size3, ct_level2_size2, ct_level2_size1;
-
-	and4$ level2_size4_1 (prebuff_ct_level2_size4[1], ct_level1_size4[7], ct_level1_size4[6], ct_level1_size4[5], ct_level1_size4[4]);
-	and4$ level2_size4_0 (prebuff_ct_level2_size4[0], ct_level1_size4[3], ct_level1_size4[2], ct_level1_size4[1], ct_level1_size4[0]);
-
-	and3$ level2_size3_1 (prebuff_ct_level2_size3[1], ct_level1_size4[6], ct_level1_size4[5], ct_level1_size4[4]);
-	and3$ level2_size3_0 (prebuff_ct_level2_size3[0], ct_level1_size4[2], ct_level1_size4[1], ct_level1_size4[0]);
+	and3$ level2_size3_1 (ct_level2_size3[1], ct_level1_size4[6], ct_level1_size4[5], ct_level1_size4[4]);
+	and3$ level2_size3_0 (ct_level2_size3[0], ct_level1_size4[2], ct_level1_size4[1], ct_level1_size4[0]);
 
 	and2$ level2_size2_1 (ct_level2_size2[1], ct_level1_size4[5], ct_level1_size4[4]);
 	and2$ level2_size2_0 (ct_level2_size2[0], ct_level1_size4[1], ct_level1_size4[0]);
 
 	assign ct_level2_size1 [0] = ct_level1_size4[4]; 
 	assign ct_level2_size1 [1] = ct_level1_size4[0];
-
-	wire [1:0] ct_level2_size4 [3:0];
-	wire [1:0] ct_level2_size3 [3:0];
-							         //buff no. | high/low
-	buffer32 u_level2_size4_0_buff0(ct_level2_size4[0][0], prebuff_ct_level2_size4[0]);
-	buffer32 u_level2_size4_0_buff1(ct_level2_size4[1][0], prebuff_ct_level2_size4[0]);
-	buffer32 u_level2_size4_0_buff2(ct_level2_size4[2][0], prebuff_ct_level2_size4[0]);
-	buffer32 u_level2_size4_0_buff3(ct_level2_size4[3][0], prebuff_ct_level2_size4[0]);
-
-	buffer32 u_level2_size4_1_buff0(ct_level2_size4[0][1], prebuff_ct_level2_size4[1]);
-	buffer32 u_level2_size4_1_buff1(ct_level2_size4[1][1], prebuff_ct_level2_size4[1]);
-	buffer32 u_level2_size4_1_buff2(ct_level2_size4[2][1], prebuff_ct_level2_size4[1]);
-	buffer32 u_level2_size4_1_buff3(ct_level2_size4[3][1], prebuff_ct_level2_size4[1]);
-
-	buffer32 u_level2_size3_0_buff0(ct_level2_size3[0][0], prebuff_ct_level2_size3[0]);
-	buffer32 u_level2_size3_0_buff1(ct_level2_size3[1][0], prebuff_ct_level2_size3[0]);
-	buffer32 u_level2_size3_0_buff2(ct_level2_size3[2][0], prebuff_ct_level2_size3[0]);
-	buffer32 u_level2_size3_0_buff3(ct_level2_size3[3][0], prebuff_ct_level2_size3[0]);
-
-	buffer32 u_level2_size3_1_buff0(ct_level2_size3[0][1], prebuff_ct_level2_size3[1]);
-	buffer32 u_level2_size3_1_buff1(ct_level2_size3[1][1], prebuff_ct_level2_size3[1]);
-	buffer32 u_level2_size3_1_buff2(ct_level2_size3[2][1], prebuff_ct_level2_size3[1]);
-	buffer32 u_level2_size3_1_buff3(ct_level2_size3[3][1], prebuff_ct_level2_size3[1]);
-
+	
 	and2$ u_carry_31(carry_found_by_lookahead[31], ct_level2_size4[0][0], ct_level2_size4[0][1]);
 	and3$ u_carry_30(carry_found_by_lookahead[30], ct_level2_size4[0][0], ct_level2_size3[0][1], ct_level1_size3[7]);
 	and3$ u_carry_29(carry_found_by_lookahead[29], ct_level2_size4[0][0], ct_level2_size3[0][1], ct_level1_size2[7]);
