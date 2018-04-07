@@ -20,7 +20,7 @@ module decode_stage2 (
 
     output [31:0] EIP_OUT, 
     output [15:0] CS_OUT,
-    output [63:0] control_signal,
+    output [127:0] control_signal,
     output [2:0] DR, SR, base, index,
     output [2:0] MM_DR, MM_SR,
     output [2:0] seg_SR, seg_DR,
@@ -45,7 +45,8 @@ module decode_stage2 (
    output [1:0] DE_SIB_S_AG
 
 );
-
+`include "../control_store/control_store_wires.v"
+`include "../control_store/control_store_signals.v"
    wire [2:0] mux_base_reg_id_out;
    wire op_0F7F, op_0F7F_bar, and_ld_mm_out, and_sr1_needed_out;
 
@@ -81,62 +82,8 @@ module decode_stage2 (
     assign IR_SIB_BASE = sib[2:0];
     assign DE_SEG1_ID = 3'b000;
 
-    ucontrol_store u_ucontrol_store (.opcode(opcode[7:0]), .opcode_size(opcode_size), .control_signal(control_signal));
-
-    // Control signals
-    assign CS_UOP_STALL_DE = control_signal[0];
-    assign CS_DATA_SIZE_DE = control_signal[1];
-    assign CS_MUX_ALUK_DE = control_signal[2];
-    assign CS_ALUK_DE = control_signal[3];
-    assign CS_MUX_LD_GPR1_DE = control_signal[4];
-    assign CS_LD_GPR1_DE = control_signal[5];
-    assign CS_MUX_MEM_RD_DE = control_signal[6];
-    assign CS_MEM_RD_DE = control_signal[7];
-    assign CS_MUX_MEM_WR_DE = control_signal[8];
-    assign CS_MEM_WR_DE = control_signal[9];
-    assign CS_JMP_STALL_DE = control_signal[10];
-    assign CS_MUX_SR1_D2 = control_signal[11];
-    assign CS_SR1_D2 = control_signal[12];
-    assign CS_MUX_SR2_D2 = control_signal[13];
-    assign CS_SR2_D2 = control_signal[14];
-    assign CS_MUX_SEG1_D2 = control_signal[15];
-    assign CS_MUX_SEG2_D2 = control_signal[16];
-    assign CS_SR1_NEEDED_AG = control_signal[17];
-    assign CS_SR2_NEEDED_AG = control_signal[18];
-    assign CS_MUX_SEG1_NEEDED_AG = control_signal[19];
-    assign CS_SEG1_NEEDED_AG = control_signal[20];
-    assign CS_SEG2_NEEDED_AG = control_signal[21];
-    assign CS_MM1_NEEDED_AG = control_signal[22];
-    assign CS_MM2_NEEDED_AG = control_signal[23];
-    assign CS_MUX_A_AG = control_signal[24];
-    assign CS_MUX_B_AG = control_signal[25];
-    assign CS_MUX_DRID1_AG = control_signal[26];
-    assign CS_MUX_EIP_JMP_REL_AG = control_signal[27];
-    assign CS_MUX_NEXT_EIP_AG = control_signal[28];
-    assign CS_MUX_NEXT_CSEG_AG = control_signal[29];
-    assign CS_MUX_SP_PUSH_AG = control_signal[30];
-    assign CS_MUX_MEM_RD_ADDR_AG = control_signal[31];
-    assign CS_MUX_MEM_WR_ADDR_AG = control_signal[32];
-    assign CS_MUX_SP_XCHG_DATA_AG = control_signal[33];
-    assign CS_MUX_B_ME = control_signal[34];
-    assign CS_MUX_IMM_ADD_ME = control_signal[35];
-    assign CS_MUX_SP_POP_EX = control_signal[36];
-    assign CS_LD_TEMP_EX = control_signal[37];
-    assign CS_MUX_B_EX = control_signal[38];
-    assign CS_MUX_RESULT_EX = control_signal[39];
-    assign CS_MUX_SR1_DATA_EX = control_signal[40];
-    assign CS_MUX_SP_XCHG_DATA_EX = control_signal[41];
-    assign CS_MUX_NEXT_EIP_EX = control_signal[42];
-    assign CS_MUX_NEXT_CSEG_EX = control_signal[43];
-    assign CS_MUX_SR1_MEM_DATA_WB = control_signal[44];
-    assign CS_LD_GPR2_WB = control_signal[45];
-    assign CS_LD_SEG_WB = control_signal[46];
-    assign CS_LD_CSEG_WB = control_signal[47];
-    assign CS_LD_MM_WB = control_signal[48];
-    assign CS_LD_EIP_WB = control_signal[49];
-    assign CS_LD_FLAGS_WB = control_signal[50];
-    assign PLACEHOLDER = control_signal[51];
-    assign PLACEHOLDER2 = control_signal[52];
+    ucontrol_store u_ucontrol_store1 (.opcode(opcode[7:0]), .opcode_size(opcode_size), .control_signal(control_signal[63:0]));
+    ucontrol_store u_ucontrol_store2 (.opcode(opcode[7:0]), .opcode_size(opcode_size), .control_signal(control_signal[127:64]));
 
     inv1$ inv1 (mod7_b, modrm[7]);
     inv1$ inv2 (mod6_b, modrm[6]);
