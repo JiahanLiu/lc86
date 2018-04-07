@@ -16,7 +16,7 @@ module writeback (
    input WB_V,
    input [31:0] WB_NEIP,
    input [15:0] WB_NCS,
-   input [63:0] WB_CONTROL_STORE,
+   input [63:0] CONTROL_STORE,
    //pseudo-control store signals not from control store but generated in decode
    input [1:0] WB_de_datasize_all,
    input [2:0] WB_de_aluk_ex, 

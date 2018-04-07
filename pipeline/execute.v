@@ -5,7 +5,7 @@ module execute (
    input EX_V,
    input [31:0] EX_NEIP,
    input [15:0] EX_NCS,
-   input [63:0] EX_CONTROL_STORE,
+   input [63:0] CONTROL_STORE,
    //pseudo-control store signals not from control store but generated in decode
    input [1:0] EX_de_datasize_all,
    input [2:0] EX_de_aluk_ex, 
@@ -73,7 +73,7 @@ module execute (
   assign WB_V_next = EX_V;
   assign WB_NEIP_next = EX_NEIP; 
   assign WB_NCS_next = EX_NCS; 
-  assign WB_CONTROL_STORE_next = EX_CONTROL_STORE;
+  assign WB_CONTROL_STORE_next = CONTROL_STORE;
   assign WB_de_datasize_all_next = EX_de_datasize_all;
   assign WB_de_aluk_ex_next = EX_de_aluk_ex;
   assign WB_de_ld_gpr1_wb_next = EX_de_ld_gpr1_wb;
