@@ -5,7 +5,7 @@ module execute (
    input EX_V,
    input [31:0] EX_NEIP,
    input [15:0] EX_NCS,
-   input [63:0] CONTROL_STORE,
+   input [127:0] CONTROL_STORE,
    //pseudo-control store signals not from control store but generated in decode
    input [1:0] EX_de_datasize_all,
    input [2:0] EX_de_aluk_ex, 
