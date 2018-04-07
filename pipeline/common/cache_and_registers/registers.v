@@ -142,15 +142,13 @@ endmodule // regfile8x64
 //endmodule // regfile8x32e
 
 module regfile8x32e (
+    input clk,
     input [31:0] result1, result2, result3,
     input [2:0] SR1, SR2, SR3, SR4,
-    input [1:0] 	RE0, RE1, RE2, RE3;
-
+    input [1:0]	RE4, RE1, RE2, RE3;
     input [2:0] DR1, DR2, DR3,
     input write_DR1, write_DR2, write_DR3,
-    input [1:0] write_size1, write_size2, write_size3,
-    input clk, 
-
+    input [1:0] WE1, WE2, WE3,
     output [31:0] regA, regB, regC, regD
 );
 
@@ -189,14 +187,20 @@ wire SR10, SR11, SR12;
 wire SR20, SR21, SR22;
 wire SR30, SR31, SR32;
 wire SR40, SR41, SR42;
+wire sr1_sel0, sr1_sel1, sr1_sel2, sr1_sel3;
+wire sr2_sel0, sr2_sel1, sr2_sel2, sr2_sel3;
+wire sr3_sel0, sr3_sel1, sr3_sel2, sr3_sel3;
+wire sr4_sel0, sr4_sel1, sr4_sel2, sr4_sel3;
+wire RE10_b, RE20_b, RE30_b, RE40_b;
+wire outas1, outas2, outas3, outas4;
 
 bufferH16$ buf1 (write_DR1_buf, write_DR1);
 bufferH16$ buf2 (write_DR2_buf, write_DR2);
 bufferH16$ buf3 (write_DR3_buf, write_DR3);
 
-register_file_decoder u_register_file_decoder1 (DR1, write_size1, write_hh_en1, write_hl_en1, write_lh_en1, write_ll_en1);
-register_file_decoder u_register_file_decoder2 (DR2, write_size2, write_hh_en2, write_hl_en2, write_lh_en2, write_ll_en2);
-register_file_decoder u_register_file_decoder3 (DR3, write_size3, write_hh_en3, write_hl_en3, write_lh_en3, write_ll_en3);
+register_file_decoder u_register_file_decoder1 (DR1, WE1, write_hh_en1, write_hl_en1, write_lh_en1, write_ll_en1);
+register_file_decoder u_register_file_decoder2 (DR2, WE2, write_hh_en2, write_hl_en2, write_lh_en2, write_ll_en2);
+register_file_decoder u_register_file_decoder3 (DR3, WE3, write_hh_en3, write_hl_en3, write_lh_en3, write_ll_en3);
 
 and2$ andw1[7:0] (outw1, write_hh_en1, write_DR1_buf);
 and2$ andw2[7:0] (outw2, write_hl_en1, write_DR1_buf);
@@ -348,6 +352,36 @@ bufferH16$ bufs10 (SR40, SR4[0]);
 bufferH16$ bufs11 (SR41, SR4[1]);
 bufferH16$ bufs12 (SR42, SR4[2]);
 
+// Generate seelct signals for masking
+inv1$ invs1 (RE10_b, RE1[0]);
+inv1$ invs2 (RE20_b, RE2[0]);
+inv1$ invs3 (RE30_b, RE3[0]);
+inv1$ invs4 (RE40_b, RE4[0]);
+
+or2$ ors1 (sr1_sel0, RE1[1], RE10_b);
+assign sr1_sel1 = RE1[1];
+and2$ ands1 (outas1, RE1[0], RE1[1]);
+assign sr1_sel2 = outas1;
+assign sr1_sel3 = outas1;
+
+or2$ ors2 (sr2_sel0, RE2[1], RE20_b);
+assign sr2_sel1 = RE2[1];
+and2$ ands2 (outas2, RE2[0], RE2[1]);
+assign sr2_sel2 = outas2;
+assign sr2_sel3 = outas2;
+
+or2$ ors3 (sr3_sel0, RE3[1], RE30_b);
+assign sr3_sel1 = RE3[1];
+and2$ ands3 (outas3, RE3[0], RE3[1]);
+assign sr3_sel2 = outas3;
+assign sr3_sel3 = outas3;
+
+or2$ ors4 (sr4_sel0, RE4[1], RE40_b);
+assign sr4_sel1 = RE4[1];
+and2$ ands4 (outas4, RE4[0], RE4[1]);
+assign sr4_sel2 = outas4;
+assign sr4_sel3 = outas4;
+
 assign reg0_out = {reg0_hh[31:24], reg0_hl[23:16], reg0_lh[15:8], reg0_ll[7:0]};
 assign reg1_out = {reg1_hh[31:24], reg1_hl[23:16], reg1_lh[15:8], reg1_ll[7:0]};
 assign reg2_out = {reg2_hh[31:24], reg2_hl[23:16], reg2_lh[15:8], reg2_ll[7:0]};
@@ -360,21 +394,42 @@ assign reg7_out = {reg7_hh[31:24], reg7_hl[23:16], reg7_lh[15:8], reg7_ll[7:0]};
 // Read SR1
 mux4_8$ amux0[3:0] (out1m, reg0_out, reg1_out, reg2_out, reg3_out, SR10, SR11);
 mux4_8$ amux1[3:0] (out2m, reg4_out, reg5_out, reg6_out, reg7_out, SR10, SR11);
-mux2_8$ amux2[3:0] (regA, out1m, out2m, SR12);
+mux2_8$ amux2[3:0] (regA_out, out1m, out2m, SR12);
+
+// Mask the read value according to the size
+mux2_8$ amuxm0 (regA[7:0], regA_out[15:8], regA_out[7:0], sr1_sel0);
+mux2_8$ amuxm1 (regA[15:8], 8'b0, regA_out[15:8], sr1_sel1);
+mux2_8$ amuxm2 (regA[23:16], 8'b0, regA_out[23:16], sr1_sel2);
+mux2_8$ amuxm3 (regA[31:23], 8'b0, regA_out[31:24], sr1_sel3);
 
 //Read SR2
 mux4_8$ bmux0[3:0] (out3m, reg0_out, reg1_out, reg2_out, reg3_out, SR20, SR21);
 mux4_8$ bmux1[3:0] (out4m, reg4_out, reg5_out, reg6_out, reg7_out, SR20, SR21);
-mux2_8$ bmux2[3:0] (regB, out3m, out4m, SR22);
+mux2_8$ bmux2[3:0] (regB_out, out3m, out4m, SR22);
+
+mux2_8$ bmuxm0 (regB[7:0], regB_out[15:8], regB_out[7:0], sr2_sel0);
+mux2_8$ bmuxm1 (regB[15:8], 8'b0, regB_out[15:8], sr2_sel1);
+mux2_8$ bmuxm2 (regB[23:16], 8'b0, regB_out[23:16], sr2_sel2);
+mux2_8$ bmuxm3 (regB[31:23], 8'b0, regB_out[31:24], sr2_sel3);
 
 // Read SR3
 mux4_8$ cmux0[3:0] (out5m, reg0_out, reg1_out, reg2_out, reg3_out, SR30, SR31);
 mux4_8$ cmux1[3:0] (out6m, reg4_out, reg5_out, reg6_out, reg7_out, SR30, SR31);
-mux2_8$ cmux2[3:0] (regC, out5m, out6m, SR32);
+mux2_8$ cmux2[3:0] (regC_out, out5m, out6m, SR32);
+
+mux2_8$ cmuxm0 (regC[7:0], regC_out[15:8], regC_out[7:0], sr3_sel0);
+mux2_8$ cmuxm1 (regC[15:8], 8'b0, regC_out[15:8], sr3_sel1);
+mux2_8$ cmuxm2 (regC[23:16], 8'b0, regC_out[23:16], sr3_sel2);
+mux2_8$ cmuxm3 (regC[31:23], 8'b0, regC_out[31:24], sr3_sel3);
 
 // Read SR4
 mux4_8$ dmux0[3:0] (out7m, reg0_out, reg1_out, reg2_out, reg3_out, SR40, SR41);
 mux4_8$ dmux1[3:0] (out8m, reg4_out, reg5_out, reg6_out, reg7_out, SR40, SR41);
-mux2_8$ dmux2[3:0] (regD, out7m, out8m, SR42);
+mux2_8$ dmux2[3:0] (regD_out, out7m, out8m, SR42);
+
+mux2_8$ cmuxm0 (regD[7:0], regD_out[15:8], regD_out[7:0], sr4_sel0);
+mux2_8$ cmuxm1 (regD[15:8], 8'b0, regD_out[15:8], sr4_sel1);
+mux2_8$ cmuxm2 (regD[23:16], 8'b0, regD_out[23:16], sr4_sel2);
+mux2_8$ cmuxm3 (regD[31:23], 8'b0, regD_out[31:24], sr4_sel3);
 
 endmodule
