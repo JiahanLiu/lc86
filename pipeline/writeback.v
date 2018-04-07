@@ -41,11 +41,11 @@ module writeback (
 );
 
    //control store
-   wire cs_is_cmps_first_uop_all; //0
-   wire cs_is_cmps_second_uop_all; //1
-   wire cs_is_first_of_repne_wb; //2
-   wire cs_ld_gpr2_wb; //3
-   wire cs_ld_gpr3_wb; //4 
+   wire cs_is_cmps_first_uop_all; 
+   wire cs_is_cmps_second_uop_all; 
+   wire cs_is_first_of_repne_wb; 
+   wire cs_ld_gpr2_wb; 
+   wire cs_ld_gpr3_wb; 
    wire cs_ld_flags_wb; 
 
    //internal wires for each box output in schematic
@@ -75,7 +75,7 @@ module writeback (
    
    Flags_WB(current_flags, CLK, v_cs_ld_flags_wb, de_flags_affected_wb, WB_FLAGS);
 
-   repne_and_cmps (internal_count, WB_COUNT, cs_is_first_of_repne_wb, cs_is_cmps_second_uop_all, current_flags[6]);
+   Repne_Count_Logic u_Repne_Count_Logic(internal_count, WB_COUNT, cs_is_first_of_repne_wb, cs_is_cmps_second_uop_all, current_flags[6], CLK);
 
    and2$ u_validate_gpr1(v_de_ld_gpr1_wb, WB_V, de_ld_gpr1_wb);
    and2$ u_validate_gpr2(v_cs_ld_gpr2_wb, WB_V, cs_ld_gpr2_wb);

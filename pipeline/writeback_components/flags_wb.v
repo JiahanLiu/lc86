@@ -11,7 +11,7 @@ module Flags_WB(
 	output [31:0] current_flags,
 	input CLK, 
 	input v_cs_ld_flags_wb,
-	input [31:0] de_flags_affected_wb,
+	input [6:0] de_flags_affected_wb,
 	input [31:0] WB_FLAGS
 	);
 

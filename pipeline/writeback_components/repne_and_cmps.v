@@ -34,13 +34,14 @@ endmodule
 //
 // Combinational Delay: 
 //
-module repne_and_cmps (
+module Repne_Count_Logic (
 	output [31:0] internal_count,
 	output ex_repne_termination_all,
 	input [31:0] WB_COUNT,
 	input cs_is_first_of_repne_wb,
 	input cs_is_cmps_second_uop_all,
 	input ZF,
+	input CLK
 );
 
 	wire [31:0] internal_internal_count, count_minus_one, chosen_count;
