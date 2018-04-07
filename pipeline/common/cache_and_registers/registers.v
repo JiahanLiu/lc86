@@ -44,10 +44,10 @@ module register_file (CLK,
    
    regfile8x16  segr (SEG_DIN, SEGID1, SEGID2, 1'b1, 1'b1, WRSEGID, SEGWE, SEGDOUT1, SEGDOUT2, CLK);
    regfile8x64  mmr  (MM_DIN, MMID1, MMID2, 1'b1, 1'b1, WRMMID, MMWE, MMDOUT1, MMDOUT2, CLK);
-   regfile8x32e gpr  (GPR_DIN0, GPR_DIN1, GPR_DIN2, 
+   regfile8x32e gpr  (CLK, GPR_DIN0, GPR_DIN1, GPR_DIN2, 
 		      GPRID0, GPRID1, GPRID2, GPRID3, GPR_RE0, GPR_RE1, GPR_RE2, GPR_RE3, 
 		      WRGPR0, WRGPR1, WRGPR2, GPRWE0, GPRWE1, GPRWE2, 
-		      GPRDOUT0, GPRDOUT1, GPRDOUT2, GPRDOUT3, CLK);
+		      GPRDOUT0, GPRDOUT1, GPRDOUT2, GPRDOUT3);
 
    // Format: reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
    reg32e$
@@ -145,7 +145,7 @@ module regfile8x32e (
     input clk,
     input [31:0] result1, result2, result3,
     input [2:0] SR1, SR2, SR3, SR4,
-    input [1:0]	RE4, RE1, RE2, RE3;
+    input [1:0]	RE1, RE2, RE3, RE4;
     input [2:0] DR1, DR2, DR3,
     input write_DR1, write_DR2, write_DR3,
     input [1:0] WE1, WE2, WE3,
