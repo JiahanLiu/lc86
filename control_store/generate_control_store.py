@@ -19,7 +19,7 @@ def generate_signals(filename):
             romfilelist0.append(romfile)
         romfilelist.append(romfilelist0)
 
-    num_signals = 96
+    num_signals = 128
 
     desccol = 1
     opcodecol = desccol + 1
