@@ -1,4 +1,3 @@
-// Control store width needs to be adjusted
 
 module execute (
    input CLK, SET, RST, //not uesd SET/RST
