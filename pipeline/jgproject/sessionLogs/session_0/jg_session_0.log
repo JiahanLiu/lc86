@@ -1,0 +1,1458 @@
+#----------------------------------------
+# JasperGold Version Info
+# tool      : JasperGold 2015.09
+# platform  : Linux 2.6.32-696.23.1.el6.x86_64
+# version   : 2015.09 FCS 64 bits
+# build date: 2015.09.29 22:07:32 PDT
+#----------------------------------------
+# started Wed Apr 04 20:45:53 CDT 2018
+# hostname  : wario
+# pid       : 14371
+# arguments : '-label' 'session_0' '-console' 'wario:46099' '-style' 'windows' '-proj' '/home/ecelrc/students/anarkhede/micro/lc86/pipeline/jgproject/sessionLogs/session_0' '-init' '-hidden' '/home/ecelrc/students/anarkhede/micro/lc86/pipeline/jgproject/.tmp/.initCmds.tcl'
+
+Any disclosure about the Cadence Design Systems software or its use
+model to any third party violates the written Non-Disclosure Agreement
+between Cadence Design Systems, Inc. and the customer.
+
+THIS SOFTWARE CONTAINS CONFIDENTIAL INFORMATION AND TRADE SECRETS OF
+CADENCE DESIGN SYSTEMS, INC. USE, DISCLOSURE, OR REPRODUCTION IS
+PROHIBITED WITHOUT THE PRIOR EXPRESS WRITTEN PERMISSION OF CADENCE
+DESIGN SYSTEMS, INC.
+
+Copyright (C) 2000-2015 Cadence Design Systems, Inc. All Rights
+Reserved.  Unpublished -- rights reserved under the copyright laws of
+the United States.
+
+This product includes software developed by others and redistributed
+according to license agreement. See doc/third_party_readme.txt for
+further details.
+
+RESTRICTED RIGHTS LEGEND
+
+Use, duplication, or disclosure by the Government is subject to
+restrictions as set forth in subparagraph (c) (1) (ii) of the Rights in
+Technical Data and Computer Software clause at DFARS 252.227-7013 or
+subparagraphs (c) (1) and (2) of Commercial Computer Software -- Restricted
+Rights at 48 CFR 52.227-19, as applicable.
+
+
+                          Cadence Design Systems, Inc. 
+                          2655 Seely Avenue
+                          San Jose, CA 95134
+                          Phone: 408.943.1234
+
+For technical assistance visit http://support.cadence.com.
+
+JasperGold Apps Analysis Session - /home/ecelrc/students/anarkhede/micro/lc86/pipeline/jgproject/sessionLogs/session_0
+
+INFO: successfully checked out licenses "jasper_interactive" and "jasper_fpv".
+INFO: reading configuration file "/home/ecelrc/students/anarkhede/.config/jasper/jaspergold.conf".
+% source ./address_gen.tcl
+WARNING (WCD032): Passing arguments to "analyze" as lists has been deprecated.
+    For message help, type "help -message wcd032"
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/time
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib1
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib2
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib3
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib4
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib5
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib6
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/basic_components/muxes.v
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/basic_components/logic_gates.v
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/basic_components/eflags.v
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/functional_units/adder.v
+[-- (VERI-1482)] Analyzing Verilog file address_generation.v
+[ERROR (VERI-1158)] address_generation.v(126): use of undefined macro IDTR_VAL
+[ERROR (VERI-1128)] address_generation.v(95): CS_MUX_A_AG is not declared
+[ERROR (VERI-1128)] address_generation.v(95): CS_MUX_A_AG is not declared
+[ERROR (VERI-1128)] address_generation.v(130): CS_MUX_MEM_RD_ADDR_AG is not declared
+[ERROR (VERI-1128)] address_generation.v(130): CS_MUX_MEM_RD_ADDR_AG is not declared
+[ERROR (VERI-1128)] address_generation.v(131): CS_MUX_MEM_WR_ADDR_AG is not declared
+[ERROR (VERI-1128)] address_generation.v(131): CS_MUX_MEM_WR_ADDR_AG is not declared
+[ERROR (VERI-1072)] address_generation.v(160): module address_generation ignored due to previous errors
+Summary of errors detected:
+	[ERROR (VERI-1158)] address_generation.v(126): use of undefined macro IDTR_VAL
+	[ERROR (VERI-1128)] address_generation.v(95): CS_MUX_A_AG is not declared
+	[ERROR (VERI-1128)] address_generation.v(95): CS_MUX_A_AG is not declared
+	[ERROR (VERI-1128)] address_generation.v(130): CS_MUX_MEM_RD_ADDR_AG is not declared
+	[ERROR (VERI-1128)] address_generation.v(130): CS_MUX_MEM_RD_ADDR_AG is not declared
+	[ERROR (VERI-1128)] address_generation.v(131): CS_MUX_MEM_WR_ADDR_AG is not declared
+	[ERROR (VERI-1128)] address_generation.v(131): CS_MUX_MEM_WR_ADDR_AG is not declared
+	[ERROR (VERI-1072)] address_generation.v(160): module address_generation ignored due to previous errors
+ERROR (ENL034): 8 errors detected in the design file(s).
+
+% source ./address_gen.tcl
+WARNING (WCD032): Passing arguments to "analyze" as lists has been deprecated.
+    For message help, type "help -message wcd032"
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/time
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/time(5): overwriting previous definition of module timeunit
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/time(5): previous definition of module timeunit is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib1
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(39): overwriting previous definition of module nand2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(39): previous definition of module nand2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(54): overwriting previous definition of module nand3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(54): previous definition of module nand3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(70): overwriting previous definition of module nand4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(70): previous definition of module nand4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(87): overwriting previous definition of module and2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(87): previous definition of module and2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(102): overwriting previous definition of module and3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(102): previous definition of module and3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(118): overwriting previous definition of module and4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(118): previous definition of module and4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(135): overwriting previous definition of module nor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(135): previous definition of module nor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(150): overwriting previous definition of module nor3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(150): previous definition of module nor3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(166): overwriting previous definition of module nor4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(166): previous definition of module nor4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(181): overwriting previous definition of module or2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(181): previous definition of module or2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(198): overwriting previous definition of module or3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(198): previous definition of module or3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(214): overwriting previous definition of module or4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(214): previous definition of module or4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(231): overwriting previous definition of module xor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(231): previous definition of module xor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(247): overwriting previous definition of module xnor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(247): previous definition of module xnor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(263): overwriting previous definition of module inv1$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(263): previous definition of module inv1$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(290): overwriting previous definition of module table_dffq
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(290): previous definition of module table_dffq is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(314): overwriting previous definition of module dff$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(314): previous definition of module dff$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib2
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(115): overwriting previous definition of module dff8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(115): previous definition of module dff8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(176): overwriting previous definition of module dff16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(176): previous definition of module dff16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(238): overwriting previous definition of module jkff8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(238): previous definition of module jkff8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(301): overwriting previous definition of module jkff16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(301): previous definition of module jkff16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(317): overwriting previous definition of module buffer$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(317): previous definition of module buffer$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(324): overwriting previous definition of module buffer8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(324): previous definition of module buffer8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(330): overwriting previous definition of module buffer16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(330): previous definition of module buffer16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(346): overwriting previous definition of module bufferH16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(346): previous definition of module bufferH16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(357): overwriting previous definition of module bufferH64$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(357): previous definition of module bufferH64$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(368): overwriting previous definition of module bufferH256$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(368): previous definition of module bufferH256$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(379): overwriting previous definition of module bufferH1024$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(379): previous definition of module bufferH1024$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(396): overwriting previous definition of module bufferHInv16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(396): previous definition of module bufferHInv16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(407): overwriting previous definition of module bufferHInv64$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(407): previous definition of module bufferHInv64$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(418): overwriting previous definition of module bufferHInv256$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(418): previous definition of module bufferHInv256$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(429): overwriting previous definition of module bufferHInv1024$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(429): previous definition of module bufferHInv1024$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(458): overwriting previous definition of module latch_sr
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(458): previous definition of module latch_sr is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(482): overwriting previous definition of module latch$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(482): previous definition of module latch$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(527): overwriting previous definition of module latch8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(527): previous definition of module latch8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(571): overwriting previous definition of module latch16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(571): previous definition of module latch16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(593): overwriting previous definition of module tristateL$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(593): previous definition of module tristateL$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(606): overwriting previous definition of module tristate8L$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(606): previous definition of module tristate8L$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(618): overwriting previous definition of module tristate16L$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(618): previous definition of module tristate16L$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(638): overwriting previous definition of module tristateH$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(638): previous definition of module tristateH$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(651): overwriting previous definition of module tristate8H$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(651): previous definition of module tristate8H$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(663): overwriting previous definition of module tristate16H$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(663): previous definition of module tristate16H$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(675): overwriting previous definition of module tristate_bus_driver1$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(675): previous definition of module tristate_bus_driver1$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(687): overwriting previous definition of module tristate_bus_driver8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(687): previous definition of module tristate_bus_driver8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(699): overwriting previous definition of module tristate_bus_driver16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(699): previous definition of module tristate_bus_driver16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(762): overwriting previous definition of module dff16b$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(762): previous definition of module dff16b$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(824): overwriting previous definition of module dff32b$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(824): previous definition of module dff32b$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(887): overwriting previous definition of module reg64e$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(887): previous definition of module reg64e$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(950): overwriting previous definition of module reg32e$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(950): previous definition of module reg32e$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(1008): overwriting previous definition of module ioreg8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(1008): previous definition of module ioreg8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(1067): overwriting previous definition of module ioreg16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(1067): previous definition of module ioreg16$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib3
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(113): overwriting previous definition of module regfile$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(113): previous definition of module regfile$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(230): overwriting previous definition of module regfile8x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(230): previous definition of module regfile8x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(400): overwriting previous definition of module ram8b8w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(400): previous definition of module ram8b8w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(419): overwriting previous definition of module ram16b8w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(419): previous definition of module ram16b8w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(590): overwriting previous definition of module ram8b4w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(590): previous definition of module ram8b4w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(643): overwriting previous definition of module rom4b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(643): previous definition of module rom4b32w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(673): overwriting previous definition of module rom32b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(673): previous definition of module rom32b32w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(704): overwriting previous definition of module rom64b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(704): previous definition of module rom64b32w$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib4
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(38): overwriting previous definition of module table_imux2
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(38): previous definition of module table_imux2 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(64): overwriting previous definition of module table_imux3
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(64): previous definition of module table_imux3 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(94): overwriting previous definition of module table_imux4
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(94): previous definition of module table_imux4 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(109): overwriting previous definition of module mux2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(109): previous definition of module mux2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(127): overwriting previous definition of module mux3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(127): previous definition of module mux3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(146): overwriting previous definition of module mux4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(146): previous definition of module mux4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(173): overwriting previous definition of module mux2_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(173): previous definition of module mux2_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(197): overwriting previous definition of module mux2_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(197): previous definition of module mux2_16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(231): overwriting previous definition of module mux3_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(231): previous definition of module mux3_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(263): overwriting previous definition of module mux3_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(263): previous definition of module mux3_16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(301): overwriting previous definition of module mux4_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(301): previous definition of module mux4_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(338): overwriting previous definition of module mux4_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(338): previous definition of module mux4_16$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib5
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(57): overwriting previous definition of module decoder2_4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(57): previous definition of module decoder2_4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(89): overwriting previous definition of module decoder3_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(89): previous definition of module decoder3_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(121): overwriting previous definition of module syn_cntr8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(121): previous definition of module syn_cntr8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(241): overwriting previous definition of module syn_cntr
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(241): previous definition of module syn_cntr is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(291): overwriting previous definition of module pencoder8_3v$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(291): previous definition of module pencoder8_3v$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(332): overwriting previous definition of module pencoder8_3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(332): previous definition of module pencoder8_3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(354): overwriting previous definition of module mag_comp8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(354): previous definition of module mag_comp8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(375): overwriting previous definition of module mag_comp4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(375): previous definition of module mag_comp4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(521): overwriting previous definition of module alu4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(521): previous definition of module alu4$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib6
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(115): overwriting previous definition of module sram128x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(115): previous definition of module sram128x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(220): overwriting previous definition of module sram32x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(220): previous definition of module sram32x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(231): overwriting previous definition of module sram32x16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(231): previous definition of module sram32x16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(463): overwriting previous definition of module sram32x32$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(463): previous definition of module sram32x32$ is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/basic_components/muxes.v
+[WARN (VERI-1206)] ../execution_core/basic_components/muxes.v(37): overwriting previous definition of module mux1_8way
+[INFO (VERI-2142)] ../execution_core/basic_components/muxes.v(37): previous definition of module mux1_8way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/muxes.v(57): overwriting previous definition of module mux32_2way
+[INFO (VERI-2142)] ../execution_core/basic_components/muxes.v(57): previous definition of module mux32_2way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/muxes.v(76): overwriting previous definition of module mux32_4way
+[INFO (VERI-2142)] ../execution_core/basic_components/muxes.v(76): previous definition of module mux32_4way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/muxes.v(101): overwriting previous definition of module mux32_8way
+[INFO (VERI-2142)] ../execution_core/basic_components/muxes.v(101): previous definition of module mux32_8way is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/basic_components/logic_gates.v
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(40): overwriting previous definition of module and1_5way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(40): previous definition of module and1_5way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(65): overwriting previous definition of module and32_2way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(65): previous definition of module and32_2way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(88): overwriting previous definition of module or1_5way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(88): previous definition of module or1_5way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(111): overwriting previous definition of module or1_6way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(111): previous definition of module or1_6way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(136): overwriting previous definition of module or32_2way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(136): previous definition of module or32_2way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(160): overwriting previous definition of module not4_1way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(160): previous definition of module not4_1way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(184): overwriting previous definition of module not32_1way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(184): previous definition of module not32_1way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(203): overwriting previous definition of module buffer32
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(203): previous definition of module buffer32 is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/basic_components/eflags.v
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(43): overwriting previous definition of module OF_logic
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(43): previous definition of module OF_logic is here
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(73): overwriting previous definition of module PF_logic
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(73): previous definition of module PF_logic is here
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(111): overwriting previous definition of module ZF_logic
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(111): previous definition of module ZF_logic is here
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(137): overwriting previous definition of module ZF_logic_daa
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(137): previous definition of module ZF_logic_daa is here
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(177): overwriting previous definition of module assign_flags
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(177): previous definition of module assign_flags is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/functional_units/adder.v
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(51): overwriting previous definition of module adder32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(51): previous definition of module adder32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(78): overwriting previous definition of module adder32_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(78): previous definition of module adder32_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(107): overwriting previous definition of module sum1
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(107): previous definition of module sum1 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(134): overwriting previous definition of module sum32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(134): previous definition of module sum32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(152): overwriting previous definition of module propagate1
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(152): previous definition of module propagate1 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(176): overwriting previous definition of module propagate32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(176): previous definition of module propagate32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(194): overwriting previous definition of module generate1
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(194): previous definition of module generate1 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(218): overwriting previous definition of module generate32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(218): previous definition of module generate32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(235): overwriting previous definition of module propagate1_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(235): previous definition of module propagate1_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(262): overwriting previous definition of module propagate32_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(262): previous definition of module propagate32_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(286): overwriting previous definition of module generate1_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(286): previous definition of module generate1_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(313): overwriting previous definition of module generate32_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(313): previous definition of module generate32_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(335): overwriting previous definition of module gp_group1
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(335): previous definition of module gp_group1 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(535): overwriting previous definition of module gp_group32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(535): previous definition of module gp_group32 is here
+[-- (VERI-1482)] Analyzing Verilog file ./segment_limit_check.v
+[WARN (VERI-2050)] ./segment_limit_check.v(35): extra semicolon is not allowed here in this dialect. Use SystemVerilog mode
+[-- (VERI-1482)] Analyzing Verilog file ./reg_dependency_check.v
+[WARN (VERI-2190)] ./reg_dependency_check.v(13): extra semicolon in $unit (global) scope
+[-- (VERI-1482)] Analyzing Verilog file address_generation.v
+[INFO (VERI-1328)] address_generation.v(63): analyzing included file ../control_store/control_store_wires.v
+[INFO (VERI-1328)] address_generation.v(64): analyzing included file ../control_store/control_store_signals.v
+[-- (VERI-1482)] Analyzing Verilog file /misc/linuxws/packages/cadence_2016/jasper_2015.09/lib/verilog/packages/std/std.sv into library std
+[-- (VERI-1482)] Analyzing Verilog file address_gen_test.sv
+[WARN (VERI-1320)] address_gen_test.sv(60): concatenation with unsized literal; will interpret as 32 bits
+[WARN (VERI-1320)] address_gen_test.sv(62): concatenation with unsized literal; will interpret as 32 bits
+INFO (ISW003): Top module name is "address_generation".
+[WARN (VERI-1182)] ./segment_limit_check.v(44): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(87): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(107): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(113): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(114): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(122): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(126): adder32 expects 4 arguments
+[WARN (VERI-1320)] address_gen_test.sv(60): concatenation with unsized literal; will interpret as 32 bits
+[WARN (VERI-1320)] address_gen_test.sv(62): concatenation with unsized literal; will interpret as 32 bits
+[INFO (VERI-1018)] address_generation.v(1): compiling module address_generation
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(97): compiling module mux2$
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(23): compiling module table_imux2
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(108): specify block ignored for synthesis
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(34): compiling module adder32
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(206): compiling module generate32
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(188): compiling module generate1
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(77): compiling module and2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(86): specify block ignored for synthesis
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(164): compiling module propagate32
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(146): compiling module propagate1
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(171): compiling module or2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(180): specify block ignored for synthesis
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(347): compiling module gp_group32
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(325): compiling module gp_group1
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(119): compiling module sum32
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(90): compiling module sum1
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(254): compiling module inv1$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(262): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(91): compiling module and3$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(101): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(202): compiling module or4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(213): specify block ignored for synthesis
+[WARN (VERI-1182)] address_generation.v(87): adder32 expects 4 arguments
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(131): compiling module mux4$
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(66): compiling module table_imux4
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(145): specify block ignored for synthesis
+[WARN (VERI-1182)] address_generation.v(107): adder32 expects 4 arguments
+[WARN (VERI-1063)] address_generation.v(109): instantiating unknown module sal32
+[WARN (VERI-1182)] address_generation.v(113): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(114): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(121): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(122): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(126): adder32 expects 4 arguments
+[WARN (VERI-9028)] address_generation.v(126): missing/open ports on instance add_idt_base of module adder32
+[WARN (VERI-9028)] address_generation.v(130): missing/open ports on instance mux_rd_addr of module mux4$
+[WARN (VERI-9028)] address_generation.v(131): missing/open ports on instance mux_wr_addr of module mux4$
+[INFO (VERI-1018)] ./reg_dependency_check.v(43): compiling module reg_dependency_check
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(339): compiling module bufferH16$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(345): specify block ignored for synthesis
+[INFO (VERI-1018)] ./reg_dependency_check.v(15): compiling module chk_needed
+[INFO (VERI-1018)] ./reg_dependency_check.v(2): compiling module cmp_regid
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(237): compiling module xnor2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(246): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(106): compiling module and4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(117): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(187): compiling module or3$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(197): specify block ignored for synthesis
+[INFO (VERI-1018)] ./segment_limit_check.v(18): compiling module segment_limit_check
+[WARN (VERI-1182)] ./segment_limit_check.v(43): adder32 expects 4 arguments
+[WARN (VERI-1182)] ./segment_limit_check.v(44): adder32 expects 4 arguments
+[WARN (VERI-1063)] ./segment_limit_check.v(48): instantiating unknown module mag_comp32
+[WARN (VERI-9028)] ./segment_limit_check.v(48): missing/open ports on instance mag_comp32_limit of module mag_comp32
+[INFO (VERI-1018)] address_gen_test.sv(1): compiling module seg_lmt_chk_props
+[WARN (VDB-1013)] address_generation.v(126): input port a[31] is not connected on this instance
+[WARN (VDB-1013)] address_generation.v(130): input port in3 is not connected on this instance
+[WARN (VDB-1013)] address_generation.v(131): input port in2 is not connected on this instance
+[INFO] Beginning multiple driver analysis
+[INFO] Finished multiple driver analysis
+[INFO] Module Name std
+[INFO] Module Name address_generation
+ERROR (ENL058): Unable to elaborate module/entity "sal32" because this module/entity is missing or it contains errors.
+    Re-analyze it or use "-bbox_m sal32" if you want to black box this module/entity.
+WARNING (WNL059): If you are analyzing with "-mfcu" or "-sfcu" and "-L", try using "elaborate -L libname", "set_analyze_libunboundsearch" or "analyze +libunboundsearch"
+ERROR (ENL058): Unable to elaborate module/entity "mag_comp32" because this module/entity is missing or it contains errors.
+    Re-analyze it or use "-bbox_m mag_comp32" if you want to black box this module/entity.
+WARNING (WNL059): If you are analyzing with "-mfcu" or "-sfcu" and "-L", try using "elaborate -L libname", "set_analyze_libunboundsearch" or "analyze +libunboundsearch"
+WARNING (WNL009): Module "sal32" is not defined and is not black boxed.
+    Use "-bboxm sal32" if you want to black box this module/entity.
+WARNING (WNL009): Module "mag_comp32" is not defined and is not black boxed.
+    Use "-bboxm mag_comp32" if you want to black box this module/entity.
+Summary of errors detected:
+	ERROR (ENL058): Unable to elaborate module/entity "sal32" because this module/entity is missing or it contains errors.
+    Re-analyze it or use "-bbox_m sal32" if you want to black box this module/entity.
+	ERROR (ENL058): Unable to elaborate module/entity "mag_comp32" because this module/entity is missing or it contains errors.
+    Re-analyze it or use "-bbox_m mag_comp32" if you want to black box this module/entity.
+ERROR (ENL034): 2 errors detected in the design file(s).
+
+% source ./address_gen.tcl
+WARNING (WCD032): Passing arguments to "analyze" as lists has been deprecated.
+    For message help, type "help -message wcd032"
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/time
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/time(5): overwriting previous definition of module timeunit
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/time(5): previous definition of module timeunit is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib1
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(39): overwriting previous definition of module nand2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(39): previous definition of module nand2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(54): overwriting previous definition of module nand3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(54): previous definition of module nand3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(70): overwriting previous definition of module nand4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(70): previous definition of module nand4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(87): overwriting previous definition of module and2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(87): previous definition of module and2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(102): overwriting previous definition of module and3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(102): previous definition of module and3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(118): overwriting previous definition of module and4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(118): previous definition of module and4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(135): overwriting previous definition of module nor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(135): previous definition of module nor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(150): overwriting previous definition of module nor3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(150): previous definition of module nor3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(166): overwriting previous definition of module nor4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(166): previous definition of module nor4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(181): overwriting previous definition of module or2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(181): previous definition of module or2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(198): overwriting previous definition of module or3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(198): previous definition of module or3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(214): overwriting previous definition of module or4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(214): previous definition of module or4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(231): overwriting previous definition of module xor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(231): previous definition of module xor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(247): overwriting previous definition of module xnor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(247): previous definition of module xnor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(263): overwriting previous definition of module inv1$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(263): previous definition of module inv1$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(290): overwriting previous definition of module table_dffq
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(290): previous definition of module table_dffq is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(314): overwriting previous definition of module dff$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(314): previous definition of module dff$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib2
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(115): overwriting previous definition of module dff8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(115): previous definition of module dff8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(176): overwriting previous definition of module dff16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(176): previous definition of module dff16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(238): overwriting previous definition of module jkff8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(238): previous definition of module jkff8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(301): overwriting previous definition of module jkff16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(301): previous definition of module jkff16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(317): overwriting previous definition of module buffer$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(317): previous definition of module buffer$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(324): overwriting previous definition of module buffer8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(324): previous definition of module buffer8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(330): overwriting previous definition of module buffer16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(330): previous definition of module buffer16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(346): overwriting previous definition of module bufferH16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(346): previous definition of module bufferH16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(357): overwriting previous definition of module bufferH64$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(357): previous definition of module bufferH64$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(368): overwriting previous definition of module bufferH256$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(368): previous definition of module bufferH256$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(379): overwriting previous definition of module bufferH1024$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(379): previous definition of module bufferH1024$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(396): overwriting previous definition of module bufferHInv16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(396): previous definition of module bufferHInv16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(407): overwriting previous definition of module bufferHInv64$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(407): previous definition of module bufferHInv64$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(418): overwriting previous definition of module bufferHInv256$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(418): previous definition of module bufferHInv256$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(429): overwriting previous definition of module bufferHInv1024$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(429): previous definition of module bufferHInv1024$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(458): overwriting previous definition of module latch_sr
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(458): previous definition of module latch_sr is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(482): overwriting previous definition of module latch$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(482): previous definition of module latch$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(527): overwriting previous definition of module latch8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(527): previous definition of module latch8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(571): overwriting previous definition of module latch16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(571): previous definition of module latch16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(593): overwriting previous definition of module tristateL$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(593): previous definition of module tristateL$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(606): overwriting previous definition of module tristate8L$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(606): previous definition of module tristate8L$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(618): overwriting previous definition of module tristate16L$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(618): previous definition of module tristate16L$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(638): overwriting previous definition of module tristateH$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(638): previous definition of module tristateH$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(651): overwriting previous definition of module tristate8H$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(651): previous definition of module tristate8H$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(663): overwriting previous definition of module tristate16H$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(663): previous definition of module tristate16H$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(675): overwriting previous definition of module tristate_bus_driver1$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(675): previous definition of module tristate_bus_driver1$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(687): overwriting previous definition of module tristate_bus_driver8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(687): previous definition of module tristate_bus_driver8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(699): overwriting previous definition of module tristate_bus_driver16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(699): previous definition of module tristate_bus_driver16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(762): overwriting previous definition of module dff16b$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(762): previous definition of module dff16b$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(824): overwriting previous definition of module dff32b$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(824): previous definition of module dff32b$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(887): overwriting previous definition of module reg64e$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(887): previous definition of module reg64e$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(950): overwriting previous definition of module reg32e$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(950): previous definition of module reg32e$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(1008): overwriting previous definition of module ioreg8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(1008): previous definition of module ioreg8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(1067): overwriting previous definition of module ioreg16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(1067): previous definition of module ioreg16$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib3
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(113): overwriting previous definition of module regfile$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(113): previous definition of module regfile$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(230): overwriting previous definition of module regfile8x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(230): previous definition of module regfile8x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(400): overwriting previous definition of module ram8b8w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(400): previous definition of module ram8b8w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(419): overwriting previous definition of module ram16b8w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(419): previous definition of module ram16b8w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(590): overwriting previous definition of module ram8b4w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(590): previous definition of module ram8b4w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(643): overwriting previous definition of module rom4b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(643): previous definition of module rom4b32w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(673): overwriting previous definition of module rom32b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(673): previous definition of module rom32b32w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(704): overwriting previous definition of module rom64b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(704): previous definition of module rom64b32w$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib4
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(38): overwriting previous definition of module table_imux2
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(38): previous definition of module table_imux2 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(64): overwriting previous definition of module table_imux3
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(64): previous definition of module table_imux3 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(94): overwriting previous definition of module table_imux4
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(94): previous definition of module table_imux4 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(109): overwriting previous definition of module mux2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(109): previous definition of module mux2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(127): overwriting previous definition of module mux3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(127): previous definition of module mux3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(146): overwriting previous definition of module mux4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(146): previous definition of module mux4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(173): overwriting previous definition of module mux2_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(173): previous definition of module mux2_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(197): overwriting previous definition of module mux2_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(197): previous definition of module mux2_16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(231): overwriting previous definition of module mux3_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(231): previous definition of module mux3_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(263): overwriting previous definition of module mux3_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(263): previous definition of module mux3_16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(301): overwriting previous definition of module mux4_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(301): previous definition of module mux4_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(338): overwriting previous definition of module mux4_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(338): previous definition of module mux4_16$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib5
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(57): overwriting previous definition of module decoder2_4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(57): previous definition of module decoder2_4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(89): overwriting previous definition of module decoder3_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(89): previous definition of module decoder3_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(121): overwriting previous definition of module syn_cntr8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(121): previous definition of module syn_cntr8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(241): overwriting previous definition of module syn_cntr
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(241): previous definition of module syn_cntr is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(291): overwriting previous definition of module pencoder8_3v$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(291): previous definition of module pencoder8_3v$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(332): overwriting previous definition of module pencoder8_3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(332): previous definition of module pencoder8_3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(354): overwriting previous definition of module mag_comp8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(354): previous definition of module mag_comp8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(375): overwriting previous definition of module mag_comp4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(375): previous definition of module mag_comp4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(521): overwriting previous definition of module alu4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(521): previous definition of module alu4$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib6
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(115): overwriting previous definition of module sram128x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(115): previous definition of module sram128x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(220): overwriting previous definition of module sram32x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(220): previous definition of module sram32x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(231): overwriting previous definition of module sram32x16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(231): previous definition of module sram32x16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(463): overwriting previous definition of module sram32x32$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(463): previous definition of module sram32x32$ is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/basic_components/muxes.v
+[WARN (VERI-1206)] ../execution_core/basic_components/muxes.v(37): overwriting previous definition of module mux1_8way
+[INFO (VERI-2142)] ../execution_core/basic_components/muxes.v(37): previous definition of module mux1_8way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/muxes.v(57): overwriting previous definition of module mux32_2way
+[INFO (VERI-2142)] ../execution_core/basic_components/muxes.v(57): previous definition of module mux32_2way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/muxes.v(76): overwriting previous definition of module mux32_4way
+[INFO (VERI-2142)] ../execution_core/basic_components/muxes.v(76): previous definition of module mux32_4way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/muxes.v(101): overwriting previous definition of module mux32_8way
+[INFO (VERI-2142)] ../execution_core/basic_components/muxes.v(101): previous definition of module mux32_8way is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/basic_components/logic_gates.v
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(40): overwriting previous definition of module and1_5way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(40): previous definition of module and1_5way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(65): overwriting previous definition of module and32_2way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(65): previous definition of module and32_2way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(88): overwriting previous definition of module or1_5way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(88): previous definition of module or1_5way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(111): overwriting previous definition of module or1_6way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(111): previous definition of module or1_6way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(136): overwriting previous definition of module or32_2way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(136): previous definition of module or32_2way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(160): overwriting previous definition of module not4_1way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(160): previous definition of module not4_1way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(184): overwriting previous definition of module not32_1way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(184): previous definition of module not32_1way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(203): overwriting previous definition of module buffer32
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(203): previous definition of module buffer32 is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/basic_components/eflags.v
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(43): overwriting previous definition of module OF_logic
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(43): previous definition of module OF_logic is here
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(73): overwriting previous definition of module PF_logic
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(73): previous definition of module PF_logic is here
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(111): overwriting previous definition of module ZF_logic
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(111): previous definition of module ZF_logic is here
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(137): overwriting previous definition of module ZF_logic_daa
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(137): previous definition of module ZF_logic_daa is here
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(177): overwriting previous definition of module assign_flags
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(177): previous definition of module assign_flags is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/functional_units/adder.v
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(51): overwriting previous definition of module adder32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(51): previous definition of module adder32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(78): overwriting previous definition of module adder32_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(78): previous definition of module adder32_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(107): overwriting previous definition of module sum1
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(107): previous definition of module sum1 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(134): overwriting previous definition of module sum32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(134): previous definition of module sum32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(152): overwriting previous definition of module propagate1
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(152): previous definition of module propagate1 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(176): overwriting previous definition of module propagate32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(176): previous definition of module propagate32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(194): overwriting previous definition of module generate1
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(194): previous definition of module generate1 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(218): overwriting previous definition of module generate32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(218): previous definition of module generate32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(235): overwriting previous definition of module propagate1_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(235): previous definition of module propagate1_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(262): overwriting previous definition of module propagate32_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(262): previous definition of module propagate32_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(286): overwriting previous definition of module generate1_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(286): previous definition of module generate1_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(313): overwriting previous definition of module generate32_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(313): previous definition of module generate32_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(335): overwriting previous definition of module gp_group1
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(335): previous definition of module gp_group1 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(535): overwriting previous definition of module gp_group32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(535): previous definition of module gp_group32 is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/functional_units/alu.v
+[-- (VERI-1482)] Analyzing Verilog file ./segment_limit_check.v
+[WARN (VERI-2050)] ./segment_limit_check.v(35): extra semicolon is not allowed here in this dialect. Use SystemVerilog mode
+[WARN (VERI-1206)] ./segment_limit_check.v(55): overwriting previous definition of module segment_limit_check
+[INFO (VERI-2142)] ./segment_limit_check.v(55): previous definition of module segment_limit_check is here
+[-- (VERI-1482)] Analyzing Verilog file ./reg_dependency_check.v
+[WARN (VERI-1206)] ./reg_dependency_check.v(13): overwriting previous definition of module cmp_regid
+[INFO (VERI-2142)] ./reg_dependency_check.v(13): previous definition of module cmp_regid is here
+[WARN (VERI-2190)] ./reg_dependency_check.v(13): extra semicolon in $unit (global) scope
+[WARN (VERI-1206)] ./reg_dependency_check.v(41): overwriting previous definition of module chk_needed
+[INFO (VERI-2142)] ./reg_dependency_check.v(41): previous definition of module chk_needed is here
+[WARN (VERI-1206)] ./reg_dependency_check.v(205): overwriting previous definition of module reg_dependency_check
+[INFO (VERI-2142)] ./reg_dependency_check.v(205): previous definition of module reg_dependency_check is here
+[-- (VERI-1482)] Analyzing Verilog file address_generation.v
+[INFO (VERI-1328)] address_generation.v(63): analyzing included file ../control_store/control_store_wires.v
+[INFO (VERI-1328)] address_generation.v(64): analyzing included file ../control_store/control_store_signals.v
+[WARN (VERI-1206)] address_generation.v(160): overwriting previous definition of module address_generation
+[INFO (VERI-2142)] address_generation.v(160): previous definition of module address_generation is here
+[-- (VERI-1482)] Analyzing Verilog file address_gen_test.sv
+[WARN (VERI-1206)] address_gen_test.sv(12): overwriting previous definition of module seg_lmt_chk_props
+[INFO (VERI-2142)] address_gen_test.sv(12): previous definition of module seg_lmt_chk_props is here
+[WARN (VERI-1320)] address_gen_test.sv(60): concatenation with unsized literal; will interpret as 32 bits
+[WARN (VERI-1320)] address_gen_test.sv(62): concatenation with unsized literal; will interpret as 32 bits
+[WARN (VERI-1206)] address_gen_test.sv(113): overwriting previous definition of module alu32_props
+[INFO (VERI-2142)] address_gen_test.sv(113): previous definition of module alu32_props is here
+INFO (ISW003): Top module name is "address_generation".
+[WARN (VERI-1182)] ./segment_limit_check.v(44): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(87): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(107): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(113): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(114): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(122): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(126): adder32 expects 4 arguments
+[WARN (VERI-1320)] address_gen_test.sv(60): concatenation with unsized literal; will interpret as 32 bits
+[WARN (VERI-1320)] address_gen_test.sv(62): concatenation with unsized literal; will interpret as 32 bits
+WARNING (WNL044): Performing forced "elaborate -clear" due to conflicts related to external reference handling.
+[INFO (VERI-1018)] address_generation.v(1): compiling module address_generation
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(97): compiling module mux2$
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(23): compiling module table_imux2
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(108): specify block ignored for synthesis
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(34): compiling module adder32
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(206): compiling module generate32
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(188): compiling module generate1
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(77): compiling module and2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(86): specify block ignored for synthesis
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(164): compiling module propagate32
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(146): compiling module propagate1
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(171): compiling module or2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(180): specify block ignored for synthesis
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(347): compiling module gp_group32
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(325): compiling module gp_group1
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(119): compiling module sum32
+[INFO (VERI-1018)] ../execution_core/functional_units/adder.v(90): compiling module sum1
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(254): compiling module inv1$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(262): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(91): compiling module and3$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(101): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(202): compiling module or4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(213): specify block ignored for synthesis
+[WARN (VERI-1182)] address_generation.v(87): adder32 expects 4 arguments
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(131): compiling module mux4$
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(66): compiling module table_imux4
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(145): specify block ignored for synthesis
+[WARN (VERI-1182)] address_generation.v(107): adder32 expects 4 arguments
+[WARN (VERI-1063)] address_generation.v(109): instantiating unknown module sal32
+[WARN (VERI-1182)] address_generation.v(113): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(114): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(121): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(122): adder32 expects 4 arguments
+[WARN (VERI-1182)] address_generation.v(126): adder32 expects 4 arguments
+[WARN (VERI-9028)] address_generation.v(126): missing/open ports on instance add_idt_base of module adder32
+[WARN (VERI-9028)] address_generation.v(130): missing/open ports on instance mux_rd_addr of module mux4$
+[WARN (VERI-9028)] address_generation.v(131): missing/open ports on instance mux_wr_addr of module mux4$
+[INFO (VERI-1018)] ./reg_dependency_check.v(43): compiling module reg_dependency_check
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(339): compiling module bufferH16$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(345): specify block ignored for synthesis
+[INFO (VERI-1018)] ./reg_dependency_check.v(15): compiling module chk_needed
+[INFO (VERI-1018)] ./reg_dependency_check.v(2): compiling module cmp_regid
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(237): compiling module xnor2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(246): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(106): compiling module and4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(117): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(187): compiling module or3$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(197): specify block ignored for synthesis
+[INFO (VERI-1018)] ./segment_limit_check.v(18): compiling module segment_limit_check
+[WARN (VERI-1182)] ./segment_limit_check.v(43): adder32 expects 4 arguments
+[WARN (VERI-1182)] ./segment_limit_check.v(44): adder32 expects 4 arguments
+[WARN (VERI-1063)] ./segment_limit_check.v(48): instantiating unknown module mag_comp32
+[WARN (VERI-9028)] ./segment_limit_check.v(48): missing/open ports on instance mag_comp32_limit of module mag_comp32
+[INFO (VERI-1018)] address_gen_test.sv(1): compiling module seg_lmt_chk_props
+[WARN (VDB-1013)] address_generation.v(126): input port a[31] is not connected on this instance
+[WARN (VDB-1013)] address_generation.v(130): input port in3 is not connected on this instance
+[WARN (VDB-1013)] address_generation.v(131): input port in2 is not connected on this instance
+[INFO] Beginning multiple driver analysis
+[INFO] Finished multiple driver analysis
+[INFO] Module Name address_generation
+ERROR (ENL058): Unable to elaborate module/entity "sal32" because this module/entity is missing or it contains errors.
+    Re-analyze it or use "-bbox_m sal32" if you want to black box this module/entity.
+WARNING (WNL059): If you are analyzing with "-mfcu" or "-sfcu" and "-L", try using "elaborate -L libname", "set_analyze_libunboundsearch" or "analyze +libunboundsearch"
+ERROR (ENL058): Unable to elaborate module/entity "mag_comp32" because this module/entity is missing or it contains errors.
+    Re-analyze it or use "-bbox_m mag_comp32" if you want to black box this module/entity.
+WARNING (WNL059): If you are analyzing with "-mfcu" or "-sfcu" and "-L", try using "elaborate -L libname", "set_analyze_libunboundsearch" or "analyze +libunboundsearch"
+WARNING (WNL009): Module "sal32" is not defined and is not black boxed.
+    Use "-bboxm sal32" if you want to black box this module/entity.
+WARNING (WNL009): Module "mag_comp32" is not defined and is not black boxed.
+    Use "-bboxm mag_comp32" if you want to black box this module/entity.
+Summary of errors detected:
+	ERROR (ENL058): Unable to elaborate module/entity "sal32" because this module/entity is missing or it contains errors.
+    Re-analyze it or use "-bbox_m sal32" if you want to black box this module/entity.
+	ERROR (ENL058): Unable to elaborate module/entity "mag_comp32" because this module/entity is missing or it contains errors.
+    Re-analyze it or use "-bbox_m mag_comp32" if you want to black box this module/entity.
+ERROR (ENL034): 2 errors detected in the design file(s).
+
+% source ./address_gen.tcl
+WARNING (WCD032): Passing arguments to "analyze" as lists has been deprecated.
+    For message help, type "help -message wcd032"
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/time
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/time(5): overwriting previous definition of module timeunit
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/time(5): previous definition of module timeunit is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib1
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(39): overwriting previous definition of module nand2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(39): previous definition of module nand2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(54): overwriting previous definition of module nand3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(54): previous definition of module nand3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(70): overwriting previous definition of module nand4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(70): previous definition of module nand4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(87): overwriting previous definition of module and2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(87): previous definition of module and2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(102): overwriting previous definition of module and3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(102): previous definition of module and3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(118): overwriting previous definition of module and4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(118): previous definition of module and4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(135): overwriting previous definition of module nor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(135): previous definition of module nor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(150): overwriting previous definition of module nor3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(150): previous definition of module nor3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(166): overwriting previous definition of module nor4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(166): previous definition of module nor4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(181): overwriting previous definition of module or2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(181): previous definition of module or2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(198): overwriting previous definition of module or3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(198): previous definition of module or3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(214): overwriting previous definition of module or4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(214): previous definition of module or4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(231): overwriting previous definition of module xor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(231): previous definition of module xor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(247): overwriting previous definition of module xnor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(247): previous definition of module xnor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(263): overwriting previous definition of module inv1$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(263): previous definition of module inv1$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(290): overwriting previous definition of module table_dffq
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(290): previous definition of module table_dffq is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(314): overwriting previous definition of module dff$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(314): previous definition of module dff$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib2
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(115): overwriting previous definition of module dff8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(115): previous definition of module dff8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(176): overwriting previous definition of module dff16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(176): previous definition of module dff16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(238): overwriting previous definition of module jkff8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(238): previous definition of module jkff8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(301): overwriting previous definition of module jkff16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(301): previous definition of module jkff16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(317): overwriting previous definition of module buffer$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(317): previous definition of module buffer$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(324): overwriting previous definition of module buffer8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(324): previous definition of module buffer8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(330): overwriting previous definition of module buffer16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(330): previous definition of module buffer16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(346): overwriting previous definition of module bufferH16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(346): previous definition of module bufferH16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(357): overwriting previous definition of module bufferH64$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(357): previous definition of module bufferH64$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(368): overwriting previous definition of module bufferH256$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(368): previous definition of module bufferH256$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(379): overwriting previous definition of module bufferH1024$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(379): previous definition of module bufferH1024$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(396): overwriting previous definition of module bufferHInv16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(396): previous definition of module bufferHInv16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(407): overwriting previous definition of module bufferHInv64$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(407): previous definition of module bufferHInv64$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(418): overwriting previous definition of module bufferHInv256$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(418): previous definition of module bufferHInv256$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(429): overwriting previous definition of module bufferHInv1024$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(429): previous definition of module bufferHInv1024$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(458): overwriting previous definition of module latch_sr
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(458): previous definition of module latch_sr is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(482): overwriting previous definition of module latch$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(482): previous definition of module latch$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(527): overwriting previous definition of module latch8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(527): previous definition of module latch8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(571): overwriting previous definition of module latch16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(571): previous definition of module latch16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(593): overwriting previous definition of module tristateL$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(593): previous definition of module tristateL$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(606): overwriting previous definition of module tristate8L$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(606): previous definition of module tristate8L$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(618): overwriting previous definition of module tristate16L$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(618): previous definition of module tristate16L$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(638): overwriting previous definition of module tristateH$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(638): previous definition of module tristateH$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(651): overwriting previous definition of module tristate8H$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(651): previous definition of module tristate8H$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(663): overwriting previous definition of module tristate16H$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(663): previous definition of module tristate16H$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(675): overwriting previous definition of module tristate_bus_driver1$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(675): previous definition of module tristate_bus_driver1$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(687): overwriting previous definition of module tristate_bus_driver8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(687): previous definition of module tristate_bus_driver8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(699): overwriting previous definition of module tristate_bus_driver16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(699): previous definition of module tristate_bus_driver16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(762): overwriting previous definition of module dff16b$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(762): previous definition of module dff16b$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(824): overwriting previous definition of module dff32b$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(824): previous definition of module dff32b$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(887): overwriting previous definition of module reg64e$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(887): previous definition of module reg64e$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(950): overwriting previous definition of module reg32e$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(950): previous definition of module reg32e$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(1008): overwriting previous definition of module ioreg8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(1008): previous definition of module ioreg8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(1067): overwriting previous definition of module ioreg16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(1067): previous definition of module ioreg16$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib3
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(113): overwriting previous definition of module regfile$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(113): previous definition of module regfile$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(230): overwriting previous definition of module regfile8x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(230): previous definition of module regfile8x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(400): overwriting previous definition of module ram8b8w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(400): previous definition of module ram8b8w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(419): overwriting previous definition of module ram16b8w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(419): previous definition of module ram16b8w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(590): overwriting previous definition of module ram8b4w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(590): previous definition of module ram8b4w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(643): overwriting previous definition of module rom4b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(643): previous definition of module rom4b32w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(673): overwriting previous definition of module rom32b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(673): previous definition of module rom32b32w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(704): overwriting previous definition of module rom64b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(704): previous definition of module rom64b32w$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib4
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(38): overwriting previous definition of module table_imux2
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(38): previous definition of module table_imux2 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(64): overwriting previous definition of module table_imux3
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(64): previous definition of module table_imux3 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(94): overwriting previous definition of module table_imux4
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(94): previous definition of module table_imux4 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(109): overwriting previous definition of module mux2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(109): previous definition of module mux2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(127): overwriting previous definition of module mux3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(127): previous definition of module mux3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(146): overwriting previous definition of module mux4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(146): previous definition of module mux4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(173): overwriting previous definition of module mux2_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(173): previous definition of module mux2_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(197): overwriting previous definition of module mux2_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(197): previous definition of module mux2_16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(231): overwriting previous definition of module mux3_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(231): previous definition of module mux3_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(263): overwriting previous definition of module mux3_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(263): previous definition of module mux3_16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(301): overwriting previous definition of module mux4_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(301): previous definition of module mux4_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(338): overwriting previous definition of module mux4_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(338): previous definition of module mux4_16$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib5
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(57): overwriting previous definition of module decoder2_4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(57): previous definition of module decoder2_4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(89): overwriting previous definition of module decoder3_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(89): previous definition of module decoder3_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(121): overwriting previous definition of module syn_cntr8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(121): previous definition of module syn_cntr8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(241): overwriting previous definition of module syn_cntr
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(241): previous definition of module syn_cntr is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(291): overwriting previous definition of module pencoder8_3v$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(291): previous definition of module pencoder8_3v$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(332): overwriting previous definition of module pencoder8_3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(332): previous definition of module pencoder8_3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(354): overwriting previous definition of module mag_comp8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(354): previous definition of module mag_comp8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(375): overwriting previous definition of module mag_comp4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(375): previous definition of module mag_comp4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(521): overwriting previous definition of module alu4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(521): previous definition of module alu4$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib6
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(115): overwriting previous definition of module sram128x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(115): previous definition of module sram128x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(220): overwriting previous definition of module sram32x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(220): previous definition of module sram32x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(231): overwriting previous definition of module sram32x16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(231): previous definition of module sram32x16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(463): overwriting previous definition of module sram32x32$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(463): previous definition of module sram32x32$ is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/basic_components/muxes.v
+[WARN (VERI-1206)] ../execution_core/basic_components/muxes.v(37): overwriting previous definition of module mux1_8way
+[INFO (VERI-2142)] ../execution_core/basic_components/muxes.v(37): previous definition of module mux1_8way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/muxes.v(57): overwriting previous definition of module mux32_2way
+[INFO (VERI-2142)] ../execution_core/basic_components/muxes.v(57): previous definition of module mux32_2way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/muxes.v(76): overwriting previous definition of module mux32_4way
+[INFO (VERI-2142)] ../execution_core/basic_components/muxes.v(76): previous definition of module mux32_4way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/muxes.v(101): overwriting previous definition of module mux32_8way
+[INFO (VERI-2142)] ../execution_core/basic_components/muxes.v(101): previous definition of module mux32_8way is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/basic_components/logic_gates.v
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(40): overwriting previous definition of module and1_5way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(40): previous definition of module and1_5way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(65): overwriting previous definition of module and32_2way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(65): previous definition of module and32_2way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(88): overwriting previous definition of module or1_5way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(88): previous definition of module or1_5way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(111): overwriting previous definition of module or1_6way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(111): previous definition of module or1_6way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(136): overwriting previous definition of module or32_2way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(136): previous definition of module or32_2way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(160): overwriting previous definition of module not4_1way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(160): previous definition of module not4_1way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(184): overwriting previous definition of module not32_1way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(184): previous definition of module not32_1way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(203): overwriting previous definition of module buffer32
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(203): previous definition of module buffer32 is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/basic_components/eflags.v
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(43): overwriting previous definition of module OF_logic
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(43): previous definition of module OF_logic is here
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(73): overwriting previous definition of module PF_logic
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(73): previous definition of module PF_logic is here
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(111): overwriting previous definition of module ZF_logic
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(111): previous definition of module ZF_logic is here
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(137): overwriting previous definition of module ZF_logic_daa
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(137): previous definition of module ZF_logic_daa is here
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(177): overwriting previous definition of module assign_flags
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(177): previous definition of module assign_flags is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/functional_units/adder.v
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(51): overwriting previous definition of module adder32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(51): previous definition of module adder32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(78): overwriting previous definition of module adder32_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(78): previous definition of module adder32_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(107): overwriting previous definition of module sum1
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(107): previous definition of module sum1 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(134): overwriting previous definition of module sum32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(134): previous definition of module sum32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(152): overwriting previous definition of module propagate1
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(152): previous definition of module propagate1 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(176): overwriting previous definition of module propagate32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(176): previous definition of module propagate32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(194): overwriting previous definition of module generate1
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(194): previous definition of module generate1 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(218): overwriting previous definition of module generate32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(218): previous definition of module generate32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(235): overwriting previous definition of module propagate1_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(235): previous definition of module propagate1_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(262): overwriting previous definition of module propagate32_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(262): previous definition of module propagate32_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(286): overwriting previous definition of module generate1_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(286): previous definition of module generate1_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(313): overwriting previous definition of module generate32_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(313): previous definition of module generate32_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(335): overwriting previous definition of module gp_group1
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(335): previous definition of module gp_group1 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(535): overwriting previous definition of module gp_group32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(535): previous definition of module gp_group32 is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/functional_units/alu.v
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(57): overwriting previous definition of module alu32
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(57): previous definition of module alu32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(89): overwriting previous definition of module alu_adder
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(89): previous definition of module alu_adder is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(119): overwriting previous definition of module alu_or
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(119): previous definition of module alu_or is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(149): overwriting previous definition of module alu_not
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(149): previous definition of module alu_not is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(181): overwriting previous definition of module alu_daa
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(181): previous definition of module alu_daa is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(242): overwriting previous definition of module daa_single_digit
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(242): previous definition of module daa_single_digit is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(266): overwriting previous definition of module daa_double_digit
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(266): previous definition of module daa_double_digit is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(296): overwriting previous definition of module alu_and
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(296): previous definition of module alu_and is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(325): overwriting previous definition of module alu_cld
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(325): previous definition of module alu_cld is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(356): overwriting previous definition of module alu_cmp
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(356): previous definition of module alu_cmp is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(385): overwriting previous definition of module alu_std
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(385): previous definition of module alu_std is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/functional_units/shifter.v
+[ERROR (VERI-1137)] ../execution_core/functional_units/shifter.v(191): syntax error near ;
+[ERROR (VERI-1072)] ../execution_core/functional_units/shifter.v(201): module calculate_carry_out ignored due to previous errors
+[ERROR (VERI-1137)] ../execution_core/functional_units/shifter.v(213): syntax error near output
+Summary of errors detected:
+	[ERROR (VERI-1137)] ../execution_core/functional_units/shifter.v(191): syntax error near ;
+	[ERROR (VERI-1072)] ../execution_core/functional_units/shifter.v(201): module calculate_carry_out ignored due to previous errors
+	[ERROR (VERI-1137)] ../execution_core/functional_units/shifter.v(213): syntax error near output
+ERROR (ENL034): 3 errors detected in the design file(s).
+
+% source ./address_gen.tcl
+WARNING (WCD032): Passing arguments to "analyze" as lists has been deprecated.
+    For message help, type "help -message wcd032"
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/time
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/time(5): overwriting previous definition of module timeunit
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/time(5): previous definition of module timeunit is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib1
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(39): overwriting previous definition of module nand2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(39): previous definition of module nand2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(54): overwriting previous definition of module nand3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(54): previous definition of module nand3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(70): overwriting previous definition of module nand4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(70): previous definition of module nand4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(87): overwriting previous definition of module and2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(87): previous definition of module and2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(102): overwriting previous definition of module and3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(102): previous definition of module and3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(118): overwriting previous definition of module and4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(118): previous definition of module and4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(135): overwriting previous definition of module nor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(135): previous definition of module nor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(150): overwriting previous definition of module nor3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(150): previous definition of module nor3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(166): overwriting previous definition of module nor4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(166): previous definition of module nor4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(181): overwriting previous definition of module or2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(181): previous definition of module or2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(198): overwriting previous definition of module or3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(198): previous definition of module or3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(214): overwriting previous definition of module or4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(214): previous definition of module or4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(231): overwriting previous definition of module xor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(231): previous definition of module xor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(247): overwriting previous definition of module xnor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(247): previous definition of module xnor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(263): overwriting previous definition of module inv1$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(263): previous definition of module inv1$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(290): overwriting previous definition of module table_dffq
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(290): previous definition of module table_dffq is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(314): overwriting previous definition of module dff$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(314): previous definition of module dff$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib2
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(115): overwriting previous definition of module dff8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(115): previous definition of module dff8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(176): overwriting previous definition of module dff16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(176): previous definition of module dff16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(238): overwriting previous definition of module jkff8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(238): previous definition of module jkff8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(301): overwriting previous definition of module jkff16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(301): previous definition of module jkff16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(317): overwriting previous definition of module buffer$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(317): previous definition of module buffer$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(324): overwriting previous definition of module buffer8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(324): previous definition of module buffer8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(330): overwriting previous definition of module buffer16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(330): previous definition of module buffer16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(346): overwriting previous definition of module bufferH16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(346): previous definition of module bufferH16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(357): overwriting previous definition of module bufferH64$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(357): previous definition of module bufferH64$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(368): overwriting previous definition of module bufferH256$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(368): previous definition of module bufferH256$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(379): overwriting previous definition of module bufferH1024$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(379): previous definition of module bufferH1024$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(396): overwriting previous definition of module bufferHInv16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(396): previous definition of module bufferHInv16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(407): overwriting previous definition of module bufferHInv64$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(407): previous definition of module bufferHInv64$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(418): overwriting previous definition of module bufferHInv256$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(418): previous definition of module bufferHInv256$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(429): overwriting previous definition of module bufferHInv1024$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(429): previous definition of module bufferHInv1024$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(458): overwriting previous definition of module latch_sr
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(458): previous definition of module latch_sr is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(482): overwriting previous definition of module latch$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(482): previous definition of module latch$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(527): overwriting previous definition of module latch8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(527): previous definition of module latch8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(571): overwriting previous definition of module latch16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(571): previous definition of module latch16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(593): overwriting previous definition of module tristateL$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(593): previous definition of module tristateL$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(606): overwriting previous definition of module tristate8L$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(606): previous definition of module tristate8L$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(618): overwriting previous definition of module tristate16L$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(618): previous definition of module tristate16L$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(638): overwriting previous definition of module tristateH$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(638): previous definition of module tristateH$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(651): overwriting previous definition of module tristate8H$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(651): previous definition of module tristate8H$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(663): overwriting previous definition of module tristate16H$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(663): previous definition of module tristate16H$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(675): overwriting previous definition of module tristate_bus_driver1$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(675): previous definition of module tristate_bus_driver1$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(687): overwriting previous definition of module tristate_bus_driver8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(687): previous definition of module tristate_bus_driver8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(699): overwriting previous definition of module tristate_bus_driver16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(699): previous definition of module tristate_bus_driver16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(762): overwriting previous definition of module dff16b$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(762): previous definition of module dff16b$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(824): overwriting previous definition of module dff32b$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(824): previous definition of module dff32b$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(887): overwriting previous definition of module reg64e$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(887): previous definition of module reg64e$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(950): overwriting previous definition of module reg32e$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(950): previous definition of module reg32e$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(1008): overwriting previous definition of module ioreg8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(1008): previous definition of module ioreg8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(1067): overwriting previous definition of module ioreg16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(1067): previous definition of module ioreg16$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib3
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(113): overwriting previous definition of module regfile$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(113): previous definition of module regfile$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(230): overwriting previous definition of module regfile8x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(230): previous definition of module regfile8x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(400): overwriting previous definition of module ram8b8w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(400): previous definition of module ram8b8w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(419): overwriting previous definition of module ram16b8w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(419): previous definition of module ram16b8w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(590): overwriting previous definition of module ram8b4w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(590): previous definition of module ram8b4w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(643): overwriting previous definition of module rom4b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(643): previous definition of module rom4b32w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(673): overwriting previous definition of module rom32b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(673): previous definition of module rom32b32w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(704): overwriting previous definition of module rom64b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(704): previous definition of module rom64b32w$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib4
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(38): overwriting previous definition of module table_imux2
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(38): previous definition of module table_imux2 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(64): overwriting previous definition of module table_imux3
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(64): previous definition of module table_imux3 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(94): overwriting previous definition of module table_imux4
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(94): previous definition of module table_imux4 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(109): overwriting previous definition of module mux2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(109): previous definition of module mux2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(127): overwriting previous definition of module mux3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(127): previous definition of module mux3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(146): overwriting previous definition of module mux4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(146): previous definition of module mux4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(173): overwriting previous definition of module mux2_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(173): previous definition of module mux2_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(197): overwriting previous definition of module mux2_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(197): previous definition of module mux2_16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(231): overwriting previous definition of module mux3_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(231): previous definition of module mux3_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(263): overwriting previous definition of module mux3_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(263): previous definition of module mux3_16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(301): overwriting previous definition of module mux4_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(301): previous definition of module mux4_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(338): overwriting previous definition of module mux4_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(338): previous definition of module mux4_16$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib5
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(57): overwriting previous definition of module decoder2_4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(57): previous definition of module decoder2_4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(89): overwriting previous definition of module decoder3_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(89): previous definition of module decoder3_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(121): overwriting previous definition of module syn_cntr8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(121): previous definition of module syn_cntr8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(241): overwriting previous definition of module syn_cntr
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(241): previous definition of module syn_cntr is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(291): overwriting previous definition of module pencoder8_3v$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(291): previous definition of module pencoder8_3v$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(332): overwriting previous definition of module pencoder8_3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(332): previous definition of module pencoder8_3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(354): overwriting previous definition of module mag_comp8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(354): previous definition of module mag_comp8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(375): overwriting previous definition of module mag_comp4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(375): previous definition of module mag_comp4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(521): overwriting previous definition of module alu4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(521): previous definition of module alu4$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib6
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(115): overwriting previous definition of module sram128x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(115): previous definition of module sram128x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(220): overwriting previous definition of module sram32x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(220): previous definition of module sram32x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(231): overwriting previous definition of module sram32x16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(231): previous definition of module sram32x16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(463): overwriting previous definition of module sram32x32$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(463): previous definition of module sram32x32$ is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/basic_components/muxes.v
+[WARN (VERI-1206)] ../execution_core/basic_components/muxes.v(37): overwriting previous definition of module mux1_8way
+[INFO (VERI-2142)] ../execution_core/basic_components/muxes.v(37): previous definition of module mux1_8way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/muxes.v(57): overwriting previous definition of module mux32_2way
+[INFO (VERI-2142)] ../execution_core/basic_components/muxes.v(57): previous definition of module mux32_2way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/muxes.v(76): overwriting previous definition of module mux32_4way
+[INFO (VERI-2142)] ../execution_core/basic_components/muxes.v(76): previous definition of module mux32_4way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/muxes.v(101): overwriting previous definition of module mux32_8way
+[INFO (VERI-2142)] ../execution_core/basic_components/muxes.v(101): previous definition of module mux32_8way is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/basic_components/logic_gates.v
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(40): overwriting previous definition of module and1_5way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(40): previous definition of module and1_5way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(65): overwriting previous definition of module and32_2way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(65): previous definition of module and32_2way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(88): overwriting previous definition of module or1_5way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(88): previous definition of module or1_5way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(111): overwriting previous definition of module or1_6way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(111): previous definition of module or1_6way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(136): overwriting previous definition of module or32_2way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(136): previous definition of module or32_2way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(160): overwriting previous definition of module not4_1way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(160): previous definition of module not4_1way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(184): overwriting previous definition of module not32_1way
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(184): previous definition of module not32_1way is here
+[WARN (VERI-1206)] ../execution_core/basic_components/logic_gates.v(203): overwriting previous definition of module buffer32
+[INFO (VERI-2142)] ../execution_core/basic_components/logic_gates.v(203): previous definition of module buffer32 is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/basic_components/eflags.v
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(43): overwriting previous definition of module OF_logic
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(43): previous definition of module OF_logic is here
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(73): overwriting previous definition of module PF_logic
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(73): previous definition of module PF_logic is here
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(111): overwriting previous definition of module ZF_logic
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(111): previous definition of module ZF_logic is here
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(137): overwriting previous definition of module ZF_logic_daa
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(137): previous definition of module ZF_logic_daa is here
+[WARN (VERI-1206)] ../execution_core/basic_components/eflags.v(177): overwriting previous definition of module assign_flags
+[INFO (VERI-2142)] ../execution_core/basic_components/eflags.v(177): previous definition of module assign_flags is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/functional_units/adder.v
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(51): overwriting previous definition of module adder32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(51): previous definition of module adder32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(78): overwriting previous definition of module adder32_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(78): previous definition of module adder32_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(107): overwriting previous definition of module sum1
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(107): previous definition of module sum1 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(134): overwriting previous definition of module sum32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(134): previous definition of module sum32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(152): overwriting previous definition of module propagate1
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(152): previous definition of module propagate1 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(176): overwriting previous definition of module propagate32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(176): previous definition of module propagate32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(194): overwriting previous definition of module generate1
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(194): previous definition of module generate1 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(218): overwriting previous definition of module generate32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(218): previous definition of module generate32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(235): overwriting previous definition of module propagate1_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(235): previous definition of module propagate1_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(262): overwriting previous definition of module propagate32_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(262): previous definition of module propagate32_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(286): overwriting previous definition of module generate1_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(286): previous definition of module generate1_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(313): overwriting previous definition of module generate32_w_carry_in
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(313): previous definition of module generate32_w_carry_in is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(335): overwriting previous definition of module gp_group1
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(335): previous definition of module gp_group1 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/adder.v(535): overwriting previous definition of module gp_group32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(535): previous definition of module gp_group32 is here
+[-- (VERI-1482)] Analyzing Verilog file ../execution_core/functional_units/alu.v
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(57): overwriting previous definition of module alu32
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(57): previous definition of module alu32 is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(89): overwriting previous definition of module alu_adder
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(89): previous definition of module alu_adder is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(119): overwriting previous definition of module alu_or
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(119): previous definition of module alu_or is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(149): overwriting previous definition of module alu_not
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(149): previous definition of module alu_not is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(181): overwriting previous definition of module alu_daa
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(181): previous definition of module alu_daa is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(242): overwriting previous definition of module daa_single_digit
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(242): previous definition of module daa_single_digit is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(266): overwriting previous definition of module daa_double_digit
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(266): previous definition of module daa_double_digit is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(296): overwriting previous definition of module alu_and
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(296): previous definition of module alu_and is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(325): overwriting previous definition of module alu_cld
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(325): previous definition of module alu_cld is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(356): overwriting previous definition of module alu_cmp
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(356): previous definition of module alu_cmp is here
+[WARN (VERI-1206)] ../execution_core/functional_units/alu.v(385): overwriting previous definition of module alu_std
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(385): previous definition of module alu_std is here
+[-- (VERI-1482)] Analyzing Verilog file ./segment_limit_check.v
+[WARN (VERI-2050)] ./segment_limit_check.v(35): extra semicolon is not allowed here in this dialect. Use SystemVerilog mode
+[WARN (VERI-1206)] ./segment_limit_check.v(55): overwriting previous definition of module segment_limit_check
+[INFO (VERI-2142)] ./segment_limit_check.v(55): previous definition of module segment_limit_check is here
+[-- (VERI-1482)] Analyzing Verilog file ./reg_dependency_check.v
+[WARN (VERI-1206)] ./reg_dependency_check.v(13): overwriting previous definition of module cmp_regid
+[INFO (VERI-2142)] ./reg_dependency_check.v(13): previous definition of module cmp_regid is here
+[WARN (VERI-2190)] ./reg_dependency_check.v(13): extra semicolon in $unit (global) scope
+[WARN (VERI-1206)] ./reg_dependency_check.v(41): overwriting previous definition of module chk_needed
+[INFO (VERI-2142)] ./reg_dependency_check.v(41): previous definition of module chk_needed is here
+[WARN (VERI-1206)] ./reg_dependency_check.v(205): overwriting previous definition of module reg_dependency_check
+[INFO (VERI-2142)] ./reg_dependency_check.v(205): previous definition of module reg_dependency_check is here
+[-- (VERI-1482)] Analyzing Verilog file common.v
+[WARN (VERI-1206)] common.v(144): overwriting previous definition of module adder32
+[INFO (VERI-2142)] ../execution_core/functional_units/adder.v(51): previous definition of module adder32 is here
+[WARN (VERI-1206)] common.v(152): overwriting previous definition of module alu32
+[INFO (VERI-2142)] ../execution_core/functional_units/alu.v(57): previous definition of module alu32 is here
+[WARN (VERI-1214)] common.v(330): assignment to input AF
+[-- (VERI-1482)] Analyzing Verilog file address_generation.v
+[INFO (VERI-1328)] address_generation.v(63): analyzing included file ../control_store/control_store_wires.v
+[INFO (VERI-1328)] address_generation.v(64): analyzing included file ../control_store/control_store_signals.v
+[WARN (VERI-1206)] address_generation.v(160): overwriting previous definition of module address_generation
+[INFO (VERI-2142)] address_generation.v(160): previous definition of module address_generation is here
+[-- (VERI-1482)] Analyzing Verilog file address_gen_test.sv
+[WARN (VERI-1206)] address_gen_test.sv(12): overwriting previous definition of module seg_lmt_chk_props
+[INFO (VERI-2142)] address_gen_test.sv(12): previous definition of module seg_lmt_chk_props is here
+[WARN (VERI-1320)] address_gen_test.sv(60): concatenation with unsized literal; will interpret as 32 bits
+[WARN (VERI-1320)] address_gen_test.sv(62): concatenation with unsized literal; will interpret as 32 bits
+[WARN (VERI-1206)] address_gen_test.sv(113): overwriting previous definition of module alu32_props
+[INFO (VERI-2142)] address_gen_test.sv(113): previous definition of module alu32_props is here
+INFO (ISW003): Top module name is "address_generation".
+[WARN (VERI-1320)] address_gen_test.sv(60): concatenation with unsized literal; will interpret as 32 bits
+[WARN (VERI-1320)] address_gen_test.sv(62): concatenation with unsized literal; will interpret as 32 bits
+WARNING (WNL044): Performing forced "elaborate -clear" due to conflicts related to external reference handling.
+[INFO (VERI-1018)] address_generation.v(1): compiling module address_generation
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(97): compiling module mux2$
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(23): compiling module table_imux2
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(108): specify block ignored for synthesis
+[INFO (VERI-1018)] common.v(125): compiling module adder32
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(382): compiling module alu4$
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(416): expression size 6 truncated to fit in target size 5
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(422): expression size 6 truncated to fit in target size 5
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(426): expression size 32 truncated to fit in target size 4
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(433): expression size 6 truncated to fit in target size 5
+[WARN (VERI-1221)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(447): a should be on the sensitivity list
+[WARN (VERI-1221)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(447): b should be on the sensitivity list
+[WARN (VERI-1221)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(447): cin should be on the sensitivity list
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(459): expression size 6 truncated to fit in target size 5
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(502): expression size 32 truncated to fit in target size 4
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(503): expression size 32 truncated to fit in target size 5
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(518): expression size 32 truncated to fit in target size 4
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(131): compiling module mux4$
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(66): compiling module table_imux4
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(145): specify block ignored for synthesis
+[WARN (VERI-9028)] address_generation.v(130): missing/open ports on instance mux_rd_addr of module mux4$
+[WARN (VERI-9028)] address_generation.v(131): missing/open ports on instance mux_wr_addr of module mux4$
+[INFO (VERI-1018)] ./reg_dependency_check.v(43): compiling module reg_dependency_check
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(339): compiling module bufferH16$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib2(345): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(171): compiling module or2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(180): specify block ignored for synthesis
+[INFO (VERI-1018)] ./reg_dependency_check.v(15): compiling module chk_needed
+[INFO (VERI-1018)] ./reg_dependency_check.v(2): compiling module cmp_regid
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(237): compiling module xnor2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(246): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(106): compiling module and4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(117): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(77): compiling module and2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(86): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(187): compiling module or3$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(197): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(202): compiling module or4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(213): specify block ignored for synthesis
+[INFO (VERI-1018)] ./segment_limit_check.v(18): compiling module segment_limit_check
+[INFO (VERI-1018)] common.v(69): compiling module mag_comp32
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(340): compiling module mag_comp8$
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(351): expression size 32 truncated to fit in target size 1
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(352): expression size 32 truncated to fit in target size 1
+[INFO (VERI-1018)] common.v(35): compiling module comp4
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(58): compiling module nand4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(69): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(91): compiling module and3$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(101): specify block ignored for synthesis
+[INFO (VERI-1018)] address_gen_test.sv(1): compiling module seg_lmt_chk_props
+[WARN (VDB-1002)] address_generation.v(68): net shf_sib_idx_out[31] does not have a driver
+[WARN (VDB-1002)] address_generation.v(75): net shf_exc_code_out[31] does not have a driver
+[WARN (VDB-1013)] address_generation.v(130): input port in3 is not connected on this instance
+[WARN (VDB-1013)] address_generation.v(131): input port in2 is not connected on this instance
+[INFO] Beginning multiple driver analysis
+[INFO] Finished multiple driver analysis
+[INFO] Module Name address_generation
+INFO (IPM031): Invalidating proof results of all properties in the Property Manager.
+INFO (IRS006): Current reset condition is "RST".
+INFO (IPF031): Settings used for this proof:
+    time_limit                    = 86400s
+    per_property_time_limit       = 1s * 10 ^ scan
+    engine_mode                   = Hp Ht N B 
+    proofgrid_per_engine_max_jobs = 1
+    proofgrid_mode                = local
+    proofgrid_restarts            = 10
+
+==============================================================
+background
+SUMMARY
+==============================================================
+	Properties Considered : 0
+	      assertions      : 0
+	       - proven       : 0
+	       - marked_proven: 0
+	       - cex          : 0
+	       - ar_cex       : 0
+	       - undetermined : 0
+	       - unprocessed  : 0
+	       - error        : 0
+	      covers          : 0
+	       - unreachable  : 0
+	       - covered      : 0
+	       - ar_covered   : 0
+	       - undetermined : 0
+	       - unprocessed  : 0
+	       - error        : 0
+INFO: Waiting for proof threads to stop...
+INFO: Proof threads stopped.

@@ -203,6 +203,15 @@ bufferH16$ bufs10 (SR40, SR4[0]);
 bufferH16$ bufs11 (SR41, SR4[1]);
 bufferH16$ bufs12 (SR42, SR4[2]);
 
+assign reg0_out = {reg0_hh[31:24], reg0_hl[23:16], reg0_lh[15:8], reg0_ll[7:0]};
+assign reg1_out = {reg1_hh[31:24], reg1_hl[23:16], reg1_lh[15:8], reg1_ll[7:0]};
+assign reg2_out = {reg2_hh[31:24], reg2_hl[23:16], reg2_lh[15:8], reg2_ll[7:0]};
+assign reg3_out = {reg3_hh[31:24], reg3_hl[23:16], reg3_lh[15:8], reg3_ll[7:0]};
+assign reg4_out = {reg4_hh[31:24], reg4_hl[23:16], reg4_lh[15:8], reg4_ll[7:0]};
+assign reg5_out = {reg5_hh[31:24], reg5_hl[23:16], reg5_lh[15:8], reg5_ll[7:0]};
+assign reg6_out = {reg6_hh[31:24], reg6_hl[23:16], reg6_lh[15:8], reg6_ll[7:0]};
+assign reg7_out = {reg7_hh[31:24], reg7_hl[23:16], reg7_lh[15:8], reg7_ll[7:0]};
+
 // Read SR1
 mux4_8$ amux0[3:0] (out1m, reg0_out, reg1_out, reg2_out, reg3_out, SR10, SR11);
 mux4_8$ amux1[3:0] (out2m, reg4_out, reg5_out, reg6_out, reg7_out, SR10, SR11);
