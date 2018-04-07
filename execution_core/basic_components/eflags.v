@@ -60,15 +60,15 @@ module PF_logic (
 	wire PF_7_6, PF_5_4, PF_3_2, PF_1_0;
 	wire PF_7_4, PF_3_0;
 
-	xor2$ u_xor2_pf_7_6 (PF_7_6, adder_result[7], adder_result[6]);
-	xor2$ u_xor2_pf_5_4 (PF_5_4, adder_result[5], adder_result[4]);
-	xor2$ u_xor2_pf_3_2 (PF_3_2, adder_result[3], adder_result[2]);
-	xor2$ u_xor2_pf_1_0 (PF_1_0, adder_result[1], adder_result[0]);
+	xnor2$ u_xor2_pf_7_6 (PF_7_6, adder_result[7], adder_result[6]);
+	xnor2$ u_xor2_pf_5_4 (PF_5_4, adder_result[5], adder_result[4]);
+	xnor2$ u_xor2_pf_3_2 (PF_3_2, adder_result[3], adder_result[2]);
+	xnor2$ u_xor2_pf_1_0 (PF_1_0, adder_result[1], adder_result[0]);
 
-	xor2$ u_xor2_pf_7_4 (PF_7_4, PF_7_6, PF_5_4);
-	xor2$ u_xor2_pf_3_0 (PF_3_0, PF_3_2, PF_1_0);
+	xnor2$ u_xor2_pf_7_4 (PF_7_4, PF_7_6, PF_5_4);
+	xnor2$ u_xor2_pf_3_0 (PF_3_0, PF_3_2, PF_1_0);
 
-	xor2$ u_xor2_pf_7_0 (PF, PF_7_4, PF_3_0);	
+	xnor2$ u_xor2_pf_7_0 (PF, PF_7_4, PF_3_0);	
 
 endmodule
 
