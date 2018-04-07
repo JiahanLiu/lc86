@@ -28,8 +28,12 @@ module writeback (
    input [31:0] WB_ALU32_RESULTS,
    input [31:0] WB_COUNT, 
    input [63:0] WB_MM_A, WB_MM_B,
+   input [31:0] WB_FLAGS,
+
+   input [31:0] WB_CMPS_POINTER,
 
    input [31:0] WB_ADDRESS,
+
 
    input [2:0] WB_DR1, WB_DR2, WB_DR3,
 
