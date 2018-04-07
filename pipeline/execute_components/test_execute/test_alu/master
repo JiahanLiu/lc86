@@ -2,7 +2,10 @@
 /home/projects/courses/spring_18/ee382n-16120/lib/lib1 
 /home/projects/courses/spring_18/ee382n-16120/lib/lib2 
 /home/projects/courses/spring_18/ee382n-16120/lib/lib4 
-./basic_components/gates.v
-./alu/adder/adder_components.v
-./alu/alu.v
-test_lc86v0.v
+../../../common/functional_units/adder.v
+../../../common/functional_units/subtract.v
+../../alu.v
+../../../common/basic_components/muxes.v
+../../../common/basic_components/logic_gates.v
+../../../common/flags/eflags.v
+test_alu.v

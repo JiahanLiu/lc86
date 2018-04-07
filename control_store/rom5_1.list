@@ -1,0 +1,22 @@
+@10 // MOV r8,imm8 (0xB0+rb)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@18 // MOV r,imm (16/32) (0xB8+r)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@06 // CMPS m8,m8 (0xA6)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@07 // CMPS m,m (16/32) (0xA7)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx

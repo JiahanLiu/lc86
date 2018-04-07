@@ -1,0 +1,36 @@
+@00 // (ADD/AND/OR)8 imm8 (0x80 /0 /4 /1)
+11111000000000000000000000000000
+@01 // ADD/AND/OR imm (0x81 /0 /4 /1)
+11111000000000000000000000000000
+@03 // ADD/AND/OR imm8 (0x83 /0 /4 /1)
+11111000000000000000000000000000
+@1a // CALL ptr16:16/32 (0x9A)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@08 // MOV r/m8, r8 (0x88)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@09 // MOV r/m, r (16/32) (0x89)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@0a // MOV r8,r/m8 (0x8A)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@0b // MOV r,r/m(16,32) (0x8B)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@0c // MOV r/m16,Sreg (0x8C)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@0e // MOV Sreg, r/m16 (0x8E)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@0f // POP r/m (16/32) (0x8F)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@10 // XCHG (E )AX,EAX (0x90)
+00000000000000000000000000000000
+@11 // XCHG (E )AX,r16/32 (0x91+r7)
+00000111111111111111111111111111
+00000111111111111111111111111111
+00000111111111111111111111111111
+00000111111111111111111111111111
+00000111111111111111111111111111
+00000111111111111111111111111111
+00000111111111111111111111111111
+@06 // XCHG r/m8,r8 (0x86)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@07 // XCHG r/m,r (16/32) (0x87)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx

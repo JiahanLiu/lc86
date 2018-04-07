@@ -1,0 +1,23 @@
+/home/projects/courses/spring_18/ee382n-16120/lib/time -v 
+/home/projects/courses/spring_18/ee382n-16120/lib/lib1 
+/home/projects/courses/spring_18/ee382n-16120/lib/lib2 
+/home/projects/courses/spring_18/ee382n-16120/lib/lib4 
+
+
+
+
+
+
+
+
+pipeline/common/functional_units/adder.v
+pipeline/common/functional_units/subtract.v
+pipeline/execute_components/alu.v
+pipeline/common/basic_components/muxes.v
+pipeline/common/basic_components/logic_gates.v
+pipeline/common/flags/eflags.v
+pipeline/execute.v
+
+pipeline/writeback_components/repne_and_cmps.v
+pipeline/writeback_components/flags_wb.v
+pipeline/writeback.v

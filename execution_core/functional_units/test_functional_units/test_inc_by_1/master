@@ -1,7 +1,0 @@
-/home/projects/courses/spring_18/ee382n-16120/lib/time -v 
-/home/projects/courses/spring_18/ee382n-16120/lib/lib1 
-/home/projects/courses/spring_18/ee382n-16120/lib/lib2 
-../../../basic_components/eflags.v
-../../../basic_components/logic_gates.v
-../../inc_by_1.v
-test_inc_by_1.v
