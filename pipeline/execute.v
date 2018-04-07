@@ -8,12 +8,12 @@ module execute (
    input [15:0] EX_NCS,
    input [63:0] EX_CONTROL_STORE,
    //pseudo-control store signals not from control store but generated in decode
-   input [1:0] de_datasize_all,
-   input [2:0] de_aluk_ex, 
-   input de_mem_wr_wb, 
-   input de_ld_gpr1_wb,
-   input de_dcache_write_wb, 
-   input [6:0] de_flags_affected_wb,
+   input [1:0] EX_de_datasize_all,
+   input [2:0] EX_de_aluk_ex, 
+   input EX_de_mem_wr_wb, 
+   input EX_de_ld_gpr1_wb,
+   input EX_de_dcache_write_wb, 
+   input [6:0] EX_de_flags_affected_wb,
 
    input [31:0] EX_A, EX_B,
    input [31:0] EX_COUNT, 
@@ -23,24 +23,23 @@ module execute (
 
    input [2:0] EX_DR1, EX_DR2, EX_DR3,
 
-   output [1:0] out_de_datasize_all,
-   output [2:0] out_de_aluk_ex, 
-   output out_de_mem_wr_wb, 
-   output out_de_ld_gpr1_wb,
-   output out_de_dcache_write_wb, 
-   output [6:0] out_de_flags_affected_wb,
+   output WB_V_next,
+   output [31:0] WB_NEIP_next, 
+   output [15:0] WB_NCS_next,
+   output [63:0] WB_CONTROL_STORE_next,
 
-   output WB_V,
-   output [31:0] WB_NEIP, 
-   output [15:0] WB_NCS,
-   output [63:0] WB_CONTROL_STORE,
+   output [1:0] WB_de_datasize_all_next,
+   output [2:0] WB_de_aluk_ex_next,
+   output WB_de_ld_gpr1_wb_next,
+   output WB_de_dcache_write_wb_next, 
+   output [6:0] WB_de_flags_affected_wb_next,
 
-   output [31:0] WB_ALU32_RESULT,
-   output [31:0] WB_FLAGS,
-   output [31:0] WB_CMPS_POINTER,
-   output [31:0] WB_COUNT, 
+   output [31:0] WB_ALU32_RESULT_next,
+   output [31:0] WB_FLAGS_next,
+   output [31:0] WB_CMPS_POINTER_next,
+   output [31:0] WB_COUNT_next, 
 
-   output [2:0] WB_DR1, WB_DR2, WB_DR3
+   output [2:0] WB_DR1_next, WB_DR2_next, WB_DR3_next
 );
    
    //control store
@@ -72,10 +71,12 @@ module execute (
    
    //String_Support
    reg32e$ u_cmps_temp_mem (CLK, EX_A, cmps_first_mem, , 1'b1, 1'b1, cs_is_cmps_first_uop_all);
-   assign WB_CMPS_POINTER = EX_B; 
-   assign WB_COUNT = EX_COUNT; 
+   assign WB_CMPS_POINTER_next = EX_B; 
+   assign WB_COUNT_next = EX_COUNT; 
 
    //ALU32
-   alu32 u_alu32(WB_ALU32_RESULT, WB_FLAGS, a, b, de_aluk_ex);
+   alu32 u_alu32(WB_ALU32_RESULT_next, WB_FLAGS_next, a, b, de_aluk_ex);
+
+
 
 endmodule
