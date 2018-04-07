@@ -156,7 +156,7 @@ module address_generation (
                               DEP_STALL_OUT);
  
    segment_limit_check
-      u_seg_limit_check (V, D2_MEM_RD_ME, D2_MEM_WR_ME, SEG1, DATA_SIZE, add_base_disp_out, mux_sib_si_out,
+      u_seg_limit_check (V, D2_MEM_RD_ME, D2_MEM_WR_ME, CS_MUX_MEM_RD_ADDR_AG, CS_MUX_MEM_WR_ADDR_AG, SEG1, DATA_SIZE, add_base_disp_out, mux_sib_si_out,
                          SEG_LIMIT_EXC_OUT);
 
 endmodule
