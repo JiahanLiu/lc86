@@ -50,4 +50,4 @@ wire CS_LD_MM_WB;
 wire CS_LD_EIP_WB;
 wire CS_LD_FLAGS_WB;
 wire [6:0] CS_FLAGS_AFFECTED_WB;
-wire [26:0] PLACEHOLDER1;
+wire [58:0] PLACEHOLDER1;

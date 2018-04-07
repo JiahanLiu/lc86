@@ -1,9 +1,9 @@
 module memory_stage (
-   input CLK, SET, RST,
+   input CLK, SET, RST, V,
 
    input [31:0] NEIP,
    input [15:0] NCS,
-   input [63:0] CONTROL_STORE,
+   input [127:0] CONTROL_STORE,
 
    input [31:0] A, B,
    input [63:0] MM_A, MM_B,
@@ -25,7 +25,7 @@ module memory_stage (
 
    output [31:0] NEIP_OUT,
    output [15:0] NCS_OUT,
-   output [63:0] CONTROL_STORE_OUT,
+   output [127:0] CONTROL_STORE_OUT,
 
    output [31:0] A_OUT, B_OUT,
    output [63:0] MM_A_OUT, MM_B_OUT,

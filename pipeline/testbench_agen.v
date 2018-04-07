@@ -5,7 +5,7 @@ module testbench_agen;
    wire [31:0] AG_PS_EIP;
    wire [15:0] AG_PS_CS, AG_PS_CS_NC;
    
-   wire [63:0] AG_PS_CONTROL_STORE;
+   wire [127:0] AG_PS_CONTROL_STORE;
 
    wire [1:0] AG_PS_DATA_SIZE;
    wire AG_PS_D2_SR1_NEEDED_AG, AG_PS_D2_SEG1_NEEDED_AG, AG_PS_D2_MM1_NEEDED_AG;
@@ -28,13 +28,13 @@ module testbench_agen;
    wire [3:0] DE_EXC_CODE_AG;
 
    // Signals to register file
-   wire [2:0] AG_SR1_OUT, AG_SR2_OUT, AG_SEG1_OUT, AG_SEG2_OUT, AG_MM1_OUT, AG_MM2_OUT;
+   wire [2:0] AG_SR1_OUT, AG_SR2_OUT, AG_SR3_OUT, AG_SIB_I_OUT, AG_SEG1_OUT, AG_SEG2_OUT, AG_MM1_OUT, AG_MM2_OUT;
    wire [1:0] AG_DATA_SIZE_OUT;
    
    // Signals for next stage latches
    wire [31:0] AG_NEIP_OUT;
    wire [15:0] AG_NCS_OUT;
-   wire [63:0] AG_CONTROL_STORE_OUT;
+   wire [127:0] AG_CONTROL_STORE_OUT;
    
    wire [31:0] AG_A_OUT, AG_B_OUT;
    wire [63:0] AG_MM_A_OUT, AG_MM_B_OUT;
@@ -52,7 +52,7 @@ module testbench_agen;
 
    reg [31:0]  D2_EIP_OUT;
    reg [15:0]  D2_CS_OUT;
-   reg [63:0]  D2_CONTROL_STORE_OUT;
+   reg [127:0]  D2_CONTROL_STORE_OUT;
    reg [1:0]   D2_DATA_SIZE_AG_OUT;
    reg 	       D2_SR1_NEEDED_AG_OUT, D2_SEG1_NEEDED_AG_OUT, D2_MM1_NEEDED_AG_OUT, D2_MEM_RD_ME_OUT, D2_MEM_WR_ME_OUT;
    reg [2:0]   D2_ALUK_EX_OUT;
@@ -95,7 +95,7 @@ module testbench_agen;
 
 	ME_DRID1 = 3'b000;
 	ME_DRID2 = 3'b000;
-	V_ME_LD_GPR1 = 1'b0;
+	V_ME_LD_GPR1 = 1'b1;
 	V_ME_LD_GPR2 = 1'b0;
 	V_ME_LD_SEG = 1'b0;
 	V_ME_LD_CSEG = 1'b0;
@@ -114,7 +114,8 @@ module testbench_agen;
      begin	
 	D2_EIP_OUT = 32'h00000000;
 	D2_CS_OUT = 16'h0000;
-	D2_CONTROL_STORE_OUT = 64'b0001000111010010000000001010000001000000000000000000000000001100;
+	D2_CONTROL_STORE_OUT[127:64] = 64'b0001000111010010000000001010000001000000000000000000000000001100;
+	D2_CONTROL_STORE_OUT[63:0] = 64'b0001000111010010000000001010000001000000000000000000000000001100;
 	D2_DATA_SIZE_AG_OUT = 2'b11;
 	D2_SR1_NEEDED_AG_OUT = 1'b1;
 	D2_SEG1_NEEDED_AG_OUT = 1'b0;
@@ -154,7 +155,8 @@ module testbench_agen;
       u_reg_ag_ps_cs (CLK, {16'b0, D2_CS_OUT}, {AG_PS_CS_NC, AG_PS_CS}, , CLR, PRE, LD_AG);
 
    reg64e$
-      u_reg_ag_ps_control_store (CLK, D2_CONTROL_STORE_OUT, AG_PS_CONTROL_STORE, , CLR, PRE, LD_AG);
+     u_reg_ag_ps_control_store0 (CLK, D2_CONTROL_STORE_OUT[127:64], AG_PS_CONTROL_STORE[127:64], , CLR, PRE, LD_AG),
+     u_reg_ag_ps_control_store1 (CLK, D2_CONTROL_STORE_OUT[63:0], AG_PS_CONTROL_STORE[63:0], , CLR, PRE, LD_AG);
 
    // [31:2]
    assign D2_OUT1_AG_PS[31:2] = { 
@@ -208,7 +210,7 @@ module testbench_agen;
                                 V_EX_LD_GPR1, V_EX_LD_GPR2, V_EX_LD_SEG, V_EX_LD_CSEG, V_EX_LD_MM,
 
                                 // outputs to register file
-                                AG_SR1_OUT, AG_SR2_OUT, AG_SEG1_OUT, AG_SEG2_OUT, AG_MM1_OUT, AG_MM2_OUT,
+                                AG_SR1_OUT, AG_SR2_OUT, AG_SR3_OUT, AG_SIB_I_OUT, AG_SEG1_OUT, AG_SEG2_OUT, AG_MM1_OUT, AG_MM2_OUT,
                                 AG_DATA_SIZE_OUT,
 
                                 // outputs to next stage

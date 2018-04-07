@@ -1,26 +1,26 @@
 @0f // IRETd (0xCF)
-00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @06 // MOV r/m8,imm8 (0xC6)
-00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @07 // MOV r/m,imm (16/32) (0xC7)
-00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @03 // RET near (0xC3)
-00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @0b // RET far (0xCB)
-00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @02 // RET imm16,near (0xC2)
-00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @0a // RET imm16,far (0xCA)
-00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @10 // SHF r/m8,1 (0xD0 /4 /7)
-00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @12 // SHF r/m8,CL (0xD2 /4 /7)
-00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @00 // SHF r/m8,imm8 (0xC0 /4 /7)
-00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @11 // SHF r/m,1 (16,32) (0xD1 /4 /7)
-00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @13 // SHF r/m,CL (16,32) (0xD3 /4 /7)
-00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 @01 // SHF r/m,imm (16,32) (0xC1 /4 /7)
-00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
