@@ -4,7 +4,7 @@ module address_generation (
    // Signals to be saved in pipeline latches
    input [31:0] EIP, 
    input [15:0] CS,
-   input [63:0] CONTROL_STORE,
+   input [127:0] CONTROL_STORE,
 
    input [1:0] DATA_SIZE,
    input D2_SR1_NEEDED_AG, D2_SEG1_NEEDED_AG, D2_MM1_NEEDED_AG,
@@ -37,13 +37,13 @@ module address_generation (
    input V_EX_LD_GPR1, V_EX_LD_GPR2, V_EX_LD_SEG, V_EX_LD_CSEG, V_EX_LD_MM,
 
    // Signals to register file
-   output [2:0] SR1_OUT, SR2_OUT, SEG1_OUT, SEG2_OUT, MM1_OUT, MM2_OUT,
+   output [2:0] SR1_OUT, SR2_OUT, SR3_OUT, SIB_I_OUT, SEG1_OUT, SEG2_OUT, MM1_OUT, MM2_OUT,
    output [1:0] DATA_SIZE_OUT,
 
    // Signals for next stage latches
    output [31:0] NEIP_OUT, 
    output [15:0] NCS_OUT,
-   output [63:0] CONTROL_STORE_OUT,
+   output [127:0] CONTROL_STORE_OUT,
 
    output [31:0] A_OUT, B_OUT,
    output [63:0] MM_A_OUT, MM_B_OUT,
@@ -76,6 +76,8 @@ module address_generation (
 
    assign SR1_OUT = SR1;
    assign SR2_OUT = SR2;
+   assign SR3_OUT = SR3;
+   assign SIB_I_OUT = SIB_I;
    assign SEG1_OUT = SEG1;
    assign SEG2_OUT = SEG2;
    assign MM1_OUT = SR1;

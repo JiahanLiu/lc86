@@ -5,13 +5,14 @@ module register_file (CLK,
 		      GPRID0, GPRID1, GPRID2, GPRID3,
 		      GPR_RE0, GPR_RE1, GPR_RE2, GPR_RE3,
 		      WRGPR0, WRGPR1, WRGPR2, GPRWE0, GPRWE1, GPRWE2,
+              WE0, WE1, WE2,
 		      CS_DIN, EIP_DIN, EFLAGS_DIN,
 		      LD_CS, LD_EIP, LD_EFLAGS,
 		      SEGDOUT1, SEGDOUT2, MMDOUT1, MMDOUT2,
 		      GPRDOUT0, GPRDOUT1, GPRDOUT2, GPRDOUT3,
-		      CSDOUT, EIPDOUT, EFLAGSDOUT);
+		      CSDOUT, EIPDOUT, EFLAGSDOUT, RST);
 
-   input CLK;
+   input CLK, RST;
    
    input [15:0] SEG_DIN;
    input [2:0] 	SEGID1, SEGID2, WRSEGID;
@@ -26,6 +27,7 @@ module register_file (CLK,
 		WRGPR0, WRGPR1, WRGPR2;
    input [1:0] 	GPR_RE0, GPR_RE1, GPR_RE2, GPR_RE3,
 		GPRWE0, GPRWE1, GPRWE2;
+   input WE0, WE1, WE2;     // WRITE ENABLE SIGNALS
 
    input [16:0] CS_DIN;
    input [31:0] EIP_DIN, EFLAGS_DIN;
@@ -46,7 +48,7 @@ module register_file (CLK,
    regfile8x64  mmr  (MM_DIN, MMID1, MMID2, 1'b1, 1'b1, WRMMID, MMWE, MMDOUT1, MMDOUT2, CLK);
    regfile8x32e gpr  (CLK, GPR_DIN0, GPR_DIN1, GPR_DIN2, 
 		      GPRID0, GPRID1, GPRID2, GPRID3, GPR_RE0, GPR_RE1, GPR_RE2, GPR_RE3, 
-		      WRGPR0, WRGPR1, WRGPR2, GPRWE0, GPRWE1, GPRWE2, 
+		      WRGPR0, WRGPR1, WRGPR2, WE0, WE1, WE2, GPRWE0, GPRWE1, GPRWE2, 
 		      GPRDOUT0, GPRDOUT1, GPRDOUT2, GPRDOUT3);
 
    // Format: reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
