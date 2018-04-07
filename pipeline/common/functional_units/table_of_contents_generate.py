@@ -13,7 +13,7 @@ print("//-----------------------------------------------------------------------
 print("// " + input_file_name, file=file_write);
 print("// --------------------", file=file_write);
 print("// EE382N, Spring 2018", file=file_write);
-print("// Apruv Narkhede, Nelson Wu, Steven Flolid, Jiahan Liu", file=file_write);
+print("// Apurv Narkhede, Nelson Wu, Steven Flolid, Jiahan Liu", file=file_write);
 print("//", file=file_write);
 
 array_of_module_names = [];

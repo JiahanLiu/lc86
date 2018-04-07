@@ -162,6 +162,7 @@ module alu_daa (
 
 	wire OF, DF, SF, ZF, AF, PF, CF;  
 
+    assign daa_result[31:8] = 24'b0;
 	assign OF = 0;
 	assign DF = 0;
 	assign SF = 0; //bcd is unsigned, vol1, page 80
@@ -343,7 +344,7 @@ module alu_cmp (
 	ZF_logic u_ZF_logic(ZF, cmp_result[31:0]);
 	assign AF = carry_out[3];
 	PF_logic u_PF_logic(PF, cmp_result[7:0]);
-	assign CF = cmp_result[31];
+	assign CF = carry_out[31];
 
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
 endmodule

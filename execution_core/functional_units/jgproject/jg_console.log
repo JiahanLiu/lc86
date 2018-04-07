@@ -1,0 +1,49 @@
+2018-04-04 20:18:02.806680 (19123) main____ INFO    ----------------------------------------
+2018-04-04 20:18:02.806941 (19123) main____ INFO    JasperGold version info
+2018-04-04 20:18:02.806971 (19123) main____ INFO      tool      : JasperGold 2015.09
+2018-04-04 20:18:02.806994 (19123) main____ INFO      version   : 2015.09 FCS 64 bits
+2018-04-04 20:18:02.807010 (19123) main____ INFO      build date: 2015.09.29 22:07:28 PDT
+2018-04-04 20:18:02.807022 (19123) main____ INFO    ----------------------------------------
+2018-04-04 20:18:02.807032 (19123) main____ INFO    Runtime info:
+2018-04-04 20:18:02.807046 (19123) main____ INFO      platform  : Linux 2.6.32-696.23.1.el6.x86_64 x86_64
+2018-04-04 20:18:02.807063 (19123) main____ INFO      hostname  : wario
+2018-04-04 20:18:02.807075 (19123) main____ INFO      pid       : 19123
+2018-04-04 20:18:02.807087 (19123) main____ INFO      arguments : '-style' 'windows'
+2018-04-04 20:18:02.807097 (19123) main____ INFO    ----------------------------------------
+2018-04-04 20:18:02.810102 (19123) lic__man INFO    Claim 'main' for <ui>.
+2018-04-04 20:18:02.817140 (19123) lic_core INFO    (1) checking out 'jasper_interactive' ...
+2018-04-04 20:18:02.830816 (19123) lic_core INFO    ... (1) checkout succeeded
+2018-04-04 20:18:02.830947 (19123) lic__man INFO    Claim 'fpv' for <ui>.
+2018-04-04 20:18:02.830984 (19123) lic_core INFO    (2) checking out 'jasper_fpv' ...
+2018-04-04 20:18:02.848935 (19123) lic_core INFO    ... (2) checkout succeeded
+2018-04-04 20:18:03.380349 (19123) lic__man INFO    Claim 'fpv' for <ui>.
+2018-04-04 20:18:03.499871 (19123) lic__man INFO    Unclaim 'fpv' for <ui>.
+2018-04-04 20:18:03.499933 (19123) lic__man INFO    Claim 'fpv' for <ui>.
+2018-04-04 20:18:03.509788 (19123) session_ INFO    Starting analysis session with session id 'session_0' ...
+2018-04-04 20:18:03.512336 (19123) session_ INFO    Analysis session with session id 'session_0' started (pid: 19253)
+2018-04-04 20:18:09.149311 (19123) session_ INFO    Analysis session 'session_0' connected to the console (host: 146.6.221.77:52574)
+2018-04-04 20:18:25.153458 (19123) lic__man INFO    Unclaim everything for 'session_0*'.
+2018-04-04 20:18:25.903320 (19123) lic__man INFO    Claim 'fpv' for 'session_0'.
+2018-04-04 20:18:26.913542 (19123) lic__man INFO    Unclaim everything for 'session_0/prove-0'.
+2018-04-04 20:24:11.370915 (19123) lic__man INFO    Unclaim everything for 'session_0*'.
+2018-04-04 20:24:12.037686 (19123) lic__man INFO    Claim 'fpv' for 'session_0'.
+2018-04-04 20:24:12.842662 (19123) lic__man INFO    Unclaim everything for 'session_0/prove-1'.
+2018-04-04 20:24:35.066322 (19123) lic__man INFO    Unclaim everything for 'session_0*'.
+2018-04-04 20:24:35.713125 (19123) lic__man INFO    Claim 'fpv' for 'session_0'.
+2018-04-04 20:24:36.561805 (19123) lic__man INFO    Unclaim everything for 'session_0/prove-2'.
+2018-04-04 20:24:52.334492 (19123) lic__man INFO    Unclaim everything for 'session_0*'.
+2018-04-04 20:24:53.188491 (19123) lic__man INFO    Claim 'fpv' for 'session_0'.
+2018-04-04 20:24:54.451879 (19123) lic__man INFO    Unclaim everything for 'session_0/prove-3'.
+2018-04-04 20:26:19.341929 (19123) lic__man INFO    Unclaim everything for 'session_0*'.
+2018-04-04 20:26:20.210131 (19123) lic__man INFO    Claim 'fpv' for 'session_0'.
+2018-04-04 20:26:20.996475 (19123) lic__man INFO    Unclaim everything for 'session_0/prove-4'.
+2018-04-04 20:26:29.541062 (19123) lic__man INFO    Unclaim everything for 'session_0*'.
+2018-04-04 20:26:30.252784 (19123) lic__man INFO    Claim 'fpv' for 'session_0'.
+2018-04-04 20:26:31.015213 (19123) lic__man INFO    Unclaim everything for 'session_0/prove-5'.
+2018-04-04 20:27:32.247424 (19123) lic__man INFO    Unclaim everything for 'session_0*'.
+2018-04-04 20:27:33.021804 (19123) lic__man INFO    Claim 'fpv' for 'session_0'.
+2018-04-04 20:27:34.002767 (19123) lic__man INFO    Unclaim everything for 'session_0/prove-6'.
+2018-04-04 20:35:34.002876 (19123) lic__man INFO    Entering idle state.
+2018-04-04 21:18:30.145863 (19123) lic__man INFO    Leaving idle state.
+2018-04-04 21:18:33.255240 (19123) main____ INFO    About to exit: request to exit with status 0 received from analysis session 'session_0'
+2018-04-04 21:18:33.649301 (19123) main____ INFO    Exiting.
