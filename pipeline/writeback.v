@@ -18,12 +18,11 @@ module writeback (
    input [15:0] WB_NCS,
    input [63:0] WB_CONTROL_STORE,
    //pseudo-control store signals not from control store but generated in decode
-   input [1:0] de_datasize_all,
-   input [2:0] de_aluk_ex, 
-   input de_mem_wr_wb, 
-   input de_ld_gpr1_wb,
-   input de_dcache_write_wb, 
-   input [6:0] de_flags_affected_wb,
+   input [1:0] WB_de_datasize_all,
+   input [2:0] WB_de_aluk_ex, 
+   input WB_de_ld_gpr1_wb,
+   input WB_de_dcache_write_wb, 
+   input [6:0] WB_de_flags_affected_wb,
 
    input [31:0] WB_ALU32_RESULTS,
    input [31:0] WB_COUNT, 
@@ -41,16 +40,23 @@ module writeback (
    output [31:0] Out_DR1_Data, Out_DR2_Data, Out_DR3_Data, 
    output out_v_de_ld_gpr1_wb, out_v_cs_ld_gpr2_wb, out_v_cs_ld_gpr3_wb,
    output [1:0] out_de_datasize,
-   output [31:0] Out_Dcache_Data, Out_Dcache_Address
+   output [31:0] Out_Dcache_Data, Out_Dcache_Address,
+   output Out_ex_repne_termination_all
 );
 
-   //control store
-   wire cs_is_cmps_first_uop_all; 
-   wire cs_is_cmps_second_uop_all; 
-   wire cs_is_first_of_repne_wb; 
-   wire cs_ld_gpr2_wb; 
-   wire cs_ld_gpr3_wb; 
-   wire cs_ld_flags_wb; 
+   //need nelson to make these signals
+  wire CS_IS_CMPS_FIRST_UOP_ALL;
+  wire CS_IS_CMPS_SECOND_UOP_ALL; 
+  wire CS_IS_FIRST_OF_REPNE_WB; 
+  wire CS_LD_GPR3_WB;
+  assign CS_IS_CMPS_FIRST_UOP_ALL = 0;
+  assign CS_IS_CMPS_SECOND_UOP_ALL = 0; 
+  assign CS_IS_FIRST_OF_REPNE_WB = 0; 
+  assign CS_LD_GPR3_WB = 0;
+
+  //control signals
+  `include "../control_store/control_store_wires.v"
+  `include "../control_store/control_store_signals.v"
 
    //internal wires for each box output in schematic
       //
@@ -63,33 +69,23 @@ module writeback (
    wire [31:0] current_flags; 
    wire data1, data2, data3; 
 
-   undo_control_store u_undo_control_store(
-      cs_is_cmps_first_uop_all, //0
-      cs_is_cmps_second_uop_all, //1
-      cs_is_first_of_repne_wb, //2
-      cs_ld_gpr2_wb, //3
-      cs_ld_gpr3_wb, //4
-      cs_ld_flags_wb,
-      EX_CONTROL_STORE
-   );
-
-   CMPS_POINTER_LOGIC (cmps_updated_pointer, WB_CMPS_POINTER, de_datasize_all, current_flags[11]); 
+   CMPS_POINTER_LOGIC (cmps_updated_pointer, WB_CMPS_POINTER, WB_de_datasize_all, current_flags[11]); 
    
-   reg32e$ cmps_temp_pointer (CLK, cmps_updated_pointer, cmps_first_pointer, , 1'b1, 1'b1, cs_is_cmps_first_uop_all);
+   reg32e$ cmps_temp_pointer (CLK, cmps_updated_pointer, cmps_first_pointer, , 1'b1, 1'b1, CS_IS_CMPS_FIRST_UOP_ALL);
    
-   Flags_WB(current_flags, CLK, v_cs_ld_flags_wb, de_flags_affected_wb, WB_FLAGS);
+   Flags_WB(current_flags, CLK, v_cs_ld_flags_wb, WB_de_flags_affected_wb, WB_FLAGS);
 
-   Repne_Count_Logic u_Repne_Count_Logic(internal_count, WB_COUNT, cs_is_first_of_repne_wb, cs_is_cmps_second_uop_all, current_flags[6], CLK);
+   Repne_Count_Logic u_Repne_Count_Logic(internal_count, WB_COUNT, CS_IS_FIRST_OF_REPNE_WB, CS_IS_CMPS_SECOND_UOP_ALL, current_flags[6], CLK);
 
-   and2$ u_validate_gpr1(v_de_ld_gpr1_wb, WB_V, de_ld_gpr1_wb);
-   and2$ u_validate_gpr2(v_cs_ld_gpr2_wb, WB_V, cs_ld_gpr2_wb);
-   and2$ u_validate_gpr3(v_cs_ld_gpr3_wb, WB_V, cs_ld_gpr3_wb);
-   and2$ u_validate_mem_writes(v_de_dache_write_wb, WB_V, de_dcache_write_wb);
-   and2$ u_validate_flag_writes(v_cs_ld_flags_wb, WB_V, cs_ld_flags_wb);
+   and2$ u_validate_gpr1(v_de_ld_gpr1_wb, WB_V, WB_de_ld_gpr1_wb);
+   and2$ u_validate_gpr2(v_cs_ld_gpr2_wb, WB_V, CS_LD_GPR2_WB);
+   and2$ u_validate_gpr3(v_cs_ld_gpr3_wb, WB_V, CS_LD_GPR3_WB);
+   and2$ u_validate_mem_writes(v_de_dache_write_wb, WB_V, WB_de_dcache_write_wb);
+   and2$ u_validate_flag_writes(v_cs_ld_flags_wb, WB_V, CS_LD_FLAGS_WB);
 
    //Desination Select_WB
 
-   mux32_2way u_mux_d1(data1, WB_ALU32_RESULTS, cmps_first_pointer, cs_is_cmps_first_uop_all);
+   mux32_2way u_mux_d1(data1, WB_ALU32_RESULTS, cmps_first_pointer, CS_IS_CMPS_FIRST_UOP_ALL);
    assign data2 = cmps_updated_pointer;
    assign data3 = internal_count; 
 

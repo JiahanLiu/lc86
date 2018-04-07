@@ -1,0 +1,8 @@
+@17 // JNBE rel8 (0x77)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@15 // JNE rel8 (0x75)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@0a // PUSH imm8 (0x6A)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@08 // PUSH imm16/32 (0x68)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx

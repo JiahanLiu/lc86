@@ -1,0 +1,20 @@
+@08 // CALL rel16/32 (0xE8)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@1c // CLD (0xFC)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@14 // HLT (0xF4)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@1e // INC r/m8 (0xFE)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@0b // JMP rel8 (0xEB)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@09 // JMP rel16/32 (0xE9)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@0a // JMP ptr16:16/32 (0xEA)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@16 // NOT r/m8 (0xF6)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@17 // NOT r/m (16/32) (0xF7)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx
+@1d // STD (0xFD)
+00000xxxxxxxxxxxxxxxxxxxxxxxxxxx

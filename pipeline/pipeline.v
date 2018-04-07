@@ -488,6 +488,9 @@ assign WB_DR1 = WB_DR1_next[2:0];
 assign WB_DR2 = WB_DR2_next[2:0];
 assign WB_DR3 = WB_DR3_next[2:0];
 
+//REPNE CMPS is done
+wire Out_ex_repne_termination_all; 
+
 //*******WRITE BACK STAGE*******.//
 writeback u_writeback(
     CLK, SET, RST, //not uesd SET/RST
@@ -498,11 +501,11 @@ writeback u_writeback(
     WB_CONTROL_STORE,
    //pseudo-control store signals not from control store but generated in decode
     de_datasize_all,
-     de_aluk_ex, 
+    de_aluk_ex, 
     de_mem_wr_wb, 
     de_ld_gpr1_wb,
     de_dcache_write_wb, 
-   de_flags_affected_wb,
+    de_flags_affected_wb,
 
     WB_ALU32_RESULTS,
     WB_COUNT, 
@@ -519,7 +522,8 @@ writeback u_writeback(
     Out_DR1_Data, Out_DR2_Data, Out_DR3_Data, 
     out_v_de_ld_gpr1_wb, out_v_cs_ld_gpr2_wb, out_v_cs_ld_gpr3_wb,
     out_de_datasize,
-    Out_Dcache_Data, Out_Dcache_Address
+    Out_Dcache_Data, Out_Dcache_Address, 
+    Out_ex_repne_termination_all
 );
 
 

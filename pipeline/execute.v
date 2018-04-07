@@ -42,41 +42,47 @@ module execute (
    output [2:0] WB_DR1_next, WB_DR2_next, WB_DR3_next
 );
    
-   //control store
-  wire cs_is_cmps_first_uop_all;
-  wire cs_is_cmps_second_uop_all; 
-  wire cs_is_first_of_repne_wb; 
-  wire cs_ld_gpr2_wb; 
-  wire cs_ld_gpr3_wb; 
-  wire cs_ld_flags_wb; 
+   //need nelson to make these signals
+  wire CS_IS_CMPS_FIRST_UOP_ALL;
+  wire CS_IS_CMPS_SECOND_UOP_ALL; 
+  wire CS_IS_FIRST_OF_REPNE_WB; 
+  assign CS_IS_CMPS_FIRST_UOP_ALL = 0;
+  assign CS_IS_CMPS_SECOND_UOP_ALL = 0; 
+  assign CS_IS_FIRST_OF_REPNE_WB = 0; 
+
+  //control signals
+  `include "../control_store/control_store_wires.v"
+  `include "../control_store/control_store_signals.v"
 
   //internal wires
   wire [31:0] a, b;
   wire [31:0] cmps_first_mem;
 
-
-  undo_control_store u_undo_control_store(
-    cs_is_cmps_first_uop_all, 
-    cs_is_cmps_second_uop_all, 
-    cs_is_first_of_repne_wb, 
-    cs_ld_gpr2_wb, 
-    cs_ld_gpr3_wb, 
-    cs_ld_flags_wb, 
-    EX_CONTROL_STORE
-  );
-
    //Operand_Select_EX
    assign a = EX_A;
-   mux32_2way u_select_b(b, EX_B, cmps_first_mem, cs_is_cmps_second_uop_all); 
+   mux32_2way u_select_b(b, EX_B, cmps_first_mem, CS_IS_CMPS_SECOND_UOP_ALL); 
    
    //String_Support
-   reg32e$ u_cmps_temp_mem (CLK, EX_A, cmps_first_mem, , 1'b1, 1'b1, cs_is_cmps_first_uop_all);
+   reg32e$ u_cmps_temp_mem (CLK, EX_A, cmps_first_mem, , 1'b1, 1'b1, CS_IS_CMPS_FIRST_UOP_ALL);
    assign WB_CMPS_POINTER_next = EX_B; 
    assign WB_COUNT_next = EX_COUNT; 
 
    //ALU32
-   alu32 u_alu32(WB_ALU32_RESULT_next, WB_FLAGS_next, a, b, de_aluk_ex);
+   alu32 u_alu32(WB_ALU32_RESULT_next, WB_FLAGS_next, a, b, EX_de_aluk_ex);
 
+   //EX latches pass to WB latches
+  assign WB_V_next = EX_V;
+  assign WB_NEIP_next = EX_NEIP; 
+  assign WB_NCS_next = EX_NCS; 
+  assign WB_CONTROL_STORE_next = EX_CONTROL_STORE;
+  assign WB_de_datasize_all_next = EX_de_datasize_all;
+  assign WB_de_aluk_ex_next = EX_de_aluk_ex;
+  assign WB_de_ld_gpr1_wb_next = EX_de_ld_gpr1_wb;
+  assign WB_de_dcache_write_wb_next = EX_de_dcache_write_wb;
+  assign WB_de_flags_affected_wb_next = EX_de_flags_affected_wb;
 
+  assign WB_DR1_next = EX_DR1;
+  assign WB_DR2_next = EX_DR2;
+  assign WB_DR3_next = EX_DR3; 
 
 endmodule
