@@ -461,12 +461,6 @@ reg32e$ u_ex_de_aluk_ex_latch(CLK, EX_de_dcache_write_wb_next, EX_de_dcache_writ
 wire EX_de_dcache_write_wb; 
 assign EX_de_dcache_write_wb = EX_de_dcache_write_wb_out[0]; 
 
-wire [6:0] EX_de_flags_affected_wb_next;
-wire [31:0] EX_de_flags_affected_wb_out;
-reg32e$ u_ex_de_aluk_ex_latch(CLK, EX_de_flags_affected_wb_next, EX_de_flags_affected_wb_out, ,CLR,PRE,EN);
-wire [6:0] EX_de_flags_affected_wb;
-assign EX_de_flags_affected_wb = EX_de_flags_affected_wb_out[6:0]; 
-
    wire [31:0] EX_A_next = ME_A_OUT;
    wire [31:0] EX_B_next = ME_B_OUT;
 reg32e$ u_ex_a_latch(CLK, EX_A_next, EX_A, ,CLR,PRE,EN);
@@ -513,10 +507,8 @@ execute u_execute(
   //pseudo-control store signals not from control store but generated in decode
   EX_de_datasize_all,
   EX_de_aluk_ex, 
-  EX_de_mem_wr_wb, 
   EX_de_ld_gpr1_wb,
   EX_de_dcache_write_wb, 
-  EX_de_flags_affected_wb,
 
   EX_A, EX_B,
   EX_COUNT, 
@@ -607,10 +599,8 @@ writeback u_writeback(
    //pseudo-control store signals not from control store but generated in decode
     de_datasize_all,
     de_aluk_ex, 
-    de_mem_wr_wb, 
     de_ld_gpr1_wb,
     de_dcache_write_wb, 
-    de_flags_affected_wb,
 
     WB_ALU32_RESULTS,
     WB_COUNT, 

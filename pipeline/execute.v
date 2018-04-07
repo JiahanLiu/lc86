@@ -78,7 +78,6 @@ module execute (
   assign WB_de_aluk_ex_next = EX_de_aluk_ex;
   assign WB_de_ld_gpr1_wb_next = EX_de_ld_gpr1_wb;
   assign WB_de_dcache_write_wb_next = EX_de_dcache_write_wb;
-  assign WB_de_flags_affected_wb_next = EX_de_flags_affected_wb;
 
   assign WB_DR1_next = EX_DR1;
   assign WB_DR2_next = EX_DR2;

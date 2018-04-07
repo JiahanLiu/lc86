@@ -21,8 +21,7 @@ module writeback (
    input [1:0] WB_de_datasize_all,
    input [2:0] WB_de_aluk_ex, 
    input WB_de_ld_gpr1_wb,
-   input WB_de_dcache_write_wb, 
-   input [6:0] WB_de_flags_affected_wb,
+   input WB_de_dcache_write_wb,
 
    input [31:0] WB_ALU32_RESULTS,
    input [31:0] WB_COUNT, 
@@ -73,7 +72,7 @@ module writeback (
    
    reg32e$ cmps_temp_pointer (CLK, cmps_updated_pointer, cmps_first_pointer, , 1'b1, 1'b1, CS_IS_CMPS_FIRST_UOP_ALL);
    
-   Flags_WB(current_flags, CLK, v_cs_ld_flags_wb, WB_de_flags_affected_wb, WB_FLAGS);
+   Flags_WB(current_flags, CLK, v_cs_ld_flags_wb, CS_FLAGS_AFFECTED_WB, WB_FLAGS);
 
    Repne_Count_Logic u_Repne_Count_Logic(internal_count, WB_COUNT, CS_IS_FIRST_OF_REPNE_WB, CS_IS_CMPS_SECOND_UOP_ALL, current_flags[6], CLK);
 
