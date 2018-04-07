@@ -17,7 +17,7 @@ GS  = 101
 // first_addr <= seg_limit - (size-1)
 module segment_limit_check (
    input V, MEM_RD, MEM_WR,
-
+   input [1:0] CS_MUX_MEM_RD, CS_MUX_MEM_WR,
    input [2:0] SEG1_ID,
    input [1:0] DATA_SIZE,
    input [31:0] ADD_BASE_DISP, MUX_SIB_SI, 
@@ -28,8 +28,9 @@ module segment_limit_check (
    wire [31:0] mux_seg1_out, mux_seg2_out, mux_seg_out;
    wire [31:0] add_sib_si_out, mux_data_size_out, add_limit_out;
 
-   wire or_mem_out, and_v_out, mag_comp32_limit_out;
-
+   wire or_v_out, mag_comp32_limit_out;
+   wire nor_rd_out, nor_wr_out, and_rd_out, and_wr_out;
+   
    mux4$
       mux_seg1 [31:0] (mux_seg1_out, {12'h000, `ES_LIMIT_REGISTER}, {12'h000, `CS_LIMIT_REGISTER}, 32'hFFFFFFFF, {12'h000, `DS_LIMIT_REGISTER}, SEG1_ID[0], SEG1_ID[1]),
       mux_seg2 [31:0] (mux_seg2_out, {12'h000, `FS_LIMIT_REGISTER}, {12'h000, `GS_LIMIT_REGISTER}, 32'hFFFFFFFF, 32'hFFFFFFFF, SEG1_ID[0], SEG1_ID[1]);;
@@ -47,10 +48,17 @@ module segment_limit_check (
    mag_comp32
       mag_comp32_limit (add_sib_si_out, add_limit_out, mag_comp32_limit_out, , );
 
-   or2$ or_mem (or_mem_out, MEM_RD, MEM_WR);
-   and2$ and_v (and_v_out, V, or_mem_out);
+   nor2$ 
+     nor_rd (nor_rd_out, CS_MUX_MEM_RD[0], CS_MUX_MEM_RD[1]),
+     nor_wr (nor_wr_out, CS_MUX_MEM_WR[0], CS_MUX_MEM_WR[1]);
 
-   and2$ and_exc (EXC, mag_comp32_limit_out, and_v_out);
+   and3$
+     and_rd (and_rd_out, V, nor_rd_out, MEM_RD),
+     and_wr (and_wr_out, V, nor_wr_out, MEM_WR);
+   
+   or2$ or_v (or_v_out, and_rd_out, and_wr_out);
+
+   and2$ and_exc (EXC, mag_comp32_limit_out, or_v_out);
 
 endmodule
  
