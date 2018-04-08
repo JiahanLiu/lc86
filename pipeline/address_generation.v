@@ -6,6 +6,8 @@ module address_generation (
    input [15:0] CS,
    input [127:0] CONTROL_STORE,
 
+   input [47:0] OFFSET,
+			   
    input [1:0] DATA_SIZE,
    input D2_SR1_NEEDED_AG, D2_SEG1_NEEDED_AG, D2_MM1_NEEDED_AG,
 

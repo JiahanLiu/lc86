@@ -20,24 +20,17 @@ module decode_stage2 (
 
     output [31:0] EIP_OUT, 
     output [15:0] CS_OUT,
-    output [127:0] control_signal,
-    output [2:0] DR, SR, base, index,
-    output [2:0] MM_DR, MM_SR,
-    output [2:0] seg_SR, seg_DR,
-    output [1:0] data_size, 
-    output [31:0] imm, disp,
-
-    output operation, MM_operation,
-    output type_A, MM_type_A,
-    output type_B, MM_type_B,
-    output [1:0] D2_DATA_SIZE_AG,
+    output [127:0] CONTROL_STORE,
+    output [47:0] OFFSET,
+		      
+   output [1:0] D2_DATA_SIZE_AG,
    output D2_SR1_NEEDED_AG, D2_SEG1_NEEDED_AG, D2_MM1_NEEDED_AG,
 
    output D2_MEM_RD_ME, D2_MEM_WR_ME, 
    output [2:0] D2_ALUK_EX,
    output D2_LD_GPR1_WB, D2_LD_MM_WB,
 
-   output [2:0] SR1_OUT, SR2_OUT, SEG1_OUT, SEG2_OUT,
+   output [2:0] SR1_OUT, SR2_OUT, SR3_OUT, SIB_I_OUT, SEG1_OUT, SEG2_OUT,
    output [31:0] IMM32_OUT, DISP32_OUT,
 
    output DE_SIB_EN_AG, DE_DISP_EN_AG, DE_BASE_REG_EN_AG,
@@ -82,8 +75,8 @@ module decode_stage2 (
     assign IR_SIB_BASE = sib[2:0];
     assign DE_SEG1_ID = 3'b000;
 
-    ucontrol_store u_ucontrol_store1 (.opcode(opcode[7:0]), .opcode_size(opcode_size), .control_signal(control_signal[63:0]));
-    ucontrol_store u_ucontrol_store2 (.opcode(opcode[7:0]), .opcode_size(opcode_size), .control_signal(control_signal[127:64]));
+    ucontrol_store u_ucontrol_store1 (.opcode(opcode[7:0]), .opcode_size(opcode_size), .control_signal(CONTROL_STORE[63:0]));
+    ucontrol_store u_ucontrol_store2 (.opcode(opcode[7:0]), .opcode_size(opcode_size), .control_signal(CONTROL_STORE[127:64]));
 
     inv1$ inv1 (mod7_b, modrm[7]);
     inv1$ inv2 (mod6_b, modrm[6]);

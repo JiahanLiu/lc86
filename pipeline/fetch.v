@@ -15,29 +15,63 @@ module fetch (
     output icache_en,
     output [31:0] icache_address,
     output segment_limit_exception,
-    output [127:0] IR
+    output [127:0] IR,
+
+    output [3:0] instr_length_updt,
+    output [15:0] opcode,
+    output [1:0] prefix_size,
+    output prefix_present, segment_override, operand_override, repeat_prefix,
+    output modrm_present, imm_present,
+    output [1:0] imm_size,
+    output sib_present, disp_present, disp_size,
+    output [3:0] imm_sel,
+    output [2:0] disp_sel,
+    output offset_present,
+    output opcode_size,
+    output [1:0] offset_size,
+    output [2:0] segID,
+    output [7:0] modrm, sib,
+    output [2:0] modrm_sel
 );
 
-//The four buffers for the fetch unit
-wire [127:0] FE_buf_0_in, FE_buf_1_in, FE_buf_2_in, FE_buf_3_in;	//the buffer register inputs
-wire [127:0] FE_buf_0_out, FE_buf_1_out, FE_buf_2_out, FE_buf_3_out;
-wire FE_buf_0_en, FE_buf_1_en, FE_buf_2_en, FE_buf_3_en;
-reg128e$ u_FE_buf_0(clk, FE_buf_0_in, FE_buf_0_out, , reset, set, FE_buf_0_en);
-reg128e$ u_FE_buf_1(clk, FE_buf_1_in, FE_buf_1_out, , reset, set, FE_buf_1_en);
-reg128e$ u_FE_buf_2(clk, FE_buf_2_in, FE_buf_2_out, , reset, set,FE_buf_2_en);
-reg128e$ u_FE_buf_3(clk, FE_buf_3_in, FE_buf_3_out, , reset, set, FE_buf_3_en);
+   //The four buffers for the fetch unit
+   wire [127:0]  FE_buf_0_in, FE_buf_1_in, FE_buf_2_in, FE_buf_3_in;	//the buffer register inputs
+   wire [127:0]  FE_buf_0_out, FE_buf_1_out, FE_buf_2_out, FE_buf_3_out;
+   wire 	 FE_buf_0_en, FE_buf_1_en, FE_buf_2_en, FE_buf_3_en;
+   reg128e$ u_FE_buf_0(clk, FE_buf_0_in, FE_buf_0_out, , reset, set, FE_buf_0_en);
+   reg128e$ u_FE_buf_1(clk, FE_buf_1_in, FE_buf_1_out, , reset, set, FE_buf_1_en);
+   reg128e$ u_FE_buf_2(clk, FE_buf_2_in, FE_buf_2_out, , reset, set,FE_buf_2_en);
+   reg128e$ u_FE_buf_3(clk, FE_buf_3_in, FE_buf_3_out, , reset, set, FE_buf_3_en);
 
 
-wire [5:0] read_ptr;
-//temporary read_ptr assign until the fetch is finished
-assign read_ptr = 0;
-//Values of the fetch buffers until the fetch unit is finished
-assign FE_buf_0_in = 128'hFEEDBEEF;
-assign FE_buf_1_in = 128'hABCD1234;
-assign FE_buf_2_in = 128'hABCD1234;
-assign FE_buf_3_in = 128'hABCD1234;
-FE_full_shifter(FE_buf_0_out, FE_buf_1_out, FE_buf_2_out, FE_buf_3_out, read_ptr, IR);
+   wire [5:0] 	 read_ptr;
+   //temporary read_ptr assign until the fetch is finished
+   assign read_ptr = 0;
+   //Values of the fetch buffers until the fetch unit is finished
+   assign FE_buf_0_in = 128'hFEEDBEEF;
+   assign FE_buf_1_in = 128'hABCD1234;
+   assign FE_buf_2_in = 128'hABCD1234;
+   assign FE_buf_3_in = 128'hABCD1234;
+   FE_full_shifter(FE_buf_0_out, FE_buf_1_out, FE_buf_2_out, FE_buf_3_out, read_ptr, IR);
 
+   decode_stage1 u_decode_stage1 (clk, set, reset,
+				  IR, ,
+				  instr_length_updt,
+				  opcode,
+				  prefix_size,
+				  prefix_present, segment_override, operand_override, repeat_prefix,
+				  modrm_present, imm_present,
+				  imm_size,
+				  sib_present, disp_present, disp_size,
+				  imm_sel,
+				  disp_sel,
+				  offset_present,
+				  opcode_size,
+				  offset_size,
+				  segID,
+				  modrm, sib,
+				  modrm_sel);
+   
 endmodule
 
 module FE_full_shifter(input [127:0] A, B, C, D,
