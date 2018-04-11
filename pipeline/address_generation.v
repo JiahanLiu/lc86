@@ -88,7 +88,7 @@ module address_generation (
 
    // Generate next EIP value
    mux2$ mux_rel [31:0] (mux_rel_out, 32'b0, DISP32, CS_MUX_EIP_JMP_REL_AG);
-   adder32 add_rel (add_rel_out, , EIP, mux_rel_out, 1'b0);
+   adder32_w_carry_in add_rel (add_rel_out, , EIP, mux_rel_out, 1'b0);
    mux2$ mux_eip [31:0] (NEIP_OUT, add_rel_out, IMM32, CS_MUX_NEXT_EIP_AG);
 
    // Generate next CS register value
@@ -108,26 +108,26 @@ module address_generation (
    mux2$
       mux_disp [31:0] (mux_disp_out, 32'b0, DISP32, DE_DISP_EN_AG),
       mux_base_reg [31:0] (mux_base_reg_out, 32'b0, SR1_DATA, DE_BASE_REG_EN_AG);
-   adder32 add_base_disp (add_base_disp_out, , mux_disp_out, mux_base_reg_out, 1'b0); 
+   adder32_w_carry_in add_base_disp (add_base_disp_out, , mux_disp_out, mux_base_reg_out, 1'b0); 
 
    sal32 shf_sib_idx (shf_sib_idx_out, SIB_I_DATA, {3'b0, DE_SIB_S_AG});
    mux2$ mux_sib_si [31:0] (mux_sib_si_out, 32'b0, shf_sib_idx_out, DE_SIB_EN_AG);
    mux2$ mux_seg1 [15:0] (mux_seg1_out, SEG1_DATA, CS, DE_MUX_SEG_AG);
 
-   adder32 add_sib_seg1 (add_sib_seg1_out, , {mux_seg1_out, 16'b0}, mux_sib_si_out, 1'b0);
-   adder32 add_seg1 (add_seg1_out, , add_base_disp_out, add_sib_seg1_out, 1'b0);
+   adder32_w_carry_in add_sib_seg1 (add_sib_seg1_out, , {mux_seg1_out, 16'b0}, mux_sib_si_out, 1'b0);
+   adder32_w_carry_in add_seg1 (add_seg1_out, , add_base_disp_out, add_sib_seg1_out, 1'b0);
 
    // Generate SR2 address (for stack accesses)
    mux2$
       mux_push_size [1:0] (mux_push_size_out, 2'b10, 2'b00, DATA_SIZE[1]), // select to add -2 or -4 on data size
       mux_push_add [31:0] (mux_push_add_out, 32'b0, {30'b1, mux_push_size_out}, CS_MUX_SP_PUSH_AG);
-   adder32 
+   adder32_w_carry_in 
       add_sp (add_sp_out, , SR2_DATA, mux_push_add_out, 1'b0),
       add_seg2 (add_seg2_out, , {SEG2_DATA, 16'b0}, add_sp_out, 1'b0);
   
    // Generate IDTR + offset address (for IDT entry reads)
    sal32 shf_exc_code (shf_exc_code_out, {28'b0, DE_EXC_CODE_AG}, 5'b00011);
-   adder32 add_idt_base (add_idt_base_out, , `IDTR_VAL, shf_exc_code_out, 1'b0);
+   adder32_w_carry_in add_idt_base (add_idt_base_out, , `IDTR_VAL, shf_exc_code_out, 1'b0);
 
    // Decide MEM_RD_ADDR, MEM_WR_ADDR
    mux4$

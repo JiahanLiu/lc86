@@ -25,7 +25,7 @@ module execute (
    output WB_V_next,
    output [31:0] WB_NEIP_next, 
    output [15:0] WB_NCS_next,
-   output [63:0] WB_CONTROL_STORE_next,
+   output [127:0] WB_CONTROL_STORE_next,
 
    output [1:0] WB_de_datasize_all_next,
    output [2:0] WB_de_aluk_ex_next,

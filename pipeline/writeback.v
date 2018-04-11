@@ -16,7 +16,7 @@ module writeback (
    input WB_V,
    input [31:0] WB_NEIP,
    input [15:0] WB_NCS,
-   input [63:0] CONTROL_STORE,
+   input [127:0] CONTROL_STORE,
    //pseudo-control store signals not from control store but generated in decode
    input [1:0] WB_de_datasize_all,
    input [2:0] WB_de_aluk_ex, 
@@ -66,15 +66,15 @@ module writeback (
    wire v_de_ld_gpr1_wb, v_cs_ld_gpr2_wb, v_cs_ld_gpr3_wb, v_de_dache_write_wb, v_cs_ld_flags_wb;
       //internal data
    wire [31:0] current_flags; 
-   wire data1, data2, data3; 
+   wire [31:0] data1, data2, data3; 
 
-   CMPS_POINTER_LOGIC (cmps_updated_pointer, WB_CMPS_POINTER, WB_de_datasize_all, current_flags[11]); 
+   //CMPS_POINTER_LOGIC (cmps_updated_pointer, WB_CMPS_POINTER, WB_de_datasize_all, current_flags[11]); 
    
    reg32e$ cmps_temp_pointer (CLK, cmps_updated_pointer, cmps_first_pointer, , 1'b1, 1'b1, CS_IS_CMPS_FIRST_UOP_ALL);
    
-   Flags_WB(current_flags, CLK, v_cs_ld_flags_wb, CS_FLAGS_AFFECTED_WB, WB_FLAGS);
+   //Flags_WB(current_flags, CLK, v_cs_ld_flags_wb, CS_FLAGS_AFFECTED_WB, WB_FLAGS);
 
-   Repne_Count_Logic u_Repne_Count_Logic(internal_count, WB_COUNT, CS_IS_FIRST_OF_REPNE_WB, CS_IS_CMPS_SECOND_UOP_ALL, current_flags[6], CLK);
+   //Repne_Count_Logic u_Repne_Count_Logic(internal_count, WB_COUNT, CS_IS_FIRST_OF_REPNE_WB, CS_IS_CMPS_SECOND_UOP_ALL, current_flags[6], CLK);
 
    and2$ u_validate_gpr1(v_de_ld_gpr1_wb, WB_V, WB_de_ld_gpr1_wb);
    and2$ u_validate_gpr2(v_cs_ld_gpr2_wb, WB_V, CS_LD_GPR2_WB);
@@ -100,7 +100,7 @@ module writeback (
    assign out_v_de_ld_gpr3_wb = v_cs_ld_gpr3_wb; 
 
    //DCACHE outputs
-   assign out_de_datasize = de_datasize_all;
+   assign out_de_datasize = WB_de_datasize_all;
    assign Out_Dcache_Data = data1; 
    assign Out_Dcache_Address = WB_ADDRESS; 
 

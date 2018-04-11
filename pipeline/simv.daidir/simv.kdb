@@ -1,0 +1,9 @@
+rc file Version 1.0
+
+[Design]
+COMPILE_PATH=/home/ecelrc/students/anarkhede/micro/lc86/pipeline
+SystemC=FALSE
+UUM=FALSE
+KDB=FALSE
+USE_NOVAS_HOME=FALSE
+TOP=timeunit dff8$ dff16$ jkff8$ jkff16$ buffer$ buffer8$ buffer16$ bufferH1024$ bufferHInv16$ bufferHInv64$ bufferHInv256$ bufferHInv1024$ latch$ latch8$ latch16$ tristateL$ tristate8L$ tristate16L$ tristateH$ tristate8H$ tristate16H$ tristate_bus_driver1$ tristate_bus_driver8$ tristate_bus_driver16$ dff16b$ dff32b$ ioreg8$ ioreg16$ regfile$ ram16b8w$ ram8b4w$ rom4b32w$ rom32b32w$ mux3$ mux3_8$ decoder2_4$ decoder3_8$ syn_cntr8$ pencoder8_3v$ pencoder8_3$ mag_comp4$ alu4$ sram128x8$ sram32x16$ sram32x32$ sar32 carry_lookahead16_sat carry_lookahead16_AF carry_lookahead32 modrm_decoder decode_stage1 mux1_8way mux32_3way TOP 

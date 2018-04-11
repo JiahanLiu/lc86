@@ -1,0 +1,542 @@
+{
+    "jkff16$": [
+        "jkff160x24",
+        "pQavA",
+        "module"
+    ],
+    "timeunit": [
+        "timeunit",
+        "H0Y6L",
+        "module"
+    ],
+    "buffer8$": [
+        "buffer80x24",
+        "QFH1S",
+        "module"
+    ],
+    "tristate16H$": [
+        "tristate16H0x24",
+        "PQH7a",
+        "module"
+    ],
+    "bufferHInv256$": [
+        "bufferHInv2560x24",
+        "dDgCy",
+        "module"
+    ],
+    "dff8$": [
+        "dff80x24",
+        "jQsNd",
+        "module"
+    ],
+    "ioreg8$": [
+        "ioreg80x24",
+        "KEhV6",
+        "module"
+    ],
+    "sram32x16$": [
+        "sram32x160x24",
+        "KVibP",
+        "module"
+    ],
+    "mux2$": [
+        "mux20x24",
+        "gbBs9",
+        "module"
+    ],
+    "mag_comp4$": [
+        "mag_comp40x24",
+        "quacJ",
+        "module"
+    ],
+    "dff16$": [
+        "dff160x24",
+        "SCu9C",
+        "module"
+    ],
+    "bufferH16$": [
+        "bufferH160x24",
+        "bxTVL",
+        "module"
+    ],
+    "tristate_bus_driver16$": [
+        "tristate_bus_driver160x24",
+        "s8L2V",
+        "module"
+    ],
+    "mux4_16$": [
+        "mux4_160x24",
+        "GgUtG",
+        "module"
+    ],
+    "jkff8$": [
+        "jkff80x24",
+        "JgZKg",
+        "module"
+    ],
+    "buffer16$": [
+        "buffer160x24",
+        "vJF8R",
+        "module"
+    ],
+    "latch16$": [
+        "latch160x24",
+        "svdej",
+        "module"
+    ],
+    "buffer$": [
+        "buffer0x24",
+        "FNzcy",
+        "module"
+    ],
+    "or3$": [
+        "or30x24",
+        "PshGg",
+        "module"
+    ],
+    "tristate8L$": [
+        "tristate8L0x24",
+        "F2ANb",
+        "module"
+    ],
+    "bufferH1024$": [
+        "bufferH10240x24",
+        "HE2ZM",
+        "module"
+    ],
+    "bufferHInv16$": [
+        "bufferHInv160x24",
+        "hb0rt",
+        "module"
+    ],
+    "mux32_3way": [
+        "mux32_3way",
+        "wMKsc",
+        "module"
+    ],
+    "ioreg16$": [
+        "ioreg160x24",
+        "nvHk0",
+        "module"
+    ],
+    "bufferHInv64$": [
+        "bufferHInv640x24",
+        "YYuYM",
+        "module"
+    ],
+    "bufferHInv1024$": [
+        "bufferHInv10240x24",
+        "IgGNx",
+        "module"
+    ],
+    "mux3_16$": [
+        "mux3_160x24",
+        "zdbpw",
+        "module"
+    ],
+    "latch$": [
+        "latch0x24",
+        "s37Em",
+        "module"
+    ],
+    "latch8$": [
+        "latch80x24",
+        "nG9Qp",
+        "module"
+    ],
+    "decoder3_8$": [
+        "decoder3_80x24",
+        "CBrar",
+        "module"
+    ],
+    "tristateL$": [
+        "tristateL0x24",
+        "FnCvq",
+        "module"
+    ],
+    "pencoder8_3$": [
+        "pencoder8_30x24",
+        "KDHaM",
+        "module"
+    ],
+    "mag_comp8$": [
+        "mag_comp80x24",
+        "DasqW",
+        "module"
+    ],
+    "tristate16L$": [
+        "tristate16L0x24",
+        "dSMzD",
+        "module"
+    ],
+    "alu4$": [
+        "alu40x24",
+        "AjRvi",
+        "module"
+    ],
+    "tristateH$": [
+        "tristateH0x24",
+        "N5Ba1",
+        "module"
+    ],
+    "tristate8H$": [
+        "tristate8H0x24",
+        "xws7j",
+        "module"
+    ],
+    "ram16b8w$": [
+        "ram16b8w0x24",
+        "cn0fQ",
+        "module"
+    ],
+    "rom32b32w$": [
+        "rom32b32w0x24",
+        "bhE0p",
+        "module"
+    ],
+    "comp4": [
+        "comp4",
+        "kPUiy",
+        "module"
+    ],
+    "tristate_bus_driver1$": [
+        "tristate_bus_driver10x24",
+        "VZaFA",
+        "module"
+    ],
+    "sram32x8$": [
+        "sram32x80x24",
+        "PWhQb",
+        "module"
+    ],
+    "tristate_bus_driver8$": [
+        "tristate_bus_driver80x24",
+        "qL8KW",
+        "module"
+    ],
+    "ram8b4w$": [
+        "ram8b4w0x24",
+        "WaEiL",
+        "module"
+    ],
+    "table_imux3": [
+        "table_imux3",
+        "pIp1i",
+        "udp"
+    ],
+    "dff16b$": [
+        "dff16b0x24",
+        "zTBIE",
+        "module"
+    ],
+    "dff32b$": [
+        "dff32b0x24",
+        "MxKy0",
+        "module"
+    ],
+    "regfile$": [
+        "regfile0x24",
+        "cRE6w",
+        "module"
+    ],
+    "regfile8x8$": [
+        "regfile8x80x24",
+        "VIY5Q",
+        "module"
+    ],
+    "gp_group1": [
+        "gp_group1",
+        "axdd8",
+        "module"
+    ],
+    "ram8b8w$": [
+        "ram8b8w0x24",
+        "HG4gk",
+        "module"
+    ],
+    "carry_lookahead": [
+        "carry_lookahead",
+        "kjshY",
+        "module"
+    ],
+    "execute": [
+        "execute",
+        "sEyU5",
+        "module"
+    ],
+    "rom4b32w$": [
+        "rom4b32w0x24",
+        "qJmpA",
+        "module"
+    ],
+    "chk_needed": [
+        "chk_needed",
+        "FzUP9",
+        "module"
+    ],
+    "mux4$": [
+        "mux40x24",
+        "tp1u2",
+        "module"
+    ],
+    "mux3$": [
+        "mux30x24",
+        "E9zVK",
+        "module"
+    ],
+    "memory_stage": [
+        "memory_stage",
+        "qRR2A",
+        "module"
+    ],
+    "mux2_8$": [
+        "mux2_80x24",
+        "RtsUf",
+        "module"
+    ],
+    "pencoder8_3v$": [
+        "pencoder8_3v0x24",
+        "x8y1J",
+        "module"
+    ],
+    "TOP": [
+        "TOP",
+        "ThQKx",
+        "module"
+    ],
+    "mux3_8$": [
+        "mux3_80x24",
+        "dQyFv",
+        "module"
+    ],
+    "ucontrol_store": [
+        "ucontrol_store",
+        "hRcJw",
+        "module"
+    ],
+    "mux4_8$": [
+        "mux4_80x24",
+        "hGaEL",
+        "module"
+    ],
+    "writeback": [
+        "writeback",
+        "wFN4a",
+        "module"
+    ],
+    "decoder2_4$": [
+        "decoder2_40x24",
+        "QC4rD",
+        "module"
+    ],
+    "sar32": [
+        "sar32",
+        "RKIgA",
+        "module"
+    ],
+    "full_adder": [
+        "full_adder",
+        "BEdzp",
+        "module"
+    ],
+    "gp_group32": [
+        "gp_group32",
+        "dpn5s",
+        "module"
+    ],
+    "syn_cntr8$": [
+        "syn_cntr80x24",
+        "CMdWC",
+        "module"
+    ],
+    "sram128x8$": [
+        "sram128x80x24",
+        "FtFWT",
+        "module"
+    ],
+    "sram32x32$": [
+        "sram32x320x24",
+        "iC8DI",
+        "module"
+    ],
+    "adder32_w_carry_in": [
+        "adder32_w_carry_in",
+        "aqn7z",
+        "module"
+    ],
+    "carry_lookahead16_sat": [
+        "carry_lookahead16_sat",
+        "D68yg",
+        "module"
+    ],
+    "carry_lookahead16_AF": [
+        "carry_lookahead16_AF",
+        "awc5J",
+        "module"
+    ],
+    "carry_lookahead32": [
+        "carry_lookahead32",
+        "u4yqQ",
+        "module"
+    ],
+    "register_file_decoder": [
+        "register_file_decoder",
+        "brpzu",
+        "module"
+    ],
+    "regfile8x64": [
+        "regfile8x64",
+        "nI1Df",
+        "module"
+    ],
+    "register_file": [
+        "register_file",
+        "zZrks",
+        "module"
+    ],
+    "regfile8x16": [
+        "regfile8x16",
+        "kpych",
+        "module"
+    ],
+    "modrm_decoder": [
+        "modrm_decoder",
+        "qPfFN",
+        "module"
+    ],
+    "ZF_logic": [
+        "ZF_logic",
+        "Q4bAJ",
+        "module"
+    ],
+    "prefix_checker": [
+        "prefix_checker",
+        "kTQnj",
+        "module"
+    ],
+    "decode_stage1": [
+        "decode_stage1",
+        "nxxr6",
+        "module"
+    ],
+    "generate1": [
+        "generate1",
+        "GTA0v",
+        "module"
+    ],
+    "decode_stage2": [
+        "decode_stage2",
+        "LIEVa",
+        "module"
+    ],
+    "cmp_regid": [
+        "cmp_regid",
+        "qWMwz",
+        "module"
+    ],
+    "address_generation": [
+        "address_generation",
+        "GCVbk",
+        "module"
+    ],
+    "daa_single_digit": [
+        "daa_single_digit",
+        "L734N",
+        "module"
+    ],
+    "mux1_8way": [
+        "mux1_8way",
+        "yryB3",
+        "module"
+    ],
+    "mux32_2way": [
+        "mux32_2way",
+        "mEKSC",
+        "module"
+    ],
+    "not32_1way_0000": [
+        "not32_1way_0000",
+        "zm8mM",
+        "module"
+    ],
+    "assign_flags": [
+        "assign_flags",
+        "V3Aca",
+        "module"
+    ],
+    "sum1": [
+        "sum1",
+        "N57bS",
+        "module"
+    ],
+    "xnor2$": [
+        "xnor20x24",
+        "i48Ip",
+        "module"
+    ],
+    "sum32_0000": [
+        "sum32_0000",
+        "u6I5N",
+        "module"
+    ],
+    "propagate1": [
+        "propagate1",
+        "zwCxk",
+        "module"
+    ],
+    "or2$": [
+        "or20x24",
+        "HYgzw",
+        "module"
+    ],
+    "nand2$": [
+        "nand20x24",
+        "GnPnt",
+        "module"
+    ],
+    "and2$": [
+        "and20x24",
+        "VFdkN",
+        "module"
+    ],
+    "and3$": [
+        "and30x24",
+        "Z9uSW",
+        "module"
+    ],
+    "and4$": [
+        "and40x24",
+        "mm9mm",
+        "module"
+    ],
+    "or4$": [
+        "or40x24",
+        "Z8whs",
+        "module"
+    ],
+    "table_imux2": [
+        "table_imux2",
+        "BYmPi",
+        "udp"
+    ],
+    "inv1$": [
+        "inv10x24",
+        "NYIg8",
+        "module"
+    ],
+    "...MASTER...": [
+        "SIM",
+        "amcQw",
+        "module"
+    ],
+    "latch_sr": [
+        "latch_sr",
+        "H4YNa",
+        "udp"
+    ],
+    "table_imux4": [
+        "table_imux4",
+        "i5D5s",
+        "udp"
+    ]
+}

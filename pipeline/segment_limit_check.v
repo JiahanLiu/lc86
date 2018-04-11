@@ -40,7 +40,7 @@ module segment_limit_check (
    // select to subtract 0, 1, 3, 7 from segment limit
    mux4$ mux_data_size [31:0] (mux_data_size_out, 32'h00000000, 32'hFFFFFFFF, 32'hFFFFFFFD, 32'hFFFFFFF9, DATA_SIZE[0], DATA_SIZE[1]);
 
-   adder32
+   adder32_w_carry_in
       add_sib_si (add_sib_si_out, , ADD_BASE_DISP, MUX_SIB_SI, 1'b0),
       add_limit (add_limit_out, , mux_seg_out, mux_data_size_out, 1'b0);
  

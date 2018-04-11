@@ -57,7 +57,7 @@ module memory_stage (
 
    mux2$
       mux_imm [31:0] (mux_imm_out, 32'b0, B, CS_MUX_IMM_ADD_ME);
-   adder32
+   adder32_w_carry_in
       add_xchg (SP_XCHG_DATA_OUT, , mux_imm_out, SP_XCHG_DATA, 1'b0);
 
    assign MEM_RD_ADDR_OUT = MEM_RD_ADDR; // TODO: implement TLB lookup

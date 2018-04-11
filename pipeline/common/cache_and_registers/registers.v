@@ -29,7 +29,7 @@ module register_file (CLK,
 		GPRWE0, GPRWE1, GPRWE2;
    input WE0, WE1, WE2;     // WRITE ENABLE SIGNALS
 
-   input [16:0] CS_DIN;
+   input [15:0] CS_DIN;
    input [31:0] EIP_DIN, EFLAGS_DIN;
 
    input 	LD_CS, LD_EIP, LD_EFLAGS;

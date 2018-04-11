@@ -145,7 +145,7 @@ and2$ and33h (out33h, out29h, out32h);
 
 and3$ and34h (out34h, write_id2, write_id1, write_id0_b);
 and2$ and35h (out35h, write_size1_b, write_size0_b);
-and2$ and36h (out36h, out34h, out36h);
+and2$ and36h (out36h, out34h, out35h);
 
 or3$ or6 (write_lh[2], out31h, out33h, out36h);
 

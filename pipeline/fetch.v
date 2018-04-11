@@ -15,7 +15,8 @@ module fetch (
     output icache_en,
     output [31:0] icache_address,
     output segment_limit_exception,
-    output [127:0] IR,
+    input [127:0] IR,
+    output [127:0] IR_OUT,
 
     output [3:0] instr_length_updt,
     output [15:0] opcode,
@@ -43,7 +44,7 @@ module fetch (
    reg128e$ u_FE_buf_2(clk, FE_buf_2_in, FE_buf_2_out, , reset, set,FE_buf_2_en);
    reg128e$ u_FE_buf_3(clk, FE_buf_3_in, FE_buf_3_out, , reset, set, FE_buf_3_en);
 
-
+   assign IR_OUT = IR;
    wire [5:0] 	 read_ptr;
    //temporary read_ptr assign until the fetch is finished
    assign read_ptr = 0;
@@ -52,7 +53,7 @@ module fetch (
    assign FE_buf_1_in = 128'hABCD1234;
    assign FE_buf_2_in = 128'hABCD1234;
    assign FE_buf_3_in = 128'hABCD1234;
-   FE_full_shifter(FE_buf_0_out, FE_buf_1_out, FE_buf_2_out, FE_buf_3_out, read_ptr, IR);
+   FE_full_shifter FE_full_shifter1 (FE_buf_0_out, FE_buf_1_out, FE_buf_2_out, FE_buf_3_out, read_ptr, IR);
 
    decode_stage1 u_decode_stage1 (clk, set, reset,
 				  IR, ,
@@ -95,20 +96,22 @@ module shift128$(input [127:0] Din_low,
 	wire [3:0] array [127:0];
 	wire [1:0] mux_array [127:0];
 	genvar i;
+    generate
 for(i=0;i<8;i=i+1)
   begin : generate_loop
   //Allowed since i is constant when the loop is unrolled
   assign array[i] = {Din_high[127-i*8:0], Din_low[127:127-i*8]};
   end
+    endgenerate
 
 //muxes to select shifted value, first round of muxes
-mux4_128$(mux_array[0],array[0],array[1],array[2],array[3],amnt[0],amnt[1]);
-mux4_128$(mux_array[1],array[4],array[5],array[6],array[7],amnt[0],amnt[1]);
-mux4_128$(mux_array[2],array[8],array[9],array[10],array[11],amnt[0],amnt[1]);
-mux4_128$(mux_array[3],array[12],array[13],array[14],array[15],amnt[0],amnt[1]);
+mux4_128$ mux1 (mux_array[0],array[0],array[1],array[2],array[3],amnt[0],amnt[1]);
+mux4_128$ mux2 (mux_array[1],array[4],array[5],array[6],array[7],amnt[0],amnt[1]);
+mux4_128$ mux3 (mux_array[2],array[8],array[9],array[10],array[11],amnt[0],amnt[1]);
+mux4_128$ mux4 (mux_array[3],array[12],array[13],array[14],array[15],amnt[0],amnt[1]);
 
 //last round of muxes
-mux4_128$(Dout,mux_array[0],mux_array[0],mux_array[0],mux_array[0],amnt[2],amnt[3]);
+mux4_128$ mux5 (Dout,mux_array[0],mux_array[0],mux_array[0],mux_array[0],amnt[2],amnt[3]);
 	
 
 endmodule
@@ -118,11 +121,13 @@ module mux4_128$(output [127:0] Y,
 		input [127:0] IN0,input [127:0] IN1, input [127:0] IN2,input [127:0] IN3,
 		input S0, input S1);
 genvar i;
+generate
 for(i=0;i<8;i=i+1)
   begin : generate_loop
-	mux4_16$(Y[i*8 +7:i*8], IN0[i*8 +7:i*8], IN1[i*8 +7:i*8], IN2[i*8 +7:i*8], IN3[i*8 +7:i*8],
+	mux4_16$ mux6 (Y[i*8 +7:i*8], IN0[i*8 +7:i*8], IN1[i*8 +7:i*8], IN2[i*8 +7:i*8], IN3[i*8 +7:i*8],
 			S0, S1);
   end
+  endgenerate
 
 endmodule
 
