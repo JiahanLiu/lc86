@@ -48,8 +48,8 @@ UNAME=/bin/uname
 TOOL_HOME=/usr/local/packages/synopsys_2015/vcs-mx/linux64
 TCLSH=/usr/bin/tclsh
 SSH_TTY=/dev/pts/5
-SSH_CONNECTION=172.29.230.156 57348 146.6.221.77 22
-SSH_CLIENT=172.29.230.156 57348 22
+SSH_CONNECTION=10.145.101.30 58305 146.6.221.77 22
+SSH_CLIENT=10.145.101.30 58305 22
 SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
 SPECMAM_PATH_modshare=/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/soc_verification_lib/e_ex_lib:1:/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/util_lib:1:/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/misc/links:1:/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/misc:1:/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/soc_verification_lib/abv_formal:1:/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/soc_verification_lib/uvm_e_ex_lib/interface_uvc_lib:1:/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/ovm_ex_lib/e_ex_lib:1:/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/soc_verification_lib/uvm_e_ex_lib/apb_subsystem:1:/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/soc_verification_lib/uvm_e_ex_lib:1
 SPECMAM_PATH=/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/soc_verification_lib/abv_formal:/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/soc_verification_lib/e_ex_lib:/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/util_lib:/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/misc/links:/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/ovm_ex_lib/e_ex_lib:/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/misc:/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/soc_verification_lib/uvm_e_ex_lib/interface_uvc_lib:/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/soc_verification_lib/uvm_e_ex_lib/apb_subsystem:/usr/local/packages/cadence_2015/incisiv13.2/kits/VerificationKit/soc_verification_lib/uvm_e_ex_lib
@@ -108,7 +108,7 @@ CDK_DIR=/usr/local/packages/ncsu-cdk-1-6-0-beta
 1452058252 /home/projects/courses/spring_16/ee382n-16785/lib/lib1
 1523138926 ../control_store/control_store_signals.v
 1523138926 ../control_store/control_store_wires.v
-1523424790 ./decode_agen.v
+1523467227 ./decode_agen.v
 1523422579 ./writeback.v
 1523422164 ./memory_stage.v
 1523423979 ./execute.v
@@ -121,7 +121,7 @@ CDK_DIR=/usr/local/packages/ncsu-cdk-1-6-0-beta
 1523422133 ./address_generation.v
 1523422038 ./segment_limit_check.v
 1522700949 ./reg_dependency_check.v
-1523418017 ../decode/decode_stage2.v
+1523463772 ../decode/decode_stage2.v
 1522700949 ../decode/decode_stage1.v
 1523141247 ../decode/ucontrol_store.v
 1522434829 ../decode/sib_selector.v
@@ -156,4 +156,4 @@ CDK_DIR=/usr/local/packages/ncsu-cdk-1-6-0-beta
 1448427877 /usr/local/packages/synopsys_2015/vcs-mx/linux64/lib/libvirsim.so
 1448427558 /usr/local/packages/synopsys_2015/vcs-mx/linux64/lib/liberrorinf.so
 1448427538 /usr/local/packages/synopsys_2015/vcs-mx/linux64/lib/libsnpsmalloc.so
-1523424807 simv.daidir
+1523467238 simv.daidir

@@ -32,6 +32,9 @@ Scal
 TOP.u_pipeline.u_address_generation.mux_wr_addr
 in3
 Scal
+TOP.u_pipeline.u_decode_stage1.mux_segID
+in3
+Scal
 ZF_logic
 ZF_11_8
 Scal
@@ -722,9 +725,6 @@ All
 decode_stage1
 segID_sel
 All
-decode_stage1.mux_segID
-in3
-Scal
 decode_stage2
 CS_ALUK_DE
 All

@@ -1,0 +1,76 @@
+Chronologic VCS simulator copyright 1991-2015
+Contains Synopsys proprietary information.
+Compiler version K-2015.09-SP1_Full64; Runtime version K-2015.09-SP1_Full64;  Apr 11 12:20 2018
+VCD+ Writer K-2015.09-SP1_Full64 Copyright (c) 1991-2015 by Synopsys Inc.
+at time 10, modrm_sel = 5
+at time 10, sib = 0a
+at time 10, modrm = c0
+at time 10, segID = 0
+at time 10, offset_size = 0
+at time 10, offset_present = 0
+at time 10, disp_sel = 2
+at time 10, imm_sel = 2
+at time 10, disp_size = 0
+at time 10, disp_present = 0
+at time 10, sib_present = 0
+at time 10, imm_size = 0
+at time 10, imm_present = 1
+at time 10, modrm_present = 1
+at time 10, repeat_prefix = 0
+at time 10, operand_override = 0
+at time 10, segment_override = z
+at time 10, prefix_present = 0
+at time 10, prefix_size = 0
+at time 10, instr_length_updt = 3
+at time 10, modrm_sel = 5
+at time 10, opcode = 0083
+at time 30, modrm_sel = 5
+at time 30, sib = 0a
+at time 30, modrm = c0
+at time 30, segID = 0
+at time 30, offset_size = 0
+at time 30, offset_present = 0
+at time 30, disp_sel = 2
+at time 30, imm_sel = 2
+at time 30, disp_size = 0
+at time 30, disp_present = 0
+at time 30, sib_present = 0
+at time 30, imm_size = 0
+at time 30, imm_present = 1
+at time 30, modrm_present = 1
+at time 30, repeat_prefix = 0
+at time 30, operand_override = 0
+at time 30, segment_override = z
+at time 30, prefix_present = 0
+at time 30, prefix_size = 0
+at time 30, instr_length_updt = 3
+at time 30, modrm_sel = 5
+at time 30, opcode = 0083
+at time 50, modrm_sel = 5
+at time 50, sib = 0a
+at time 50, modrm = c0
+at time 50, segID = 0
+at time 50, offset_size = 0
+at time 50, offset_present = 0
+at time 50, disp_sel = 2
+at time 50, imm_sel = 2
+at time 50, disp_size = 0
+at time 50, disp_present = 0
+at time 50, sib_present = 0
+at time 50, imm_size = 0
+at time 50, imm_present = 1
+at time 50, modrm_present = 1
+at time 50, repeat_prefix = 0
+at time 50, operand_override = 0
+at time 50, segment_override = z
+at time 50, prefix_present = 0
+at time 50, prefix_size = 0
+at time 50, instr_length_updt = 3
+at time 50, modrm_sel = 5
+at time 50, opcode = 0083
+$finish called from file "./decode_agen.v", line 26.
+$finish at simulation time   60.0 ns
+           V C S   S i m u l a t i o n   R e p o r t 
+Time: 60000 ps
+CPU Time:      0.780 seconds;       Data structure size:   3.2Mb
+Wed Apr 11 12:20:52 2018

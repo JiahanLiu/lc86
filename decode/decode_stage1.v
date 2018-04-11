@@ -1,7 +1,11 @@
 module decode_stage1 (
     input clk, set, reset, 
     input [127:0] IR, 
-    
+    input [31:0] EIP,
+    input [15:0] CS,
+
+    output [31:0] EIP_OUT, 
+    output [15:0] CS_OUT,
     output [127:0] IR_OUT,
     output [3:0] instr_length_updt,
     output [15:0] opcode, 
@@ -31,6 +35,7 @@ wire isPrefix3, isOpcode3, operand_override3, segment_override3, repeat_prefix3;
 wire [2:0] segID1, segID2, segID3;
 wire isPrefix4, isOpcode4;
 wire isPrefix5, isOpcode5;
+wire out4a, out5a, out6a, out7a, out8a, out9a;
 
 // Prefix Decoder
 wire [1:0] segID_sel;
@@ -39,6 +44,8 @@ wire [1:0] segID_sel;
 wire [2:0] opcode_sel;
 wire [7:0] out1m, out2m;
 
+assign CS_OUT = CS;
+assign EIP_OUT = EIP;
 assign IR_OUT = IR;
 
 prefix_checker u_prefix_checker1 (.instr_byte(IR[127:120]), .isPrefix(isPrefix1), .isOpcode(isOpcode1),
@@ -66,12 +73,21 @@ prefix_checker u_prefix_checker5 (.instr_byte(IR[95:88]), .isPrefix(isPrefix5), 
     .repeat_prefix(), .segID()
 );
 
-or3$ or1 (operand_override, operand_override1, operand_override2, operand_override3);
-or3$ or2 (repeat_prefix, repeat_prefix1, repeat_prefix2, repeat_prefix3);
+and4$ and4 (out4a, isPrefix1, isPrefix2, isPrefix3, operand_override3);
+and3$ and5 (out5a, isPrefix1, isPrefix2, operand_override2);
+and2$ and6 (out6a, isPrefix1, operand_override1);
+
+and4$ and7 (out7a, isPrefix1, isPrefix2, isPrefix3, repeat_prefix3);
+and3$ and8 (out8a, isPrefix1, isPrefix2, repeat_prefix2);
+and2$ and9 (out9a, isPrefix1, repeat_prefix1);
+
+or3$ or1 (operand_override, out4a, out5a, out6a);
+or3$ or2 (repeat_prefix, out7a, out8a, out9a);
 
 prefix_decoder u_prefix_decoder (.isPrefix1(isPrefix1), .isPrefix2(isPrefix2), .isPrefix3(isPrefix3),
     .isSeg_ovrr1(segment_override1), .isSeg_ovrr2(segment_override2), .isSeg_ovrr3(segment_override3),
-    .prefix_present(prefix_present), .prefix_length(prefix_size), .segID_sel(segID_sel)
+    .prefix_present(prefix_present), .prefix_length(prefix_size), .segID_sel(segID_sel),
+    .segment_override(segment_override)
 );
 
 mux4$ mux_segID[2:0] (segID, segID1, segID2, segID3, , segID_sel[0], segID_sel[1]);
@@ -100,7 +116,7 @@ modrm_pointer u_modrm_pointer (.opcode_size(opcode_size), .prefix_present(prefix
 
 modrm_selector u_modrm_selector (.instr_buf(IR[119:80]), .modrm_sel(modrm_sel), .modrm(modrm) );
 
-sib_disp_detector u_sib_disp_detector (.modrm(modrm), .disp_present(disp_present), .disp_size(disp_size),
+sib_disp_detector u_sib_disp_detector (.modrm(modrm), .modrm_present(modrm_present), .disp_present(disp_present), .disp_size(disp_size),
     .sib_present(sib_present)
 );
 
