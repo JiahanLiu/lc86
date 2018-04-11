@@ -315,13 +315,15 @@ decode_stage2 u_decode_stage2(
    wire        AG_D2_MEM_RD_ME_OUT, AG_D2_MEM_WR_WB_OUT;
    wire        AG_D2_LD_GPR1_WB_OUT, AG_D2_LD_MM_WB_OUT;
    wire        AG_DEP_STALL_OUT, AG_SEG_LIMIT_EXC_OUT;
+   wire [127:0] D2_CONTROL_STORE;
+   wire [127:0] AG_PS_CONTROL_STORE_OUT;
    
    wire [31:0] D2_OUT1_AG_PS, D2_OUT2_AG_PS, AG_PS_IN1, AG_PS_IN2;
    wire [31:0] D2_CS_OUT32;
 
    reg32e$
-      u_reg_ag_ps_eip (CLK, AG,PS_EIP, D2_EIP_OUT, , CLR, PRE, LD_AG),
-      u_reg_ag_ps_cs (CLK, , {AG_PS_CS_NC, AG_PS_CS}, D2_CS_OUT32, , CLR, PRE, LD_AG);
+      u_reg_ag_ps_eip (CLK, AG_PS_EIP, D2_EIP_OUT, , CLR, PRE, LD_AG),
+      u_reg_ag_ps_cs (CLK, {AG_PS_CS_NC, AG_PS_CS}, D2_CS_OUT32, , CLR, PRE, LD_AG);
    assign D2_CS_OUT = D2_CS_OUT32[15:0];
 
    reg64e$
@@ -398,6 +400,7 @@ decode_stage2 u_decode_stage2(
    wire [31:0] ME_PS_NEIP;
    wire [15:0] ME_PS_NCS, ME_PS_NCS_NC;
    wire [127:0] ME_PS_CONTROL_STORE;
+   wire [127:0] ME_PS_CONTROL_STORE_OUT;
 
    wire [31:0] ME_PS_A, ME_PS_B;
    wire [63:0] ME_PS_MM_A, ME_PS_MM_B;
@@ -436,6 +439,7 @@ decode_stage2 u_decode_stage2(
    wire [31:0] AG_OUT1_ME_PS, ME_PS_IN1;
    wire LD_ME;
    wire [31:0] AG_NCS_OUT32;
+   wire [127:0] AG_CONTROL_STORE;
 
    reg32e$
      u_reg_me_ps_neip (CLK, ME_PS_NEIP, AG_NEIP_OUT, , CLR, PRE, LD_ME),
