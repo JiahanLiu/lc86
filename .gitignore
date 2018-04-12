@@ -7,3 +7,15 @@ pipeline/transcript
 *transcript
 lc86.sublime-project
 lc86.sublime-workspace
+
+# cadence vcs compilation/simulation
+####################################
+DVEfiles/
+csrc/
+simv
+simv.daidir
+*.key
+*.vpd
+*.vpd.*
+*.old
+*.png

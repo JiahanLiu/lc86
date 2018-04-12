@@ -94,6 +94,8 @@ module address_generation (
    // Generate next CS register value
    mux2$ mux_cseg [15:0] (NCS_OUT, CS, DISP32[15:0], CS_MUX_NEXT_CSEG_AG);
    
+   assign CONTROL_STORE_OUT = CONTROL_STORE;
+
    // Generate A and B latch values
    mux4$
       mux_a [31:0] (A_OUT, SR1_DATA, {16'b0, SEG1_DATA}, {16'b0, SEG2_DATA}, {16'b0, CS}, CS_MUX_A_AG[0], CS_MUX_A_AG[1]);
