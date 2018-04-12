@@ -79,18 +79,21 @@ def generate_signals(filename):
                             romfilelist[rom_num][j].write("@%02x" % (rom_addr))
                             romfilelist[rom_num][j].write(" // %s (%s)\n" % (desc, opcode_full))
                     elif col_num >= signalcol and col_num <= maxcol:
-                        if entries:
-                            if col_num < (signalcol + 64):
-                                current_row[0].append(signal)
-                            else:
-                                current_row[1].append(signal)
+                        if col_num < (signalcol + 64):
+                            current_row[0].append(signal)
+                        else:
+                            current_row[1].append(signal)
+
                         if col_num < (signalcol + 64): # first set of roms 
                             romfilelist[rom_num][0].write(signal)
                         else:
                             romfilelist[rom_num][1].write(signal)
                     col_num += 1
                 for j in xrange(0, 2):
-                    romfilelist[rom_num][j].write("\n")
+                    if 'x' in current_row[j]:
+                        romfilelist[rom_num][j].write("\n")
+                    else:
+                        romfilelist[rom_num][j].write("  // 0x%X\n" % int(''.join(current_row[j]), 2))
 
                 reg_offset = 0
                 if entries == 7:
