@@ -4,7 +4,8 @@ module register_file_decoder (
     output [7:0] write_hh,
     output [7:0] write_hl,
     output [7:0] write_lh,
-    output [7:0] write_ll
+    output [7:0] write_ll,
+    output sh
 );
 
 wire out1a, out2a, out4a, out5a, out7a, out8a, out10a, out11a;
@@ -17,6 +18,7 @@ wire out34h, out35h, out36h, out37h, out38h, out39h, out40h, out50h;
 wire out51h, out52h;
 wire out1l, out2l, out3l, out4l, out5l, out6l, out7l, out8l, out9l;
 wire out10l, out11l, out12l, out13l, out14l, out15l, out16l;
+wire out1n, out2n, out3n, out4n, out5n, out6n, out7n, out8n, out9n, out10n, out11n, out12n;
 
 inv1$ inv1 (write_size0_b, write_size[0]);
 inv1$ inv2 (write_size1_b, write_size[1]);
@@ -29,6 +31,28 @@ assign write_size0 = write_size[0];
 assign write_id2 = write_id[2];
 assign write_id1 = write_id[1];
 assign write_id0 = write_id[0];
+
+// Shift the [7:0] to [15:8] for writing to the AH
+// sh = (write_id2 &write_id1 &write_id0 &!write_size1 &!write_size0) | (write_id2 &write_id1
+//      &!write_id0 &!write_size1 &!write_size0) | (write_id2 &!write_id1 &write_id0 &!write_size1
+//      &!write_size0) | (write_id2 &!write_id1 &!write_id0 &!write_size1 &!write_size0);
+and3$ and1n (out1n, write_id2, write_id1, write_id0);
+and2$ and2n (out2n, write_size1_b, write_size0_b);
+and2$ and3n (out3n, out1n, out2n);
+
+and3$ and4n (out4n, write_id2, write_id1, write_id0_b);
+and2$ and5n (out5n, write_size1_b, write_size0_b);
+and2$ and6n (out6n, out4n, out5n);
+
+and3$ and7n (out7n, write_id2, write_id1_b, write_id0);
+and2$ and8n (out8n, write_size1_b, write_size0_b);
+and2$ and9n (out9n, out7n, out8n);
+
+and3$ and10n (out10n, write_id2, write_id1_b, write_id0_b);
+and2$ and11n (out11n, write_size1_b, write_size0_b);
+and2$ and12n (out12n, out10n, out11n);
+
+or4$ or1n (sh, out3n, out6n, out9n, out12n);
 
 //Write_en for reg[31:24]
 // whh7 = (write_id2 &write_id1 &write_id0 &write_size1 &!write_size0);

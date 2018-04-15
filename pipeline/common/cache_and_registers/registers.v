@@ -44,6 +44,15 @@ module register_file (CLK,
 	       
    wire [15:0] cs_unused;
    
+   //    input clk,
+   // input [31:0] result1, result2, result3,
+   // input [2:0] SR1, SR2, SR3, SR4,
+   // input [1:0]	RE1, RE2, RE3, RE4,
+   // input [2:0] DR1, DR2, DR3,
+   // input write_DR1, write_DR2, write_DR3,
+   // input [1:0] WE1, WE2, WE3,
+   // output [31:0] regA, regB, regC, regD
+
    regfile8x16  segr (SEG_DIN, SEGID1, SEGID2, 1'b1, 1'b1, WRSEGID, SEGWE, SEGDOUT1, SEGDOUT2, CLK);
    regfile8x64  mmr  (MM_DIN, MMID1, MMID2, 1'b1, 1'b1, WRMMID, MMWE, MMDOUT1, MMDOUT2, CLK);
    regfile8x32e gpr  (CLK, GPR_DIN0, GPR_DIN1, GPR_DIN2, 
@@ -203,15 +212,38 @@ wire sr2_sel0, sr2_sel1, sr2_sel2, sr2_sel3;
 wire sr3_sel0, sr3_sel1, sr3_sel2, sr3_sel3;
 wire sr4_sel0, sr4_sel1, sr4_sel2, sr4_sel3;
 wire RE10_b, RE20_b, RE30_b, RE40_b;
+wire RE11_b, RE21_b, RE31_b, RE41_b;
 wire outas1, outas2, outas3, outas4;
+wire outr1, outr2, outr3, outr4;
+wire sel12, sel22, sel32, sel42;
+wire clk_n;
+wire [7:0] res1, res2, res3;
+wire [31:0] result1_m, result2_m, result3_m;
+wire sh1, sh2, sh3;
 
 bufferH16$ buf1 (write_DR1_buf, write_DR1);
 bufferH16$ buf2 (write_DR2_buf, write_DR2);
 bufferH16$ buf3 (write_DR3_buf, write_DR3);
 
-register_file_decoder u_register_file_decoder1 (DR1, WE1, write_hh_en1, write_hl_en1, write_lh_en1, write_ll_en1);
-register_file_decoder u_register_file_decoder2 (DR2, WE2, write_hh_en2, write_hl_en2, write_lh_en2, write_ll_en2);
-register_file_decoder u_register_file_decoder3 (DR3, WE3, write_hh_en3, write_hl_en3, write_lh_en3, write_ll_en3);
+register_file_decoder u_register_file_decoder1 (DR1, WE1, write_hh_en1, write_hl_en1, write_lh_en1, write_ll_en1, sh1);
+register_file_decoder u_register_file_decoder2 (DR2, WE2, write_hh_en2, write_hl_en2, write_lh_en2, write_ll_en2, sh2);
+register_file_decoder u_register_file_decoder3 (DR3, WE3, write_hh_en3, write_hl_en3, write_lh_en3, write_ll_en3, sh3);
+
+mux2_8$ muxr1 (res1, result1[15:8], result1[7:0], sh1);
+mux2_8$ muxr2 (res2, result2[15:8], result2[7:0], sh2);
+mux2_8$ muxr3 (res3, result3[15:8], result3[7:0], sh3);
+
+assign result1_m[15:8] = res1;
+assign result2_m[15:8] = res2;
+assign result3_m[15:8] = res3;
+
+assign result1_m[31:16] = result1[31:16];
+assign result2_m[31:16] = result2[31:16];
+assign result3_m[31:16] = result3[31:16];
+
+assign result1_m[7:0] = result1[7:0];
+assign result2_m[7:0] = result2[7:0];
+assign result3_m[7:0] = result3[7:0];
 
 and2$ andw1[7:0] (outw1, write_hh_en1, write_DR1_buf);
 and2$ andw2[7:0] (outw2, write_hl_en1, write_DR1_buf);
@@ -253,7 +285,7 @@ inv1$ inv9[7:0] (write_lh_en3_b, write_lh_en3);
 inv1$ inv10[7:0] (write_ll_en1_b, write_ll_en1);
 inv1$ inv11[7:0] (write_ll_en2_b, write_ll_en2);
 inv1$ inv12[7:0] (write_ll_en3_b, write_ll_en3);
-
+inv1$ inv_clk (clk_n, clk);
 
 // Write the correct data
 and3$ and2[7:0] (r_sel1_hh, write_hh_en1_b, write_hh_en2_b, write_hh_en3);
@@ -268,83 +300,85 @@ and3$ and7[7:0] (r_sel0_lh, write_lh_en1_b, write_lh_en2, write_lh_en3_b);
 and3$ and8[7:0] (r_sel1_ll, write_ll_en1_b, write_ll_en2_b, write_ll_en3);
 and3$ and9[7:0] (r_sel0_ll, write_ll_en1_b, write_ll_en2, write_ll_en3_b);
 
+ 
 
-mux4_8$ mux0_hh[3:0] (write_data0_hh, result1, result2, result3, , r_sel0_hh[0], r_sel1_hh[0]);
-mux4_8$ mux1_hh[3:0] (write_data1_hh, result1, result2, result3, , r_sel0_hh[1], r_sel1_hh[1]);
-mux4_8$ mux2_hh[3:0] (write_data2_hh, result1, result2, result3, , r_sel0_hh[2], r_sel1_hh[2]);
-mux4_8$ mux3_hh[3:0] (write_data3_hh, result1, result2, result3, , r_sel0_hh[3], r_sel1_hh[3]);
-mux4_8$ mux4_hh[3:0] (write_data4_hh, result1, result2, result3, , r_sel0_hh[4], r_sel1_hh[4]);
-mux4_8$ mux5_hh[3:0] (write_data5_hh, result1, result2, result3, , r_sel0_hh[5], r_sel1_hh[5]);
-mux4_8$ mux6_hh[3:0] (write_data6_hh, result1, result2, result3, , r_sel0_hh[6], r_sel1_hh[6]);
-mux4_8$ mux7_hh[3:0] (write_data7_hh, result1, result2, result3, , r_sel0_hh[7], r_sel1_hh[7]);
 
-mux4_8$ mux0_hl[3:0] (write_data0_hl, result1, result2, result3, , r_sel0_hl[0], r_sel1_hl[0]);
-mux4_8$ mux1_hl[3:0] (write_data1_hl, result1, result2, result3, , r_sel0_hl[1], r_sel1_hl[1]);
-mux4_8$ mux2_hl[3:0] (write_data2_hl, result1, result2, result3, , r_sel0_hl[2], r_sel1_hl[2]);
-mux4_8$ mux3_hl[3:0] (write_data3_hl, result1, result2, result3, , r_sel0_hl[3], r_sel1_hl[3]);
-mux4_8$ mux4_hl[3:0] (write_data4_hl, result1, result2, result3, , r_sel0_hl[4], r_sel1_hl[4]);
-mux4_8$ mux5_hl[3:0] (write_data5_hl, result1, result2, result3, , r_sel0_hl[5], r_sel1_hl[5]);
-mux4_8$ mux6_hl[3:0] (write_data6_hl, result1, result2, result3, , r_sel0_hl[6], r_sel1_hl[6]);
-mux4_8$ mux7_hl[3:0] (write_data7_hl, result1, result2, result3, , r_sel0_hl[7], r_sel1_hl[7]);
+mux4_8$ mux0_hh[3:0] (write_data0_hh, result1_m, result2_m, result3_m, , r_sel0_hh[0], r_sel1_hh[0]);
+mux4_8$ mux1_hh[3:0] (write_data1_hh, result1_m, result2_m, result3_m, , r_sel0_hh[1], r_sel1_hh[1]);
+mux4_8$ mux2_hh[3:0] (write_data2_hh, result1_m, result2_m, result3_m, , r_sel0_hh[2], r_sel1_hh[2]);
+mux4_8$ mux3_hh[3:0] (write_data3_hh, result1_m, result2_m, result3_m, , r_sel0_hh[3], r_sel1_hh[3]);
+mux4_8$ mux4_hh[3:0] (write_data4_hh, result1_m, result2_m, result3_m, , r_sel0_hh[4], r_sel1_hh[4]);
+mux4_8$ mux5_hh[3:0] (write_data5_hh, result1_m, result2_m, result3_m, , r_sel0_hh[5], r_sel1_hh[5]);
+mux4_8$ mux6_hh[3:0] (write_data6_hh, result1_m, result2_m, result3_m, , r_sel0_hh[6], r_sel1_hh[6]);
+mux4_8$ mux7_hh[3:0] (write_data7_hh, result1_m, result2_m, result3_m, , r_sel0_hh[7], r_sel1_hh[7]);
 
-mux4_8$ mux0_lh[3:0] (write_data0_lh, result1, result2, result3, , r_sel0_lh[0], r_sel1_lh[0]);
-mux4_8$ mux1_lh[3:0] (write_data1_lh, result1, result2, result3, , r_sel0_lh[1], r_sel1_lh[1]);
-mux4_8$ mux2_lh[3:0] (write_data2_lh, result1, result2, result3, , r_sel0_lh[2], r_sel1_lh[2]);
-mux4_8$ mux3_lh[3:0] (write_data3_lh, result1, result2, result3, , r_sel0_lh[3], r_sel1_lh[3]);
-mux4_8$ mux4_lh[3:0] (write_data4_lh, result1, result2, result3, , r_sel0_lh[4], r_sel1_lh[4]);
-mux4_8$ mux5_lh[3:0] (write_data5_lh, result1, result2, result3, , r_sel0_lh[5], r_sel1_lh[5]);
-mux4_8$ mux6_lh[3:0] (write_data6_lh, result1, result2, result3, , r_sel0_lh[6], r_sel1_lh[6]);
-mux4_8$ mux7_lh[3:0] (write_data7_lh, result1, result2, result3, , r_sel0_lh[7], r_sel1_lh[7]);
+mux4_8$ mux0_hl[3:0] (write_data0_hl, result1_m, result2_m, result3_m, , r_sel0_hl[0], r_sel1_hl[0]);
+mux4_8$ mux1_hl[3:0] (write_data1_hl, result1_m, result2_m, result3_m, , r_sel0_hl[1], r_sel1_hl[1]);
+mux4_8$ mux2_hl[3:0] (write_data2_hl, result1_m, result2_m, result3_m, , r_sel0_hl[2], r_sel1_hl[2]);
+mux4_8$ mux3_hl[3:0] (write_data3_hl, result1_m, result2_m, result3_m, , r_sel0_hl[3], r_sel1_hl[3]);
+mux4_8$ mux4_hl[3:0] (write_data4_hl, result1_m, result2_m, result3_m, , r_sel0_hl[4], r_sel1_hl[4]);
+mux4_8$ mux5_hl[3:0] (write_data5_hl, result1_m, result2_m, result3_m, , r_sel0_hl[5], r_sel1_hl[5]);
+mux4_8$ mux6_hl[3:0] (write_data6_hl, result1_m, result2_m, result3_m, , r_sel0_hl[6], r_sel1_hl[6]);
+mux4_8$ mux7_hl[3:0] (write_data7_hl, result1_m, result2_m, result3_m, , r_sel0_hl[7], r_sel1_hl[7]);
 
-mux4_8$ mux0_ll[3:0] (write_data0_ll, result1, result2, result3, , r_sel0_ll[0], r_sel1_ll[0]);
-mux4_8$ mux1_ll[3:0] (write_data1_ll, result1, result2, result3, , r_sel0_ll[1], r_sel1_ll[1]);
-mux4_8$ mux2_ll[3:0] (write_data2_ll, result1, result2, result3, , r_sel0_ll[2], r_sel1_ll[2]);
-mux4_8$ mux3_ll[3:0] (write_data3_ll, result1, result2, result3, , r_sel0_ll[3], r_sel1_ll[3]);
-mux4_8$ mux4_ll[3:0] (write_data4_ll, result1, result2, result3, , r_sel0_ll[4], r_sel1_ll[4]);
-mux4_8$ mux5_ll[3:0] (write_data5_ll, result1, result2, result3, , r_sel0_ll[5], r_sel1_ll[5]);
-mux4_8$ mux6_ll[3:0] (write_data6_ll, result1, result2, result3, , r_sel0_ll[6], r_sel1_ll[6]);
-mux4_8$ mux7_ll[3:0] (write_data7_ll, result1, result2, result3, , r_sel0_ll[7], r_sel1_ll[7]);
+mux4_8$ mux0_lh[3:0] (write_data0_lh, result1_m, result2_m, result3_m, , r_sel0_lh[0], r_sel1_lh[0]);
+mux4_8$ mux1_lh[3:0] (write_data1_lh, result1_m, result2_m, result3_m, , r_sel0_lh[1], r_sel1_lh[1]);
+mux4_8$ mux2_lh[3:0] (write_data2_lh, result1_m, result2_m, result3_m, , r_sel0_lh[2], r_sel1_lh[2]);
+mux4_8$ mux3_lh[3:0] (write_data3_lh, result1_m, result2_m, result3_m, , r_sel0_lh[3], r_sel1_lh[3]);
+mux4_8$ mux4_lh[3:0] (write_data4_lh, result1_m, result2_m, result3_m, , r_sel0_lh[4], r_sel1_lh[4]);
+mux4_8$ mux5_lh[3:0] (write_data5_lh, result1_m, result2_m, result3_m, , r_sel0_lh[5], r_sel1_lh[5]);
+mux4_8$ mux6_lh[3:0] (write_data6_lh, result1_m, result2_m, result3_m, , r_sel0_lh[6], r_sel1_lh[6]);
+mux4_8$ mux7_lh[3:0] (write_data7_lh, result1_m, result2_m, result3_m, , r_sel0_lh[7], r_sel1_lh[7]);
+
+mux4_8$ mux0_ll[3:0] (write_data0_ll, result1_m, result2_m, result3_m, , r_sel0_ll[0], r_sel1_ll[0]);
+mux4_8$ mux1_ll[3:0] (write_data1_ll, result1_m, result2_m, result3_m, , r_sel0_ll[1], r_sel1_ll[1]);
+mux4_8$ mux2_ll[3:0] (write_data2_ll, result1_m, result2_m, result3_m, , r_sel0_ll[2], r_sel1_ll[2]);
+mux4_8$ mux3_ll[3:0] (write_data3_ll, result1_m, result2_m, result3_m, , r_sel0_ll[3], r_sel1_ll[3]);
+mux4_8$ mux4_ll[3:0] (write_data4_ll, result1_m, result2_m, result3_m, , r_sel0_ll[4], r_sel1_ll[4]);
+mux4_8$ mux5_ll[3:0] (write_data5_ll, result1_m, result2_m, result3_m, , r_sel0_ll[5], r_sel1_ll[5]);
+mux4_8$ mux6_ll[3:0] (write_data6_ll, result1_m, result2_m, result3_m, , r_sel0_ll[6], r_sel1_ll[6]);
+mux4_8$ mux7_ll[3:0] (write_data7_ll, result1_m, result2_m, result3_m, , r_sel0_ll[7], r_sel1_ll[7]);
 
 
 // Registers[31:24] 
-reg32e$ reg0_hh (.CLK(clk), .Din(write_data0_hh), .Q(reg0_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[0]) );
-reg32e$ reg1_hh (.CLK(clk), .Din(write_data1_hh), .Q(reg1_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[1]) );
-reg32e$ reg2_hh (.CLK(clk), .Din(write_data2_hh), .Q(reg2_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[2]) );
-reg32e$ reg3_hh (.CLK(clk), .Din(write_data3_hh), .Q(reg3_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[3]) );
-reg32e$ reg4_hh (.CLK(clk), .Din(write_data4_hh), .Q(reg4_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[4]) );
-reg32e$ reg5_hh (.CLK(clk), .Din(write_data5_hh), .Q(reg5_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[5]) );
-reg32e$ reg6_hh (.CLK(clk), .Din(write_data6_hh), .Q(reg6_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[6]) );
-reg32e$ reg7_hh (.CLK(clk), .Din(write_data7_hh), .Q(reg7_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[7]) );
+reg32e$ reg0_hh (.CLK(clk_n), .Din(write_data0_hh), .Q(reg0_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[0]) );
+reg32e$ reg1_hh (.CLK(clk_n), .Din(write_data1_hh), .Q(reg1_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[1]) );
+reg32e$ reg2_hh (.CLK(clk_n), .Din(write_data2_hh), .Q(reg2_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[2]) );
+reg32e$ reg3_hh (.CLK(clk_n), .Din(write_data3_hh), .Q(reg3_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[3]) );
+reg32e$ reg4_hh (.CLK(clk_n), .Din(write_data4_hh), .Q(reg4_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[4]) );
+reg32e$ reg5_hh (.CLK(clk_n), .Din(write_data5_hh), .Q(reg5_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[5]) );
+reg32e$ reg6_hh (.CLK(clk_n), .Din(write_data6_hh), .Q(reg6_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[6]) );
+reg32e$ reg7_hh (.CLK(clk_n), .Din(write_data7_hh), .Q(reg7_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[7]) );
 
 // Registers[23:16] 
-reg32e$ reg0_hl (.CLK(clk), .Din(write_data0_hl), .Q(reg0_hl_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out2a[0]) );
-reg32e$ reg1_hl (.CLK(clk), .Din(write_data1_hl), .Q(reg1_hl_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out2a[1]) );
-reg32e$ reg2_hl (.CLK(clk), .Din(write_data2_hl), .Q(reg2_hl_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out2a[2]) );
-reg32e$ reg3_hl (.CLK(clk), .Din(write_data3_hl), .Q(reg3_hl_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out2a[3]) );
-reg32e$ reg4_hl (.CLK(clk), .Din(write_data4_hl), .Q(reg4_hl_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out2a[4]) );
-reg32e$ reg5_hl (.CLK(clk), .Din(write_data5_hl), .Q(reg5_hl_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out2a[5]) );
-reg32e$ reg6_hl (.CLK(clk), .Din(write_data6_hl), .Q(reg6_hl_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out2a[6]) );
-reg32e$ reg7_hl (.CLK(clk), .Din(write_data7_hl), .Q(reg7_hl_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out2a[7]) );
+reg32e$ reg0_hl (.CLK(clk_n), .Din(write_data0_hl), .Q(reg0_hl_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out2a[0]) );
+reg32e$ reg1_hl (.CLK(clk_n), .Din(write_data1_hl), .Q(reg1_hl_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out2a[1]) );
+reg32e$ reg2_hl (.CLK(clk_n), .Din(write_data2_hl), .Q(reg2_hl_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out2a[2]) );
+reg32e$ reg3_hl (.CLK(clk_n), .Din(write_data3_hl), .Q(reg3_hl_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out2a[3]) );
+reg32e$ reg4_hl (.CLK(clk_n), .Din(write_data4_hl), .Q(reg4_hl_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out2a[4]) );
+reg32e$ reg5_hl (.CLK(clk_n), .Din(write_data5_hl), .Q(reg5_hl_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out2a[5]) );
+reg32e$ reg6_hl (.CLK(clk_n), .Din(write_data6_hl), .Q(reg6_hl_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out2a[6]) );
+reg32e$ reg7_hl (.CLK(clk_n), .Din(write_data7_hl), .Q(reg7_hl_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out2a[7]) );
 
 // Registers[15:8] 
-reg32e$ reg0_lh (.CLK(clk), .Din(write_data0_lh), .Q(reg0_lh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out3a[0]) );
-reg32e$ reg1_lh (.CLK(clk), .Din(write_data1_lh), .Q(reg1_lh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out3a[1]) );
-reg32e$ reg2_lh (.CLK(clk), .Din(write_data2_lh), .Q(reg2_lh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out3a[2]) );
-reg32e$ reg3_lh (.CLK(clk), .Din(write_data3_lh), .Q(reg3_lh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out3a[3]) );
-reg32e$ reg4_lh (.CLK(clk), .Din(write_data4_lh), .Q(reg4_lh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out3a[4]) );
-reg32e$ reg5_lh (.CLK(clk), .Din(write_data5_lh), .Q(reg5_lh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out3a[5]) );
-reg32e$ reg6_lh (.CLK(clk), .Din(write_data6_lh), .Q(reg6_lh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out3a[6]) );
-reg32e$ reg7_lh (.CLK(clk), .Din(write_data7_lh), .Q(reg7_lh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out3a[7]) );
+reg32e$ reg0_lh (.CLK(clk_n), .Din(write_data0_lh), .Q(reg0_lh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out3a[0]) );
+reg32e$ reg1_lh (.CLK(clk_n), .Din(write_data1_lh), .Q(reg1_lh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out3a[1]) );
+reg32e$ reg2_lh (.CLK(clk_n), .Din(write_data2_lh), .Q(reg2_lh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out3a[2]) );
+reg32e$ reg3_lh (.CLK(clk_n), .Din(write_data3_lh), .Q(reg3_lh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out3a[3]) );
+reg32e$ reg4_lh (.CLK(clk_n), .Din(write_data4_lh), .Q(reg4_lh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out3a[4]) );
+reg32e$ reg5_lh (.CLK(clk_n), .Din(write_data5_lh), .Q(reg5_lh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out3a[5]) );
+reg32e$ reg6_lh (.CLK(clk_n), .Din(write_data6_lh), .Q(reg6_lh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out3a[6]) );
+reg32e$ reg7_lh (.CLK(clk_n), .Din(write_data7_lh), .Q(reg7_lh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out3a[7]) );
 
 // Registers[7:0] 
-reg32e$ reg0_ll (.CLK(clk), .Din(write_data0_ll), .Q(reg0_ll_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out4a[0]) );
-reg32e$ reg1_ll (.CLK(clk), .Din(write_data1_ll), .Q(reg1_ll_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out4a[1]) );
-reg32e$ reg2_ll (.CLK(clk), .Din(write_data2_ll), .Q(reg2_ll_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out4a[2]) );
-reg32e$ reg3_ll (.CLK(clk), .Din(write_data3_ll), .Q(reg3_ll_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out4a[3]) );
-reg32e$ reg4_ll (.CLK(clk), .Din(write_data4_ll), .Q(reg4_ll_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out4a[4]) );
-reg32e$ reg5_ll (.CLK(clk), .Din(write_data5_ll), .Q(reg5_ll_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out4a[5]) );
-reg32e$ reg6_ll (.CLK(clk), .Din(write_data6_ll), .Q(reg6_ll_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out4a[6]) );
-reg32e$ reg7_ll (.CLK(clk), .Din(write_data7_ll), .Q(reg7_ll_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out4a[7]) );
+reg32e$ reg0_ll (.CLK(clk_n), .Din(write_data0_ll), .Q(reg0_ll_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out4a[0]) );
+reg32e$ reg1_ll (.CLK(clk_n), .Din(write_data1_ll), .Q(reg1_ll_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out4a[1]) );
+reg32e$ reg2_ll (.CLK(clk_n), .Din(write_data2_ll), .Q(reg2_ll_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out4a[2]) );
+reg32e$ reg3_ll (.CLK(clk_n), .Din(write_data3_ll), .Q(reg3_ll_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out4a[3]) );
+reg32e$ reg4_ll (.CLK(clk_n), .Din(write_data4_ll), .Q(reg4_ll_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out4a[4]) );
+reg32e$ reg5_ll (.CLK(clk_n), .Din(write_data5_ll), .Q(reg5_ll_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out4a[5]) );
+reg32e$ reg6_ll (.CLK(clk_n), .Din(write_data6_ll), .Q(reg6_ll_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out4a[6]) );
+reg32e$ reg7_ll (.CLK(clk_n), .Din(write_data7_ll), .Q(reg7_ll_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out4a[7]) );
 
 
 bufferH16$ bufs1 (SR10, SR1[0]);
@@ -369,29 +403,44 @@ inv1$ invs2 (RE20_b, RE2[0]);
 inv1$ invs3 (RE30_b, RE3[0]);
 inv1$ invs4 (RE40_b, RE4[0]);
 
-or2$ ors1 (sr1_sel0, RE1[1], RE10_b);
-assign sr1_sel1 = RE1[1];
-and2$ ands1 (outas1, RE1[0], RE1[1]);
+inv1$ invs5 (RE11_b, RE1[1]);
+inv1$ invs6 (RE21_b, RE2[1]);
+inv1$ invs7 (RE31_b, RE3[1]);
+inv1$ invs8 (RE41_b, RE4[1]);
+
+
+and3$ ands5 (sr1_sel0, SR1[2], RE10_b, RE11_b);
+and2$ ands1 (outas1, RE10_b, RE1[1]);
 assign sr1_sel2 = outas1;
 assign sr1_sel3 = outas1;
 
-or2$ ors2 (sr2_sel0, RE2[1], RE20_b);
-assign sr2_sel1 = RE2[1];
-and2$ ands2 (outas2, RE2[0], RE2[1]);
+and3$ ands6 (sr2_sel0, SR2[2], RE20_b, RE21_b);
+and2$ ands2 (outas2, RE20_b, RE2[1]);
 assign sr2_sel2 = outas2;
 assign sr2_sel3 = outas2;
 
-or2$ ors3 (sr3_sel0, RE3[1], RE30_b);
-assign sr3_sel1 = RE3[1];
-and2$ ands3 (outas3, RE3[0], RE3[1]);
+and3$ ands7 (sr3_sel0, SR3[2], RE30_b, RE31_b);
+and2$ ands3 (outas3, RE30_b, RE3[1]);
 assign sr3_sel2 = outas3;
 assign sr3_sel3 = outas3;
 
-or2$ ors4 (sr4_sel0, RE4[1], RE40_b);
-assign sr4_sel1 = RE4[1];
-and2$ ands4 (outas4, RE4[0], RE4[1]);
+and3$ ands8 (sr4_sel0, SR4[2], RE40_b, RE41_b);
+and2$ ands4 (outas4, RE40_b, RE4[1]);
 assign sr4_sel2 = outas4;
 assign sr4_sel3 = outas4;
+
+or2$ ors1 (sr1_sel1, RE1[1], RE1[0]);
+and2$ andn1 (sel12, sr1_sel1, SR1[2]);
+
+or2$ ors2 (sr2_sel1, RE2[1], RE2[0]);
+and2$ andn2 (sel22, sr2_sel1, SR2[2]);
+
+or2$ ors3 (sr3_sel1, RE3[1], RE3[0]);
+and2$ andn3 (sel32, sr3_sel1, SR3[2]);
+
+or2$ ors4 (sr4_sel1, RE4[1], RE4[0]);
+and2$ andn4 (sel42, sr4_sel1, SR4[2]);
+
 
 assign reg0_out = {reg0_hh_out[31:24], reg0_hl_out[23:16], reg0_lh_out[15:8], reg0_ll_out[7:0]};
 assign reg1_out = {reg1_hh_out[31:24], reg1_hl_out[23:16], reg1_lh_out[15:8], reg1_ll_out[7:0]};
@@ -405,10 +454,10 @@ assign reg7_out = {reg7_hh_out[31:24], reg7_hl_out[23:16], reg7_lh_out[15:8], re
 // Read SR1
 mux4_8$ amux0[3:0] (out1m, reg0_out, reg1_out, reg2_out, reg3_out, SR10, SR11);
 mux4_8$ amux1[3:0] (out2m, reg4_out, reg5_out, reg6_out, reg7_out, SR10, SR11);
-mux2_8$ amux2[3:0] (regA_out, out1m, out2m, SR12);
+mux2_8$ amux2[3:0] (regA_out, out1m, out2m, sel12);
 
 // Mask the read value according to the size
-mux2_8$ amuxm0 (regA[7:0], regA_out[15:8], regA_out[7:0], sr1_sel0);
+mux2_8$ amuxm0 (regA[7:0], regA_out[7:0], regA_out[15:8], sr1_sel0);
 mux2_8$ amuxm1 (regA[15:8], 8'b0, regA_out[15:8], sr1_sel1);
 mux2_8$ amuxm2 (regA[23:16], 8'b0, regA_out[23:16], sr1_sel2);
 mux2_8$ amuxm3 (regA[31:24], 8'b0, regA_out[31:24], sr1_sel3);
@@ -416,9 +465,9 @@ mux2_8$ amuxm3 (regA[31:24], 8'b0, regA_out[31:24], sr1_sel3);
 //Read SR2
 mux4_8$ bmux0[3:0] (out3m, reg0_out, reg1_out, reg2_out, reg3_out, SR20, SR21);
 mux4_8$ bmux1[3:0] (out4m, reg4_out, reg5_out, reg6_out, reg7_out, SR20, SR21);
-mux2_8$ bmux2[3:0] (regB_out, out3m, out4m, SR22);
+mux2_8$ bmux2[3:0] (regB_out, out3m, out4m, sel22);
 
-mux2_8$ bmuxm0 (regB[7:0], regB_out[15:8], regB_out[7:0], sr2_sel0);
+mux2_8$ bmuxm0 (regB[7:0], regB_out[7:0], regB_out[15:8], sr2_sel0);
 mux2_8$ bmuxm1 (regB[15:8], 8'b0, regB_out[15:8], sr2_sel1);
 mux2_8$ bmuxm2 (regB[23:16], 8'b0, regB_out[23:16], sr2_sel2);
 mux2_8$ bmuxm3 (regB[31:24], 8'b0, regB_out[31:24], sr2_sel3);
@@ -426,9 +475,9 @@ mux2_8$ bmuxm3 (regB[31:24], 8'b0, regB_out[31:24], sr2_sel3);
 // Read SR3
 mux4_8$ cmux0[3:0] (out5m, reg0_out, reg1_out, reg2_out, reg3_out, SR30, SR31);
 mux4_8$ cmux1[3:0] (out6m, reg4_out, reg5_out, reg6_out, reg7_out, SR30, SR31);
-mux2_8$ cmux2[3:0] (regC_out, out5m, out6m, SR32);
+mux2_8$ cmux2[3:0] (regC_out, out5m, out6m, sel32);
 
-mux2_8$ cmuxm0 (regC[7:0], regC_out[15:8], regC_out[7:0], sr3_sel0);
+mux2_8$ cmuxm0 (regC[7:0], regC_out[7:0], regC_out[15:8], sr3_sel0);
 mux2_8$ cmuxm1 (regC[15:8], 8'b0, regC_out[15:8], sr3_sel1);
 mux2_8$ cmuxm2 (regC[23:16], 8'b0, regC_out[23:16], sr3_sel2);
 mux2_8$ cmuxm3 (regC[31:24], 8'b0, regC_out[31:24], sr3_sel3);
@@ -436,9 +485,9 @@ mux2_8$ cmuxm3 (regC[31:24], 8'b0, regC_out[31:24], sr3_sel3);
 // Read SR4
 mux4_8$ dmux0[3:0] (out7m, reg0_out, reg1_out, reg2_out, reg3_out, SR40, SR41);
 mux4_8$ dmux1[3:0] (out8m, reg4_out, reg5_out, reg6_out, reg7_out, SR40, SR41);
-mux2_8$ dmux2[3:0] (regD_out, out7m, out8m, SR42);
+mux2_8$ dmux2[3:0] (regD_out, out7m, out8m, sel42);
 
-mux2_8$ dmuxm0 (regD[7:0], regD_out[15:8], regD_out[7:0], sr4_sel0);
+mux2_8$ dmuxm0 (regD[7:0], regD_out[7:0], regD_out[15:8], sr4_sel0);
 mux2_8$ dmuxm1 (regD[15:8], 8'b0, regD_out[15:8], sr4_sel1);
 mux2_8$ dmuxm2 (regD[23:16], 8'b0, regD_out[23:16], sr4_sel2);
 mux2_8$ dmuxm3 (regD[31:24], 8'b0, regD_out[31:24], sr4_sel3);
