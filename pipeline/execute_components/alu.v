@@ -27,7 +27,7 @@
 // Operations 0 = ADD | 1 == OR | 2 = NOT | 3 = DAA | 4 = AND
 //            | 5 = CLD | 6 = CMP | 7 = STD
 //
-// Combinational Delay: 4.2ns
+// Combinational Delay:
 //
 module alu32 (alu_out, flags, a, b, op);
 	output [31:0] alu_out;
@@ -58,7 +58,7 @@ endmodule // alu
 //-------------------------------------------------------------------------------------
 // Functionality: adds a and b, produces flags
 //
-// Combinational Delay: 4.2ns
+// Combinational Delay: 
 //
 module alu_adder (adder_result, flags, a, b);
 	output [31:0] adder_result;
@@ -89,7 +89,7 @@ endmodule
 //-------------------------------------------------------------------------------------
 // Functionality: 32-bitwise OR, produces flags
 //
-// Combinational Delay: 4.2ns
+// Combinational Delay: 
 //
 module alu_or (
 	output [31:0] or_result,
@@ -119,7 +119,7 @@ endmodule
 //-------------------------------------------------------------------------------------
 // Functionality: 32-bitwise NOT, produces flags
 //
-// Combinational Delay: 4.2ns
+// Combinational Delay: 
 //
 module alu_not (
 	output [31:0] not_result,
@@ -149,7 +149,7 @@ endmodule
 //-------------------------------------------------------------------------------------
 // Functionality: decimal adjust, produces flags
 //
-// Combinational Delay: 4.2ns
+// Combinational Delay: 
 //
 module alu_daa (
 	output [31:0] daa_result,
@@ -181,7 +181,7 @@ endmodule
 //-------------------------------------------------------------------------------------
 // Functionality: decimal adjust for 1-digit (4 bits)
 //
-// Combinational Delay: 4.2ns
+// Combinational Delay: 
 //
 module daa_single_digit (
 	output [3:0] digit_out, 
@@ -242,7 +242,7 @@ endmodule
 //-------------------------------------------------------------------------------------
 // Functionality: decimal adjust for 2-digit (8 bits), produces flags
 //
-// Combinational Delay: 4.2ns
+// Combinational Delay: 
 //
 module daa_double_digit (
 	output [7:0] digits_out,
@@ -266,7 +266,7 @@ endmodule
 //-------------------------------------------------------------------------------------
 // Functionality: 32-bitwise AND, produces flags
 //
-// Combinational Delay: 4.2ns
+// Combinational Delay: 
 //
 module alu_and (
 	output [31:0] and_result,
@@ -296,7 +296,7 @@ endmodule
 //-------------------------------------------------------------------------------------
 // Functionality: produces a 32-bit flag with DF = 0
 //
-// Combinational Delay: 4.2ns
+// Combinational Delay: 
 //
 module alu_cld (
 	output [31:0] cld_result,
@@ -325,7 +325,7 @@ endmodule
 //-------------------------------------------------------------------------------------
 // Functionality: does a compare by subtracting, produces flags
 //
-// Combinational Delay: 4.2ns
+// Combinational Delay: 
 //
 module alu_cmp (
 	output [31:0] cmp_result,
@@ -356,7 +356,7 @@ endmodule
 //-------------------------------------------------------------------------------------
 // Functionality: produces a 32-bit flag with DF = 1
 //
-// Combinational Delay: 4.2ns
+// Combinational Delay: 
 //
 module alu_std (
 	output [31:0] std_result,

@@ -1,41 +1,32 @@
 //-------------------------------------------------------------------------------------
 //
-// 							   Increment by 1 (YES flags)
+// 									  shifter32
 //
 //-------------------------------------------------------------------------------------
-// Functionality: Increments a32 by 1, produces flags
+// Functionality: 32-bit Shifter
 //
-// Note: Use faster module: inc_by_1 if flags aren't required 
+// Operations 0 = LEFT | 1 == RIGHT |
 //
-// Combinational Delay: 4.2ns
+// Combinational Delay: 
 //
-module functional_unit_inc_by_1 (
-	output [31:0] sum, 
-	output [31:0] flags,
-	output carry_out, 
-	input [31:0] a
+module shifter32(
+	output [31:0] shift_result,
+	output [31:0] shift_flags,
+	input EX_de_shift_dir_wb,
+	input [31:0] a,
+	input [31:0] b
 	);
-	
-	wire [31:0] internal_sum;
-	wire [31:0] internal_carry_out;
 
-	assign sum = internal_sum;
-	assign carry_out = internal_carry_out;
+	wire [31:0] left_result, right_result;
+	wire [31:0] left_flags, right_flags;
 
-	inc_by_1 u_inc_by_1(sum, carry_out, a);
+	shift_arithmetic_left_w_flags u_SAL(left_results, left_flags, a, b);
+	shift_arithmetic_right_w_flags u_SAR(right_results, right_flags, a, b);
 
-	wire OF, DF, SF, ZF, AF, PF, CF; 
+	mux32_2way mux_results(shift_result, left_result, right_result, EX_de_shift_dir_wb);
+	mux32_2way mux_flags(shift_flags, left_flags, right_flags, EX_de_shift_dir_wb);
+endmodule // shifter32	
 
-	OF_logic u_OF_logic(OF, adder_result[31], a[31], b[31]);
-	assign DF = 0;
-	assign SF = adder_result[31];
-	ZF_logic u_ZF_logic(ZF, adder_result[31:0]);
-	assign AF = internal_carry_out[3];
-	PF_logic u_PF_logic(PF, adder_result[7:0]);
-	assign CF = 0;
-
-	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
-endmodule
 //-------------------------------------------------------------------------------------
 //
 // 							Shift Arthemtic Left w/ Flags
@@ -57,7 +48,7 @@ module shift_arithmetic_left_w_flags(
 
 	wire carry_out;
 
-	shift_arithmetic_left_w_carry(sal_result, carry_out, a, b);
+	shift_arithmetic_left_w_carry u_sal_carry(sal_result, carry_out, a, b);
 
 	OF_logic u_OF_logic(OF, sal_result[31], a[31], b[31]);
 	assign DF = 0; 
@@ -90,7 +81,7 @@ module shift_arithmetic_right_w_flags(
 
 	wire carry_out;
 
-	shift_arithmetic_right_w_carry(sar_result, carry_out, a, b);
+	shift_arithmetic_right_w_carry u_sar_carry(sar_result, carry_out, a, b);
 
 	OF_logic u_OF_logic(OF, sar_result[31], a[31], b[31]);
 	assign DF = 0; 
