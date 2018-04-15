@@ -118,7 +118,7 @@ module shift_arithmetic_left(
 	mux32_2way u_mux_2(post_mux_2, post_mux_1, post_shift_2, b[1]);
 	mux32_2way u_mux_4(post_mux_4, post_mux_2, post_shift_4, b[2]);
 	mux32_2way u_mux_8(post_mux_8, post_mux_4, post_shift_8, b[3]);
-	mux32_2way u_mux_16(sar_result, post_mux_8, post_shift_16, b[4]);
+	mux32_2way u_mux_16(sal_result, post_mux_8, post_shift_16, b[4]);
 	
 endmodule
 
