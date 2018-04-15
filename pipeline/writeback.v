@@ -20,12 +20,13 @@ module writeback (
    //pseudo-control store signals not from control store but generated in decode
    input [1:0] WB_de_datasize_all,
    input [2:0] WB_de_aluk_ex, 
-   input WB_de_ld_gpr1_wb,
-   input WB_de_dcache_write_wb,
+   input WB_ex_ld_gpr1_wb,
+   input WB_ex_ld_gpr2_wb,
+   input WB_ex_dcache_write_wb,
+   input WB_de_repne_wb, 
 
-   input [31:0] WB_ALU32_RESULTS,
-   input [31:0] WB_COUNT, 
-   input [63:0] WB_MM_A, WB_MM_B,
+   input [31:0] WB_RESULT_A, WB_RESULT_B, WB_RESULT_C,
+   input [63:0] WB_RESULT_MM,
    input [31:0] WB_FLAGS,
 
    input [31:0] WB_CMPS_POINTER,
@@ -35,72 +36,86 @@ module writeback (
 
    input [2:0] WB_DR1, WB_DR2, WB_DR3,
 
-   output [2:0] Out_DR1, Out_DR2, Out_DR3,
-   output [31:0] Out_DR1_Data, Out_DR2_Data, Out_DR3_Data, 
-   output out_v_de_ld_gpr1_wb, out_v_cs_ld_gpr2_wb, out_v_cs_ld_gpr3_wb,
-   output [1:0] out_de_datasize,
-   output [31:0] Out_Dcache_Data, Out_Dcache_Address,
-   output Out_ex_repne_termination_all
-);
+   input In_write_ready, 
 
-   //need nelson to make these signals
-  wire CS_IS_FIRST_OF_REPNE_WB; 
-  wire CS_LD_GPR3_WB;
-  wire CS_LD_GPR2_WB;
-//  assign CS_IS_CMPS_FIRST_UOP_ALL = 0;
-//  assign CS_IS_CMPS_SECOND_UOP_ALL = 0; 
-  assign CS_IS_FIRST_OF_REPNE_WB = 0; 
-  assign CS_LD_GPR3_WB = 0;
+   output [2:0] WB_Final_DR1, WB_Final_DR2, WB_Final_DR3,
+   output [31:0] WB_Final_data1, WB_Final_data2, WB_Final_data3, 
+   output WB_Final_ld_gpr1, WB_Final_ld_gpr2, WB_Final_ld_gpr3,
+   output [1:0] WB_Final_datasize,
+   output WB_Final_ld_seg, 
+   output [63:0] WB_Final_MM_Data,
+   output WB_Final_ld_mm, 
+   output [31:0] WB_Final_EIP, 
+   output WB_Final_ld_eip, 
+   output [63:0] WB_Final_Dcache_Data, WB_Final_Dcache_Address,
 
+   output DEP_v_wb_ld_gpr1, DEP_v_wb_ld_gpr2, DEP_v_wb_ld_gpr3, DEP_v_wb_ld_seg, DEP_v_wb_ld_mm, DEP_v_wb_dcache_write, 
+
+   output wb_halt_all, wb_repne_terminate_all,
+   output WB_stall
+   );
   //control signals
-  `include "../control_store/control_store_wires.v"
-  `include "../control_store/control_store_signals.v"
+  `include "../../../../control_store/control_store_wires.v"
+  `include "../../../../control_store/control_store_signals.v"
 
-   //internal wires for each box output in schematic
-      //
-   wire [31:0] cmps_updated_pointer, cmps_first_pointer;
-   wire [31:0] internal_count;
-   wire ex_repne_termination_all;
-      //validate writeback signals for GPR and DCACHE
-   wire v_de_ld_gpr1_wb, v_cs_ld_gpr2_wb, v_cs_ld_gpr3_wb, v_de_dache_write_wb, v_cs_ld_flags_wb;
-      //internal data
-   wire [31:0] current_flags; 
-   wire [31:0] data1, data2, data3; 
+   //internal wires
+   //operand_select_wb
+   wire [31:0] data1; 
+   //conditional_support_wb
+   wire wb_ld_eip, wb_ld_gpr1;
+   //validate_signals_wb
+   wire v_wb_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3, v_cs_ld_seg, v_cs_ld_mm, v_ex_dcache_write, v_cs_ld_flags, v_wb_ld_eip;
+   //repne_halt_wb
+   wire ZF; 
+   //flags_wb
+   wire [31:0] current_flags;
+   wire v_cs_ld_flags_wb; 
+   //outputs
+   wire data1_64; //64 because dcache data-in port is 64 bits incase the input is mm 
+   //stall
+   wire In_write_ready_not;
 
-   //CMPS_POINTER_LOGIC (cmps_updated_pointer, WB_CMPS_POINTER, WB_de_datasize_all, current_flags[11]); 
-   
-   reg32e$ cmps_temp_pointer (CLK, cmps_updated_pointer, cmps_first_pointer, , 1'b1, 1'b1, CS_IS_CMPS_FIRST_UOP_ALL);
-   
-   //Flags_WB(current_flags, CLK, v_cs_ld_flags_wb, CS_FLAGS_AFFECTED_WB, WB_FLAGS);
+   operand_select_wb u_operand_select_wb(data1, CLK, CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_CMPS_SECOND_UOP_ALL, WB_RESULT_A);
+   conditional_support_wb u_conditional_support_wb(wb_ld_eip, wb_ld_gpr1, CS_IS_JNBE_WB, CS_IS_JNE_WB, CS_LD_EIP_WB, CF, ZF, CS_IS_CMOVC_WB, WB_ex_ld_gpr1_wb);
+   validate_signals_wb u_validate_signals_wb(v_wb_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3, v_cs_ld_seg, v_cs_ld_mm, v_ex_dcache_write, v_cs_ld_flags, v_wb_ld_eip,
+      WB_V, wb_ld_gpr1, WB_ex_ld_gpr2_wb, CS_LD_GPR3_WB, CS_LD_SEG_WB, CS_LD_MM_WB, WB_ex_dcache_write_wb, CS_LD_FLAGS_WB, wb_ld_eip);
+   assign DEP_v_wb_ld_gpr1 = v_wb_ld_gpr1;
+   assign DEP_v_wb_ld_gpr2 = v_ex_ld_gpr2;
+   assign DEP_v_wb_ld_gpr3 = v_cs_ld_gpr3;
+   assign DEP_v_wb_ld_seg = v_cs_ld_seg;
+   assign DEP_v_wb_ld_mm = v_cs_ld_mm;
+   assign DEP_v_wb_dcache_write = v_ex_dcache_write;
 
-   //Repne_Count_Logic u_Repne_Count_Logic(internal_count, WB_COUNT, CS_IS_FIRST_OF_REPNE_WB, CS_IS_CMPS_SECOND_UOP_ALL, current_flags[6], CLK);
+   repne_halt_wb u_repne_halt_wb(wb_halt_all, wb_repne_terminate_all, WB_V, CS_IS_HALT_WB, CS_IS_CMPS_SECOND_UOP_ALL, WB_de_repne_wb, ZF, WB_RESULT_C);
+   flags_wb u_flags_wb(current_flags, CLK, v_cs_ld_flags_wb, CS_FLAGS_AFFECTED_WB, WB_FLAGS);
+   assign ZF = current_flags[6];
 
-   and2$ u_validate_gpr1(v_de_ld_gpr1_wb, WB_V, WB_de_ld_gpr1_wb);
-   and2$ u_validate_gpr2(v_cs_ld_gpr2_wb, WB_V, CS_LD_GPR2_WB);
-   and2$ u_validate_gpr3(v_cs_ld_gpr3_wb, WB_V, CS_LD_GPR3_WB);
-   and2$ u_validate_mem_writes(v_de_dache_write_wb, WB_V, WB_de_dcache_write_wb);
-   and2$ u_validate_flag_writes(v_cs_ld_flags_wb, WB_V, CS_LD_FLAGS_WB);
-
-   //Desination Select_WB
-
-   mux32_2way u_mux_d1(data1, WB_ALU32_RESULTS, cmps_first_pointer, CS_IS_CMPS_FIRST_UOP_ALL);
-   assign data2 = cmps_updated_pointer;
-   assign data3 = internal_count; 
-
-   //REG_FILE32 outputs
-   assign Out_DR1 = WB_DR1;
-   assign Out_DR2 = WB_DR2;
-   assign Out_DR3 = WB_DR3; 
-   assign Out_DR1_data = data1;
-   assign Out_DR2_data = data2;
-   assign Out_DR3_data = data3;
-   assign out_v_de_ld_gpr1_wb = v_de_ld_gpr1_wb; 
-   assign out_v_cs_ld_gpr2_wb = v_cs_ld_gpr2_wb;
-   assign out_v_de_ld_gpr3_wb = v_cs_ld_gpr3_wb; 
-
+   //regfile32
+   assign WB_Final_DR1 = WB_DR1;
+   assign WB_Final_DR2 = WB_DR2;
+   assign WB_Final_DR3 = WB_DR3; 
+   assign WB_Final_data1 = data1;
+   assign WB_Final_data2 = WB_RESULT_B;
+   assign WB_Final_data3 = WB_RESULT_C;
+   assign WB_Final_ld_gpr1 = v_wb_ld_gpr1; 
+   assign WB_Final_ld_gpr2 = v_ex_ld_gpr2;
+   assign WB_Final_ld_gpr3 = v_cs_ld_gpr3; 
+   //segfile
+   assign WB_Final_ld_seg = v_cs_ld_seg; 
+   //regfile64
+   assign WB_Final_MM_Data = WB_RESULT_MM; 
+   assign WB_Final_ld_mm = v_cs_ld_mm; 
+   //EIP register
+   assign WB_Final_EIP = WB_NEIP; 
+   assign WB_Final_ld_eip = v_wb_ld_eip;
    //DCACHE outputs
-   assign out_de_datasize = WB_de_datasize_all;
-   assign Out_Dcache_Data = data1; 
-   assign Out_Dcache_Address = WB_ADDRESS; 
+   assign data1_64 = {{32{1'b0}}, data1};
+   mux64_2way u_dache_data_in(WB_Final_Dcache_Data, data1_64, WB_RESULT_MM, CS_MM_OPERATION);
+   assign WB_Final_Dcache_Data = data1; 
+   assign WB_Final_Dcache_Address = WB_ADDRESS; 
+
+   //stall logic
+   inv1$ u_not_write_ready(In_write_ready_not, In_write_ready);
+   and2$ u_wb_stall(WB_stall, v_ex_dcache_write, In_write_ready_not);
 
 endmodule
