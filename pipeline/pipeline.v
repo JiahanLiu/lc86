@@ -20,10 +20,47 @@ module TOP;
 //        clr = 0;
 //        # (clk_cycle -2)
 //        clr = 1;
+//        #clk_cycle
+        u_pipeline.u_register_file.gpr.reg0_ll.Q = 32'h0;
+        u_pipeline.u_register_file.gpr.reg1_ll.Q = 32'h1;
+        u_pipeline.u_register_file.gpr.reg2_ll.Q = 32'h2;
+        u_pipeline.u_register_file.gpr.reg3_ll.Q = 32'h3;
+        u_pipeline.u_register_file.gpr.reg4_ll.Q = 32'h4;
+        u_pipeline.u_register_file.gpr.reg5_ll.Q = 32'h5;
+        u_pipeline.u_register_file.gpr.reg6_ll.Q = 32'h6;
+        u_pipeline.u_register_file.gpr.reg7_ll.Q = 32'h7;
+
+        u_pipeline.u_register_file.gpr.reg0_lh.Q = 32'h800;
+        u_pipeline.u_register_file.gpr.reg1_lh.Q = 32'h900;
+        u_pipeline.u_register_file.gpr.reg2_lh.Q = 32'hA00;
+        u_pipeline.u_register_file.gpr.reg3_lh.Q = 32'hB00;
+        u_pipeline.u_register_file.gpr.reg4_lh.Q = 32'hC00;
+        u_pipeline.u_register_file.gpr.reg5_lh.Q = 32'hD00;
+        u_pipeline.u_register_file.gpr.reg6_lh.Q = 32'hE00;
+        u_pipeline.u_register_file.gpr.reg7_lh.Q = 32'hF00;
+
+        u_pipeline.u_register_file.gpr.reg0_hl.Q = 32'h00000;
+        u_pipeline.u_register_file.gpr.reg1_hl.Q = 32'h10000;
+        u_pipeline.u_register_file.gpr.reg2_hl.Q = 32'h20000;
+        u_pipeline.u_register_file.gpr.reg3_hl.Q = 32'h30000;
+        u_pipeline.u_register_file.gpr.reg4_hl.Q = 32'h40000;
+        u_pipeline.u_register_file.gpr.reg5_hl.Q = 32'h50000;
+        u_pipeline.u_register_file.gpr.reg6_hl.Q = 32'h60000;
+        u_pipeline.u_register_file.gpr.reg7_hl.Q = 32'h70000;
+
+        u_pipeline.u_register_file.gpr.reg0_hh.Q = 32'h8000000;
+        u_pipeline.u_register_file.gpr.reg1_hh.Q = 32'h9000000;
+        u_pipeline.u_register_file.gpr.reg2_hh.Q = 32'hA000000;
+        u_pipeline.u_register_file.gpr.reg3_hh.Q = 32'hB000000;
+        u_pipeline.u_register_file.gpr.reg4_hh.Q = 32'hC000000;
+        u_pipeline.u_register_file.gpr.reg5_hh.Q = 32'hD000000;
+        u_pipeline.u_register_file.gpr.reg6_hh.Q = 32'hE000000;
+        u_pipeline.u_register_file.gpr.reg7_hh.Q = 32'hF000000;
+
      end 
 
 
-   initial #(15 * clk_cycle) $finish;
+   initial #(10 * clk_cycle) $finish;
    
    initial
      begin
@@ -54,10 +91,12 @@ module TOP;
         $readmemb("../control_store/rom8_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom9.mem);
      end
 
+
     // Checking the values
     always @(posedge clk) begin
         // Decode stage 1 signals 
         $strobe ("at time %0d, DE1_opcode = %h", $time, u_pipeline.u_decode_stage1.opcode);
+        $strobe ("at time %0d, DE1_opcode_size = %h", $time, u_pipeline.u_decode_stage1.opcode_size);
         $strobe ("at time %0d, DE1_modrm_sel = %h", $time, u_pipeline.u_decode_stage1.modrm_sel);
         $strobe ("at time %0d, DE1_instr_length_updt = %h", $time, u_pipeline.u_decode_stage1.instr_length_updt);
         $strobe ("at time %0d, DE1_prefix_size = %h", $time, u_pipeline.u_decode_stage1.prefix_size);
@@ -78,7 +117,6 @@ module TOP;
         $strobe ("at time %0d, DE1_segID = %h", $time, u_pipeline.u_decode_stage1.segID);
         $strobe ("at time %0d, DE1_modrm = %h", $time, u_pipeline.u_decode_stage1.modrm);
         $strobe ("at time %0d, DE1_sib = %h", $time, u_pipeline.u_decode_stage1.sib);
-        $strobe ("at time %0d, DE1_modrm_sel = %h", $time, u_pipeline.u_decode_stage1.modrm_sel);
 
         // Decode_stage 2 signals
         $strobe ("at time %0d, DE2_offset = %h", $time, u_pipeline.u_decode_stage2.offset);
@@ -86,7 +124,7 @@ module TOP;
         $strobe ("at time %0d, DE2_D2_DATA_SIZE_AG = %h", $time, u_pipeline.u_decode_stage2.D2_DATA_SIZE_AG);
         $strobe ("at time %0d, DE2_D2_SR1_NEEDED_AG = %h", $time, u_pipeline.u_decode_stage2.D2_SR1_NEEDED_AG);
         $strobe ("at time %0d, DE2_D2_SEG1_NEEDED_AG = %h", $time, u_pipeline.u_decode_stage2.D2_SEG1_NEEDED_AG);
-        $strobe ("at time %0d, DE2_D2_MM1_NEEDED_AG = %h", $time, u_pipeline.u_decode_stage2.D2_MM1_NEEDED_AG);
+        $strobe ("at time %0d, DE2_D2_MM1_NEEDED_DE = %h", $time, u_pipeline.u_decode_stage2.D2_MM1_NEEDED_AG);
         $strobe ("at time %0d, DE2_D2_MEM_RD_ME = %h", $time, u_pipeline.u_decode_stage2.D2_MEM_RD_ME);
         $strobe ("at time %0d, DE2_D2_MEM_WR_ME = %h", $time, u_pipeline.u_decode_stage2.D2_MEM_WR_ME);
         $strobe ("at time %0d, DE2_D2_ALUK_EX = %h", $time, u_pipeline.u_decode_stage2.D2_ALUK_EX);
@@ -106,6 +144,19 @@ module TOP;
         $strobe ("at time %0d, DE2_DE_MUX_SEG_AG = %h", $time, u_pipeline.u_decode_stage2.DE_MUX_SEG_AG);
         $strobe ("at time %0d, DE2_DE_CMPXCHG_AG = %h", $time, u_pipeline.u_decode_stage2.DE_CMPXCHG_AG);
         $strobe ("at time %0d, DE2_DE_SIB_S_AG = %h", $time, u_pipeline.u_decode_stage2.DE_SIB_S_AG);
+
+        // Register file signals
+        $strobe ("at time %0d, REG_SR1_DATA = %h", $time, u_pipeline.SR1_DATA);
+        $strobe ("at time %0d, REG_SR2_DATA = %h", $time, u_pipeline.SR2_DATA);
+        $strobe ("at time %0d, REG_SR3_DATA = %h", $time, u_pipeline.SR3_DATA);
+        $strobe ("at time %0d, REG_SIB_I_DATA = %h", $time, u_pipeline.SIB_I_DATA);
+        $strobe ("at time %0d, REG_SEG_OUT1 = %h", $time, u_pipeline.u_register_file.SEGDOUT1);
+        $strobe ("at time %0d, REG_SEG_OUT2 = %h", $time, u_pipeline.u_register_file.SEGDOUT2);
+        $strobe ("at time %0d, REG_MM_OUT1 = %h", $time, u_pipeline.u_register_file.MMDOUT1);
+        $strobe ("at time %0d, REG_MM_OUT2 = %h", $time, u_pipeline.u_register_file.MMDOUT2);
+        $strobe ("at time %0d, REG_CSDOUT = %h", $time, u_pipeline.u_register_file.CSDOUT);
+        $strobe ("at time %0d, REG_EIP_DOUT = %h", $time, u_pipeline.u_register_file.EIPDOUT);
+        $strobe ("at time %0d, REG_EFLAGS = %h", $time, u_pipeline.u_register_file.EFLAGSDOUT);
 
         // Address generation stage signals
         $strobe ("at time %0d, AG_SR1_OUT = %h", $time, u_pipeline.u_address_generation.SR1_OUT);
@@ -230,19 +281,27 @@ module PIPELINE(CLK, CLR, PRE);
    wire  [15:0] CSDOUT;
    wire  [31:0] EIPDOUT;
    wire  [31:0] EFLAGSDOUT;
+   wire [31:0] SR1_DATA, SR2_DATA, SR3_DATA, SIB_I_DATA;
+    wire [2:0] D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT, D2_SEG1_OUT, D2_SEG2_OUT;
+    wire [1:0] D2_DATA_SIZE_AG_OUT;
+
 
     register_file u_register_file (CLK, 
         SEG_DIN, SEGID1, SEGID2, WRSEGID, SEGWE,
         MM_DIN, MMID1, MMID2, WRMMID, MMWE, 
         GPR_DIN0, GPR_DIN1, GPR_DIN2, 
-        GPRID0, GPRID1, GPRID2, GPRID3,
-        GPR_RE0, GPR_RE1, GPR_RE2, GPR_RE3,
+        D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT,
+        // For now, all the 4 read datasizes are same
+        2'd2, 2'd2, 2'd2, 2'd2,
+        // D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT,
         WRGPR0, WRGPR1, WRGPR2, GPRWE0, GPRWE1, GPRWE2,
-        WE0, WE1, WE2,
+        // Enable signals from writeback
+        // WE0, WE1, WE2,
+        1'b0, 1'b0, 1'b0,
         CS_DIN, EIP_DIN, EFLAGS_DIN,
         LD_CS, LD_EIP, LD_EFLAGS,
         SEGDOUT1, SEGDOUT2, MMDOUT1, MMDOUT2,
-        GPRDOUT0, GPRDOUT1, GPRDOUT2, GPRDOUT3,
+        SR1_DATA, SR2_DATA, SR3_DATA, SIB_I_DATA,
         CSDOUT, EIPDOUT, EFLAGSDOUT, CLR
     );
        
@@ -272,6 +331,7 @@ module PIPELINE(CLK, CLR, PRE);
     wire [31:0] DE_EIP_IN, DE_EIP_OUT, DE_EIP_OUT_BAR;
     wire [127:0] IR_IN;
     //Debug - change reg to wire
+    //wire [127:0] IR;
     reg [127:0] IR = 128'h83c00a00000000000000000000000000;
     wire [3:0] DE_INSTR_LENGTH_UPDT_IN;
 
@@ -382,17 +442,15 @@ module PIPELINE(CLK, CLR, PRE);
 
     wire [47:0] D2_OFFSET_OUT;
 
-    wire [1:0] D2_DATA_SIZE_AG_OUT;
     wire D2_SR1_NEEDED_AG_OUT, D2_SEG1_NEEDED_AG_OUT, D2_MM1_NEEDED_AG_OUT, D2_MEM_RD_ME_OUT, D2_MEM_WR_ME_OUT;
     wire [2:0] D2_ALUK_EX_OUT;
     wire D2_LD_GPR1_WB_OUT, D2_LD_MM_WB_OUT;
-    wire [2:0] D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT, D2_SEG1_OUT, D2_SEG2_OUT;
     wire [31:0] D2_IMM32_OUT, D2_DISP32_OUT;
     wire D2_SIB_EN_AG, D2_DISP_EN_AG, D2_BASE_REG_EN_AG, D2_MUX_SEG_AG, D2_CMPXCHG_AG;
     wire [1:0] D2_SIB_S_AG;
 
     // Assigned 1 for now - placeholder
-    wire LD_AG=1;
+    assign LD_AG=1;
 
     wire [2:0] AG_DRID1, AG_DRID2;
     wire V_AG_LD_GPR1, V_AG_LD_GPR2, V_AG_LD_SEG, V_AG_LD_CSEG, V_AG_LD_MM;
@@ -463,7 +521,6 @@ module PIPELINE(CLK, CLR, PRE);
    wire AG_PS_DE_MUX_SEG_AG, AG_PS_DE_CMPXCHG_AG;
    wire [1:0] AG_PS_DE_SIB_S_AG;
 
-   wire [31:0] SR1_DATA, SR2_DATA, SR3_DATA, SIB_I_DATA;
    wire [15:0] SEG1_DATA, SEG2_DATA;
    wire [63:0] MM1_DATA, MM2_DATA;
 
@@ -504,27 +561,30 @@ module PIPELINE(CLK, CLR, PRE);
      u_reg_ag_ps_control_store1 (CLK, D2_CONTROL_STORE_OUT[63:0], AG_PS_CONTROL_STORE[63:0], , CLR, PRE, LD_AG);
 
    // [31:2]
-   assign D2_OUT1_AG_PS[31:2] = { 
+   assign D2_OUT1_AG_PS = { 
           D2_DATA_SIZE_AG_OUT, D2_SR1_NEEDED_AG_OUT, D2_SEG1_NEEDED_AG_OUT, D2_MM1_NEEDED_AG_OUT,
           D2_MEM_RD_ME_OUT, D2_MEM_WR_ME_OUT, D2_ALUK_EX_OUT, D2_LD_GPR1_WB_OUT, D2_LD_MM_WB_OUT,
-          D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT, D2_SEG1_OUT, D2_SEG2_OUT };
+          D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT, D2_SEG1_OUT, D2_SEG2_OUT, 2'b0 };
 
-   assign { AG_PS_DATA_SIZE, AG_PS_D2_SR1_NEEDED_AG, AG_PS_D2_SEG1_NEEDED_AG, AG_PS_D2_MM1_NEEDED_AG,
-            AG_PS_D2_MEM_RD_ME, AG_PS_D2_MEM_WR_ME, AG_PS_D2_ALUK_EX, AG_PS_D2_LD_GPR1_WB, AG_PS_D2_LD_MM_WB,
-            AG_PS_SR1, AG_PS_SR2, AG_PS_SR3, AG_PS_SIB_I, AG_PS_SEG1, AG_PS_SEG2 } = AG_PS_IN1[31:2];
-											       
+    // reg32e$ IR_1(CLK, IR_IN[63:32], IR_OUT[63:32], IR_BAR_OUT[63:32], CLR, PRE, EN);
    reg32e$
       u_reg_ag_ps_in1 (CLK, D2_OUT1_AG_PS, AG_PS_IN1, , CLR, PRE, LD_AG),
       u_reg_ag_ps_imm32 (CLK, D2_IMM32_OUT, AG_PS_IMM32, , CLR, PRE, LD_AG),
       u_reg_ag_ps_disp32 (CLK, D2_DISP32_OUT, AG_PS_DISP32, , CLR, PRE, LD_AG);
 
+     assign { AG_PS_DATA_SIZE, AG_PS_D2_SR1_NEEDED_AG, AG_PS_D2_SEG1_NEEDED_AG, AG_PS_D2_MM1_NEEDED_AG,
+            AG_PS_D2_MEM_RD_ME, AG_PS_D2_MEM_WR_ME, AG_PS_D2_ALUK_EX, AG_PS_D2_LD_GPR1_WB, AG_PS_D2_LD_MM_WB,
+            AG_PS_SR1, AG_PS_SR2, AG_PS_SR3, AG_PS_SIB_I, AG_PS_SEG1, AG_PS_SEG2 } = AG_PS_IN1[31:2];
+
+
    // [31:25]
    assign D2_OUT2_AG_PS[31:25] = { D2_SIB_EN_AG, D2_DISP_EN_AG, D2_BASE_REG_EN_AG, D2_MUX_SEG_AG,
                                    D2_CMPXCHG_AG, D2_SIB_S_AG };
-   assign { AG_PS_DE_SIB_EN_AG, AG_PS_DE_DISP_EN_AG, AG_PS_DE_BASE_REG_EN_AG,
-            AG_PS_DE_MUX_SEG_AG, AG_PS_DE_CMPXCHG_AG, AG_PS_DE_SIB_S_AG } = AG_PS_IN2[31:25];
    reg32e$
       u_reg_ag_ps_in2 (CLK, D2_OUT2_AG_PS, AG_PS_IN2, , CLR, PRE, LD_AG);
+
+    assign { AG_PS_DE_SIB_EN_AG, AG_PS_DE_DISP_EN_AG, AG_PS_DE_BASE_REG_EN_AG,
+        AG_PS_DE_MUX_SEG_AG, AG_PS_DE_CMPXCHG_AG, AG_PS_DE_SIB_S_AG } = AG_PS_IN2[31:25];
      
    wire NextV;
     address_generation u_address_generation (CLK, PRE, CLR, NextV,
@@ -610,7 +670,8 @@ module PIPELINE(CLK, CLR, PRE);
    wire ME_D2_MEM_WR_WB_OUT, ME_D2_LD_GPR1_WB_OUT, ME_D2_LD_MM_WB_OUT;
 
    wire [31:0] AG_OUT1_ME_PS, ME_PS_IN1;
-   wire LD_ME;
+   // Placeholder for ME
+   assign LD_ME=1;
    wire [31:0] AG_NCS_OUT32;
    wire [127:0] AG_CONTROL_STORE;
 
@@ -737,6 +798,7 @@ module PIPELINE(CLK, CLR, PRE);
 
     wire [2:0] EX_DR1_next = ME_DRID1_OUT;
     wire [2:0] EX_DR2_next = ME_DRID2_OUT;
+    // TODO - What is it assigned from?
     wire [2:0] EX_DR3_next;
     wire [31:0] EX_DR1_out, EX_DR2_out, EX_DR3_out;
     wire [2:0] EX_DR1, EX_DR2, EX_DR3;

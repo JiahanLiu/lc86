@@ -12,7 +12,7 @@ wire [4:0] opcode_buf;
 bufferH16$ buf1[4:0] (opcode_buf, opcode[4:0]);
 bufferH64$ buf2 (opcode5_buf, opcode[5]);
 bufferH64$ buf3 (opcode6_buf, opcode[6]);
-bufferH16$ buf4 (opcode7_buf, opcode[6]);
+bufferH16$ buf4 (opcode7_buf, opcode[7]);
 
 rom64b32w$ u_rom1 (.A(opcode_buf[4:0]), .OE(1'b1), .DOUT(cs1) );
 rom64b32w$ u_rom2 (.A(opcode_buf[4:0]), .OE(1'b1), .DOUT(cs2) );

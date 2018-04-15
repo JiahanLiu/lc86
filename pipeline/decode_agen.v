@@ -23,7 +23,7 @@ module TOP;
      end 
 
 
-   initial #(3 * clk_cycle) $finish;
+   initial #(15 * clk_cycle) $finish;
    
    initial
      begin
@@ -56,28 +56,141 @@ module TOP;
 
     // Checking the values
     always @(posedge clk) begin
-        $strobe ("at time %0d, opcode = %h", $time, u_pipeline.u_decode_stage1.opcode);
-        $strobe ("at time %0d, modrm_sel = %h", $time, u_pipeline.u_decode_stage1.modrm_sel);
-        $strobe ("at time %0d, instr_length_updt = %h", $time, u_pipeline.u_decode_stage1.instr_length_updt);
-        $strobe ("at time %0d, prefix_size = %h", $time, u_pipeline.u_decode_stage1.prefix_size);
-        $strobe ("at time %0d, prefix_present = %h", $time, u_pipeline.u_decode_stage1.prefix_present);
-        $strobe ("at time %0d, segment_override = %h", $time, u_pipeline.u_decode_stage1.segment_override);
-        $strobe ("at time %0d, operand_override = %h", $time, u_pipeline.u_decode_stage1.operand_override);
-        $strobe ("at time %0d, repeat_prefix = %h", $time, u_pipeline.u_decode_stage1.repeat_prefix);
-        $strobe ("at time %0d, modrm_present = %h", $time, u_pipeline.u_decode_stage1.modrm_present);
-        $strobe ("at time %0d, imm_present = %h", $time, u_pipeline.u_decode_stage1.imm_present);
-        $strobe ("at time %0d, imm_size = %h", $time, u_pipeline.u_decode_stage1.imm_size);
-        $strobe ("at time %0d, sib_present = %h", $time, u_pipeline.u_decode_stage1.sib_present);
-        $strobe ("at time %0d, disp_present = %h", $time, u_pipeline.u_decode_stage1.disp_present);
-        $strobe ("at time %0d, disp_size = %h", $time, u_pipeline.u_decode_stage1.disp_size);
-        $strobe ("at time %0d, imm_sel = %h", $time, u_pipeline.u_decode_stage1.imm_sel);
-        $strobe ("at time %0d, disp_sel = %h", $time, u_pipeline.u_decode_stage1.disp_sel);
-        $strobe ("at time %0d, offset_present = %h", $time, u_pipeline.u_decode_stage1.offset_present);
-        $strobe ("at time %0d, offset_size = %h", $time, u_pipeline.u_decode_stage1.offset_size);
-        $strobe ("at time %0d, segID = %h", $time, u_pipeline.u_decode_stage1.segID);
-        $strobe ("at time %0d, modrm = %h", $time, u_pipeline.u_decode_stage1.modrm);
-        $strobe ("at time %0d, sib = %h", $time, u_pipeline.u_decode_stage1.sib);
-        $strobe ("at time %0d, modrm_sel = %h", $time, u_pipeline.u_decode_stage1.modrm_sel);
+        // Decode stage 1 signals 
+        $strobe ("at time %0d, DE1_opcode = %h", $time, u_pipeline.u_decode_stage1.opcode);
+        $strobe ("at time %0d, DE1_modrm_sel = %h", $time, u_pipeline.u_decode_stage1.modrm_sel);
+        $strobe ("at time %0d, DE1_instr_length_updt = %h", $time, u_pipeline.u_decode_stage1.instr_length_updt);
+        $strobe ("at time %0d, DE1_prefix_size = %h", $time, u_pipeline.u_decode_stage1.prefix_size);
+        $strobe ("at time %0d, DE1_prefix_present = %h", $time, u_pipeline.u_decode_stage1.prefix_present);
+        $strobe ("at time %0d, DE1_segment_override = %h", $time, u_pipeline.u_decode_stage1.segment_override);
+        $strobe ("at time %0d, DE1_operand_override = %h", $time, u_pipeline.u_decode_stage1.operand_override);
+        $strobe ("at time %0d, DE1_repeat_prefix = %h", $time, u_pipeline.u_decode_stage1.repeat_prefix);
+        $strobe ("at time %0d, DE1_modrm_present = %h", $time, u_pipeline.u_decode_stage1.modrm_present);
+        $strobe ("at time %0d, DE1_imm_present = %h", $time, u_pipeline.u_decode_stage1.imm_present);
+        $strobe ("at time %0d, DE1_imm_size = %h", $time, u_pipeline.u_decode_stage1.imm_size);
+        $strobe ("at time %0d, DE1_sib_present = %h", $time, u_pipeline.u_decode_stage1.sib_present);
+        $strobe ("at time %0d, DE1_disp_present = %h", $time, u_pipeline.u_decode_stage1.disp_present);
+        $strobe ("at time %0d, DE1_disp_size = %h", $time, u_pipeline.u_decode_stage1.disp_size);
+        $strobe ("at time %0d, DE1_imm_sel = %h", $time, u_pipeline.u_decode_stage1.imm_sel);
+        $strobe ("at time %0d, DE1_disp_sel = %h", $time, u_pipeline.u_decode_stage1.disp_sel);
+        $strobe ("at time %0d, DE1_offset_present = %h", $time, u_pipeline.u_decode_stage1.offset_present);
+        $strobe ("at time %0d, DE1_offset_size = %h", $time, u_pipeline.u_decode_stage1.offset_size);
+        $strobe ("at time %0d, DE1_segID = %h", $time, u_pipeline.u_decode_stage1.segID);
+        $strobe ("at time %0d, DE1_modrm = %h", $time, u_pipeline.u_decode_stage1.modrm);
+        $strobe ("at time %0d, DE1_sib = %h", $time, u_pipeline.u_decode_stage1.sib);
+        $strobe ("at time %0d, DE1_modrm_sel = %h", $time, u_pipeline.u_decode_stage1.modrm_sel);
+
+        // Decode_stage 2 signals
+        $strobe ("at time %0d, DE2_offset = %h", $time, u_pipeline.u_decode_stage2.offset);
+        $strobe ("at time %0d, DE2_CONTROL_STORE = %h", $time, u_pipeline.u_decode_stage2.CONTROL_STORE);
+        $strobe ("at time %0d, DE2_D2_DATA_SIZE_AG = %h", $time, u_pipeline.u_decode_stage2.D2_DATA_SIZE_AG);
+        $strobe ("at time %0d, DE2_D2_SR1_NEEDED_AG = %h", $time, u_pipeline.u_decode_stage2.D2_SR1_NEEDED_AG);
+        $strobe ("at time %0d, DE2_D2_SEG1_NEEDED_AG = %h", $time, u_pipeline.u_decode_stage2.D2_SEG1_NEEDED_AG);
+        $strobe ("at time %0d, DE2_D2_MM1_NEEDED_AG = %h", $time, u_pipeline.u_decode_stage2.D2_MM1_NEEDED_AG);
+        $strobe ("at time %0d, DE2_D2_MEM_RD_ME = %h", $time, u_pipeline.u_decode_stage2.D2_MEM_RD_ME);
+        $strobe ("at time %0d, DE2_D2_MEM_WR_ME = %h", $time, u_pipeline.u_decode_stage2.D2_MEM_WR_ME);
+        $strobe ("at time %0d, DE2_D2_ALUK_EX = %h", $time, u_pipeline.u_decode_stage2.D2_ALUK_EX);
+        $strobe ("at time %0d, DE2_D2_LD_GPR1_WB = %h", $time, u_pipeline.u_decode_stage2.D2_LD_GPR1_WB);
+        $strobe ("at time %0d, DE2_D2_LD_MM_WB = %h", $time, u_pipeline.u_decode_stage2.D2_LD_MM_WB);
+        $strobe ("at time %0d, DE2_SR1_OUT = %h", $time, u_pipeline.u_decode_stage2.SR1_OUT);
+        $strobe ("at time %0d, DE2_SR2_OUT = %h", $time, u_pipeline.u_decode_stage2.SR2_OUT);
+        $strobe ("at time %0d, DE2_SR3_OUT = %h", $time, u_pipeline.u_decode_stage2.SR3_OUT);
+        $strobe ("at time %0d, DE2_SR4_OUT = %h", $time, u_pipeline.u_decode_stage2.SR4_OUT);
+        $strobe ("at time %0d, DE2_SEG1_OUT = %h", $time, u_pipeline.u_decode_stage2.SEG1_OUT);
+        $strobe ("at time %0d, DE2_SEG2_OUT = %h", $time, u_pipeline.u_decode_stage2.SEG2_OUT);
+        $strobe ("at time %0d, DE2_IMM32_OUT = %h", $time, u_pipeline.u_decode_stage2.IMM32_OUT);
+        $strobe ("at time %0d, DE2_DISP32_OUT = %h", $time, u_pipeline.u_decode_stage2.DISP32_OUT);
+        $strobe ("at time %0d, DE2_DE_SIB_EN_AG = %h", $time, u_pipeline.u_decode_stage2.DE_SIB_EN_AG);
+        $strobe ("at time %0d, DE2_DE_DISP_EN_AG = %h", $time, u_pipeline.u_decode_stage2.DE_DISP_EN_AG);
+        $strobe ("at time %0d, DE2_DE_BASE_REG_EN_AG = %h", $time, u_pipeline.u_decode_stage2.DE_BASE_REG_EN_AG);
+        $strobe ("at time %0d, DE2_DE_MUX_SEG_AG = %h", $time, u_pipeline.u_decode_stage2.DE_MUX_SEG_AG);
+        $strobe ("at time %0d, DE2_DE_CMPXCHG_AG = %h", $time, u_pipeline.u_decode_stage2.DE_CMPXCHG_AG);
+        $strobe ("at time %0d, DE2_DE_SIB_S_AG = %h", $time, u_pipeline.u_decode_stage2.DE_SIB_S_AG);
+
+        // Address generation stage signals
+        $strobe ("at time %0d, AG_SR1_OUT = %h", $time, u_pipeline.u_address_generation.SR1_OUT);
+        $strobe ("at time %0d, AG_SR2_OUT = %h", $time, u_pipeline.u_address_generation.SR2_OUT);
+        $strobe ("at time %0d, AG_SR3_OUT = %h", $time, u_pipeline.u_address_generation.SR3_OUT);
+        $strobe ("at time %0d, AG_SIB_I_OUT = %h", $time, u_pipeline.u_address_generation.SIB_I_OUT);
+        $strobe ("at time %0d, AG_SEG1_OUT = %h", $time, u_pipeline.u_address_generation.SEG1_OUT);
+        $strobe ("at time %0d, AG_SEG2_OUT = %h", $time, u_pipeline.u_address_generation.SEG2_OUT);
+        $strobe ("at time %0d, AG_MM1_OUT = %h", $time, u_pipeline.u_address_generation.MM1_OUT);
+        $strobe ("at time %0d, AG_MM2_OUT = %h", $time, u_pipeline.u_address_generation.MM2_OUT);
+        $strobe ("at time %0d, AG_DATA_SIZE_OUT = %h", $time, u_pipeline.u_address_generation.DATA_SIZE_OUT);
+        $strobe ("at time %0d, AG_NEIP_OUT = %h", $time, u_pipeline.u_address_generation.NEIP_OUT);
+        $strobe ("at time %0d, AG_NCS_OUT = %h", $time, u_pipeline.u_address_generation.NCS_OUT);
+        $strobe ("at time %0d, AG_CONTROL_STORE_OUT = %h", $time, u_pipeline.u_address_generation.CONTROL_STORE_OUT);
+        $strobe ("at time %0d, AG_A_OUT = %h", $time, u_pipeline.u_address_generation.A_OUT);
+        $strobe ("at time %0d, AG_B_OUT = %h", $time, u_pipeline.u_address_generation.B_OUT);
+        $strobe ("at time %0d, AG_MM_A_OUT = %h", $time, u_pipeline.u_address_generation.MM_A_OUT);
+        $strobe ("at time %0d, AG_MM_B_OUT = %h", $time, u_pipeline.u_address_generation.MM_B_OUT);
+        $strobe ("at time %0d, AG_SP_XCHG_DATA_OUT = %h", $time, u_pipeline.u_address_generation.SP_XCHG_DATA_OUT);
+        $strobe ("at time %0d, AG_MEM_RD_ADDR_OUT = %h", $time, u_pipeline.u_address_generation.MEM_RD_ADDR_OUT);
+//        $strobe ("at time %0d, AG_MEM_WR_ADDR_OUT = %h", $time, u_pipeline.u_address_generation.MEM_WB_ADDR_OUT);
+        $strobe ("at time %0d, AG_D2_ALUK_EX_OUT = %h", $time, u_pipeline.u_address_generation.D2_ALUK_EX_OUT);
+        $strobe ("at time %0d, AG_DRID1_OUT = %h", $time, u_pipeline.u_address_generation.DRID1_OUT);
+        $strobe ("at time %0d, AG_DRID2_OUT = %h", $time, u_pipeline.u_address_generation.DRID2_OUT);
+        $strobe ("at time %0d, AG_D2_MEM_RD_ME_OUT = %h", $time, u_pipeline.u_address_generation.D2_MEM_RD_ME_OUT);
+        $strobe ("at time %0d, AG_D2_MEM_WR_WB_OUT = %h", $time, u_pipeline.u_address_generation.D2_MEM_WR_WB_OUT);
+        $strobe ("at time %0d, AG_D2_LD_GPR1_WB_OUT = %h", $time, u_pipeline.u_address_generation.D2_LD_GPR1_WB_OUT);
+        $strobe ("at time %0d, AG_D2_LD_MM_WB_OUT = %h", $time, u_pipeline.u_address_generation.D2_LD_MM_WB_OUT);
+        $strobe ("at time %0d, AG_DEP_STALL_OUT = %h", $time, u_pipeline.u_address_generation.DEP_STALL_OUT);
+        $strobe ("at time %0d, AG_SEG_LIMIT_EXC_OUT = %h", $time, u_pipeline.u_address_generation.SEG_LIMIT_EXC_OUT);
+
+        // MEMORY STAGE SIGNALS
+        $strobe ("at time %0d, ME_DCACHE_EN = %h", $time, u_pipeline.u_memory_stage.DCACHE_EN);
+        $strobe ("at time %0d, ME_NEIP_OUT = %h", $time, u_pipeline.u_memory_stage.NEIP_OUT);
+        $strobe ("at time %0d, ME_NCS_OUT = %h", $time, u_pipeline.u_memory_stage.NCS_OUT);
+        $strobe ("at time %0d, ME_CONTROL_STORE_OUT = %h", $time, u_pipeline.u_memory_stage.CONTROL_STORE_OUT);
+        $strobe ("at time %0d, ME_A_OUT = %h", $time, u_pipeline.u_memory_stage.A_OUT);
+        $strobe ("at time %0d, ME_B_OUT = %h", $time, u_pipeline.u_memory_stage.B_OUT);
+        $strobe ("at time %0d, ME_MM_A_OUT = %h", $time, u_pipeline.u_memory_stage.MM_A_OUT);
+        $strobe ("at time %0d, ME_MM_B_OUT = %h", $time, u_pipeline.u_memory_stage.MM_B_OUT);
+        $strobe ("at time %0d, ME_SP_XCHG_DATA_OUT = %h", $time, u_pipeline.u_memory_stage.SP_XCHG_DATA_OUT);
+        $strobe ("at time %0d, ME_MEM_RD_ADDR_OUT = %h", $time, u_pipeline.u_memory_stage.MEM_RD_ADDR_OUT);
+        $strobe ("at time %0d, ME_MEM_WR_ADDR_OUT = %h", $time, u_pipeline.u_memory_stage.MEM_WR_ADDR_OUT);
+        $strobe ("at time %0d, ME_DATA_SIZE_OUT = %h", $time, u_pipeline.u_memory_stage.DATA_SIZE_OUT);
+        $strobe ("at time %0d, ME_DE_ALUK_EX_OUT = %h", $time, u_pipeline.u_memory_stage.DE_ALUK_EX_OUT);
+        $strobe ("at time %0d, ME_DRID1_OUT = %h", $time, u_pipeline.u_memory_stage.DRID1_OUT);
+        $strobe ("at time %0d, ME_DRID2_OUT = %h", $time, u_pipeline.u_memory_stage.DRID2_OUT);
+        $strobe ("at time %0d, ME_D2_MEM_WR_WB_OUT = %h", $time, u_pipeline.u_memory_stage.D2_MEM_WR_WB_OUT);
+        $strobe ("at time %0d, ME_D2_LD_GPR1_WB_OUT = %h", $time, u_pipeline.u_memory_stage.D2_LD_GPR1_WB_OUT);
+        $strobe ("at time %0d, ME_D2_LD_MM_WB_OUT = %h", $time, u_pipeline.u_memory_stage.D2_LD_MM_WB_OUT);
+
+
+        // EXECUTE STAGE SIGNALS
+        $strobe ("at time %0d, EX_WB_V_next = %h", $time, u_pipeline.u_execute.WB_V_next);
+        $strobe ("at time %0d, EX_WB_NEIP_next = %h", $time, u_pipeline.u_execute.WB_NEIP_next);
+        $strobe ("at time %0d, EX_WB_NCS_next = %h", $time, u_pipeline.u_execute.WB_NCS_next);
+        $strobe ("at time %0d, EX_WB_CONTROL_STORE_next = %h", $time, u_pipeline.u_execute.WB_CONTROL_STORE_next);
+        $strobe ("at time %0d, EX_WB_de_datasize_all_next = %h", $time, u_pipeline.u_execute.WB_de_datasize_all_next);
+        $strobe ("at time %0d, EX_WB_de_aluk_ex_next = %h", $time, u_pipeline.u_execute.WB_de_aluk_ex_next);
+        $strobe ("at time %0d, EX_WB_de_ld_gpr1_wb_next = %h", $time, u_pipeline.u_execute.WB_de_ld_gpr1_wb_next);
+        $strobe ("at time %0d, EX_WB_de_dcache_write_wb_next = %h", $time, u_pipeline.u_execute.WB_de_dcache_write_wb_next);
+        $strobe ("at time %0d, EX_WB_de_flags_affected_wb_next = %h", $time, u_pipeline.u_execute.WB_de_flags_affected_wb_next);
+        $strobe ("at time %0d, EX_WB_ALU32_RESULT_next = %h", $time, u_pipeline.u_execute.WB_ALU32_RESULT_next);
+        $strobe ("at time %0d, EX_WB_FLAGS_next = %h", $time, u_pipeline.u_execute.WB_FLAGS_next);
+        $strobe ("at time %0d, EX_WB_CMPS_POINTER_next = %h", $time, u_pipeline.u_execute.WB_CMPS_POINTER_next);
+        $strobe ("at time %0d, EX_WB_COUNT_next = %h", $time, u_pipeline.u_execute.WB_COUNT_next);
+        $strobe ("at time %0d, EX_WB_DR1_next = %h", $time, u_pipeline.u_execute.WB_DR1_next);
+        $strobe ("at time %0d, EX_WB_DR2_next = %h", $time, u_pipeline.u_execute.WB_DR2_next);
+        $strobe ("at time %0d, EX_WB_DR3_next = %h", $time, u_pipeline.u_execute.WB_DR3_next);
+
+        // WRITEBACK SIGNALS
+        $strobe ("at time %0d, WB_Out_DR1 = %h", $time, u_pipeline.u_writeback.Out_DR1);
+        $strobe ("at time %0d, WB_Out_DR2 = %h", $time, u_pipeline.u_writeback.Out_DR2);
+        $strobe ("at time %0d, WB_Out_DR3 = %h", $time, u_pipeline.u_writeback.Out_DR3);
+        $strobe ("at time %0d, WB_Out_DR1_Data = %h", $time, u_pipeline.u_writeback.Out_DR1_Data);
+        $strobe ("at time %0d, WB_Out_DR2_Data = %h", $time, u_pipeline.u_writeback.Out_DR2_Data);
+        $strobe ("at time %0d, WB_Out_DR3_Data = %h", $time, u_pipeline.u_writeback.Out_DR3_Data);
+        $strobe ("at time %0d, WB_out_v_de_ld_gpr1_wb = %h", $time, u_pipeline.u_writeback.out_v_de_ld_gpr1_wb);
+        $strobe ("at time %0d, WB_out_v_cs_ld_gpr2_wb = %h", $time, u_pipeline.u_writeback.out_v_cs_ld_gpr2_wb);
+        $strobe ("at time %0d, WB_out_v_cs_ld_gpr3_wb = %h", $time, u_pipeline.u_writeback.out_v_cs_ld_gpr3_wb);
+        $strobe ("at time %0d, WB_out_de_datasize = %h", $time, u_pipeline.u_writeback.out_de_datasize);
+        $strobe ("at time %0d, WB_Out_Dcache_Data = %h", $time, u_pipeline.u_writeback.Out_Dcache_Data);
+        $strobe ("at time %0d, WB_Out_Dcache_Address = %h", $time, u_pipeline.u_writeback.Out_Dcache_Address);
+        $strobe ("at time %0d, WB_Out_ex_repne_termination_all = %h", $time, u_pipeline.u_writeback.Out_ex_repne_termination_all);
+
     end
 
    
@@ -533,7 +646,7 @@ module PIPELINE(CLK, CLR, PRE);
      u_reg_me_ps_in1 (CLK, AG_OUT1_ME_PS, ME_PS_IN1, , CLR, PRE, LD_ME);
    
     wire V;
-    memory_stage me_stage (CLK, CLR, PRE, V,
+    memory_stage u_memory_stage (CLK, CLR, PRE, V,
         ME_PS_NEIP, ME_PS_NCS, ME_PS_CONTROL_STORE,
         ME_PS_A, ME_PS_B, ME_PS_MM_A, ME_PS_MM_B, ME_PS_SP_XCHG_DATA,
         ME_PS_MEM_RD_ADDR, ME_PS_MEM_WR_ADDR, ME_PS_DATA_SIZE,
