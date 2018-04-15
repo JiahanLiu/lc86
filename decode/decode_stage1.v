@@ -1,11 +1,6 @@
 module decode_stage1 (
     input clk, set, reset, 
     input [127:0] IR, 
-    input [31:0] EIP,
-    input [15:0] CS,
-
-    output [31:0] EIP_OUT, 
-    output [15:0] CS_OUT,
     output [127:0] IR_OUT,
     output [3:0] instr_length_updt,
     output [15:0] opcode, 
@@ -36,6 +31,7 @@ wire [2:0] segID1, segID2, segID3;
 wire isPrefix4, isOpcode4;
 wire isPrefix5, isOpcode5;
 wire out4a, out5a, out6a, out7a, out8a, out9a;
+wire [1:0] imm_size_in;
 
 // Prefix Decoder
 wire [1:0] segID_sel;
@@ -44,8 +40,6 @@ wire [1:0] segID_sel;
 wire [2:0] opcode_sel;
 wire [7:0] out1m, out2m;
 
-assign CS_OUT = CS;
-assign EIP_OUT = EIP;
 assign IR_OUT = IR;
 
 prefix_checker u_prefix_checker1 (.instr_byte(IR[127:120]), .isPrefix(isPrefix1), .isOpcode(isOpcode1),
@@ -107,7 +101,7 @@ mux2_8$ mux4_op (opcode[15:8], 8'b0, out1m, opcode_sel[2]);
 modrm_detector u_modrm_detector (.opcode(opcode), .modrm_present(modrm_present) );
 
 immediate_detector u_immediate_detector (.opcode(opcode), .operand_override(operand_override),
-    .imm_present(imm_present), .imm_size(imm_size)
+    .imm_present(imm_present), .imm_size(imm_size_in)
 );
 
 modrm_pointer u_modrm_pointer (.opcode_size(opcode_size), .prefix_present(prefix_present),
@@ -129,11 +123,15 @@ offset_detector u_offset_detector (.opcode(opcode), .operand_override(operand_ov
     .opcode_size(opcode_size), .offset_present(offset_present), .offset_size(offset_size)
 );
 
+
+
 instruction_length_decoder u_instruction_length_decoder (.prefix_present(prefix_present),
     .prefix_size(prefix_size), .opcode_size(opcode_size), .modrm_present(modrm_present),
     .sib_present(sib_present), .offset_present(offset_present), .offset_size(offset_size), 
     .disp_present(disp_present), .disp_size(disp_size), .imm_present(imm_present),
-    .imm_size(imm_size), .disp_sel(disp_sel), .imm_sel(imm_sel), .read_ptr_update(instr_length_updt)
+    .imm_size(imm_size_in), .disp_sel(disp_sel), .imm_sel(imm_sel), .read_ptr_update(instr_length_updt)
 );
+
+assign imm_size = imm_size_in;
 
 endmodule

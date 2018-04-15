@@ -44,12 +44,11 @@ module writeback (
 );
 
    //need nelson to make these signals
-  wire CS_IS_CMPS_FIRST_UOP_ALL;
-  wire CS_IS_CMPS_SECOND_UOP_ALL; 
   wire CS_IS_FIRST_OF_REPNE_WB; 
   wire CS_LD_GPR3_WB;
-  assign CS_IS_CMPS_FIRST_UOP_ALL = 0;
-  assign CS_IS_CMPS_SECOND_UOP_ALL = 0; 
+  wire CS_LD_GPR2_WB;
+//  assign CS_IS_CMPS_FIRST_UOP_ALL = 0;
+//  assign CS_IS_CMPS_SECOND_UOP_ALL = 0; 
   assign CS_IS_FIRST_OF_REPNE_WB = 0; 
   assign CS_LD_GPR3_WB = 0;
 
