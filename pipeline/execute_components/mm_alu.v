@@ -153,9 +153,9 @@ module PSHUFW(
 	input [7:0] c 
 	);
 
-	mux16_4way u_mux3(alu64_results[63:48], b[15:0], b[31:16], b[47:32], b[63:48], c[1:0]);
-	mux16_4way u_mux2(alu64_results[47:32], b[15:0], b[31:16], b[47:32], b[63:48], c[3:2]);
-	mux16_4way u_mux1(alu64_results[31:16], b[15:0], b[31:16], b[47:32], b[63:48], c[5:4]);
-	mux16_4way u_mux0(alu64_results[15:0], b[15:0], b[31:16], b[47:32], b[63:48], c[7:6]);
+	mux16_4way u_mux3(alu64_results[63:48], b[15:0], b[31:16], b[47:32], b[63:48], c[7:6]);
+	mux16_4way u_mux2(alu64_results[47:32], b[15:0], b[31:16], b[47:32], b[63:48], c[5:4]);
+	mux16_4way u_mux1(alu64_results[31:16], b[15:0], b[31:16], b[47:32], b[63:48], c[3:2]);
+	mux16_4way u_mux0(alu64_results[15:0], b[15:0], b[31:16], b[47:32], b[63:48], c[1:0]);
 	
 endmodule // PSHUFW
