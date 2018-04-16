@@ -208,7 +208,7 @@ module TOP;
         $strobe ("at time %0d, ME_D2_LD_GPR1_WB_OUT = %h", $time, u_pipeline.u_memory_stage.D2_LD_GPR1_WB_OUT);
         $strobe ("at time %0d, ME_D2_LD_MM_WB_OUT = %h", $time, u_pipeline.u_memory_stage.D2_LD_MM_WB_OUT);
 
-
+/*
         // EXECUTE STAGE SIGNALS
         $strobe ("at time %0d, EX_WB_V_next = %h", $time, u_pipeline.u_execute.WB_V_next);
         $strobe ("at time %0d, EX_WB_NEIP_next = %h", $time, u_pipeline.u_execute.WB_NEIP_next);
@@ -241,7 +241,7 @@ module TOP;
         $strobe ("at time %0d, WB_Out_Dcache_Data = %h", $time, u_pipeline.u_writeback.Out_Dcache_Data);
         $strobe ("at time %0d, WB_Out_Dcache_Address = %h", $time, u_pipeline.u_writeback.Out_Dcache_Address);
         $strobe ("at time %0d, WB_Out_ex_repne_termination_all = %h", $time, u_pipeline.u_writeback.Out_ex_repne_termination_all);
-
+*/
     end
 
    
@@ -812,7 +812,7 @@ module PIPELINE(CLK, CLR, PRE);
     //EX s
 
     //*******EXECUTE STAGE*******.//
-
+/*
     wire WB_V_next;
     wire [1:0] WB_de_datasize_all_next;
     wire [2:0] WB_de_aluk_ex_next; 
@@ -956,7 +956,7 @@ module PIPELINE(CLK, CLR, PRE);
         out_de_datasize,
         Out_Dcache_Data, Out_Dcache_Address, 
         Out_ex_repne_termination_all
-    );
+    );*/
 
 
 endmodule
