@@ -15,8 +15,8 @@ module regfile_gpr_props (
     input [31:0] reg4_lh_out, reg5_lh_out, reg6_lh_out, reg7_lh_out,
     input [31:0] reg0_ll_out, reg1_ll_out, reg2_ll_out, reg3_ll_out,
     input [31:0] reg4_ll_out, reg5_ll_out, reg6_ll_out, reg7_ll_out,
-    input [31:0] write_data0_ll,
-    input [7:0] out4a
+    input [31:0] write_data0_ll, write_data0_hh,
+    input [7:0] out4a, out3a, out2a, out1a
 
 );
 
@@ -36,200 +36,165 @@ assume property (@(posedge clk) write_DR1 |-> !$isunknown(result1) && $stable(re
 assume property (@(posedge clk) write_DR2 |-> !$isunknown(result2) && $stable(result2));
 assume property (@(posedge clk) write_DR3 |-> !$isunknown(result3) && $stable(result3));
 
+assume property (@(posedge clk) $rose(result1) | $fell(result1));
+assume property (@(posedge clk) $rose(result2) | $fell(result2));
+assume property (@(posedge clk) $rose(result3) | $fell(result3));
+
+assume property (@(posedge clk) $rose(write_DR1) | $fell(write_DR1));
+assume property (@(posedge clk) $rose(write_DR2) | $fell(write_DR2));
+assume property (@(posedge clk) $rose(write_DR3) | $fell(write_DR3));
+
 // Write properties
-assert property (@(posedge clk) DR1==0 && WE1==0 && write_DR1 |-> write_data0_ll == result1); 
-assert property (@(posedge clk) DR1==0 && WE1==0 && write_DR1 |-> out4a[0]==1); 
-assert property (@(posedge clk) out4a[0] |=> reg0_ll_out == $past(write_data0_ll,1));
+//assert property (@(posedge clk) DR1==0 && WE1==0 && write_DR1 |-> write_data0_ll == result1); 
+//assert property (@(negedge clk) DR1==0 && WE1==0 && write_DR1 |=> write_data0_ll == reg0_ll_out); 
+//assert property (@(posedge clk) ($stable(result1) && $stable(DR1) && $stable(WE1)) ##1 (DR1==0 && WE1==2 && write_DR1) |=> $past(result1[7:0],1) == reg0_ll_out[7:0]);
 
 
-// Read properties
-
+//// Read properties
+//
 //assert property (@(posedge clk) RE1==0 |-> regA[31:8]==24'b0); 
-//assert property (@(posedge clk) RE1==1 |-> regA[31:8]==24'b0); 
-//assert property (@(posedge clk) RE1==2 |-> regA[31:16]==24'b0); 
+//assert property (@(posedge clk) RE1==1 |-> regA[31:16]==24'b0); 
 //
 //assert property (@(posedge clk) RE2==0 |-> regB[31:8]==24'b0); 
-//assert property (@(posedge clk) RE2==1 |-> regB[31:8]==24'b0); 
-//assert property (@(posedge clk) RE2==2 |-> regB[31:16]==24'b0); 
+//assert property (@(posedge clk) RE2==1 |-> regB[31:16]==24'b0); 
 //
 //assert property (@(posedge clk) RE3==0 |-> regC[31:8]==24'b0); 
-//assert property (@(posedge clk) RE3==1 |-> regC[31:8]==24'b0); 
-//assert property (@(posedge clk) RE3==2 |-> regC[31:16]==24'b0); 
+//assert property (@(posedge clk) RE3==1 |-> regC[31:16]==24'b0); 
 //
 //assert property (@(posedge clk) RE4==0 |-> regD[31:8]==24'b0); 
-//assert property (@(posedge clk) RE4==1 |-> regD[31:8]==24'b0); 
-//assert property (@(posedge clk) RE4==2 |-> regD[31:16]==24'b0); 
-
+//assert property (@(posedge clk) RE4==1 |-> regD[31:16]==24'b0); 
+//
 //// RegA output
 //assert property (@(posedge clk) SR1==0 && RE1==0 |-> regA=={24'b0, reg0_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR1==0 && RE1==1 |-> regA=={24'b0, reg0_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR1==0 && RE1==2 |-> regA=={16'b0, reg0_lh_out[15:8], reg0_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR1==0 && RE1==3 |-> regA=={reg0_hh_out[31:24], reg0_hl_out[23:16], reg0_lh_out[15:8], reg0_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR1==0 && RE1==1 |-> regA=={16'b0, reg0_lh_out[15:8], reg0_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR1==0 && RE1==2 |-> regA=={reg0_hh_out[31:24], reg0_hl_out[23:16], reg0_lh_out[15:8], reg0_ll_out[7:0]}); 
 //
 //assert property (@(posedge clk) SR1==1 && RE1==0 |-> regA=={24'b0, reg1_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR1==1 && RE1==1 |-> regA=={24'b0, reg1_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR1==1 && RE1==2 |-> regA=={16'b0, reg1_lh_out[15:8], reg1_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR1==1 && RE1==3 |-> regA=={reg1_hh_out[31:24], reg1_hl_out[23:16], reg1_lh_out[15:8], reg1_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR1==1 && RE1==1 |-> regA=={16'b0, reg1_lh_out[15:8], reg1_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR1==1 && RE1==2 |-> regA=={reg1_hh_out[31:24], reg1_hl_out[23:16], reg1_lh_out[15:8], reg1_ll_out[7:0]}); 
 //
 //assert property (@(posedge clk) SR1==2 && RE1==0 |-> regA=={24'b0, reg2_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR1==2 && RE1==1 |-> regA=={24'b0, reg2_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR1==2 && RE1==2 |-> regA=={16'b0, reg2_lh_out[15:8], reg2_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR1==2 && RE1==3 |-> regA=={reg2_hh_out[31:24], reg2_hl_out[23:16], reg2_lh_out[15:8], reg2_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR1==2 && RE1==1 |-> regA=={16'b0, reg2_lh_out[15:8], reg2_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR1==2 && RE1==2 |-> regA=={reg2_hh_out[31:24], reg2_hl_out[23:16], reg2_lh_out[15:8], reg2_ll_out[7:0]}); 
 //
 //assert property (@(posedge clk) SR1==3 && RE1==0 |-> regA=={24'b0, reg3_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR1==3 && RE1==1 |-> regA=={24'b0, reg3_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR1==3 && RE1==2 |-> regA=={16'b0, reg3_lh_out[15:8], reg3_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR1==3 && RE1==3 |-> regA=={reg3_hh_out[31:24], reg3_hl_out[23:16], reg3_lh_out[15:8], reg3_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR1==3 && RE1==1 |-> regA=={16'b0, reg3_lh_out[15:8], reg3_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR1==3 && RE1==2 |-> regA=={reg3_hh_out[31:24], reg3_hl_out[23:16], reg3_lh_out[15:8], reg3_ll_out[7:0]}); 
 //
-//assert property (@(posedge clk) SR1==4 && RE1==0 |-> regA=={24'b0, reg4_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR1==4 && RE1==1 |-> regA=={24'b0, reg4_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR1==4 && RE1==2 |-> regA=={16'b0, reg4_lh_out[15:8], reg4_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR1==4 && RE1==3 |-> regA=={reg4_hh_out[31:24], reg4_hl_out[23:16], reg4_lh_out[15:8], reg4_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR1==4 && RE1==0 |-> regA=={24'b0, reg0_lh_out[15:8]}); 
+//assert property (@(posedge clk) SR1==4 && RE1==1 |-> regA=={16'b0, reg4_lh_out[15:8], reg4_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR1==4 && RE1==2 |-> regA=={reg4_hh_out[31:24], reg4_hl_out[23:16], reg4_lh_out[15:8], reg4_ll_out[7:0]}); 
 //
-//assert property (@(posedge clk) SR1==5 && RE1==0 |-> regA=={24'b0, reg5_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR1==5 && RE1==1 |-> regA=={24'b0, reg5_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR1==5 && RE1==2 |-> regA=={16'b0, reg5_lh_out[15:8], reg5_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR1==5 && RE1==3 |-> regA=={reg5_hh_out[31:24], reg5_hl_out[23:16], reg5_lh_out[15:8], reg5_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR1==5 && RE1==0 |-> regA=={24'b0, reg1_lh_out[15:8]}); 
+//assert property (@(posedge clk) SR1==5 && RE1==1 |-> regA=={16'b0, reg5_lh_out[15:8], reg5_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR1==5 && RE1==2 |-> regA=={reg5_hh_out[31:24], reg5_hl_out[23:16], reg5_lh_out[15:8], reg5_ll_out[7:0]}); 
 //
-//assert property (@(posedge clk) SR1==6 && RE1==0 |-> regA=={24'b0, reg6_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR1==6 && RE1==1 |-> regA=={24'b0, reg6_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR1==6 && RE1==2 |-> regA=={16'b0, reg6_lh_out[15:8], reg6_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR1==6 && RE1==3 |-> regA=={reg6_hh_out[31:24], reg6_hl_out[23:16], reg6_lh_out[15:8], reg6_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR1==6 && RE1==0 |-> regA=={24'b0, reg2_lh_out[15:8]}); 
+//assert property (@(posedge clk) SR1==6 && RE1==1 |-> regA=={16'b0, reg6_lh_out[15:8], reg6_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR1==6 && RE1==2 |-> regA=={reg6_hh_out[31:24], reg6_hl_out[23:16], reg6_lh_out[15:8], reg6_ll_out[7:0]}); 
 //
-//assert property (@(posedge clk) SR1==7 && RE1==0 |-> regA=={24'b0, reg7_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR1==7 && RE1==1 |-> regA=={24'b0, reg7_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR1==7 && RE1==2 |-> regA=={16'b0, reg7_lh_out[15:8], reg7_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR1==7 && RE1==3 |-> regA=={reg7_hh_out[31:24], reg7_hl_out[23:16], reg7_lh_out[15:8], reg7_ll_out[7:0]}); 
-
+//assert property (@(posedge clk) SR1==7 && RE1==0 |-> regA=={24'b0, reg3_lh_out[15:8]}); 
+//assert property (@(posedge clk) SR1==7 && RE1==1 |-> regA=={16'b0, reg7_lh_out[15:8], reg7_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR1==7 && RE1==2 |-> regA=={reg7_hh_out[31:24], reg7_hl_out[23:16], reg7_lh_out[15:8], reg7_ll_out[7:0]}); 
+//
 //// RegB output
 //assert property (@(posedge clk) SR2==0 && RE2==0 |-> regB=={24'b0, reg0_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR2==0 && RE2==1 |-> regB=={24'b0, reg0_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR2==0 && RE2==2 |-> regB=={16'b0, reg0_lh_out[15:8], reg0_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR2==0 && RE2==3 |-> regB=={reg0_hh_out[31:24], reg0_hl_out[23:16], reg0_lh_out[15:8], reg0_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR2==0 && RE2==1 |-> regB=={16'b0, reg0_lh_out[15:8], reg0_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR2==0 && RE2==2 |-> regB=={reg0_hh_out[31:24], reg0_hl_out[23:16], reg0_lh_out[15:8], reg0_ll_out[7:0]}); 
 //
 //assert property (@(posedge clk) SR2==1 && RE2==0 |-> regB=={24'b0, reg1_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR2==1 && RE2==1 |-> regB=={24'b0, reg1_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR2==1 && RE2==2 |-> regB=={16'b0, reg1_lh_out[15:8], reg1_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR2==1 && RE2==3 |-> regB=={reg1_hh_out[31:24], reg1_hl_out[23:16], reg1_lh_out[15:8], reg1_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR2==1 && RE2==1 |-> regB=={16'b0, reg1_lh_out[15:8], reg1_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR2==1 && RE2==2 |-> regB=={reg1_hh_out[31:24], reg1_hl_out[23:16], reg1_lh_out[15:8], reg1_ll_out[7:0]}); 
 //
 //assert property (@(posedge clk) SR2==2 && RE2==0 |-> regB=={24'b0, reg2_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR2==2 && RE2==1 |-> regB=={24'b0, reg2_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR2==2 && RE2==2 |-> regB=={16'b0, reg2_lh_out[15:8], reg2_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR2==2 && RE2==3 |-> regB=={reg2_hh_out[31:24], reg2_hl_out[23:16], reg2_lh_out[15:8], reg2_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR2==2 && RE2==1 |-> regB=={16'b0, reg2_lh_out[15:8], reg2_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR2==2 && RE2==2 |-> regB=={reg2_hh_out[31:24], reg2_hl_out[23:16], reg2_lh_out[15:8], reg2_ll_out[7:0]}); 
 //
 //assert property (@(posedge clk) SR2==3 && RE2==0 |-> regB=={24'b0, reg3_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR2==3 && RE2==1 |-> regB=={24'b0, reg3_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR2==3 && RE2==2 |-> regB=={16'b0, reg3_lh_out[15:8], reg3_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR2==3 && RE2==3 |-> regB=={reg3_hh_out[31:24], reg3_hl_out[23:16], reg3_lh_out[15:8], reg3_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR2==3 && RE2==1 |-> regB=={16'b0, reg3_lh_out[15:8], reg3_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR2==3 && RE2==2 |-> regB=={reg3_hh_out[31:24], reg3_hl_out[23:16], reg3_lh_out[15:8], reg3_ll_out[7:0]}); 
 //
-//assert property (@(posedge clk) SR2==4 && RE2==0 |-> regB=={24'b0, reg4_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR2==4 && RE2==1 |-> regB=={24'b0, reg4_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR2==4 && RE2==2 |-> regB=={16'b0, reg4_lh_out[15:8], reg4_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR2==4 && RE2==3 |-> regB=={reg4_hh_out[31:24], reg4_hl_out[23:16], reg4_lh_out[15:8], reg4_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR2==4 && RE2==0 |-> regB=={24'b0, reg0_lh_out[15:8]}); 
+//assert property (@(posedge clk) SR2==4 && RE2==1 |-> regB=={16'b0, reg4_lh_out[15:8], reg4_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR2==4 && RE2==2 |-> regB=={reg4_hh_out[31:24], reg4_hl_out[23:16], reg4_lh_out[15:8], reg4_ll_out[7:0]}); 
 //
-//assert property (@(posedge clk) SR2==5 && RE2==0 |-> regB=={24'b0, reg5_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR2==5 && RE2==1 |-> regB=={24'b0, reg5_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR2==5 && RE2==2 |-> regB=={16'b0, reg5_lh_out[15:8], reg5_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR2==5 && RE2==3 |-> regB=={reg5_hh_out[31:24], reg5_hl_out[23:16], reg5_lh_out[15:8], reg5_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR2==5 && RE2==0 |-> regB=={24'b0, reg1_lh_out[15:8]}); 
+//assert property (@(posedge clk) SR2==5 && RE2==1 |-> regB=={16'b0, reg5_lh_out[15:8], reg5_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR2==5 && RE2==2 |-> regB=={reg5_hh_out[31:24], reg5_hl_out[23:16], reg5_lh_out[15:8], reg5_ll_out[7:0]}); 
 //
-//assert property (@(posedge clk) SR2==6 && RE2==0 |-> regB=={24'b0, reg6_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR2==6 && RE2==1 |-> regB=={24'b0, reg6_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR2==6 && RE2==2 |-> regB=={16'b0, reg6_lh_out[15:8], reg6_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR2==6 && RE2==3 |-> regB=={reg6_hh_out[31:24], reg6_hl_out[23:16], reg6_lh_out[15:8], reg6_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR2==6 && RE2==0 |-> regB=={24'b0, reg2_lh_out[15:8]}); 
+//assert property (@(posedge clk) SR2==6 && RE2==1 |-> regB=={16'b0, reg6_lh_out[15:8], reg6_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR2==6 && RE2==2 |-> regB=={reg6_hh_out[31:24], reg6_hl_out[23:16], reg6_lh_out[15:8], reg6_ll_out[7:0]}); 
 //
-//assert property (@(posedge clk) SR2==7 && RE2==0 |-> regB=={24'b0, reg7_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR2==7 && RE2==1 |-> regB=={24'b0, reg7_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR2==7 && RE2==2 |-> regB=={16'b0, reg7_lh_out[15:8], reg7_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR2==7 && RE2==3 |-> regB=={reg7_hh_out[31:24], reg7_hl_out[23:16], reg7_lh_out[15:8], reg7_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR2==7 && RE2==0 |-> regB=={24'b0, reg3_lh_out[15:8]}); 
+//assert property (@(posedge clk) SR2==7 && RE2==1 |-> regB=={16'b0, reg7_lh_out[15:8], reg7_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR2==7 && RE2==2 |-> regB=={reg7_hh_out[31:24], reg7_hl_out[23:16], reg7_lh_out[15:8], reg7_ll_out[7:0]}); 
 //
 //// RegC output
 //assert property (@(posedge clk) SR3==0 && RE3==0 |-> regC=={24'b0, reg0_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR3==0 && RE3==1 |-> regC=={24'b0, reg0_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR3==0 && RE3==2 |-> regC=={16'b0, reg0_lh_out[15:8], reg0_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR3==0 && RE3==3 |-> regC=={reg0_hh_out[31:24], reg0_hl_out[23:16], reg0_lh_out[15:8], reg0_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR3==0 && RE3==1 |-> regC=={16'b0, reg0_lh_out[15:8], reg0_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR3==0 && RE3==2 |-> regC=={reg0_hh_out[31:24], reg0_hl_out[23:16], reg0_lh_out[15:8], reg0_ll_out[7:0]}); 
 //
 //assert property (@(posedge clk) SR3==1 && RE3==0 |-> regC=={24'b0, reg1_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR3==1 && RE3==1 |-> regC=={24'b0, reg1_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR3==1 && RE3==2 |-> regC=={16'b0, reg1_lh_out[15:8], reg1_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR3==1 && RE3==3 |-> regC=={reg1_hh_out[31:24], reg1_hl_out[23:16], reg1_lh_out[15:8], reg1_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR3==1 && RE3==1 |-> regC=={16'b0, reg1_lh_out[15:8], reg1_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR3==1 && RE3==2 |-> regC=={reg1_hh_out[31:24], reg1_hl_out[23:16], reg1_lh_out[15:8], reg1_ll_out[7:0]}); 
 //
 //assert property (@(posedge clk) SR3==2 && RE3==0 |-> regC=={24'b0, reg2_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR3==2 && RE3==1 |-> regC=={24'b0, reg2_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR3==2 && RE3==2 |-> regC=={16'b0, reg2_lh_out[15:8], reg2_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR3==2 && RE3==3 |-> regC=={reg2_hh_out[31:24], reg2_hl_out[23:16], reg2_lh_out[15:8], reg2_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR3==2 && RE3==1 |-> regC=={16'b0, reg2_lh_out[15:8], reg2_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR3==2 && RE3==2 |-> regC=={reg2_hh_out[31:24], reg2_hl_out[23:16], reg2_lh_out[15:8], reg2_ll_out[7:0]}); 
 //
 //assert property (@(posedge clk) SR3==3 && RE3==0 |-> regC=={24'b0, reg3_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR3==3 && RE3==1 |-> regC=={24'b0, reg3_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR3==3 && RE3==2 |-> regC=={16'b0, reg3_lh_out[15:8], reg3_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR3==3 && RE3==3 |-> regC=={reg3_hh_out[31:24], reg3_hl_out[23:16], reg3_lh_out[15:8], reg3_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR3==3 && RE3==1 |-> regC=={16'b0, reg3_lh_out[15:8], reg3_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR3==3 && RE3==2 |-> regC=={reg3_hh_out[31:24], reg3_hl_out[23:16], reg3_lh_out[15:8], reg3_ll_out[7:0]}); 
 //
-//assert property (@(posedge clk) SR3==4 && RE3==0 |-> regC=={24'b0, reg4_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR3==4 && RE3==1 |-> regC=={24'b0, reg4_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR3==4 && RE3==2 |-> regC=={16'b0, reg4_lh_out[15:8], reg4_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR3==4 && RE3==3 |-> regC=={reg4_hh_out[31:24], reg4_hl_out[23:16], reg4_lh_out[15:8], reg4_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR3==4 && RE3==0 |-> regC=={24'b0, reg0_lh_out[15:8]}); 
+//assert property (@(posedge clk) SR3==4 && RE3==1 |-> regC=={16'b0, reg4_lh_out[15:8], reg4_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR3==4 && RE3==2 |-> regC=={reg4_hh_out[31:24], reg4_hl_out[23:16], reg4_lh_out[15:8], reg4_ll_out[7:0]}); 
 //
-//assert property (@(posedge clk) SR3==5 && RE3==0 |-> regC=={24'b0, reg5_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR3==5 && RE3==1 |-> regC=={24'b0, reg5_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR3==5 && RE3==2 |-> regC=={16'b0, reg5_lh_out[15:8], reg5_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR3==5 && RE3==3 |-> regC=={reg5_hh_out[31:24], reg5_hl_out[23:16], reg5_lh_out[15:8], reg5_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR3==5 && RE3==0 |-> regC=={24'b0, reg1_lh_out[15:8]}); 
+//assert property (@(posedge clk) SR3==5 && RE3==1 |-> regC=={16'b0, reg5_lh_out[15:8], reg5_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR3==5 && RE3==2 |-> regC=={reg5_hh_out[31:24], reg5_hl_out[23:16], reg5_lh_out[15:8], reg5_ll_out[7:0]}); 
 //
-//assert property (@(posedge clk) SR3==6 && RE3==0 |-> regC=={24'b0, reg6_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR3==6 && RE3==1 |-> regC=={24'b0, reg6_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR3==6 && RE3==2 |-> regC=={16'b0, reg6_lh_out[15:8], reg6_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR3==6 && RE3==3 |-> regC=={reg6_hh_out[31:24], reg6_hl_out[23:16], reg6_lh_out[15:8], reg6_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR3==6 && RE3==0 |-> regC=={24'b0, reg2_lh_out[15:8]}); 
+//assert property (@(posedge clk) SR3==6 && RE3==1 |-> regC=={16'b0, reg6_lh_out[15:8], reg6_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR3==6 && RE3==2 |-> regC=={reg6_hh_out[31:24], reg6_hl_out[23:16], reg6_lh_out[15:8], reg6_ll_out[7:0]}); 
 //
-//assert property (@(posedge clk) SR3==7 && RE3==0 |-> regC=={24'b0, reg7_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR3==7 && RE3==1 |-> regC=={24'b0, reg7_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR3==7 && RE3==2 |-> regC=={16'b0, reg7_lh_out[15:8], reg7_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR3==7 && RE3==3 |-> regC=={reg7_hh_out[31:24], reg7_hl_out[23:16], reg7_lh_out[15:8], reg7_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR3==7 && RE3==0 |-> regC=={24'b0, reg3_lh_out[15:8]}); 
+//assert property (@(posedge clk) SR3==7 && RE3==1 |-> regC=={16'b0, reg7_lh_out[15:8], reg7_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR3==7 && RE3==2 |-> regC=={reg7_hh_out[31:24], reg7_hl_out[23:16], reg7_lh_out[15:8], reg7_ll_out[7:0]}); 
 //
 //// RegD output
 //assert property (@(posedge clk) SR4==0 && RE4==0 |-> regD=={24'b0, reg0_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR4==0 && RE4==1 |-> regD=={24'b0, reg0_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR4==0 && RE4==2 |-> regD=={16'b0, reg0_lh_out[15:8], reg0_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR4==0 && RE4==3 |-> regD=={reg0_hh_out[31:24], reg0_hl_out[23:16], reg0_lh_out[15:8], reg0_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR4==0 && RE4==1 |-> regD=={16'b0, reg0_lh_out[15:8], reg0_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR4==0 && RE4==2 |-> regD=={reg0_hh_out[31:24], reg0_hl_out[23:16], reg0_lh_out[15:8], reg0_ll_out[7:0]}); 
 //
 //assert property (@(posedge clk) SR4==1 && RE4==0 |-> regD=={24'b0, reg1_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR4==1 && RE4==1 |-> regD=={24'b0, reg1_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR4==1 && RE4==2 |-> regD=={16'b0, reg1_lh_out[15:8], reg1_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR4==1 && RE4==3 |-> regD=={reg1_hh_out[31:24], reg1_hl_out[23:16], reg1_lh_out[15:8], reg1_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR4==1 && RE4==1 |-> regD=={16'b0, reg1_lh_out[15:8], reg1_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR4==1 && RE4==2 |-> regD=={reg1_hh_out[31:24], reg1_hl_out[23:16], reg1_lh_out[15:8], reg1_ll_out[7:0]}); 
 //
 //assert property (@(posedge clk) SR4==2 && RE4==0 |-> regD=={24'b0, reg2_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR4==2 && RE4==1 |-> regD=={24'b0, reg2_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR4==2 && RE4==2 |-> regD=={16'b0, reg2_lh_out[15:8], reg2_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR4==2 && RE4==3 |-> regD=={reg2_hh_out[31:24], reg2_hl_out[23:16], reg2_lh_out[15:8], reg2_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR4==2 && RE4==1 |-> regD=={16'b0, reg2_lh_out[15:8], reg2_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR4==2 && RE4==2 |-> regD=={reg2_hh_out[31:24], reg2_hl_out[23:16], reg2_lh_out[15:8], reg2_ll_out[7:0]}); 
 //
 //assert property (@(posedge clk) SR4==3 && RE4==0 |-> regD=={24'b0, reg3_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR4==3 && RE4==1 |-> regD=={24'b0, reg3_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR4==3 && RE4==2 |-> regD=={16'b0, reg3_lh_out[15:8], reg3_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR4==3 && RE4==3 |-> regD=={reg3_hh_out[31:24], reg3_hl_out[23:16], reg3_lh_out[15:8], reg3_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR4==3 && RE4==1 |-> regD=={16'b0, reg3_lh_out[15:8], reg3_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR4==3 && RE4==2 |-> regD=={reg3_hh_out[31:24], reg3_hl_out[23:16], reg3_lh_out[15:8], reg3_ll_out[7:0]}); 
 //
-//assert property (@(posedge clk) SR4==4 && RE4==0 |-> regD=={24'b0, reg4_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR4==4 && RE4==1 |-> regD=={24'b0, reg4_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR4==4 && RE4==2 |-> regD=={16'b0, reg4_lh_out[15:8], reg4_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR4==4 && RE4==3 |-> regD=={reg4_hh_out[31:24], reg4_hl_out[23:16], reg4_lh_out[15:8], reg4_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR4==4 && RE4==0 |-> regD=={24'b0, reg0_lh_out[15:8]}); 
+//assert property (@(posedge clk) SR4==4 && RE4==1 |-> regD=={16'b0, reg4_lh_out[15:8], reg4_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR4==4 && RE4==2 |-> regD=={reg4_hh_out[31:24], reg4_hl_out[23:16], reg4_lh_out[15:8], reg4_ll_out[7:0]}); 
 //
-//assert property (@(posedge clk) SR4==5 && RE4==0 |-> regD=={24'b0, reg5_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR4==5 && RE4==1 |-> regD=={24'b0, reg5_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR4==5 && RE4==2 |-> regD=={16'b0, reg5_lh_out[15:8], reg5_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR4==5 && RE4==3 |-> regD=={reg5_hh_out[31:24], reg5_hl_out[23:16], reg5_lh_out[15:8], reg5_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR4==5 && RE4==0 |-> regD=={24'b0, reg1_lh_out[15:8]}); 
+//assert property (@(posedge clk) SR4==5 && RE4==1 |-> regD=={16'b0, reg5_lh_out[15:8], reg5_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR4==5 && RE4==2 |-> regD=={reg5_hh_out[31:24], reg5_hl_out[23:16], reg5_lh_out[15:8], reg5_ll_out[7:0]}); 
 //
-//assert property (@(posedge clk) SR4==6 && RE4==0 |-> regD=={24'b0, reg6_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR4==6 && RE4==1 |-> regD=={24'b0, reg6_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR4==6 && RE4==2 |-> regD=={16'b0, reg6_lh_out[15:8], reg6_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR4==6 && RE4==3 |-> regD=={reg6_hh_out[31:24], reg6_hl_out[23:16], reg6_lh_out[15:8], reg6_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR4==6 && RE4==0 |-> regD=={24'b0, reg2_lh_out[15:8]}); 
+//assert property (@(posedge clk) SR4==6 && RE4==1 |-> regD=={16'b0, reg6_lh_out[15:8], reg6_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR4==6 && RE4==2 |-> regD=={reg6_hh_out[31:24], reg6_hl_out[23:16], reg6_lh_out[15:8], reg6_ll_out[7:0]}); 
 //
-//assert property (@(posedge clk) SR4==7 && RE4==0 |-> regD=={24'b0, reg7_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR4==7 && RE4==1 |-> regD=={24'b0, reg7_lh_out[15:8]}); 
-//assert property (@(posedge clk) SR4==7 && RE4==2 |-> regD=={16'b0, reg7_lh_out[15:8], reg7_ll_out[7:0]}); 
-//assert property (@(posedge clk) SR4==7 && RE4==3 |-> regD=={reg7_hh_out[31:24], reg7_hl_out[23:16], reg7_lh_out[15:8], reg7_ll_out[7:0]}); 
-
-
-
-
-
-
-
+//assert property (@(posedge clk) SR4==7 && RE4==0 |-> regD=={24'b0, reg3_lh_out[15:8]}); 
+//assert property (@(posedge clk) SR4==7 && RE4==1 |-> regD=={16'b0, reg7_lh_out[15:8], reg7_ll_out[7:0]}); 
+//assert property (@(posedge clk) SR4==7 && RE4==2 |-> regD=={reg7_hh_out[31:24], reg7_hl_out[23:16], reg7_lh_out[15:8], reg7_ll_out[7:0]}); 
 
 endmodule
 
@@ -400,5 +365,9 @@ bind register_file regfile_gpr_props wrp_regfile_gpr (
     .reg6_ll_out(gpr.reg6_ll_out),
     .reg7_ll_out(gpr.reg7_ll_out),
     .write_data0_ll(gpr.write_data0_ll),
-    .out4a(gpr.out4a)
+    .write_data0_hh(gpr.write_data0_hh),
+    .out4a(gpr.out4a),
+    .out3a(gpr.out3a),
+    .out2a(gpr.out2a),
+    .out1a(gpr.out1a)
 );
