@@ -1,5 +1,4 @@
 // 16 bytes from icache in one access
-
 module fetch (
     input clk, set, reset,
     input [31:0] EIP,
@@ -93,8 +92,8 @@ module shift128$(input [127:0] Din_low,
 		input dir,
 		input [3:0] amnt,
 		output [127:0] Dout);
-	wire [3:0] array [127:0];
-	wire [1:0] mux_array [127:0];
+	wire [127:0] array [15:0];
+	wire [127:0] mux_array [3:0];
 	genvar i;
     generate
 for(i=0;i<8;i=i+1)
@@ -124,7 +123,7 @@ genvar i;
 generate
 for(i=0;i<8;i=i+1)
   begin : generate_loop
-	mux4_16$ mux6 (Y[i*8 +7:i*8], IN0[i*8 +7:i*8], IN1[i*8 +7:i*8], IN2[i*8 +7:i*8], IN3[i*8 +7:i*8],
+	mux4_8$ mux6 (Y[i*8 +7:i*8], IN0[i*8 +7:i*8], IN1[i*8 +7:i*8], IN2[i*8 +7:i*8], IN3[i*8 +7:i*8],
 			S0, S1);
   end
   endgenerate

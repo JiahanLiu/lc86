@@ -8,7 +8,7 @@
 ./common.v
 ./common/cache_and_registers/register_file_decoder.v
 ./common/cache_and_registers/registers.v
-#./fetch.v
+./fetch.v
 ../decode/disp_selector.v
 ../decode/immediate_detector.v
 ../decode/imm_selector.v
@@ -36,7 +36,7 @@
 ./common/functional_units/adder.v
 ./execute_components/alu.v
 ./common/functional_units/subtract.v
-./execute.v
+#./execute.v
 ./memory_stage.v
-./writeback.v
+#./writeback.v
 ./pipeline.v
