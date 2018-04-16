@@ -11,7 +11,7 @@ module alu64(
 	output [63:0] alu64_results,
 	input [63:0] MM_A,
 	input [63:0] MM_B,
-	input [32:0] imm, 
+	input [31:0] imm, 
 	input [2:0] operation_select
 	);
 	
@@ -52,6 +52,16 @@ module PADDW(
 	assign a1[15:0] = a[31:16];
 	assign a0[31:16] = 16'h0000;
 	assign a0[15:0] = a[15:0];
+
+    assign b3[31:16] = 16'h0000;
+	assign b3[15:0] = b[63:48];
+	assign b2[31:16] = 16'h0000;
+	assign b2[15:0] = b[47:32];
+	assign b1[31:16] = 16'h0000;
+	assign b1[15:0] = b[31:16];
+	assign b0[31:16] = 16'h0000;
+	assign b0[15:0] = b[15:0];
+
 
 	adder32 adder_3(result3, , a3, b3);
 	adder32 adder_2(result2, , a2, b2);

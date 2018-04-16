@@ -22,7 +22,7 @@ elaborate -top {register_file};
 #You will need to add commands below
 
 #Set the clock
-clock -clear; clock CLK
+clock -clear; clock CLK -both_edges
 
 #Set Reset
 reset -expression {RST};
