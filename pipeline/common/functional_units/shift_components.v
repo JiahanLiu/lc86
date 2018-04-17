@@ -102,7 +102,7 @@ endmodule
 //
 module shift_arithmetic_left(
 	output [31:0] sal_result,
-	input [31:0] a, b,
+	input [31:0] a, b
 	);
 	
 	wire [31:0] post_shift_1, post_shift_2, post_shift_4, post_shift_8, post_shift_16;
@@ -305,7 +305,7 @@ module SAL32_by_1 (
 	output [31:0] out, 
 	output leftover,  
 	input [31:0] in,
-	input [1:0] datasize,
+	input [1:0] datasize
 	);
 	
 	wire leftover8, leftover16, leftover32; 
@@ -330,7 +330,8 @@ endmodule
 module SAL32_by_2 (
 	output [31:0] out, 
 	output leftover,  
-	input [31:0] in
+	input [31:0] in,
+	input [1:0] datasize
 	);
 
 	wire leftover8, leftover16, leftover32; 
@@ -356,7 +357,8 @@ endmodule
 module SAL32_by_4 (
 	output [31:0] out, 
 	output leftover,  
-	input [31:0] in
+	input [31:0] in,
+	input [1:0] datasize
 	);
 
 	wire leftover8, leftover16, leftover32;  
@@ -382,7 +384,8 @@ endmodule
 module SAL32_by_8 (
 	output [31:0] out, 
 	output leftover,  
-	input [31:0] in
+	input [31:0] in,
+	input [1:0] datasize
 	);
 
 	wire leftover8, leftover16, leftover32;  
@@ -409,7 +412,8 @@ endmodule
 module SAL32_by_16 (
 	output [31:0] out, 
 	output leftover,  
-	input [31:0] in
+	input [31:0] in,
+	input [1:0] datasize
 	);
 
 	wire leftover8, leftover16, leftover32;  
