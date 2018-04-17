@@ -14,7 +14,11 @@ analyze -v2k {
     ./common/basic_components/logic_gates.v \
     ./common/flags/eflags.v \
     ./common/functional_units/adder.v \
+    ./common/functional_units/shift_components.v \
     ./execute_components/alu.v \
+    ./execute_components/execute_components.v \
+    ./execute_components/mm_alu.v \
+    ./execute_components/shifter.v \
     ./common/functional_units/subtract.v \
     ./execute.v \
 };

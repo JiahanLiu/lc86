@@ -11,7 +11,7 @@ module alu64(
 	output [63:0] alu64_results,
 	input [63:0] MM_A,
 	input [63:0] MM_B,
-	input [32:0] imm, 
+	input [31:0] imm, 
 	input [2:0] operation_select
 	);
 	
@@ -52,6 +52,16 @@ module PADDW(
 	assign a1[15:0] = a[31:16];
 	assign a0[31:16] = 16'h0000;
 	assign a0[15:0] = a[15:0];
+
+    assign b3[31:16] = 16'h0000;
+	assign b3[15:0] = b[63:48];
+	assign b2[31:16] = 16'h0000;
+	assign b2[15:0] = b[47:32];
+	assign b1[31:16] = 16'h0000;
+	assign b1[15:0] = b[31:16];
+	assign b0[31:16] = 16'h0000;
+	assign b0[15:0] = b[15:0];
+
 
 	adder32 adder_3(result3, , a3, b3);
 	adder32 adder_2(result2, , a2, b2);
@@ -143,9 +153,9 @@ module PSHUFW(
 	input [7:0] c 
 	);
 
-	mux16_4way u_mux3(alu64_results[63:48], b[15:0], b[31:16], b[47:32], b[63:48], c[1:0]);
-	mux16_4way u_mux2(alu64_results[47:32], b[15:0], b[31:16], b[47:32], b[63:48], c[3:2]);
-	mux16_4way u_mux1(alu64_results[31:16], b[15:0], b[31:16], b[47:32], b[63:48], c[5:4]);
-	mux16_4way u_mux0(alu64_results[15:0], b[15:0], b[31:16], b[47:32], b[63:48], c[7:6]);
+	mux16_4way u_mux3(alu64_results[63:48], b[15:0], b[31:16], b[47:32], b[63:48], c[7:6]);
+	mux16_4way u_mux2(alu64_results[47:32], b[15:0], b[31:16], b[47:32], b[63:48], c[5:4]);
+	mux16_4way u_mux1(alu64_results[31:16], b[15:0], b[31:16], b[47:32], b[63:48], c[3:2]);
+	mux16_4way u_mux0(alu64_results[15:0], b[15:0], b[31:16], b[47:32], b[63:48], c[1:0]);
 	
 endmodule // PSHUFW

@@ -73,7 +73,7 @@ module TOP;
         RE3=2'd2;
         RE4=2'd0;
 
-        #7
+        #10
         write_DR1 = 1'b1;
         write_DR2 = 1'b1;
         write_DR3 = 1'b1;
@@ -90,8 +90,6 @@ module TOP;
         WE2=2'd1;
         WE3=2'd2;
 
-
-        #3
         SR1=3'd1;
         SR2=3'd4;
         SR3=3'd2;
