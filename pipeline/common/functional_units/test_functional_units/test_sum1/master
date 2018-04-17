@@ -1,8 +1,0 @@
-/home/projects/courses/spring_18/ee382n-16120/lib/time -v 
-/home/projects/courses/spring_18/ee382n-16120/lib/lib1 
-/home/projects/courses/spring_18/ee382n-16120/lib/lib4 
-../../adder.v
-../../alu.v
-../../../basic_components/muxes.v
-../../../basic_components/eflags.v
-test_sum1.v
