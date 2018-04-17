@@ -79,7 +79,7 @@ module execute (
 
   alu32 u_alu32(alu32_result, alu32_flags, EX_A, b, EX_de_aluk_ex);
   alu64 u_alu64(alu64_result, EX_MM_A, EX_MM_B, b, CS_MM_ALUK_EX);
-  shifter32 u_shifter32(shift_result, shift_flags, EX_de_shift_dir_ex, EX_A, b);
+  shifter32 u_shifter32(shift_result, shift_flags, EX_de_shift_dir_ex, EX_A, b, EX_de_datasize_all);
   result_select_ex u_result_select_ex(WB_RESULT_A_next, WB_RESULT_B_next, WB_RESULT_C_next, final_flags, WB_RESULT_MM_next, CS_PASS_A_EX, CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_XCHG_EX, CS_IS_CMPXCHG_EX, CS_MUX_FUNCTION_UNIT_EX, CS_MUX_SP_POP_EX, EX_de_datasize_all, alu32_flags, shift_flags, alu32_result, shift_result, alu64_result, EX_A, EX_B, EX_C);
   assign WB_FLAGS_next = final_flags; 
   assign ZF = final_flags[6];
