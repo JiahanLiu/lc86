@@ -45,13 +45,8 @@ module execute (
    output WB_ld_latches
 );
   //control signals
-<<<<<<< HEAD
   `include "./control_store/control_store_wires.v"
   `include "./control_store/control_store_signals.v"
-=======
-  `include "../control_store/control_store_wires.v"
-  `include "../control_store/control_store_signals.v"
->>>>>>> master
 
   //internal wires
   //operand_select_ex 
