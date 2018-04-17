@@ -110,13 +110,14 @@ module PADDSW(
 	);
 
 	wire [63:0] intermediate_result;
+	wire [63:0] ignored_results;
 
-	adder32 adder3({{16{1'b0}},intermediate_result[63:48]}, {{16{1'b0}},a[63:48]}, {{16{1'b0}},b[63:48]});
-	adder32 adder2({{16{1'b0}},intermediate_result[47:32]}, {{16{1'b0}},a[47:32]}, {{16{1'b0}},b[47:32]});
-	adder32 adder1({{16{1'b0}},intermediate_result[31:16]}, {{16{1'b0}},a[31:16]}, {{16{1'b0}},b[31:16]});
-	adder32 adder0({{16{1'b0}},intermediate_result[15:0]}, {{16{1'b0}},a[15:0]}, {{16{1'b0}},b[15:0]});
+	adder16 u_adder3(intermediate_result[63:48], ,a[63:48], b[63:48]);
+	adder16 u_adder2(intermediate_result[47:32], ,a[47:32], b[47:32]);
+	adder16 u_adder1(intermediate_result[31:16], ,a[31:16], b[31:16]);
+	adder16 u_adder0(intermediate_result[15:0], ,a[15:0], b[15:0]);
 
-	wire a_63_not, a_47_not a_31_not, a_15_not, b_63_not, b_47_not, b_31_not, b_15_not, result_63_not, result_47_not, result_31_not, result_15_not; 
+	wire a_63_not, a_47_not, a_31_not, a_15_not, b_63_not, b_47_not, b_31_not, b_15_not, result_63_not, result_47_not, result_31_not, result_15_not; 
 
 	inv1$ u_not_a_63(a_63_not, a[63]);
 	inv1$ u_not_a_47(a_47_not, a[47]);
@@ -127,9 +128,9 @@ module PADDSW(
 	inv1$ u_not_b_31(b_31_not, b[31]);
 	inv1$ u_not_b_15(b_15_not, b[15]);
 	inv1$ u_not_result_63(result_63_not, intermediate_result[63]);
-	inv1$ u_not_result_63(result_47_not, intermediate_result[47]);
+	inv1$ u_not_result_47(result_47_not, intermediate_result[47]);
 	inv1$ u_not_result_31(result_31_not, intermediate_result[31]);
-	inv1$ u_not_result_63(result_15_not, intermediate_result[15]);
+	inv1$ u_not_result_15(result_15_not, intermediate_result[15]);
 
 	wire [3:0] positive_sat, negative_sat;
 
@@ -149,9 +150,9 @@ module PADDSW(
 	mux16_2way u_mux_pos_sat1(post_pos_sat[31:16], intermediate_result[31:16], 16'h7FFF, positive_sat[1]);
 	mux16_2way u_mux_pos_sat0(post_pos_sat[15:0], intermediate_result[15:0], 16'h7FFF, positive_sat[0]);
 	mux16_2way u_mux_neg_sat3(alu64_results[63:48], post_pos_sat[63:48], 16'h8000, negative_sat[3]);
-	mux16_2way u_mux_neg_sat3(alu64_results[47:32], post_pos_sat[47:32], 16'h8000, negative_sat[2]);
-	mux16_2way u_mux_neg_sat3(alu64_results[31:16], post_pos_sat[31:16], 16'h8000, negative_sat[1]);
-	mux16_2way u_mux_neg_sat3(alu64_results[15:0], post_pos_sat[15:0], 16'h8000, negative_sat[0]);
+	mux16_2way u_mux_neg_sat2(alu64_results[47:32], post_pos_sat[47:32], 16'h8000, negative_sat[2]);
+	mux16_2way u_mux_neg_sat1(alu64_results[31:16], post_pos_sat[31:16], 16'h8000, negative_sat[1]);
+	mux16_2way u_mux_neg_sat0(alu64_results[15:0], post_pos_sat[15:0], 16'h8000, negative_sat[0]);
 
 endmodule // PADDSW
 //-------------------------------------------------------------------------------------
