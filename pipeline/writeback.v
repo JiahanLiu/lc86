@@ -90,7 +90,7 @@ module writeback (
    //stall
    wire In_write_ready_not;
 
-   operand_select_wb u_operand_select_wb(data1, CLK, CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_CMPS_SECOND_UOP_ALL, WB_RESULT_A);
+   operand_select_wb u_operand_select_wb(data1, CLK, PRE, CLR, CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_CMPS_SECOND_UOP_ALL, WB_RESULT_A);
    conditional_support_wb u_conditional_support_wb(wb_ld_eip, wb_ld_gpr1, CS_IS_JNBE_WB, CS_IS_JNE_WB, CS_LD_EIP_WB, CF, ZF, CS_IS_CMOVC_WB, WB_ex_ld_gpr1_wb);
    validate_signals_wb u_validate_signals_wb(v_wb_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3, v_cs_ld_seg, v_cs_ld_mm, v_ex_dcache_write, v_cs_ld_flags, v_wb_ld_eip,
       WB_V, wb_ld_gpr1, WB_ex_ld_gpr2_wb, CS_LD_GPR3_WB, CS_LD_SEG_WB, CS_LD_MM_WB, WB_ex_dcache_write_wb, CS_LD_FLAGS_WB, wb_ld_eip);
