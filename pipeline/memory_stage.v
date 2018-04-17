@@ -39,8 +39,8 @@ module memory_stage (
 
    output D2_MEM_WR_WB_OUT, D2_LD_GPR1_WB_OUT, D2_LD_MM_WB_OUT
 );
-`include "../control_store/control_store_wires.v"
-`include "../control_store/control_store_signals.v"
+`include "./control_store/control_store_wires.v"
+`include "./control_store/control_store_signals.v"
 
    wire [31:0] mux_imm_out;
 

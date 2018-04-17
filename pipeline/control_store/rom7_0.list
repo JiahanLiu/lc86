@@ -1,0 +1,20 @@
+@08 // CALL rel16/32 (0xE8)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
+@1c // CLD (0xFC)
+0000x00xxxxxxxxx00xx000000000000x0x0000xxxx0000xxxx000xxxxxxxx00
+@14 // HLT (0xF4)
+xxx0x00xxxxxxxxx00xx000000000000x0x0000xxxx0000xxxx000xxxxxxxx00
+@1e // INC r/m8 (0xFE)
+xxx0x00xxxxxxxxx00xx000000000000x0x0000xxxx0000xxxx000xxxxxxxx00
+@0b // JMP rel8 (0xEB)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
+@09 // JMP rel16/32 (0xE9)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
+@0a // JMP ptr16:16/32 (0xEA)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
+@16 // NOT r/m8 (0xF6)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
+@17 // NOT r/m (16/32) (0xF7)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
+@1d // STD (0xFD)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00

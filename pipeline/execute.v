@@ -45,8 +45,8 @@ module execute (
    output WB_ld_latches
 );
   //control signals
-  `include "../../../../control_store/control_store_wires.v"
-  `include "../../../../control_store/control_store_signals.v"
+  `include "./control_store/control_store_wires.v"
+  `include "./control_store/control_store_signals.v"
 
   //internal wires
   //operand_select_ex 

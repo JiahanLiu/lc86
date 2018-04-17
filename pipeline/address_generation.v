@@ -62,8 +62,8 @@ module address_generation (
    output DEP_STALL_OUT, SEG_LIMIT_EXC_OUT
 );
 //`include "ag_control_store.v"
-`include "../control_store/control_store_wires.v"
-`include "../control_store/control_store_signals.v"
+`include "./control_store/control_store_wires.v"
+`include "./control_store/control_store_signals.v"
 
    wire [31:0] mux_rel_out, add_rel_out;
    wire [31:0] mux_disp_out, mux_base_reg_out, add_base_disp_out;
