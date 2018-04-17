@@ -1,0 +1,13 @@
+
+//-------------------------------------------------------------------------------------
+// muxes.v
+// --------------------
+// EE382N, Spring 2018
+// Apruv Narkhede, Nelson Wu, Steven Flolid, Jiahan Liu
+//
+// mux1_8way                        - 1-bit Mux with 8 inputs        
+// mux32_2way                       - 32-bit Mux with 2 inputs       
+// mux32_4way                       - 32-bit Mux with 4 inputs       
+// mux32_8way                       - 32-bit Mux with 8 inputs       
+//
+//-------------------------------------------------------------------------------------

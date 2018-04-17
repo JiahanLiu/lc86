@@ -1,0 +1,17 @@
+
+//-------------------------------------------------------------------------------------
+// file_name
+// --------------------
+// EE382N, Spring 2018
+// Apruv Narkhede, Nelson Wu, Steven Flolid, Jiahan Liu
+//
+// and1_5way                        - 1-Bit 5-Input AND Gate         
+// and32_2way                       - a32 & b32                      
+// or1_5way                         - 1-Bit 5-Input OR Gate          
+// or1_6way                         - 1-Bit 6-Input OR Gate          
+// or32_2way                        - a32 | b32                      
+// not4_1way                        - !a4                            
+// not32_1way                       - !a32                           
+// buffer32                         - 32-Bit 1x->4x Buffer           
+//
+//-------------------------------------------------------------------------------------
