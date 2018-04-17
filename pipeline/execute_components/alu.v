@@ -182,11 +182,12 @@ module alu_daa (
 	mux2$ u_mux_CF_high(CF_part2, 0, 1, high_needs_daa);
 
 	wire AF_part2;
-	mux2$ u_mux_AF(AF_part2, 0, 1, low_needs_daa);
+	mux2$ u_mux_AF(AF_part2, 0, 1, low_needs_daa);	
 
 	wire OF, DF, SF, ZF, AF, PF, CF;  
 
     assign daa_result[31:8] = 24'b0;
+    assign daa_result[7:0] = AL_part2; 
 	assign OF = 0;
 	assign DF = 0;
 	assign SF = 0; //bcd is unsigned, vol1, page 80
