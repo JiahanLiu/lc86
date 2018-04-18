@@ -63,4 +63,5 @@ wire CS_IS_CMOVC_WB;
 wire CS_IS_HALT_WB;
 wire CS_IS_CMPXCHG_EX;
 wire CS_LD_GPR3_WB;
-wire [43:0] CS_MM_OPERATION;
+wire CS_MM_OPERATION;
+wire [42:0] Placeholder;

@@ -10,6 +10,8 @@
 module operand_select_wb(
 	output [31:0] data1,
 	input CLK, 
+	input PRE,
+	input CLR,
 	input CS_IS_CMPS_FIRST_UOP_ALL,
 	input CS_IS_CMPS_SECOND_UOP_ALL,
 	input [31:0] WB_RESULT_A
@@ -17,7 +19,7 @@ module operand_select_wb(
 
 	wire [31:0] cmps_first_pointer; 
 
-	reg32e$ u_cmps_temp_mem (CLK, WB_RESULT_A, cmps_first_pointer, , 1'b1, 1'b1, CS_IS_CMPS_FIRST_UOP_ALL);
+	reg32e$ u_cmps_temp_mem (CLK, WB_RESULT_A, cmps_first_pointer, , CLR, PRE, CS_IS_CMPS_FIRST_UOP_ALL);
 	//module reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
 
 	mux32_2way u_mux_data1(data1, WB_RESULT_A, cmps_first_pointer, CS_IS_CMPS_SECOND_UOP_ALL);

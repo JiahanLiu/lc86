@@ -248,20 +248,54 @@ module TOP;
 endmodule
 
 module PIPELINE(CLK, CLR, PRE);
-   //inputs to this simulator
-   input CLK, CLR, PRE;
-   assign EN = 1;//placeholder until stalls are working correctly
+   //connect this to simulator
+    input CLK, CLR, PRE;
+    assign EN = 1;//placeholder until stalls are working correctly
    
-   //signals from WB
-   wire [2:0] Out_DR1, Out_DR2, Out_DR3;
-   wire [31:0] Out_DR1_Data, Out_DR2_Data, Out_DR3_Data; 
-   wire        out_v_de_ld_gpr1_wb, out_v_cs_ld_gpr2_wb, out_v_cs_ld_gpr3_wb;
-   wire [1:0]  out_de_datasize;
-   
-   wire [31:0] Out_Dcache_Data, Out_Dcache_Address;
+    //signals from EX to Dependency Checks
+    wire DEP_v_ex_ld_gpr1;
+    wire DEP_v_ex_ld_gpr2;
+    wire DEP_v_ex_ld_gpr3;
+    wire Dep_v_ex_ld_seg;
+    wire Dep_v_ex_ld_mm;
+    wire Dep_v_ex_dcache_write;
+    //signals from WB to Dependency Checks
+    wire DEP_v_wb_ld_gpr1;
+    wire DEP_v_wb_ld_gpr2;
+    wire DEP_v_wb_ld_gpr3;
+    wire DEP_v_wb_ld_seg;
+    wire DEP_v_wb_ld_mm;
+    wire DEP_v_wb_dcache_write;
+    //signals from WB to dcache
+    wire [2:0] WB_Final_DR1;
+    wire [2:0] WB_Final_DR2;
+    wire [2:0] WB_Final_DR3;
+    wire [31:0] WB_Final_data1;
+    wire [31:0] WB_Final_data2;
+    wire [31:0] WB_Final_data3;
+    wire WB_Final_ld_gpr1;
+    wire WB_Final_ld_gpr2;
+    wire WB_Final_ld_gpr3;
+    wire [1:0] WB_Final_datasize;
+    wire WB_Final_ld_seg; 
+    wire [63:0] WB_Final_MM_Data;
+    wire WB_Final_ld_mm; 
+    wire [31:0] WB_Final_EIP; 
+    wire WB_Final_ld_eip; 
+    wire [63:0] WB_Final_Dcache_Data;
+    wire [31:0] WB_Final_Dcache_address;
+    //signals from d-cache needed by WB
+    wire In_write_ready = 1'b1; //Steven 
+    //WB outputs
+    wire wb_halt_all;
+    wire wb_repne_terminate_all;
+    wire WB_stall;
+    //Dataforwarded, currently for daa
+    wire CF_dataforwarded;
+    wire AF_dataforwarded; 
    
 //*******REGISTER FILE*******//
-   wire CLK, RST;
+   wire RST;
    wire [15:0] SEG_DIN;
    wire [2:0] 	SEGID1, SEGID2, WRSEGID;
    wire 	SEGWE;
@@ -588,7 +622,7 @@ module PIPELINE(CLK, CLR, PRE);
      
    wire NextV;
     address_generation u_address_generation (CLK, PRE, CLR, NextV,
-        // inputs from pipestage latches
+        // s from pipestage latches
         AG_PS_EIP, AG_PS_CS, AG_PS_CONTROL_STORE, AG_PS_OFFSET,
         AG_PS_DATA_SIZE, AG_PS_D2_SR1_NEEDED_AG, AG_PS_D2_SEG1_NEEDED_AG, AG_PS_D2_MM1_NEEDED_AG,
         AG_PS_D2_MEM_RD_ME, AG_PS_D2_MEM_WR_ME,
@@ -599,14 +633,14 @@ module PIPELINE(CLK, CLR, PRE);
         AG_PS_DE_MUX_SEG_AG, AG_PS_DE_CMPXCHG_AG,
         AG_PS_DE_SIB_S_AG,
 
-        // inputs from register file
+        // s from register file
         SR1_DATA, SR2_DATA, SR3_DATA, SIB_I_DATA,
         SEG1_DATA, SEG2_DATA, MM1_DATA, MM2_DATA,
 
-        // inputs from exception/interrupt logic
+        // s from exception/interrupt logic
         DE_EXC_CODE_AG,
 
-        // dependency check inputs
+        // dependency check s
         AG_DRID1, AG_DRID2,
         V_AG_LD_GPR1, V_AG_LD_GPR2, V_AG_LD_SEG, V_AG_LD_CSEG, V_AG_LD_MM,
         ME_DRID1, ME_DRID2,
@@ -729,110 +763,130 @@ module PIPELINE(CLK, CLR, PRE);
     //register between ME and EX
     //reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
     //reg32e$ REG_DEST_COM(CLK, {{31{1'b0}},REG_DEST_COM_IN}, D_REG_DEST, D_3, CLR, PRE, EN);
-    //EX inputs
+    //EX s
     wire EX_V_next = 1'b1; // TODO
-    // CHeck whether the input/output is properly connected - TODO
+    // CHeck whether the /output is properly connected - TODO
     wire [31:0] EX_V_out; 
-    reg32e$ u_ex_v_latch(CLK, {{31{1'b0}}, EX_V_next}, EX_V_out, ,CLR,PRE,EN); 
+    reg32e$ u_EX_v_latch(CLK, {{31{1'b0}}, EX_V_next}, EX_V_out, ,CLR,PRE,EN); 
     wire EX_V;
     assign EX_V = EX_V_out[0]; 
 
     wire [31:0] EX_NEIP_next = ME_NEIP_OUT;
     wire [31:0] EX_NEIP;
-    reg32e$ u_ex_neip_latch(CLK, EX_NEIP_next, EX_NEIP, ,CLR,PRE,EN);
+    reg32e$ u_EX_neip_latch(CLK, EX_NEIP_next, EX_NEIP, ,CLR,PRE,EN);
 
     wire [15:0] EX_NCS_next = ME_NCS_OUT;
     wire [31:0] EX_NCS_out; 
-    reg32e$ u_ex_ncs_latch(CLK, {{16{1'b0}}, EX_NCS_next}, EX_NCS_out, ,CLR,PRE,EN); 
-    wire [15:0] EX_NCS;
+    wire [15:0] EX_NCS;    
+    reg32e$ u_EX_ncs_latch(CLK, {{16{1'b0}}, EX_NCS_next}, EX_NCS_out, ,CLR,PRE,EN); 
     assign EX_NCS = EX_NCS_out[15:0]; 
 
     wire [127:0] EX_CONTROL_STORE_next = ME_CONTROL_STORE_OUT;
     wire [127:0] EX_CONTROL_STORE;
-    reg64e$ u_ex_control_store_latch1(CLK, EX_CONTROL_STORE_next[63:0], EX_CONTROL_STORE[63:0], ,CLR,PRE,EN);
-    reg64e$ u_ex_control_store_latch2(CLK, EX_CONTROL_STORE_next[127:64], EX_CONTROL_STORE[127:64], ,CLR,PRE,EN);
+    reg64e$ u_EX_control_store_latch1(CLK, EX_CONTROL_STORE_next[63:0], EX_CONTROL_STORE[63:0], ,CLR,PRE,EN);
+    reg64e$ u_EX_control_store_latch2(CLK, EX_CONTROL_STORE_next[127:64], EX_CONTROL_STORE[127:64], ,CLR,PRE,EN);
 
     wire [1:0] EX_de_datasize_all_next = ME_DATA_SIZE_OUT; 
     wire [31:0] EX_de_datasize_all_out;
-    reg32e$ u_ex_de_datasize_all_all(CLK, {30'b0,EX_de_datasize_all_next}, EX_de_datasize_all_out, ,CLR,PRE,EN);
     wire [1:0] EX_de_datasize_all;
+    reg32e$ u_EX_de_datasize_all_all(CLK, {30'b0,EX_de_datasize_all_next}, EX_de_datasize_all_out, ,CLR,PRE,EN);
     assign EX_de_datasize_all = EX_de_datasize_all_out[1:0]; 
 
     wire [2:0] EX_de_aluk_ex_next = ME_D2_ALUK_EX_OUT;
     wire [31:0] EX_de_aluk_ex_out;
     wire [2:0] EX_de_aluk_ex; 
-    reg32e$ u_ex_de_aluk_ex_latch1 (CLK, {29'b0, EX_de_aluk_ex_next}, EX_de_aluk_ex_out, ,CLR,PRE,EN);
+    reg32e$ u_EX_de_aluk_ex_latch(CLK, {29'b0, EX_de_aluk_ex_next}, EX_de_aluk_ex_out, ,CLR,PRE,EN);
     assign EX_de_aluk_ex = EX_de_aluk_ex_out[2:0]; 
 
-    wire EX_de_ld_gpr1_wb_next = ME_D2_LD_GPR1_WB_OUT;
-    wire [31:0] EX_de_ld_gpr1_wb_out;
-    wire EX_de_ld_gpr1_wb;
-    reg32e$ u_ex_de_aluk_ex_latch2 (CLK, {31'b0, EX_de_ld_gpr1_wb_next}, EX_de_ld_gpr1_wb_out, ,CLR,PRE,EN);
-    assign EX_de_ld_gpr1_wb = EX_de_ld_gpr1_wb_out[0]; 
+    wire EX_de_shift_dir_ex_next = 3'b0; //Nelson
+    wire [31:0] EX_de_shift_dir_ex_out;
+    wire EX_de_shift_dir_ex;
+    reg32e$ u_EX_de_shift_dir_ex_latch(CLK, {31'b0, EX_de_shift_dir_ex_next}, EX_de_shift_dir_ex_out, ,CLR,PRE,EN);
+    assign EX_de_shift_dir_ex = EX_de_shift_dir_ex_out[0]; 
 
-    wire EX_de_dcache_write_wb_next = ME_D2_MEM_WR_WB_OUT;
-    wire [31:0] EX_de_dcache_write_wb_out;
-    wire EX_de_dcache_write_wb; 
-    reg32e$ u_ex_de_aluk_ex_latch3 (CLK, {31'b0, EX_de_dcache_write_wb_next}, EX_de_dcache_write_wb_out, ,CLR,PRE,EN);
-    assign EX_de_dcache_write_wb = EX_de_dcache_write_wb_out[0]; 
+    wire EX_de_ld_gpr1_ex_next = ME_D2_LD_GPR1_WB_OUT;
+    wire [31:0] EX_de_ld_gpr1_ex_out;
+    wire EX_de_ld_gpr1_ex;
+    reg32e$ u_EX_de_ld_gpr1_wb_latch (CLK, {31'b0, EX_de_ld_gpr1_ex_next}, EX_de_ld_gpr1_ex_out, ,CLR,PRE,EN);
+    assign EX_de_ld_gpr1_ex = EX_de_ld_gpr1_ex_out[0]; 
+
+    wire EX_de_dcache_write_ex_next = ME_D2_MEM_WR_WB_OUT;
+    wire [31:0] EX_de_dcache_write_ex_out;
+    wire EX_de_dcache_write_ex; 
+    reg32e$ u_EX_de_dcache_write_wb_latch(CLK, {31'b0, EX_de_dcache_write_ex_next}, EX_de_dcache_write_ex_out, ,CLR,PRE,EN);
+    assign EX_de_dcache_write_ex = EX_de_dcache_write_ex_out[0]; 
+
+    wire EX_de_repne_wb_next = 1'b0; //Nelson
+    wire [31:0] EX_de_repne_wb_out; 
+    wire EX_de_repne_wb; 
+    reg32e$ u_EX_de_repne_wb_latch(CLK, {31'b0, EX_de_repne_wb_next}, EX_de_repne_wb_out, ,CLR,PRE,EN);
+    assign EX_de_repne_wb = EX_de_repne_wb_out[0]; 
 
     wire [31:0] EX_A_next = ME_A_OUT;
     wire [31:0] EX_B_next = ME_B_OUT;
-    wire [31:0] EX_A, EX_B;
-    reg32e$ u_ex_a_latch(CLK, EX_A_next, EX_A, ,CLR,PRE,EN);
-    reg32e$ u_ex_b_latch(CLK, EX_B_next, EX_B, ,CLR,PRE,EN);
-
-    wire [31:0] EX_COUNT_next; 
-    wire [31:0] EX_COUNT; 
-    reg32e$ u_ex_count_latch(CLK, EX_COUNT_next, EX_COUNT, ,CLR,PRE,EN);
+    wire [31:0] EX_C_next = 32'b00000000; //Nelson
+    wire [31:0] EX_A, EX_B, EX_C;
+    reg32e$ u_EX_a_latch(CLK, EX_A_next, EX_A, ,CLR,PRE,EN);
+    reg32e$ u_EX_b_latch(CLK, EX_B_next, EX_B, ,CLR,PRE,EN);
+    reg32e$ u_EX_c_latch(CLK, EX_C_next, EX_C, ,CLR,PRE,EN);
 
     wire [63:0] EX_MM_A_next = ME_MM_A_OUT;
     wire [63:0] EX_MM_B_next = ME_MM_B_OUT;
     wire [63:0] EX_MM_A, EX_MM_B;
-    reg64e$ u_ex_mm_a_latch(CLK, EX_MM_A_next, EX_MM_A, ,CLR,PRE,EN);
-    reg64e$ u_ex_mm_b_latch(CLK, EX_MM_B_next, EX_MM_B, ,CLR,PRE,EN);
-
-    wire [31:0] EX_ADDRESS_next = ME_MEM_WR_ADDR_OUT;
-    wire [31:0] EX_ADDRESS;
-    reg32e$ u_ex_address_latch(CLK, EX_ADDRESS_next, EX_ADDRESS, ,CLR,PRE,EN);
+    reg64e$ u_EX_mm_a_latch(CLK, EX_MM_A_next, EX_MM_A, ,CLR,PRE,EN);
+    reg64e$ u_EX_mm_b_latch(CLK, EX_MM_B_next, EX_MM_B, ,CLR,PRE,EN);
 
     wire [2:0] EX_DR1_next = ME_DRID1_OUT;
     wire [2:0] EX_DR2_next = ME_DRID2_OUT;
-    // TODO - What is it assigned from?
+    // TODO - What is it assigned from? //Jiahan
     wire [2:0] EX_DR3_next;
     wire [31:0] EX_DR1_out, EX_DR2_out, EX_DR3_out;
     wire [2:0] EX_DR1, EX_DR2, EX_DR3;
-    reg32e$ u_ex_dr1_latch(CLK, {29'b0, EX_DR1_next}, EX_DR1_out, ,CLR,PRE,EN);
-    reg32e$ u_ex_dr2_latch(CLK, {29'b0, EX_DR2_next}, EX_DR2_out, ,CLR,PRE,EN);
-    reg32e$ u_ex_dr3_latch(CLK, {29'b0, EX_DR3_next}, EX_DR3_out, ,CLR,PRE,EN);
+    reg32e$ u_EX_dr1_latch(CLK, {29'b0, EX_DR1_next}, EX_DR1_out, ,CLR,PRE,EN);
+    reg32e$ u_EX_dr2_latch(CLK, {29'b0, EX_DR2_next}, EX_DR2_out, ,CLR,PRE,EN);
+    reg32e$ u_EX_dr3_latch(CLK, {29'b0, EX_DR3_next}, EX_DR3_out, ,CLR,PRE,EN);
     assign EX_DR1 = EX_DR1_out[2:0]; 
     assign EX_DR2 = EX_DR2_out[2:0]; 
     assign EX_DR3 = EX_DR3_out[2:0]; 
 
-    //EX s
+    wire [31:0] EX_ADDRESS_next = ME_MEM_WR_ADDR_OUT;
+    wire [31:0] EX_ADDRESS;
+    reg32e$ u_EX_address_latch(CLK, EX_ADDRESS_next, EX_ADDRESS, ,CLR,PRE,EN);
 
-    //*******EXECUTE STAGE*******.//
-/*
+    //******************************************************************************//
+    //*
+    //*                                Execute STAGE
+    //*
+    //*******************************************************************************//
+
+    //Execute Outputs
+
     wire WB_V_next;
-    wire [1:0] WB_de_datasize_all_next;
-    wire [2:0] WB_de_aluk_ex_next; 
-    wire WB_de_ld_gpr1_wb_next;
-    wire WB_de_dcache_write_wb_next; 
-    wire [6:0] WB_de_flags_affected_wb_next;
-
-    wire [31:0] WB_NEIP_next;
+    wire [31:0] WB_NEIP_next; 
     wire [15:0] WB_NCS_next;
     wire [127:0] WB_CONTROL_STORE_next;
-    wire [31:0] WB_ALU32_RESULT_next;
+
+    wire [1:0] WB_de_datasize_all_next;
+    wire WB_ex_ld_gpr1_wb_next;
+    wire WB_ex_ld_gpr2_wb_next; 
+    wire WB_ex_dcache_write_wb_next; 
+    wire WB_de_repne_wb_next; 
+
+    wire [31:0] WB_RESULT_A_next;
+    wire [31:0] WB_RESULT_B_next;
+    wire [31:0] WB_RESULT_C_next;
     wire [31:0] WB_FLAGS_next;
-    wire [31:0] WB_CMPS_POINTER_next;
-    wire [31:0] WB_COUNT_next; 
-    wire [2:0] WB_DR1_next, WB_DR2_next, WB_DR3_next;
-    wire [6:0] EX_de_flags_affected_wb;
-    wire EX_de_mem_wr_wb;
+    wire [63:0] WB_RESULT_MM_next; 
+
+    wire [2:0] WB_DR1_next;
+    wire [2:0] WB_DR2_next;
+    wire [2:0] WB_DR3_next;
+    wire [31:0] WB_ADDRESS_next;   
+
+    wire WB_ld_latches;
 
     execute u_execute(
-        CLK, CLR, PRE, //not uesd SET/RST
+        CLK, PRE, CLR, //not uesd SET/RST
 
         EX_V,
         EX_NEIP,
@@ -841,18 +895,27 @@ module PIPELINE(CLK, CLR, PRE);
         //pseudo-control store signals not from control store but generated in decode
         EX_de_datasize_all,
         EX_de_aluk_ex, 
-        EX_de_mem_wr_wb,
-        EX_de_ld_gpr1_wb,
-        EX_de_dcache_write_wb, 
-        EX_de_flags_affected_wb,
+        EX_de_shift_dir_ex, 
+        EX_de_ld_gpr1_ex,
+        EX_de_dcache_write_ex, 
+        EX_de_repne_wb, 
 
-        EX_A, EX_B,
-        EX_COUNT, 
-        EX_MM_A, EX_MM_B,
+        //execute results
+        EX_A, 
+        EX_B, 
+        EX_C,
+        EX_MM_A, 
+        EX_MM_B,
 
+        EX_DR1, 
+        EX_DR2,
+        EX_DR3,
         EX_ADDRESS,
 
-        EX_DR1, EX_DR2, EX_DR3,
+        WB_stall, 
+
+        CF_dataforwarded,
+        AF_dataforwarded,
 
         WB_V_next,
         WB_NEIP_next, 
@@ -860,74 +923,111 @@ module PIPELINE(CLK, CLR, PRE);
         WB_CONTROL_STORE_next,
 
         WB_de_datasize_all_next,
-        WB_de_aluk_ex_next, 
-        WB_de_ld_gpr1_wb_next,
-        WB_de_dcache_write_wb_next, 
-        WB_de_flags_affected_wb_next,
+        WB_ex_ld_gpr1_wb_next,
+        WB_ex_ld_gpr2_wb_next, 
+        WB_ex_dcache_write_wb_next, 
+        WB_de_repne_wb_next, 
 
-        WB_ALU32_RESULT_next,
+        WB_RESULT_A_next,
+        WB_RESULT_B_next,
+        WB_RESULT_C_next,
         WB_FLAGS_next,
-        WB_CMPS_POINTER_next,
-        WB_COUNT_next, 
+        WB_RESULT_MM_next, 
 
-        WB_DR1_next, WB_DR2_next, WB_DR3_next
+        WB_DR1_next,
+        WB_DR2_next,
+        WB_DR3_next,
+        WB_ADDRESS_next,   
+
+        DEP_v_ex_ld_gpr1,
+        DEP_v_ex_ld_gpr2,
+        DEP_v_ex_ld_gpr3,
+        Dep_v_ex_ld_seg,
+        Dep_v_ex_ld_mm,
+        Dep_v_ex_dcache_write,
+
+        WB_ld_latches
     );
 
 
     //register between EX and WB
-    wire [31:0] WB_V_out; 
-    wire WB_V;
-    reg32e$ u_wb_v_latch(CLK, {{31{1'b0}}, WB_V_next}, WB_V_out, ,CLR,PRE,EN); 
+    wire [31:0] WB_V_out;
+    wire WB_V; 
+    reg32e$ u_WB_v_latch(CLK, {{31{1'b0}}, WB_V_next}, WB_V_out, ,CLR,PRE,EN); 
     assign WB_V = WB_V_out[0]; 
 
     wire [31:0] WB_NEIP;
-    reg32e$ u_wb_neip_latch(CLK, WB_NEIP_next, WB_NEIP, ,CLR,PRE,EN);
+    reg32e$ u_WB_neip_latch(CLK, WB_NEIP_next, WB_NEIP, ,CLR,PRE,EN);
 
+    wire [31:0] WB_NCS_out;
     wire [15:0] WB_NCS;
-    wire [31:0] WB_NCS32;
-    reg32e$ u_wb_ncs_latch(CLK, {16'b0,WB_NCS_next}, WB_NCS32, ,CLR,PRE,EN);
-    assign WB_NCS = WB_NCS32[15:0];
+    reg32e$ u_WB_ncs_latch(CLK, {16'b0, WB_NCS_next}, WB_NCS_out, ,CLR,PRE,EN);
+    assign WB_NCS = WB_NCS_out[15:0];
 
     wire [127:0] WB_CONTROL_STORE;
-    reg64e$ u_wb_control_store_latch1 (CLK, WB_CONTROL_STORE_next[127:64], WB_CONTROL_STORE[127:64], ,CLR,PRE,EN);
-    reg64e$ u_wb_control_store_latch2 (CLK, WB_CONTROL_STORE_next[63:0], WB_CONTROL_STORE[63:0], ,CLR,PRE,EN);
+    reg64e$ u_WB_control_store_latch1 (CLK, WB_CONTROL_STORE_next[127:64], WB_CONTROL_STORE[127:64], ,CLR,PRE,EN);
+    reg64e$ u_WB_control_store_latch2 (CLK, WB_CONTROL_STORE_next[63:0], WB_CONTROL_STORE[63:0], ,CLR,PRE,EN);
 
-    wire [31:0] WB_ALU32_RESULTS;
-    reg32e$ u_wb_alu32_result_latch(CLK, WB_ALU32_RESULT_next, WB_ALU32_RESULTS, ,CLR,PRE,EN);
+    wire [31:0] WB_de_datasize_all_out; 
+    wire [1:0] WB_de_datasize_all; 
+    reg32e$ u_WB_de_datasize_all_latch(CLK, {30'b0, WB_de_datasize_all_next}, WB_de_datasize_all_out, ,CLR,PRE,EN);
+    assign WB_de_datasize_all = WB_de_datasize_all_out[1:0]; 
+
+    wire [31:0] WB_ex_ld_gpr1_wb_out; 
+    wire WB_ex_ld_gpr1_wb; 
+    reg32e$ u_WB_ex_ld_gpr1_wb_latch(CLK, {31'b0, WB_ex_ld_gpr1_wb}, WB_ex_ld_gpr1_wb_out, ,CLR,PRE,EN);
+    assign WB_ex_ld_gpr1_wb = WB_ex_ld_gpr1_wb_out[0]; 
+
+    wire [31:0] WB_ex_ld_gpr2_wb_out; 
+    wire WB_ex_ld_gpr2_wb; 
+    reg32e$ u_WB_ex_ld_gpr2_wb_latch(CLK, {31'b0, WB_ex_ld_gpr2_wb}, WB_ex_ld_gpr2_wb_out, ,CLR,PRE,EN);
+    assign WB_ex_ld_gpr2_wb = WB_ex_ld_gpr2_wb_out[0]; 
+
+    wire [31:0] WB_ex_dcache_write_wb_out; 
+    wire WB_ex_dcache_write_wb; 
+    reg32e$ u_WB_ex_dcache_write_wb_latch(CLK, {31'b0, WB_ex_dcache_write_wb}, WB_ex_dcache_write_wb_out, ,CLR,PRE,EN);
+    assign WB_ex_dcache_write_wb = WB_ex_dcache_write_wb_out[0]; 
+
+    wire [31:0] WB_de_repne_wb_out; 
+    wire WB_de_repne_wb; 
+    reg32e$ u_WB_de_repne_wb_latch(CLK, {31'b0, WB_de_repne_wb}, WB_de_repne_wb_out, ,CLR,PRE,EN);
+    assign WB_de_repne_wb = WB_de_repne_wb_out[0]; 
+
+    wire [31:0] WB_RESULT_A;
+    reg32e$ u_WB_RESULT_A_latch(CLK, WB_RESULT_A_next, WB_RESULT_A, ,CLR,PRE,EN);
+
+    wire [31:0] WB_RESULT_B;
+    reg32e$ u_WB_RESULT_B_latch(CLK, WB_RESULT_B_next, WB_RESULT_B, ,CLR,PRE,EN);
+
+    wire [31:0] WB_RESULT_C;
+    reg32e$ u_WB_RESULT_C_latch(CLK, WB_RESULT_C_next, WB_RESULT_C, ,CLR,PRE,EN);
 
     wire [31:0] WB_FLAGS;
-    reg32e$ u_wb_flags_latch(CLK, WB_FLAGS_next, WB_FLAGS, ,CLR,PRE,EN);
+    reg32e$ u_WB_FLAGS_latch(CLK, WB_FLAGS_next, WB_FLAGS, ,CLR,PRE,EN);
 
-
-    wire [31:0] WB_CMPS_POINTER;
-    reg32e$ u_wb_cmps_pointer_latch(CLK, WB_CMPS_POINTER_next, WB_CMPS_POINTER, ,CLR,PRE,EN);
-
-
-    wire [31:0] WB_COUNT; 
-    reg32e$ u_wb_count_latch(CLK, WB_COUNT_next, WB_COUNT, ,CLR,PRE,EN);
+    wire [63:0] WB_RESULT_MM; 
+    reg64e$ u_WB_RESULT_MM_latch(CLK, WB_RESULT_MM_next, WB_RESULT_MM, ,CLR,PRE,EN);
 
     wire [31:0] WB_DR1_out, WB_DR2_out, WB_DR3_out;
     wire [2:0] WB_DR1, WB_DR2, WB_DR3;
-    reg32e$ u_wb_dr1_next_latch(CLK, {29'b0, WB_DR1_next}, WB_DR1_out, ,CLR,PRE,EN);
-    reg32e$ u_wb_dr2_next_latch(CLK, {29'b0, WB_DR2_next}, WB_DR2_out, ,CLR,PRE,EN);
-    reg32e$ u_wb_dr3_next_latch(CLK, {29'b0, WB_DR3_next}, WB_DR3_out, ,CLR,PRE,EN);
+    reg32e$ u_WB_DR1_latch(CLK, {29'b0, WB_DR1_next}, WB_DR1_out, ,CLR,PRE,EN);
+    reg32e$ u_WB_DR2_latch(CLK, {29'b0, WB_DR2_next}, WB_DR2_out, ,CLR,PRE,EN);
+    reg32e$ u_WB_DR3_latch(CLK, {29'b0, WB_DR3_next}, WB_DR3_out, ,CLR,PRE,EN);
     assign WB_DR1 = WB_DR1_next[2:0];
     assign WB_DR2 = WB_DR2_next[2:0];
     assign WB_DR3 = WB_DR3_next[2:0];
 
-    //REPNE CMPS is done
-    wire Out_ex_repne_termination_all; 
+    wire [31:0] WB_ADDRESS; 
+    reg32e$ u_WB_ADDRESS_latch(CLK, WB_ADDRESS_next, WB_ADDRESS, ,CLR,PRE,EN);
 
-    //*******WRITE BACK STAGE*******.//
-    wire [1:0] WB_de_datasize_all;
-    wire [2:0] WB_de_aluk_ex; 
-    wire WB_de_ld_gpr1_wb;
-    wire WB_de_dcache_write_wb;
-    wire [63:0] WB_MM_A, WB_MM_B;
-    wire [31:0] WB_ADDRESS;
+    //******************************************************************************//
+    //*
+    //*                                Writeback STAGE
+    //*
+    //*******************************************************************************//
 
     writeback u_writeback(
-        CLK, CLR, PRE, //not uesd SET/RST
+        CLK, PRE, CLR, //not uesd SET/RST
 
         WB_V,
         WB_NEIP,
@@ -935,28 +1035,54 @@ module PIPELINE(CLK, CLR, PRE);
         WB_CONTROL_STORE,
        //pseudo-control store signals not from control store but generated in decode
         WB_de_datasize_all,
-        WB_de_aluk_ex, 
-        WB_de_ld_gpr1_wb,
-        WB_de_dcache_write_wb, 
+        WB_ex_ld_gpr1_wb,
+        WB_ex_ld_gpr2_wb,
+        WB_ex_dcache_write_wb,
+        WB_de_repne_wb, 
 
-        WB_ALU32_RESULTS,
-        WB_COUNT, 
-        WB_MM_A, WB_MM_B,
+        WB_RESULT_A, 
+        WB_RESULT_B, 
+        WB_RESULT_C,
         WB_FLAGS,
+        WB_RESULT_MM,
 
-        WB_CMPS_POINTER,
-
+        WB_DR1,
+        WB_DR2,
+        WB_DR3,
         WB_ADDRESS,
 
-        WB_DR1, WB_DR2, WB_DR3,
+        In_write_ready, 
 
-        Out_DR1, Out_DR2, Out_DR3,
-        Out_DR1_Data, Out_DR2_Data, Out_DR3_Data, 
-        out_v_de_ld_gpr1_wb, out_v_cs_ld_gpr2_wb, out_v_cs_ld_gpr3_wb,
-        out_de_datasize,
-        Out_Dcache_Data, Out_Dcache_Address, 
-        Out_ex_repne_termination_all
-    );*/
+        WB_Final_DR1,
+        WB_Final_DR2,
+        WB_Final_DR3,
+        WB_Final_data1,
+        WB_Final_data2,
+        WB_Final_data3,
+        WB_Final_ld_gpr1,
+        WB_Final_ld_gpr2,
+        WB_Final_ld_gpr3,
+        WB_Final_datasize,
+        WB_Final_ld_seg, 
+        WB_Final_MM_Data,
+        WB_Final_ld_mm, 
+        WB_Final_EIP, 
+        WB_Final_ld_eip, 
+        WB_Final_Dcache_Data,
+        WB_Final_Dcache_address,
 
+        DEP_v_wb_ld_gpr1,
+        DEP_v_wb_ld_gpr2,
+        DEP_v_wb_ld_gpr3,
+        DEP_v_wb_ld_seg,
+        DEP_v_wb_ld_mm,
+        DEP_v_wb_dcache_write,
+
+        wb_halt_all, 
+        wb_repne_terminate_all,
+        WB_stall,
+        CF_dataforwarded,
+        AF_dataforwarded
+    );
 
 endmodule

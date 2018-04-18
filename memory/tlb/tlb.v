@@ -49,6 +49,21 @@ module mux8_32 (
 
 endmodule
 
+module mux8_64 (
+   output [63:0] out,
+
+   input [63:0] in0, in1, in2, in3,
+   input [63:0] in4, in5, in6, in7,
+
+   input [2:0] s
+);
+
+   mux8_32
+      mux0 (out[63:32], in0[63:32], in1[63:32], in2[63:32], in3[63:32], in4[63:32], in5[63:32], in6[63:32], in7[63:32], s),
+      mux1 (out[31:0], in0[31:0], in1[31:0], in2[31:0], in3[31:0], in4[31:0], in5[31:0], in6[31:0], in7[31:0], s);
+
+endmodule
+
 module tlb (
    input [19:0] VPN1, VPN1_END,
    input [19:0] VPN2, VPN2_END,

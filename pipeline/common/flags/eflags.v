@@ -120,7 +120,7 @@ module ZF_logic (
 	or4$ u_or_zf_15_0(ZF_15_0, ZF_15_12, ZF_11_8, ZF_7_4, ZF_3_0);
 	//layer 3
 	or2$ u_or_zf_31_0(ZF_n, ZF_31_16, ZF_15_0);
-    inv1$ inv1 (ZF, ZF_n);
+    inv1$ final_invert(ZF, ZF_n);
 
 endmodule
 

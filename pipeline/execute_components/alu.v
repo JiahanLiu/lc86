@@ -29,11 +29,14 @@
 //
 // Combinational Delay:
 //
-module alu32 (alu_out, flags, a, b, op);
-	output [31:0] alu_out;
-	output [31:0] flags;
-	input [31:0] a, b;
-	input [2:0] op;
+module alu32 (
+	output [31:0] alu_out,
+	output [31:0] flags,
+	input [31:0] a, b,
+	input [2:0] op,
+	input CF_dataforwarded,
+	input AF_dataforwarded
+	);
 
 	wire [31:0] adder_result, or_result, not_result, daa_result, and_result, cld_result, cmp_result, std_result;
 	wire [31:0] adder_flags, or_flags, not_flags, daa_flags, and_flags, cld_flags, cmp_flags, std_flags;
@@ -41,7 +44,7 @@ module alu32 (alu_out, flags, a, b, op);
 	alu_adder u_alu_adder (adder_result, adder_flags, a, b);
 	alu_or u_alu_or (or_result, or_flags, a, b);
 	alu_not u_alu_not (not_result, not_flags, a);
-	alu_daa u_alu_daa (daa_result, daa_flags, a);
+	alu_daa u_alu_daa (daa_result, daa_flags, a, CF_dataforwarded, AF_dataforwarded);
 	alu_and u_alu_and (and_result, and_flags, a, b);
 	alu_cld u_alu_cld (cld_result, cld_flags);
 	alu_cmp u_alu_cmp (cmp_result, cmp_flags, b, a); //inverted because of how Nelson gives me the data
@@ -179,10 +182,10 @@ module alu_daa (
 	wire CF_part1, CF_part2; 
 	or2$ u_or_cf(CF_or, CF_dataforwarded, carry_low);
 	mux2$ u_mux_CF_low(CF_part1, CF_dataforwarded, CF_or, low_needs_daa);
-	mux2$ u_mux_CF_high(CF_part2, 0, 1, high_needs_daa);
+	mux2$ u_mux_CF_high(CF_part2, 1'b0, 1'b1, high_needs_daa);
 
 	wire AF_part2;
-	mux2$ u_mux_AF(AF_part2, 0, 1, low_needs_daa);	
+	mux2$ u_mux_AF(AF_part2, 1'b0, 1'b1, low_needs_daa);	
 
 	wire OF, DF, SF, ZF, AF, PF, CF;  
 
@@ -192,7 +195,7 @@ module alu_daa (
 	assign DF = 0;
 	assign SF = 0; //bcd is unsigned, vol1, page 80
 	ZF_logic_daa u_ZF_logic_daa(ZF, daa_result[7:0]);
-	assigin AF = AF_part2;
+	assign AF = AF_part2;
 	PF_logic u_PF_logic(PF, daa_result[7:0]);
 	assign CF = CF_part2;
 

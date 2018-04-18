@@ -34,18 +34,19 @@
 module shift_arithmetic_left_w_carry(
 	output [31:0] sal_result,
 	output carry_out, 
-	input [31:0] a, b
+	input [31:0] a, b,
+	input [1:0] datasize
 	);
 	
 	wire [31:0] post_shift_1, post_shift_2, post_shift_4, post_shift_8, post_shift_16;
 	wire [31:0] post_mux_1, post_mux_2, post_mux_4, post_mux_8;
 	wire [4:0] leftover;
 
-	SAL32_by_1 u_sal32_by_1(post_shift_1, leftover[0], a);
-	SAL32_by_2 u_sal32_by_2(post_shift_2, leftover[1], post_mux_1);
-	SAL32_by_4 u_sal32_by_4(post_shift_4, leftover[2], post_mux_2);
-	SAL32_by_8 u_sal32_by_8(post_shift_8, leftover[3], post_mux_4);
-	SAL32_by_16 u_sal32_by_16(post_shift_16, leftover[4], post_mux_8);
+	SAL32_by_1 u_sal32_by_1(post_shift_1, leftover[0], a, datasize);
+	SAL32_by_2 u_sal32_by_2(post_shift_2, leftover[1], post_mux_1, datasize);
+	SAL32_by_4 u_sal32_by_4(post_shift_4, leftover[2], post_mux_2, datasize);
+	SAL32_by_8 u_sal32_by_8(post_shift_8, leftover[3], post_mux_4, datasize);
+	SAL32_by_16 u_sal32_by_16(post_shift_16, leftover[4], post_mux_8, datasize);
 
 	mux32_2way u_mux_1(post_mux_1, a, post_shift_1, b[0]);
 	mux32_2way u_mux_2(post_mux_2, post_mux_1, post_shift_2, b[1]);
@@ -108,11 +109,11 @@ module shift_arithmetic_left(
 	wire [31:0] post_mux_1, post_mux_2, post_mux_4, post_mux_8;
 	wire [4:0] leftover; //hanging wires since carry not needed
 
-	SAL32_by_1 u_sar32_by_1(post_shift_1, leftover[0], a);
-	SAL32_by_2 u_sar32_by_2(post_shift_2, leftover[1], post_mux_1);
-	SAL32_by_4 u_sar32_by_4(post_shift_4, leftover[2], post_mux_2);
-	SAL32_by_8 u_sar32_by_8(post_shift_8, leftover[3], post_mux_4);
-	SAL32_by_16 u_sar32_by_16(post_shift_16, leftover[4], post_mux_8);
+	SAL32_by_1 u_sar32_by_1(post_shift_1, leftover[0], a, 2'b00);
+	SAL32_by_2 u_sar32_by_2(post_shift_2, leftover[1], post_mux_1, 2'b00);
+	SAL32_by_4 u_sar32_by_4(post_shift_4, leftover[2], post_mux_2, 2'b00);
+	SAL32_by_8 u_sar32_by_8(post_shift_8, leftover[3], post_mux_4, 2'b00);
+	SAL32_by_16 u_sar32_by_16(post_shift_16, leftover[4], post_mux_8, 2'b00);
 
 	mux32_2way u_mux_1(post_mux_1, a, post_shift_1, b[0]);
 	mux32_2way u_mux_2(post_mux_2, post_mux_1, post_shift_2, b[1]);
@@ -303,13 +304,18 @@ endmodule
 module SAL32_by_1 (
 	output [31:0] out, 
 	output leftover,  
-	input [31:0] in
+	input [31:0] in,
+	input [1:0] datasize
 	);
+	
+	wire leftover8, leftover16, leftover32; 
 
 	assign out [0] = 1'b0;
 	assign out [31:1] = in[30:0];
-	assign leftover = in[31];
-
+	assign leftover32 = in[31];
+	assign leftover16 = in[15];
+	assign leftover8 = in[7];
+	mux3$ u_mux_leftover(leftover, leftover8, leftover16, leftover32, datasize[0], datasize[1]); 
 endmodule
 
 //-------------------------------------------------------------------------------------
@@ -324,12 +330,18 @@ endmodule
 module SAL32_by_2 (
 	output [31:0] out, 
 	output leftover,  
-	input [31:0] in
+	input [31:0] in,
+	input [1:0] datasize
 	);
+
+	wire leftover8, leftover16, leftover32; 
 
 	assign out[1:0] = 2'b00;
 	assign out [31:2] = in[29:0];
-	assign leftover = in[30];
+	assign leftover32 = in[30];
+	assign leftover16 = in[14];
+	assign leftover8 = in[6];
+	mux3$ u_mux_leftover(leftover, leftover8, leftover16, leftover32, datasize[0], datasize[1]);
 
 endmodule
 
@@ -345,12 +357,18 @@ endmodule
 module SAL32_by_4 (
 	output [31:0] out, 
 	output leftover,  
-	input [31:0] in
+	input [31:0] in,
+	input [1:0] datasize
 	);
+
+	wire leftover8, leftover16, leftover32;  
 
 	assign out[3:0] = 4'h0;
 	assign out [31:4] = in[27:0];
-	assign leftover = in[28];
+	assign leftover32 = in[28];
+	assign leftover16 = in[12];
+	assign leftover8 = in[4];
+	mux3$ u_mux_leftover(leftover, leftover8, leftover16, leftover32, datasize[0], datasize[1]);
 
 endmodule
 
@@ -366,12 +384,19 @@ endmodule
 module SAL32_by_8 (
 	output [31:0] out, 
 	output leftover,  
-	input [31:0] in
+	input [31:0] in,
+	input [1:0] datasize
 	);
+
+	wire leftover8, leftover16, leftover32;  
 
 	assign out[7:0] = 8'h00;
 	assign out [31:8] = in[23:0];
-	assign leftover = in[24];
+	assign leftover32 = in[24];
+	assign leftover16 = in[16];
+	assign leftover8 = in[0]; 
+
+	mux3$ u_mux_leftover(leftover, leftover8, leftover16, leftover32, datasize[0], datasize[1]);
 
 endmodule
 
@@ -387,12 +412,19 @@ endmodule
 module SAL32_by_16 (
 	output [31:0] out, 
 	output leftover,  
-	input [31:0] in
+	input [31:0] in,
+	input [1:0] datasize
 	);
+
+	wire leftover8, leftover16, leftover32;  
 
 	assign out[15:0] = 16'h0000;
 	assign out [31:16] = in[15:0];
-	assign leftover = in[16];
+	assign leftover32 = in[16];
+	assign leftover16 = in[0];
+	assign leftover8 = in[0]; //behavior undefined cite intel specs.
+
+	mux3$ u_mux_leftover(leftover, leftover8, leftover16, leftover32, datasize[0], datasize[1]);
 
 endmodule
 
