@@ -137,4 +137,5 @@ module writeback (
    //dataforward
    assign CF_dataforwarded = current_flags[0];
    assign AF_dataforwarded = current_flags[4];
+
 endmodule
