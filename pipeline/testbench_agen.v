@@ -1,3 +1,5 @@
+`define half_cycle 50
+
 module testbench_agen;
 
    reg CLK, SET, RST, NextV;

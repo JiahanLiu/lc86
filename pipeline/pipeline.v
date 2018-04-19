@@ -347,6 +347,13 @@ module PIPELINE(CLK, CLR, PRE);
     //icache u_icache (CLK, RST, IC_PADDR, IC_R, IC_DOUT);
     //dcache u_dcache(CLK, RST, DC_PADDR, DC_DIN, DC_SIZE, DC_WE, DC_R, DC_DOUT);
 
+    wire V_FETCH;
+    wire [31:0] FETCH_POINTER;
+    wire [4:0] ICACHE_SIZE_OUT;
+    wire ICACHE_RW;
+    wire ICACHE_RD_STALL;
+    wire [127:0] IR_DATA_OUT;
+    ifu u_ifu (CLK, CLR, PRE, V_FETCH, FETCH_POINTER, CSDOUT, IC_DOUT, IC_R, IC_PADDR, ICACHE_SIZE_OUT, ICACHE_RW, IC_EN, ICACHE_RD_STALL, IR_DATA_OUT);
 
     //*******FETCH STAGE*******//
     wire [31:0] FE_EIP_IN;	//this signal should be coming out of WB, does not need a latch

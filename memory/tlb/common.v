@@ -68,6 +68,41 @@ module sll64 (out, in, cnt);
 
 endmodule // sll64
 
+module sll128 (out, in, cnt);
+   input [127:0] in;
+   input [6:0] cnt;
+
+   output [127:0] out;
+
+   wire [127:0] ind0, ind1, ind2, ind3, ind4, ind5;
+
+   mux2$
+     mux0[127:0] (ind0, in, {in[63:0], 64'b0}, cnt[6]),
+     mux1[127:0] (ind1, ind0, {ind0[95:0], 32'b0}, cnt[5]),
+     mux2[127:0] (ind2, ind1, {ind1[111:0], 16'b0}, cnt[4]),
+     mux3[127:0] (ind3, ind2, {ind2[119:0], 8'b0}, cnt[3]),
+     mux4[127:0] (ind4, ind3, {ind3[123:0], 4'b0}, cnt[2]),
+     mux5[127:0] (ind5, ind4, {ind4[125:0], 2'b0}, cnt[1]),
+     mux6[127:0] (out, ind5, {ind5[126:0], 1'b0}, cnt[0]);
+
+endmodule // sll128
+
+module reg128e (
+   input CLK,
+   input [127:0] Din,
+
+   output [127:0] Q,
+   output [127:0] QBAR,
+
+   input CLR,
+   input PRE,
+   input en);
+
+reg64e$ low(CLK, Din[63:0], Q[63:0], QBAR[63:0], CLR, PRE, en);
+reg64e$ high(CLK, Din[127:64], Q[127:64], QBAR[127:64], CLR, PRE, en);
+
+endmodule
+
 module comp4 (out, out_bar, in0, in1);
    input [3:0] in0, in1;
 
@@ -99,6 +134,33 @@ module comp16 (out, out_bar, in0, in1);
       and4 (out, and0_out, and1_out, and2_out, and3_out);
    
    nand4$ nand0 (out_bar, and0_out, and1_out, and2_out, and3_out);
+endmodule
+
+module comp20 (out, out_bar, in0, in1);
+   input [19:0] in0, in1;
+
+   // outputs EQ or NEQ
+   output out, out_bar;
+
+   wire [19:0] xnor_out;
+   wire and0_out, and1_out, and2_out, and3_out, and4_out, and5_out, and6_out;
+
+   xnor2$ xnor0 [19:0] (xnor_out, in0, in1);
+   and4$
+      and0 (and0_out, xnor_out[3], xnor_out[2], xnor_out[1], xnor_out[0]),
+      and1 (and1_out, xnor_out[7], xnor_out[6], xnor_out[5], xnor_out[4]),
+      and2 (and2_out, xnor_out[11], xnor_out[10], xnor_out[9], xnor_out[8]),
+      and3 (and3_out, xnor_out[15], xnor_out[14], xnor_out[13], xnor_out[12]),
+      and4 (and4_out, xnor_out[19], xnor_out[18], xnor_out[17], xnor_out[16]);
+
+   and3$
+      and5 (and5_out, and0_out, and1_out, and2_out);
+   and2$
+      and6 (and6_out, and3_out, and4_out),
+      and7 (out, and5_out, and6_out);
+
+   nand2$ nand0 (out_bar, and5_out, and6_out);
+
 endmodule
 
 //module mag_comp8$(A, B, AGB, BGA);
@@ -155,6 +217,115 @@ module mag_comp32 (A, B, AGB, BGA, EQ);
 
    and2$
       and_eq (EQ, hi_eq, lo_eq);
+
+endmodule
+
+module mux2_4 (Y, IN0, IN1, S0);
+   output [3:0] Y;
+
+   input [3:0] IN0, IN1;
+   input S0;
+
+   wire [7:0] in0, in1;
+   wire [3:0] Y_NC;
+
+   assign in0[3:0] = IN0;
+   assign in1[3:0] = IN1;
+
+   mux2_8$ mux0 ({Y_NC, Y}, in0, in1, S0);
+
+endmodule
+
+module mux4_4 (Y, IN0, IN1, IN2, IN3, S0, S1);
+   output [3:0] Y;
+
+   input [3:0] IN0, IN1, IN2, IN3;
+   input S0, S1;
+
+   wire [7:0] in0, in1, in2, in3;
+   wire [3:0] Y_NC;
+
+   assign in0[3:0] = IN0;
+   assign in1[3:0] = IN1;
+   assign in2[3:0] = IN2;
+   assign in3[3:0] = IN3;
+
+   mux4_8$ mux0 ({Y_NC, Y}, in0, in1, in2, in3, S0, S1);
+
+endmodule
+
+module mux2_32 (Y, IN0, IN1, S0);
+   output [31:0] Y;
+
+   input [31:0] IN0, IN1;
+   input S0;
+
+   mux2_16$
+      muxhi (Y[31:16], IN0[31:16], IN1[31:16], S0),
+      muxlo (Y[15:0], IN0[15:0], IN1[15:0], S0);
+
+endmodule
+
+module mux2_64 (Y, IN0, IN1, S0);
+   output [63:0] Y;
+
+   input [63:0] IN0, IN1;
+   input S0;
+
+   mux2_32
+      muxhi (Y[63:32], IN0[63:32], IN1[63:32], S0),
+      muxlo (Y[31:0], IN0[31:0], IN1[31:0], S0);
+
+endmodule
+
+module mux2_128 (Y, IN0, IN1, S0);
+   output [127:0] Y;
+
+   input [127:0] IN0, IN1;
+   input S0;
+
+   mux2_64
+      muxhi (Y[127:64], IN0[127:64], IN1[127:64], S0),
+      muxlo (Y[63:0], IN0[63:0], IN1[63:0], S0);
+
+endmodule
+
+module mux8_32 (
+   output [31:0] out,
+
+   input [31:0] in0, in1, in2, in3,
+   input [31:0] in4, in5, in6, in7,
+
+   input [2:0] s
+);
+
+   wire [15:0] mux0_out, mux1_out, mux2_out, mux3_out;
+
+   mux4_16$
+      mux0 (mux0_out, in0[31:16], in1[31:16], in2[31:16], in3[31:16], s[0], s[1]),
+      mux1 (mux1_out, in4[31:16], in5[31:16], in6[31:16], in7[31:16], s[0], s[1]),
+
+      mux2 (mux2_out, in0[15:0], in1[15:0], in2[15:0], in3[15:0], s[0], s[1]),
+      mux3 (mux3_out, in4[15:0], in5[15:0], in6[15:0], in7[15:0], s[0], s[1]);
+
+   mux2_16$
+      mux4 (out[31:16], mux0_out, mux1_out, s[2]),
+      mux5 (out[15:0], mux2_out, mux3_out, s[2]);
+
+endmodule
+
+module mux8_64 (
+   output [63:0] out,
+
+   input [63:0] in0, in1, in2, in3,
+   input [63:0] in4, in5, in6, in7,
+
+   input [2:0] s
+);
+
+   mux8_32
+      mux0 (out[63:32], in0[63:32], in1[63:32], in2[63:32], in3[63:32], in4[63:32], in5[63:32], in6[63:32], in7[63:32], s),
+      mux1 (out[31:0], in0[31:0], in1[31:0], in2[31:0], in3[31:0], in4[31:0], in5[31:0], in6[31:0], in7[31:0], s);
 
 endmodule
 

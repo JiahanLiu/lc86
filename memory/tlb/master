@@ -10,6 +10,8 @@ common.v
 tlb.v
 cross_size_detector.v
 cross_boundary_detector.v
+cross_icache_line_size_detector.v
+ifu_mask_detector.v
 lsu.v
 ifu.v
 TOP.v
