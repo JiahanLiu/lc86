@@ -11,4 +11,5 @@ tlb.v
 cross_size_detector.v
 cross_boundary_detector.v
 lsu.v
+ifu.v
 TOP.v
