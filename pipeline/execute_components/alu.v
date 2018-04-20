@@ -47,7 +47,7 @@ module alu32 (
 	alu_daa u_alu_daa (daa_result, daa_flags, a, CF_dataforwarded, AF_dataforwarded);
 	alu_and u_alu_and (and_result, and_flags, a, b);
 	alu_cld u_alu_cld (cld_result, cld_flags);
-	alu_cmp u_alu_cmp (cmp_result, cmp_flags, b, a); //inverted because of how Nelson gives me the data
+	alu_cmp u_alu_cmp (cmp_result, cmp_flags, a, b); //inverted because of how Nelson gives me the data
 	alu_std u_alu_std (std_result, std_flags);
 
 	mux32_8way out_selection(alu_out, adder_result, or_result, not_result, daa_result, and_result, cld_result, cmp_result, std_result, op[2:0]);

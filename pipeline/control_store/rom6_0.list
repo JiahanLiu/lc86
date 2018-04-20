@@ -1,26 +1,58 @@
-@0f // IRETd (00CF)
-0000000000000000000000000000000000000000000000000000000000000000
-@06 // MOV r/m8,imm8 (00C6)
-0000000000000000000000000000000000000000000000000000000000000000
-@07 // MOV r/m,imm (16/32) (00C7)
-0000000000000000000000000000000000000000000000000000000000000000
-@03 // RET near (00C3)
-0000000000000000000000000000000000000000000000000000000000000000
-@0b // RET far (00CB)
-0000000000000000000000000000000000000000000000000000000000000000
-@02 // RET imm16,near (00C2)
-0000000000000000000000000000000000000000000000000000000000000000
-@0a // RET imm16,far (00CA)
-0000000000000000000000000000000000000000000000000000000000000000
-@10 // SHF r/m8,1 (00D0 /4 /7)
-0000000000000000000000000000000000000000000000000000000000000000
-@12 // SHF r/m8,CL (00D2 /4 /7)
-0000000000000000000000000000000000000000000000000000000000000000
-@00 // SHF r/m8,imm8 (00C0 /4 /7)
-0000000000000000000000000000000000000000000000000000000000000000
-@11 // SHF r/m,1 (16,32) (00D1 /4 /7)
-0000000000000000000000000000000000000000000000000000000000000000
-@13 // SHF r/m,CL (16,32) (00D3 /4 /7)
-0000000000000000000000000000000000000000000000000000000000000000
-@01 // SHF r/m,imm (16,32) (00C1 /4 /7)
-0000000000000000000000000000000000000000000000000000000000000000
+@0f // IRETd (uop1) (0xCF)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000000000000
+@0f // IRETd (uop2) (0xCF)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000000000000
+@0f // IRETd (uop3) (0xCF)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000000000000
+@06 // MOV r/m8,imm8 (0xC6)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000101xxxxxx
+@07 // MOV r/m,imm (16/32) (0xC7)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000101xxxxxx
+@10 // CMPS m8,m8 uop2 ()
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx010110110xxx
+@11 // REPNE m8,m8 uop1 ()
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx100000xxxxxx
+@12 // REPNE m8,m8 uop2 ()
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx010110110xxx
+@13 // CMPS m,m (16/32) uop1 (0xA7)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx100000xxxxxx
+@14 // CMPS m,m (16/32) uop2 ()
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx010110110xxx
+@15 // REPNE m,m (16/32) uop1 ()
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx100000xxxxxx
+@16 // REPNE m,m (16/32) uop2 ()
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx010110110xxx
+@03 // RET near (0xC3)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000000xxxxxx
+@0b // RET far (uop1) (0xCB)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000000xxxxxx
+@0b // RET far (uop2) (0xCB)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000000xxxxxx
+@02 // RET imm16,near (0xC2)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000000xxxxxx
+@0a // RET imm16,far (uop1) (0xCA)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000000xxxxxx
+@0a // RET imm16,far (uop2) (0xCA)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000000xxxxxx
+@10 // SHF r/m8,1 (0xD0 /4 /7)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000101xxxxxx
+@12 // SHF r/m8,CL (0xD2 /4 /7)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000101xxxxxx
+@00 // SHF r/m8,imm8 (0xC0 /4 /7)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000101xxxxxx
+@11 // SHF r/m,1 (16,32) (0xD1 /4 /7)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000101xxxxxx
+@13 // SHF r/m,CL (16,32) (0xD3 /4 /7)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000101xxxxxx
+@01 // SHF r/m,imm (16,32) (0xC1 /4 /7)
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000101xxxxxx
+@17 // INT/EXC (uop1) ()
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000001000000
+@18 // INT/EXC (uop2) ()
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000001000000
+@19 // INT/EXC (uop3) ()
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000001000000
+@1a // INT/EXC (uop4) ()
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000000000000
+@1b // INT/EXC (uop5) ()
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx000000000000

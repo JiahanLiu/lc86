@@ -5,6 +5,9 @@
 //-------------------------------------------------------------------------------------
 // Functionality: PADDW
 //
+// Operations 0 = PADDW | 1 == PADDD | 2 = PADDSW | 3 = PSHUFW | 4 = PASS_A
+//            | 5 = SWAP_A 
+//
 // Combinational Delay: 
 //
 module alu64(

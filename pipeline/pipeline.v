@@ -34,6 +34,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire WB_Final_ld_mm; 
     wire [31:0] WB_Final_EIP; 
     wire WB_Final_ld_eip; 
+    wire [31:0] WB_Final_CS;
+    wire WB_Final_ld_cs; 
     wire [63:0] WB_Final_Dcache_Data;
     wire [31:0] WB_Final_Dcache_address;
     //signals from d-cache needed by WB
@@ -889,6 +891,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
         WB_Final_ld_mm, 
         WB_Final_EIP, 
         WB_Final_ld_eip, 
+        WB_Final_CS, 
+        WB_Final_ld_cs, 
         WB_Final_Dcache_Data,
         WB_Final_Dcache_address,
 
