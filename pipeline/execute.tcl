@@ -34,7 +34,7 @@ elaborate -top {execute};
 clock -clear; clock CLK
 
 #Set Reset
-reset -expression {RST};
+reset -expression {CLR};
 
 #Prove all
 prove -bg -all

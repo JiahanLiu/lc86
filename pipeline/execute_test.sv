@@ -173,10 +173,31 @@ logic [31:0] add6 = a[63:32]+b[63:32];
 logic [63:0] addw = {add4, add3, add2, add1};
 logic [63:0] addd = {add6, add5};
 
+function reg[15:0] signed_sat (reg [15:0] oper1, reg [15:0] oper2);
+    logic [15:0] temp = oper1+oper2;
+    if(temp > 16'h7FFF)
+        return 16'h7FFF;
+    else if(temp < 16'h8000)
+        return 16'h8000;
+    else
+        return temp;
+    signed_sat=1;
+endfunction
+
+logic [15:0] temp1 = signed_sat(a[15:0], b[15:0]);
+logic [15:0] temp2 = signed_sat(a[31:16], b[31:16]);
+logic [15:0] temp3 = signed_sat(a[47:32], b[47:32]);
+logic [15:0] temp4 = signed_sat(a[63:48], b[63:48]);
+
+logic [63:0] sh4 = b >> (imm[7:6]*16);
+logic [63:0] sh3 = b >> (imm[5:4]*16);
+logic [63:0] sh2 = b >> (imm[3:2]*16);
+logic [63:0] sh1 = b >> (imm[1:0]*16);
+
 assert property (@(posedge clk) (op==0) |-> alu_out == addw);
 assert property (@(posedge clk) (op==1) |-> alu_out == addd);
-//assert property (@(posedge clk) (op==2) |-> alu_out == ~a);
-//assert property (@(posedge clk) (op==3) |-> (alu_out[7:0] == DAA_result[7:0]) && (CF==DAA_result[9]) && (AF==DAA_result[8]));
+assert property (@(posedge clk) (op==2) |-> alu_out == {temp4, temp3, temp2, temp1});
+assert property (@(posedge clk) (op==3) |-> alu_out == {sh4[15:0], sh3[15:0], sh2[15:0], sh1[15:0]});
 
 endmodule
 
@@ -198,7 +219,7 @@ assign PF = flags[2];
 assign CF = flags[0];
 
 assume property (@(posedge clk) (op==3) |-> a[31:8] == 24'b0);
-assume property (@(posedge clk) (op==3) |-> AF == 0);
+//assume property (@(posedge clk) (op==3) |-> AF == 0);
 
 function reg ZF_flag (reg [31:0] alu_out);
     if(alu_out==32'b0)
@@ -290,7 +311,7 @@ endmodule
 
 //bind execute adder32_props wrp_adder32 (
 //    .clk(CLK),
-//    .reset(RST),
+//    .reset(CLR),
 //    .a(u_adder32.a),
 //    .b(u_adder32.b),
 //    .carry(u_adder32.carry),
@@ -300,7 +321,7 @@ endmodule
 
 //bind execute adder32_cry_props wrp_adder32_cry (
 //    .clk(CLK),
-//    .reset(RST),
+//    .reset(CLR),
 //    .a(add_sz.a),
 //    .b(add_sz.b),
 //    .carry_out(add_sz.carry_out),
@@ -308,19 +329,19 @@ endmodule
 //    .carry_in(add_sz.carry_in)
 //);
 
-//bind execute alu32_props wrp_alu32 (
-//    .clk(CLK),
-//    .reset(RST),
-//    .a(u_alu32.a),
-//    .b(u_alu32.b),
-//    .flags(u_alu32.flags),
-//    .alu_out(u_alu32.alu_out),
-//    .op(u_alu32.op)
-//);
+bind execute alu32_props wrp_alu32 (
+    .clk(CLK),
+    .reset(CLR),
+    .a(u_alu32.a),
+    .b(u_alu32.b),
+    .flags(u_alu32.flags),
+    .alu_out(u_alu32.alu_out),
+    .op(u_alu32.op)
+);
 
 bind execute alu64_props wrp_alu64 (
     .clk(CLK),
-    .reset(RST),
+    .reset(CLR),
     .a(u_alu64.MM_A),
     .b(u_alu64.MM_B),
     .alu_out(u_alu64.alu64_results),
@@ -330,7 +351,7 @@ bind execute alu64_props wrp_alu64 (
 
 //bind execute execute_props wrp_alu32 (
 //    .clk(CLK),
-//    .reset(RST),
+//    .reset(CLR),
 //    .a(u_alu32.a),
 //    .b(u_alu32.b),
 //    .flags(u_alu32.flags),

@@ -3,6 +3,7 @@ module decode_stage2 (
     input [127:0] IR, 
     input [31:0] EIP,
     input [15:0] CS,
+    input [3:0] instr_length_updt,
     input [15:0] opcode, 
     input [1:0] prefix_size,
     input prefix_present, segment_override, operand_override, repeat_prefix, 
@@ -134,9 +135,7 @@ module decode_stage2 (
 
    comp16 comp_0FB0 (DE_CMPXCHG_AG, , {opcode[15:1], 1'b0}, 16'h0FB0); // set for cmpxchg
 
-
-//   register_file u_register_file (clk, set, reset, SR1, SR2, SR3, SR4, DR1, DR2, DR3,
-//       write_DR1, write_DR2, write_DR3, result1, result2, result3, write_size, read_size,
-//       regA, regB, regC, regD);
+   // Increment the EIP with proper length
+   adder32_w_carry_in add_rel (EIP_OUT, , EIP, {28'b0, instr_length_updt}, 1'b0);
 
 endmodule

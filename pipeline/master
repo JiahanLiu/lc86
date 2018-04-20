@@ -47,3 +47,4 @@
 ./execute.v
 ./writeback.v
 ./pipeline.v
+./pipeline_tb.v
