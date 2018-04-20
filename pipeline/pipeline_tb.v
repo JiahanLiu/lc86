@@ -21,7 +21,7 @@ module TOP;
    reg [15:0] opcode;
    reg [7:0] prefix1, prefix2, prefix3, modrm, sib;
    reg [31:0] disp, imm;
-   reg [47:0] offset;
+   reg [47:0] offset, offset_compare;
    reg prefix1_present, prefix2_present, prefix3_present, sib_present, modrm_present;
    reg [1:0] opcode_size, prefix_size;
    reg disp_present, imm_present, prefix_present, offset_present;
@@ -699,7 +699,7 @@ module TOP;
                $display("time: %0d DE_DISP_SIZE_OUT error!! %h", $time, u_pipeline.DE_DISP_SIZE_OUT);
 //               $stop;
            end
-          end
+           end
 
            if(u_pipeline.DE_OFFSET_PRES_OUT !== offset_present) begin
                $display("time: %0d DE_OFFSET_PRES_OUT error!! %h", $time, u_pipeline.DE_OFFSET_PRES_OUT);
@@ -733,16 +733,15 @@ module TOP;
                $display("time: %0d DE_SIB_OUT error!! %h", $time, u_pipeline.DE_SIB_OUT);
 //               $stop;
            end
-       end
+          end
 
 /*************************** ADDRESS GENERATION STAGE INPUTS COMPARE ******************************/
             EIP_UPDATE = u_pipeline.DE_INSTR_LENGTH_UPDATE_OUT + u_pipeline.DE_EIP_OUT;
 
 
-
 /*************************** ADDRESS GENERATION STAGE INPUTS COMPARE ******************************/
-            #(clk_cycle-1)
-            #1    // Allow for setup time
+            #(clk_cycle-1);
+            #1;    // Allow for setup time
            
             // Valid Signal always 1 for now
             // Check for the valid signal
@@ -758,7 +757,24 @@ module TOP;
 //              $stop;
             end
 
+/*************************** MEMORY STAGE INPUTS COMPARE ******************************/
+            #(clk_cycle-1);
+            #1;    // Allow for setup time
 
+            // Opcode == 04
+            if(opcode == 16'h4 || opcode==16'5 || opcode==16'h81 || opcode==16'h83 || opcode==16'h01) begin
+                result = ME_A_OUT + ME_B_OUT;
+
+/*************************** EXECUTE STAGE INPUTS COMPARE ******************************/
+            #(clk_cycle-1);
+            #1;    // Allow for setup time
+
+/*************************** WRITEBACK STAGE INPUTS COMPARE ******************************/
+            #(clk_cycle-1);
+            #1;    // Allow for setup time
+
+
+/*********************************************************/
            // Ignore all stall cycles; do not compare them against trace cycles.
            //while (stall_signal == 1'b1) begin
            //     #clk_cycle

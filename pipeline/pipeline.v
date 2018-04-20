@@ -73,19 +73,18 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
 
     register_file u_register_file (CLK, 
-        SEG_DIN, SEGID1, SEGID2, WRSEGID, SEGWE,
-        MM_DIN, MMID1, MMID2, WRMMID, MMWE, 
-        GPR_DIN0, GPR_DIN1, GPR_DIN2, 
+        SEG_DIN, SEGID1, SEGID2, WRSEGID, WB_Final_ld_seg,
+        WB_Final_MM_Data, MMID1, MMID2, WRMMID, WB_Final_ld_mm, 
+        WB_Final_data1, WB_Final_data2, WB_Final_data3,
         D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT,
         // For now, all the 4 read datasizes are same
         2'd2, 2'd2, 2'd2, 2'd2,
         // D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT,
-        WRGPR0, WRGPR1, WRGPR2, GPRWE0, GPRWE1, GPRWE2,
+        WB_Final_DR1, WB_Final_DR2, WB_Final_DR3, WB_Final_datasize, WB_Final_datasize, WB_Final_datasize,
         // Enable signals from writeback
-        // WE0, WE1, WE2,
-        1'b0, 1'b0, 1'b0,
-        CS_DIN, EIP_DIN, EFLAGS_DIN,
-        LD_CS, LD_EIP, LD_EFLAGS,
+        WB_Final_ld_gpr1, WB_Final_ld_gpr2, WB_Final_ld_gpr3, 
+        CS_DIN, WB_Final_EIP, EFLAGS_DIN,
+        LD_CS, WB_Final_ld_eip, LD_EFLAGS,
         SEGDOUT1, SEGDOUT2, MMDOUT1, MMDOUT2,
         SR1_DATA, SR2_DATA, SR3_DATA, SIB_I_DATA,
         CSDOUT, EIPDOUT, EFLAGSDOUT, CLR
@@ -508,23 +507,55 @@ module PIPELINE(CLK, CLR, PRE, IR);
      u_reg_me_ps_in1 (CLK, AG_OUT1_ME_PS, ME_PS_IN1, , CLR, PRE, LD_ME);
    
     wire V;
-    memory_stage u_memory_stage (CLK, CLR, PRE, V,
-        ME_PS_NEIP, ME_PS_NCS, ME_PS_CONTROL_STORE,
-        ME_PS_A, ME_PS_B, ME_PS_MM_A, ME_PS_MM_B, ME_PS_SP_XCHG_DATA,
-        ME_PS_MEM_RD_ADDR, ME_PS_MEM_WR_ADDR, ME_PS_DATA_SIZE,
-        ME_PS_D2_ALUK_EX, ME_PS_DRID1, ME_PS_DRID2,
+
+    //******************************************************************************//
+    //*
+    //*                                MEMORY STAGE
+    //*
+    //*******************************************************************************//
+
+
+    memory_stage u_memory_stage (
+        CLK, CLR, PRE, V,
+
+        ME_PS_NEIP,
+        ME_PS_NCS,
+        ME_PS_CONTROL_STORE,
+
+        ME_PS_A, ME_PS_B,
+        ME_PS_MM_A, ME_PS_MM_B,
+        ME_PS_SP_XCHG_DATA,
+
+        ME_PS_MEM_RD_ADDR, ME_PS_MEM_WR_ADDR,
+        ME_PS_DATA_SIZE,
+
+        ME_PS_D2_ALUK_EX,
+        ME_PS_DRID1, ME_PS_DRID2,
+
         ME_PS_D2_MEM_RD_ME, ME_PS_D2_MEM_WR_WB, ME_PS_D2_LD_GPR1_WB, ME_PS_D2_LD_MM_WB,
 
-        DCACHE_DATA, DCACHE_READY,
+        DCACHE_DATA,
+        DCACHE_READY,
 
         // output
-        ME_DCACHE_EN, 
+        ME_DCACHE_EN,
 
         // outputs to next stage latches
-        ME_NEIP_OUT, ME_NCS_OUT, ME_CONTROL_STORE_OUT,
-        ME_A_OUT, ME_B_OUT, ME_MM_A_OUT, ME_MM_B_OUT, ME_SP_XCHG_DATA_OUT,
-        ME_MEM_RD_ADDR_OUT, ME_MEM_WR_ADDR_OUT, ME_DATA_SIZE_OUT, ME_D2_ALUK_EX_OUT,
-        ME_DRID1_OUT, ME_DRID2_OUT, ME_D2_MEM_WR_WB_OUT, ME_D2_LD_GPR1_WB_OUT, ME_D2_LD_MM_WB_OUT
+        ME_NEIP_OUT,
+        ME_NCS_OUT,
+        ME_CONTROL_STORE_OUT,
+
+        ME_A_OUT, ME_B_OUT,
+        ME_MM_A_OUT, ME_MM_B_OUT,
+        ME_SP_XCHG_DATA_OUT,
+
+        ME_MEM_RD_ADDR_OUT, ME_MEM_WR_ADDR_OUT,
+        ME_DATA_SIZE_OUT,
+
+        ME_D2_ALUK_EX_OUT,
+        ME_DRID1_OUT, ME_DRID2_OUT,
+
+        ME_D2_MEM_WR_WB_OUT, ME_D2_LD_GPR1_WB_OUT, ME_D2_LD_MM_WB_OUT
     );
    
     //register between ME and EX
