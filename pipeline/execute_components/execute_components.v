@@ -20,7 +20,7 @@ module operand_select_ex(
 
 	wire [31:0] cmps_first_mem;
 
-	reg32e$ u_cmps_temp_mem (CLK, EX_A, cmps_first_mem, , CLR, PRE, CS_IS_CMPS_FIRST_UOP_ALL);
+	reg32e$ u_cmps_temp_mememory (CLK, EX_A, cmps_first_mem, , CLR, PRE, CS_IS_CMPS_FIRST_UOP_ALL);
 	//module reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
 
 	mux32_2way u_mux_b(b, EX_B, cmps_first_mem, CS_IS_CMPS_SECOND_UOP_ALL);
@@ -42,7 +42,7 @@ module cmpxchg_decision_ex(
 	output ex_dcache_write,
 	input CS_IS_CMPXCHG_EX,
 	input EX_de_ld_gpr1_ex,
-	input CS_LD_GPR2_WB,
+	input CS_LD_GPR2_EX,
 	input EX_de_dcache_write_ex,
 	input ZF
 	);
@@ -56,7 +56,7 @@ module cmpxchg_decision_ex(
 
 	mux2$ u_mux_gpr1(ex_ld_gpr1, EX_de_ld_gpr1_ex, equal_and_gpr1, CS_IS_CMPXCHG_EX);
 
-	mux2$ u_mux_gpr2(ex_ld_gpr2, CS_LD_GPR2_WB, ZF_not, CS_IS_CMPXCHG_EX); 
+	mux2$ u_mux_gpr2(ex_ld_gpr2, CS_LD_GPR2_EX, ZF_not, CS_IS_CMPXCHG_EX); 
 
 	mux2$ u_mux_dcache(ex_dcache_write, EX_de_dcache_write_ex, equal_and_dcache, CS_IS_CMPXCHG_EX);
 

@@ -90,7 +90,7 @@ module execute (
   assign WB_CONTROL_STORE_next = CONTROL_STORE;
 
   operand_select_ex u_operand_select_ex(b, CLK, PRE, CLR, CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_CMPS_SECOND_UOP_ALL, EX_A, EX_B);
-  cmpxchg_decision_ex u_cmpxchg_decision_ex(ex_ld_gpr1, ex_ld_gpr2, ex_dcache_write, CS_IS_CMPXCHG_EX, EX_de_ld_gpr1_ex, CS_LD_GPR2_WB, EX_de_dcache_write_ex, ZF);
+  cmpxchg_decision_ex u_cmpxchg_decision_ex(ex_ld_gpr1, ex_ld_gpr2, ex_dcache_write, CS_IS_CMPXCHG_EX, EX_de_ld_gpr1_ex, CS_LD_GPR2_EX, EX_de_dcache_write_ex, ZF);
   assign WB_de_datasize_all_next = EX_de_datasize_all;
   assign WB_ex_ld_gpr1_wb_next = ex_ld_gpr1;
   assign WB_ex_ld_gpr2_wb_next = ex_ld_gpr2;
