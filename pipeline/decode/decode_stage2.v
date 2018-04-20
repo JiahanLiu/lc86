@@ -48,12 +48,21 @@ module decode_stage2 (
    wire OPERAND_OVERRIDE_EN;
    wire [2:0] IR_REG_OP, IR_MOD_RM, IR_SIB_BASE; 
 
+   wire outs1, outs2, outs4, outs5, outs7, outs8, outs9, outs10;
+   wire [2:0] pp_ovr;
+   wire op7_b, op6_b, op5_b, op4_b, op3_b, op2_b, op1_b, op0_b;
+   wire out1o, out2o, offset_ovr;
+
+
+   and4$ and1o (out1o, opcode[7], opcode[6], opcode[5], op4_b);
+   and4$ and2o (out2o, opcode[3], op2_b, opcode[1], op0_b);
+   and3$ and3o (offset_ovr, out1o, out2o, operand_override);
 
    // 32-bit disp, imm and 48-bit offset selection
    // Need to send the offset bits to disp and imm field based on opcode
    disp_selector u_disp_selector (.IR(IR), .disp_sel(disp_sel), .disp_size(disp_size), .disp(DISP32_OUT) );
    imm_selector u_imm_selector (.IR(IR), .opcode(opcode), .imm_sel(imm_sel), .imm_size(imm_size), .imm(IMM32_OUT) );
-   offset_selector u_offset_selector (.IR(IR), .off_sel(modrm_sel), .offset_size(offset_size), .offset(offset) );
+   offset_selector u_offset_selector (.IR(IR), .off_sel(modrm_sel), .offset_size(offset_size), .ovr(offset_ovr), .offset(offset) );
 
    assign OPERAND_OVERRIDE_EN = operand_override;
    assign DE_SIB_EN_AG = sib_present;
@@ -65,6 +74,9 @@ module decode_stage2 (
     assign IR_MOD_RM = modrm[2:0];
     assign IR_SIB_BASE = sib[2:0];
     assign DE_SEG1_ID = 3'b000;
+    assign DE_SIB_S_AG = sib[7:6];
+    assign SR3_OUT = modrm[5:3];
+    assign SR4_OUT = sib[5:3];
 
 //   if(opcode == 16'h00FF) begin
 //       if(IR_REG_OP == 3'h2)
@@ -100,6 +112,48 @@ module decode_stage2 (
     and3$ and3p (out3p, modrm[0], modrm1_b, modrm[2]);
     and3$ and4p (mod_seg_ovr, modrm_present, out2p, out3p); 
 
+    // SegID override for PUSH, POP - instr_seg_ovr
+/*    ES = 000
+    CS = 001
+    SS = 010
+    DS = 011
+    FS = 100
+    GS  = 101 */
+
+//    segID2 = (op7 &!op6 &op5 &!op4 &!op2 &!op1);
+//
+//    segID1 = (!op7 &!op6 &!op5 &op4 &op2 &op1);
+//
+//    segID0 = (op7 &!op6 &op5 &!op4 &op3 &!op2 &!op1) | (!op7 &!op6 &!op5 &op3 &op2 &op1
+//         &!op0) | (!op7 &!op6 &!op5 &op4 &op3 &op2 &op1);
+
+    inv1$ inv1d (op7_b, opcode[7]);
+    inv1$ inv2d (op6_b, opcode[6]);
+    inv1$ inv3d (op5_b, opcode[5]);
+    inv1$ inv4d (op4_b, opcode[4]);
+    inv1$ inv5d (op3_b, opcode[3]);
+    inv1$ inv6d (op2_b, opcode[2]);
+    inv1$ inv7d (op1_b, opcode[1]);
+    inv1$ inv8d (op0_b, opcode[0]);
+
+    and3$ ands1 (outs1, opcode[7], op6_b, opcode[5]);
+    and3$ ands2 (outs2, op4_b, op2_b, op1_b);
+    and2$ ands3 (pp_ovr[2], outs1, outs2);
+
+    and3$ ands4 (outs4, op7_b, op6_b, op5_b);
+    and3$ ands5 (outs5, opcode[4], opcode[2], opcode[1]);
+    and2$ ands6 (pp_ovr[1], outs4, outs5);
+    
+    and3$ and7 (outs7, outs1, outs2, opcode[3]);
+
+    and3$ and8 (outs8, opcode[3], opcode[2], opcode[1]);
+    and3$ and9 (outs9, outs8, outs4, op0_b);
+
+    and3$ and10 (outs10, outs4, outs8, opcode[4]);
+    or3$ ors1 (pp_ovr[0], outs9, outs7, outs10);
+    
+    //mux2$ muxs1[2:0] (DE_SEG1_ID, segID, 3'b010, seg_ovr_overall);
+
     // DE_BASE_REG_EN_AG=1 when mod=00 and rm=101 - disp32, base not required
     inv1$ inv3k (modrm7_b, modrm[7]);
     inv1$ inv4k (modrm6_b, modrm[6]);
@@ -109,13 +163,7 @@ module decode_stage2 (
     inv1$ inv2k (segID1_b, segID[1]);
 
     and3$ and1k (DE_MUX_SEG_AG, segID2_b, segID1_b, segID[0]); // CS override
-    assign DE_SIB_S_AG = sib[7:6];
-    assign SR3_OUT = modrm[5:3];
-    assign SR4_OUT = sib[5:3];
 
-    // SegID override for PUSH, POP - instr_seg_ovr
-    
-//    mux2$ muxs1[2:0] (DE_SEG1_ID, segID, 3'b010, seg_ovr_overall);
 
 //module  mux2$(outb, in0, in1, s0);
    mux2$
