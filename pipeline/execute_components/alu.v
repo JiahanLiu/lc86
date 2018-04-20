@@ -176,7 +176,7 @@ module alu_daa (
 	mux32_2way u_mux_sum_low(AL_part1, a, low_sum, low_needs_daa);
 	assign carry_low = low_carry[3];
 	adder32 u_add_high(high_sum, ,AL_part1, 32'h00000060); 
-	mux32_2way u_mux_sum_high(AL_part2, AL_part1, low_sum, high_needs_daa);
+	mux32_2way u_mux_sum_high(AL_part2, AL_part1, high_sum, high_needs_daa);
 
 	wire CF_or; 
 	wire CF_part1, CF_part2; 

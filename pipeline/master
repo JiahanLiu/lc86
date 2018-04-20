@@ -8,6 +8,15 @@
 ./common.v
 ./common/cache_and_registers/register_file_decoder.v
 ./common/cache_and_registers/registers.v
+
+../memory/tlb/tlb.v
+../memory/tlb/cross_size_detector.v
+../memory/tlb/cross_boundary_detector.v
+../memory/tlb/cross_icache_line_size_detector.v
+../memory/tlb/ifu_mask_detector.v
+../memory/tlb/lsu.v
+../memory/tlb/ifu.v
+
 ./fetch.v
 ./decode/disp_selector.v
 ./decode/immediate_detector.v
