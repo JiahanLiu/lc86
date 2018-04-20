@@ -3,6 +3,7 @@ module offset_selector (
     input [127:0] IR,
     input [2:0] off_sel,
     input [1:0] offset_size,
+    input ovr,
     output [47:0] offset
 );
 
@@ -56,12 +57,22 @@ or2$ or1 (out1r, offset_size[0], offset_size1);
 bufferH16$ buf4 (out1r_buf, out1r);
 and2$ and1[7:0] (offset[15:8], out1r_buf, out8m);
 
-and2$ and2[7:0] (offset[23:16], offset_size1, out9m);
-and2$ and3[7:0] (offset[31:24], offset_size1, out10m);
+//and2$ and2[7:0] (offset[23:16], offset_size1, out9m);
+//and2$ and3[7:0] (offset[31:24], offset_size1, out10m);
+
+// if 32 - out9m, else if opcode==EA and operand_override and 32-00, else 00
+// if 32 - out9m, else if opcode==EA and operand_override and 32-00, else 00
+mux4_8$ mux1 (offset[23:16], 8'b0, out9m, 8'b0, 8'b0, offset_size1, ovr);
+mux4_8$ mux2 (offset[31:24], 8'b0, out10m, 8'b0, 8'b0, offset_size1, ovr);
 
 and2$ and4 (out4a, offset_size1, offset_size[0]);
 bufferH16$ buf5 (out4a_buf, out4a);
-and2$ and5[7:0] (offset[39:32], out4a_buf, out11m);
-and2$ and6[7:0] (offset[47:40], out4a_buf, out12m);
+//and2$ and5[7:0] (offset[39:32], out4a_buf, out11m);
+//and2$ and6[7:0] (offset[47:40], out4a_buf, out12m);
+
+// if 48, out11m, else if opcode==EA and operand_override and !48- out9m, else 00
+// if 48, out12m, else if opcode==EA and operand_override and !48- out10m, else 00
+mux4_8$ mux3 (offset[39:32], 8'b0, out11m, out9m, out11m, out4a_buf, ovr);
+mux4_8$ mux4 (offset[47:40], 8'b0, out12m, out10m, out12m, out4a_buf, ovr);
 
 endmodule

@@ -19,8 +19,9 @@ module TOP;
    // Signals for testbench loop
    integer file, char, retval, lineno, cntErrors;
    reg [15:0] opcode;
+   reg [31:0] result;
    reg [7:0] prefix1, prefix2, prefix3, modrm, sib;
-   reg [31:0] disp, imm;
+   reg [31:0] disp, imm, imm_compare, disp_compare;
    reg [47:0] offset, offset_compare;
    reg prefix1_present, prefix2_present, prefix3_present, sib_present, modrm_present;
    reg [1:0] opcode_size, prefix_size;
@@ -367,6 +368,23 @@ module TOP;
     reg [31:0] WB_ADDRESS; 
 
 
+    /************************************************************************/
+    /*
+                            BEHAVIOURAL REGISTER FILE 
+                                                                           */
+    /***********************************************************************/
+    reg [7:0] reg_array[31:0];
+    initial begin
+        reg_array[0] = 32'h08000800;
+        reg_array[1] = 32'h09010901;
+        reg_array[2] = 32'h0A020A02;
+        reg_array[3] = 32'h0B030B03;
+        reg_array[4] = 32'h0C040C04;
+        reg_array[5] = 32'h0D050D05;
+        reg_array[6] = 32'h0E060E06;
+        reg_array[7] = 32'h0F070F07;
+    end
+
    PIPELINE u_pipeline(clk, clr, pre, IR);
 
    initial begin
@@ -379,14 +397,14 @@ module TOP;
     end
 
     // Set the register values
-    // reg0 = 32'08000800
-    // reg1 = 32'09010901
-    // reg2 = 32'0A020A02
-    // reg3 = 32'0B030B03
-    // reg4 = 32'0C040C04
-    // reg5 = 32'0D050D05
-    // reg6 = 32'0E060E06
-    // reg7 = 32'0F070F07
+    // reg0 = 32'h08000800
+    // reg1 = 32'h09010901
+    // reg2 = 32'h0A020A02
+    // reg3 = 32'h0B030B03
+    // reg4 = 32'h0C040C04
+    // reg5 = 32'h0D050D05
+    // reg6 = 32'h0E060E06
+    // reg7 = 32'h0F070F07
     initial begin
         u_pipeline.u_register_file.gpr.reg0_ll.Q = 32'h0;
         u_pipeline.u_register_file.gpr.reg1_ll.Q = 32'h1;
@@ -584,29 +602,29 @@ module TOP;
                 offset_size = 1;
                 offset_size_en = 0;
                 IR[8*j +: 8] = offset[7:0];
-//                $display ("Time: %0d OFFSET = %h", $time, offset[7:0]);
-            end else if(offset_size16) begin
-                offset[15:0] = {$random};
-                j=j-2;
-                offset_size = 2;
-                offset_size_en = 1;
-                IR[8*j +: 16] = offset[15:0];
-//                $display ("Time: %0d OFFSET = %h", $time, offset[15:0]);
-            end else if(offset_size32) begin
-                offset = {$random};
-                j=j-4;
-                offset_size = 4;
-                offset_size_en = 2;
-                IR[8*j +: 32] = offset;
-//                $display ("Time: %0d OFFSET = %h", $time, offset[31:0]);
-            end else if(offset_size48) begin
-                offset[31:0] = {$random};
-                offset[47:32] = {$random};
-                j=j-6;
-                offset_size = 6;
-                offset_size_en = 3;
-                IR[8*j +: 48] = offset;
-//                $display ("Time: %0d OFFSET = %h", $time, offset[47:0]);
+                $display ("Time: %0d OFFSET = %h", $time, offset[7:0]);
+          end else if(offset_size16) begin
+              offset[15:0] = {$random};
+              j=j-2;
+              offset_size = 2;
+              offset_size_en = 1;
+              IR[8*j +: 16] = offset[15:0];
+                $display ("Time: %0d OFFSET = %h", $time, offset[15:0]);
+          end else if(offset_size32) begin
+              offset = {$random};
+              j=j-4;
+              offset_size = 4;
+              offset_size_en = 2;
+              IR[8*j +: 32] = offset;
+                $display ("Time: %0d OFFSET = %h", $time, offset[31:0]);
+          end else if(offset_size48) begin
+              offset[31:0] = {$random};
+              offset[47:32] = {$random};
+              j=j-6;
+              offset_size = 6;
+              offset_size_en = 3;
+              IR[8*j +: 48] = offset;
+                $display ("Time: %0d OFFSET = %h", $time, offset[47:0]);
             end
 
             instr_length = prefix_size + opcode_size + modrm_present + sib_present + disp_size + imm_size + offset_size;
@@ -738,6 +756,66 @@ module TOP;
 /*************************** ADDRESS GENERATION STAGE INPUTS COMPARE ******************************/
             EIP_UPDATE = u_pipeline.DE_INSTR_LENGTH_UPDATE_OUT + u_pipeline.DE_EIP_OUT;
 
+            if(offset_present) begin
+                if(offset_size == 1) begin
+                    offset_compare[7:0] = offset[7:0];
+                    offset_compare[47:8] = 0;
+                end else if(offset_size == 2) begin
+                    offset_compare[7:0] = offset[15:8];
+                    offset_compare[15:8] = offset[7:0];
+                    offset_compare[47:16] = 0;
+                end else if(offset_size == 4) begin
+                    if(opcode == 16'hEA && operand_override) begin
+                        offset_compare[47:40] = offset[7:0];
+                        offset_compare[39:32] = offset[15:8];
+                        offset_compare[31:16] = 16'h0;
+                        offset_compare[15:8] = offset[23:16];
+                        offset_compare[7:0] = offset[31:24];
+                    end else begin
+                        offset_compare[31:24] = offset[7:0];
+                        offset_compare[23:16] = offset[15:8];
+                        offset_compare[15:8] = offset[23:16];
+                        offset_compare[7:0] = offset[31:24];
+                        offset_compare[47:32] = 0;
+                    end
+                end else if(offset_size == 6) begin
+                    offset_compare[47:40] = offset[7:0];
+                    offset_compare[39:32] = offset[15:8];
+                    offset_compare[31:24] = offset[23:16];
+                    offset_compare[23:16] = offset[31:24];
+                    offset_compare[15:8] = offset[39:32];
+                    offset_compare[7:0] = offset[47:40];
+                end
+            end
+
+            if(imm_present) begin
+                if(imm_size8) begin
+                    imm_compare[7:0] = imm[7:0];
+                    imm_compare[31:8] = 0;
+                end else if(imm_size16) begin
+                    imm_compare[15:8] = imm[7:0];
+                    imm_compare[7:0] = imm[15:8];
+                    imm_compare[31:16] = 0;
+                end else if(imm_size32) begin
+                    imm_compare[31:24] = imm[7:0];
+                    imm_compare[23:16] = imm[15:8];
+                    imm_compare[15:8] = imm[23:16];
+                    imm_compare[7:0] = imm[31:24];
+                end
+            end
+
+            if(disp_present) begin
+                if(disp_size) begin
+                    disp_compare[31:24] = disp[7:0];
+                    disp_compare[23:16] = disp[15:8];
+                    disp_compare[15:8] = disp[23:16];
+                    disp_compare[7:0] = disp[31:24];
+                end else begin
+                    disp_compare[7:0] = disp[7:0];
+                    disp_compare[31:8] = 0;
+                end
+            end
+
 
 /*************************** ADDRESS GENERATION STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
@@ -752,9 +830,39 @@ module TOP;
 //              $stop;
             end
 
-            if(u_pipeline.D2_CONTROL_STORE_OUT === 128'hx) begin
-                $display("time: %0d D2_CONTROL_STORE_OUT error!! %h", $time, u_pipeline.D2_CONTROL_STORE_OUT);
+            if(u_pipeline.AG_PS_CS !== u_pipeline.D2_CS_OUT) begin
+                $display("time: %0d AG_PS_CS error!! %h", $time, u_pipeline.AG_PS_CS);
 //              $stop;
+            end
+
+            if(u_pipeline.AG_PS_CONTROL_STORE !== u_pipeline.D2_CONTROL_STORE_OUT) begin
+                $display("time: %0d AG_PS_CONTROL_STORE error!! %h", $time, u_pipeline.AG_PS_CONTROL_STORE_OUT);
+//              $stop;
+            end
+
+            if(offset_present) begin
+                if(u_pipeline.AG_PS_OFFSET !== offset_compare) begin
+                    $display("time: %0d AG_PS_OFFSET error!! %h", $time, u_pipeline.AG_PS_OFFSET);
+//                  $stop;
+                end
+            end
+
+            if(imm_present) begin
+                if(u_pipeline.AG_PS_IMM32 !== imm_compare) begin
+                    $display("time: %0d AG_PS_IMM32 error!! %h", $time, u_pipeline.AG_PS_IMM32);
+//                  $stop;
+                end
+            end
+
+            if(disp_present) begin
+                if(u_pipeline.AG_PS_DISP32 !== disp_compare) begin
+                    $display("time: %0d AG_PS_DISP32 error!! %h", $time, u_pipeline.AG_PS_DISP32);
+//                  $stop;
+                end
+            end
+
+            if(u_pipeline.SR1_DATA !== reg_array[u_pipeline.AG_PS_SR1]) begin
+                $display("time: %0d AG_PS_DISP32 error!! %h", $time, u_pipeline.AG_PS_DISP32);
             end
 
 /*************************** MEMORY STAGE INPUTS COMPARE ******************************/
@@ -762,8 +870,9 @@ module TOP;
             #1;    // Allow for setup time
 
             // Opcode == 04
-            if(opcode == 16'h4 || opcode==16'5 || opcode==16'h81 || opcode==16'h83 || opcode==16'h01) begin
+            if(opcode == 16'h4 || opcode==16'h5 || opcode==16'h81 || opcode==16'h83 || opcode==16'h01) begin
                 result = ME_A_OUT + ME_B_OUT;
+            end
 
 /*************************** EXECUTE STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
@@ -782,7 +891,7 @@ module TOP;
 
         end
 
-        $display("OUT of loop");
+        $display("INSTRUCTIONS COMPLETED");
         $fclose(file);
         $finish;
      end
