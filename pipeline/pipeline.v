@@ -71,25 +71,45 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire [2:0] D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT, D2_SEG1_OUT, D2_SEG2_OUT;
     wire [1:0] D2_DATA_SIZE_AG_OUT;
 
+// Make changes to the register file ports in the commented section- TODO
+//    register_file u_register_file (CLK, 
+//        SEG_DIN, SEGID1, SEGID2, WRSEGID, WB_Final_ld_seg,
+//        WB_Final_MM_Data, MMID1, MMID2, WRMMID, WB_Final_ld_mm, 
+//        WB_Final_data1, WB_Final_data2, WB_Final_data3,
+//        D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT,
+//        // For now, all the 4 read datasizes are same
+//        2'd2, 2'd2, 2'd2, 2'd2,
+//        // D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT,
+//        WB_Final_DR1, WB_Final_DR2, WB_Final_DR3, WB_Final_datasize, WB_Final_datasize, WB_Final_datasize,
+//        // Enable signals from writeback
+//        WB_Final_ld_gpr1, WB_Final_ld_gpr2, WB_Final_ld_gpr3, 
+//        CS_DIN, WB_Final_EIP, EFLAGS_DIN,
+//        LD_CS, WB_Final_ld_eip, LD_EFLAGS,
+//        SEGDOUT1, SEGDOUT2, MMDOUT1, MMDOUT2,
+//        SR1_DATA, SR2_DATA, SR3_DATA, SIB_I_DATA,
+//        CSDOUT, EIPDOUT, EFLAGSDOUT, CLR
+//    );
+       
 
     register_file u_register_file (CLK, 
-        SEG_DIN, SEGID1, SEGID2, WRSEGID, WB_Final_ld_seg,
-        WB_Final_MM_Data, MMID1, MMID2, WRMMID, WB_Final_ld_mm, 
-        WB_Final_data1, WB_Final_data2, WB_Final_data3,
+        SEG_DIN, SEGID1, SEGID2, WRSEGID, SEGWE,
+        MM_DIN, MMID1, MMID2, WRMMID, MMWE, 
+        GPR_DIN0, GPR_DIN1, GPR_DIN2, 
         D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT,
         // For now, all the 4 read datasizes are same
         2'd2, 2'd2, 2'd2, 2'd2,
         // D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT,
-        WB_Final_DR1, WB_Final_DR2, WB_Final_DR3, WB_Final_datasize, WB_Final_datasize, WB_Final_datasize,
+        WRGPR0, WRGPR1, WRGPR2, GPRWE0, GPRWE1, GPRWE2,
         // Enable signals from writeback
-        WB_Final_ld_gpr1, WB_Final_ld_gpr2, WB_Final_ld_gpr3, 
-        CS_DIN, WB_Final_EIP, EFLAGS_DIN,
-        LD_CS, WB_Final_ld_eip, LD_EFLAGS,
+        // WE0, WE1, WE2,
+        1'b0, 1'b0, 1'b0,
+        CS_DIN, EIP_DIN, EFLAGS_DIN,
+        LD_CS, LD_EIP, LD_EFLAGS,
         SEGDOUT1, SEGDOUT2, MMDOUT1, MMDOUT2,
         SR1_DATA, SR2_DATA, SR3_DATA, SIB_I_DATA,
         CSDOUT, EIPDOUT, EFLAGSDOUT, CLR
     );
-       
+
     //*******CACHE FILES*******//
     //Cache file systems to be used by the system
     wire [127:0] IC_DOUT, DC_IN, DC_DOUT;
