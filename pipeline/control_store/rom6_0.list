@@ -1,26 +1,26 @@
-@0f // IRETd (0xCF)
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
-@06 // MOV r/m8,imm8 (0xC6)
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
-@07 // MOV r/m,imm (16/32) (0xC7)
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
-@03 // RET near (0xC3)
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
-@0b // RET far (0xCB)
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
-@02 // RET imm16,near (0xC2)
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
-@0a // RET imm16,far (0xCA)
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
-@10 // SHF r/m8,1 (0xD0 /4 /7)
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
-@12 // SHF r/m8,CL (0xD2 /4 /7)
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
-@00 // SHF r/m8,imm8 (0xC0 /4 /7)
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
-@11 // SHF r/m,1 (16,32) (0xD1 /4 /7)
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
-@13 // SHF r/m,CL (16,32) (0xD3 /4 /7)
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
-@01 // SHF r/m,imm (16,32) (0xC1 /4 /7)
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx00
+@0f // IRETd (00CF)
+0000000000000000000000000000000000000000000000000000000000000000
+@06 // MOV r/m8,imm8 (00C6)
+0000000000000000000000000000000000000000000000000000000000000000
+@07 // MOV r/m,imm (16/32) (00C7)
+0000000000000000000000000000000000000000000000000000000000000000
+@03 // RET near (00C3)
+0000000000000000000000000000000000000000000000000000000000000000
+@0b // RET far (00CB)
+0000000000000000000000000000000000000000000000000000000000000000
+@02 // RET imm16,near (00C2)
+0000000000000000000000000000000000000000000000000000000000000000
+@0a // RET imm16,far (00CA)
+0000000000000000000000000000000000000000000000000000000000000000
+@10 // SHF r/m8,1 (00D0 /4 /7)
+0000000000000000000000000000000000000000000000000000000000000000
+@12 // SHF r/m8,CL (00D2 /4 /7)
+0000000000000000000000000000000000000000000000000000000000000000
+@00 // SHF r/m8,imm8 (00C0 /4 /7)
+0000000000000000000000000000000000000000000000000000000000000000
+@11 // SHF r/m,1 (16,32) (00D1 /4 /7)
+0000000000000000000000000000000000000000000000000000000000000000
+@13 // SHF r/m,CL (16,32) (00D3 /4 /7)
+0000000000000000000000000000000000000000000000000000000000000000
+@01 // SHF r/m,imm (16,32) (00C1 /4 /7)
+0000000000000000000000000000000000000000000000000000000000000000

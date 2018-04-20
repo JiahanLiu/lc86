@@ -5,10 +5,9 @@
 /home/projects/courses/spring_18/ee382n-16120/lib/lib4 
 /home/projects/courses/spring_18/ee382n-16120/lib/lib5 
 /home/projects/courses/spring_18/ee382n-16120/lib/lib6 
-
 common.v
-tlb.v
-cross_size_detector.v
 cross_boundary_detector.v
+cross_size_detector.v
+tlb.v
 lsu.v
 TOP.v

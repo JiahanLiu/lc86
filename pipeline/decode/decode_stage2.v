@@ -66,6 +66,19 @@ module decode_stage2 (
     assign IR_SIB_BASE = sib[2:0];
     assign DE_SEG1_ID = 3'b000;
 
+//   if(opcode == 16'h00FF) begin
+//       if(IR_REG_OP == 3'h2)
+//           control_address = 5'h1A;
+//       else if(IR_REG_OP == 3'h0)
+//           control_address = 5'h18;
+//       else if(IR_REG_OP == 3'h4)
+//           control_address = 5'h1C;
+//       else if(IR_REG_OP == 3'h1E)
+//           control_address = 5'h1E);
+//       else 
+//           control_address = opcode[4:0];
+//   end
+
     ucontrol_store u_ucontrol_store2 (.opcode(opcode[7:0]), .opcode_size(opcode_size), .control_signal(CONTROL_STORE[63:0]));
     ucontrol_store u_ucontrol_store1 (.opcode(opcode[7:0]), .opcode_size(opcode_size), .control_signal(CONTROL_STORE[127:64]));
 
@@ -137,5 +150,6 @@ module decode_stage2 (
 
    // Increment the EIP with proper length
    adder32_w_carry_in add_rel (EIP_OUT, , EIP, {28'b0, instr_length_updt}, 1'b0);
+
 
 endmodule

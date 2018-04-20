@@ -5,7 +5,7 @@ module TOP;
    reg [31:0] LA_RD_ADDR, LA_WR_ADDR;
    reg [1:0] LA_RD_SIZE, LA_WR_SIZE;
 
-`define half_cycle 50
+`define half_cycle 10
    initial 
      begin
 	clk = 1'b0;

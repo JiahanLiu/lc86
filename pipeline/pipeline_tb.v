@@ -753,6 +753,11 @@ module TOP;
 //              $stop;
             end
 
+            if(u_pipeline.D2_CONTROL_STORE_OUT === 128'hx) begin
+                $display("time: %0d D2_CONTROL_STORE_OUT error!! %h", $time, u_pipeline.D2_CONTROL_STORE_OUT);
+//              $stop;
+            end
+
 
            // Ignore all stall cycles; do not compare them against trace cycles.
            //while (stall_signal == 1'b1) begin

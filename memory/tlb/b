@@ -1,0 +1,69 @@
+Chronologic VCS simulator copyright 1991-2015
+Contains Synopsys proprietary information.
+Compiler version K-2015.09-SP1_Full64; Runtime version K-2015.09-SP1_Full64;  Apr 18 12:31 2018
+VCD+ Writer K-2015.09-SP1_Full64 Copyright (c) 1991-2015 by Synopsys Inc.
+LA_RD_ADDR:xxxxxxxx size:x cross page:x cross cache line:x @ 0.0 ns
+cross size: X cross next:  X @ 0.0 ns
+state 0 @ 1.0 ns
+LA_RD_ADDR:02000fff size:0 cross page:x cross cache line:x @ 10.0 ns
+cross size: X cross next:  X @ 10.0 ns
+cross size: X cross next:  X @ 11.0 ns
+cross size: X cross next:  0 @ 11.0 ns
+cross size: X cross next:  0 @ 11.0 ns
+cross size: 0 cross next:  0 @ 11.0 ns
+LA_RD_ADDR:02000fff size:0 cross page:0 cross cache line:0 @ 12.0 ns
+state 2 @ 30.0 ns
+LA_RD_ADDR:0200001f size:1 cross page:0 cross cache line:0 @ 50.0 ns
+cross size: 1 cross next:  1 @ 51.0 ns
+LA_RD_ADDR:0200001f size:1 cross page:0 cross cache line:1 @ 51.0 ns
+LA_RD_ADDR:02000fff size:2 cross page:0 cross cache line:1 @ 90.0 ns
+cross size: 1 cross next:  3 @ 91.0 ns
+LA_RD_ADDR:02000fff size:2 cross page:1 cross cache line:1 @ 91.0 ns
+LA_RD_ADDR:0200004a size:3 cross page:1 cross cache line:1 @ 130.0 ns
+LA_RD_ADDR:0200004a size:3 cross page:0 cross cache line:1 @ 131.0 ns
+cross size: 4 cross next:  2 @ 131.0 ns
+cross size: 6 cross next:  2 @ 131.0 ns
+state 0 @ 170.0 ns
+state 1 @ 270.0 ns
+state 0 @ 290.0 ns
+state 1 @ 310.0 ns
+state 0 @ 330.0 ns
+state 1 @ 350.0 ns
+state 0 @ 370.0 ns
+state 1 @ 390.0 ns
+state 0 @ 410.0 ns
+state 1 @ 430.0 ns
+state 0 @ 450.0 ns
+state 1 @ 470.0 ns
+state 0 @ 490.0 ns
+state 1 @ 510.0 ns
+state 0 @ 530.0 ns
+state 1 @ 550.0 ns
+state 0 @ 570.0 ns
+state 1 @ 590.0 ns
+state 0 @ 610.0 ns
+state 1 @ 630.0 ns
+state 0 @ 650.0 ns
+state 1 @ 670.0 ns
+state 0 @ 690.0 ns
+state 1 @ 710.0 ns
+state 0 @ 730.0 ns
+state 1 @ 750.0 ns
+state 0 @ 770.0 ns
+state 1 @ 790.0 ns
+state 0 @ 810.0 ns
+state 1 @ 830.0 ns
+state 0 @ 850.0 ns
+state 1 @ 870.0 ns
+state 0 @ 890.0 ns
+state 1 @ 910.0 ns
+state 0 @ 930.0 ns
+state 1 @ 950.0 ns
+state 0 @ 970.0 ns
+state 1 @ 990.0 ns
+$finish called from file "TOP.v", line 47.
+$finish at simulation time 1000.0 ns
+           V C S   S i m u l a t i o n   R e p o r t 
+Time: 1000000 ps
+CPU Time:      0.510 seconds;       Data structure size:   1.1Mb
+Wed Apr 18 12:32:00 2018
