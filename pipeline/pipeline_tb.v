@@ -494,8 +494,8 @@ module TOP;
             (opcode==16'h00FF);
 
             if(modrm_present == 1'b1) begin 
-                modrm = {$random};
-                modrm = 32'b10010101;
+                //modrm = {$random};
+                modrm = 32'b10010101; //95
                 j=j-1;
                 IR[8*j +: 8] = modrm;
 //                $display ("Time: %0d MODRM = %h", $time, modrm);
@@ -518,22 +518,22 @@ module TOP;
             if(disp_present == 1'b1) begin
                 if(disp_size==1) begin
                     j=j-1;
-                    disp[7:0] = {$random};
+                    //disp[7:0] = {$random};
+                    disp = 32'h0A000000;
                     IR[8*j +: 8] = disp[7:0];
                     disp_size_en=1;
 //                    $display ("Time: %0 DISP = %h", $time, disp[7:0]);
                 end else begin
                     j=j-4;
-                    disp = {$random};
+                    //disp = {$random};
                     disp_size = 4;
+                    disp = 32'h0A000000;
                     IR[8*j +: 32] = disp;
                     disp_size_en=0;
 //                    $display ("Time: %0 DISP = %h", $time, disp);
                 end
             end
             
-            if(disp_present)
-                disp = 32'h0A;
 
             imm_size8 = (opcode==16'h04) || (opcode==16'h0C) || (opcode==16'h0F70) || (opcode==16'h24) || (opcode==16'h6A) || 
             (opcode==16'h80) || (opcode==16'h83) || (opcode==16'hB0) || (opcode==16'hB1) || (opcode==16'hB2) ||
@@ -553,6 +553,7 @@ module TOP;
 
             if(imm_size8) begin
                 imm[7:0] = {$random};
+                imm = 31'd12340000;
                 j=j-1;
                 imm_size = 1;
                 imm_size_en = 0;
@@ -560,6 +561,7 @@ module TOP;
 //                $display ("Time: %0d IMM = %h", $time, imm[7:0]);
             end else if(imm_size16) begin
                 imm[15:0] = {$random};
+                imm = 31'd12340000;
                 j=j-2;
                 imm_size = 2;
                 imm_size_en = 1;
@@ -567,6 +569,7 @@ module TOP;
 //                $display ("Time: %0d IMM = %h", $time, imm[15:0]);
             end else if(imm_size32) begin
                 imm = {$random};
+                imm = 31'd12340000;
                 j=j-4;
                 imm_size = 4;
                 imm_size_en = 2;
@@ -574,8 +577,6 @@ module TOP;
 //                $display ("Time: %0d IMM = %h", $time, imm);
             end
 
-            if(imm_present)
-                imm = 31'd1234;
 
             offset_size8 = (opcode==16'hEB) || (opcode==16'h77) || (opcode==16'h75);
             offset_size16 = operand_override && ((opcode==16'hE8) || (opcode==16'hE9) || (opcode==16'h0F87) || (opcode==16'h0F85));
@@ -802,10 +803,10 @@ module TOP;
 //              $stop;
             end
 
-            if(u_pipeline.AG_PS_OFFSET !== offset_compare) begin
-                $display("time: %0d AG_PS_OFFSET error!! %h", $time, u_pipeline.AG_PS_OFFSET);
-//              $stop;
-            end
+//            if(u_pipeline.AG_PS_OFFSET !== offset_compare) begin
+//                $display("time: %0d AG_PS_OFFSET error!! %h", $time, u_pipeline.AG_PS_OFFSET);
+////              $stop;
+//            end
 
 
 /*************************** MEMORY STAGE INPUTS COMPARE ******************************/
@@ -826,34 +827,34 @@ module TOP;
             #1;    // Allow for setup time
 
         // WRITEBACK SIGNALS
-        $strobe ("at time %0d, WB_Final_DR1 = %h", $time, u_pipeline.u_writeback.WB_Final_DR1);
-        $strobe ("at time %0d, WB_Final_DR2 = %h", $time, u_pipeline.u_writeback.WB_Final_DR2);
-        $strobe ("at time %0d, WB_Final_DR3 = %h", $time, u_pipeline.u_writeback.WB_Final_DR3);
-        $strobe ("at time %0d, WB_Final_data1 = %h", $time, u_pipeline.u_writeback.WB_Final_data1);
-        $strobe ("at time %0d, WB_Final_data2 = %h", $time, u_pipeline.u_writeback.WB_Final_data2);
-        $strobe ("at time %0d, WB_Final_data3 = %h", $time, u_pipeline.u_writeback.WB_Final_data3);
-        $strobe ("at time %0d, WB_Final_ld_gpr1 = %h", $time, u_pipeline.u_writeback.WB_Final_ld_gpr1);
-        $strobe ("at time %0d, WB_Final_ld_gpr2 = %h", $time, u_pipeline.u_writeback.WB_Final_ld_gpr2);
-        $strobe ("at time %0d, WB_Final_ld_gpr3 = %h", $time, u_pipeline.u_writeback.WB_Final_ld_gpr3);
-        $strobe ("at time %0d, WB_Final_datasize = %h", $time, u_pipeline.u_writeback.WB_Final_datasize);
-        $strobe ("at time %0d, WB_Final_ld_seg = %h", $time, u_pipeline.u_writeback.WB_Final_ld_seg);
-        $strobe ("at time %0d, WB_Final_MM_Data = %h", $time, u_pipeline.u_writeback.WB_Final_MM_Data);
-        $strobe ("at time %0d, WB_Final_ld_mm  = %h", $time, u_pipeline.u_writeback.WB_Final_ld_mm);
-        $strobe ("at time %0d, WB_Final_EIP  = %h", $time, u_pipeline.u_writeback.WB_Final_EIP);
-        $strobe ("at time %0d, WB_Final_ld_eip  = %h", $time, u_pipeline.u_writeback.WB_Final_ld_eip);
-        $strobe ("at time %0d, WB_Final_Dcache_Data = %h", $time, u_pipeline.u_writeback.WB_Final_Dcache_Data);
-        $strobe ("at time %0d, WB_Final_Dcache_address = %h", $time, u_pipeline.u_writeback.WB_Final_Dcache_address);
-        $strobe ("at time %0d, DEP_v_wb_ld_gpr1 = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_gpr1);
-        $strobe ("at time %0d, DEP_v_wb_ld_gpr2 = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_gpr2);
-        $strobe ("at time %0d, DEP_v_wb_ld_gpr3 = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_gpr3);
-        $strobe ("at time %0d, DEP_v_wb_ld_seg = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_seg);
-        $strobe ("at time %0d, DEP_v_wb_ld_mm = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_mm);
-        $strobe ("at time %0d, DEP_v_wb_dcache_write = %h", $time, u_pipeline.u_writeback.DEP_v_wb_dcache_write);
-        $strobe ("at time %0d, wb_halt_all  = %h", $time, u_pipeline.u_writeback.wb_halt_all);
-        $strobe ("at time %0d, wb_repne_terminate_all = %h", $time, u_pipeline.u_writeback.wb_repne_terminate_all);
-        $strobe ("at time %0d, WB_stall = %h", $time, u_pipeline.u_writeback.WB_stall);
-        $strobe ("at time %0d, CF_dataforwarded = %h", $time, u_pipeline.u_writeback.CF_dataforwarded);
-        $strobe ("at time %0d, AF_dataforwarded = %h", $time, u_pipeline.u_writeback.AF_dataforwarded);
+        $display ("at time %0d, WB_Final_DR1 = %h", $time, u_pipeline.u_writeback.WB_Final_DR1);
+        $display ("at time %0d, WB_Final_DR2 = %h", $time, u_pipeline.u_writeback.WB_Final_DR2);
+        $display ("at time %0d, WB_Final_DR3 = %h", $time, u_pipeline.u_writeback.WB_Final_DR3);
+        $display ("at time %0d, WB_Final_data1 = %h", $time, u_pipeline.u_writeback.WB_Final_data1);
+        $display ("at time %0d, WB_Final_data2 = %h", $time, u_pipeline.u_writeback.WB_Final_data2);
+        $display ("at time %0d, WB_Final_data3 = %h", $time, u_pipeline.u_writeback.WB_Final_data3);
+        $display ("at time %0d, WB_Final_ld_gpr1 = %h", $time, u_pipeline.u_writeback.WB_Final_ld_gpr1);
+        $display ("at time %0d, WB_Final_ld_gpr2 = %h", $time, u_pipeline.u_writeback.WB_Final_ld_gpr2);
+        $display ("at time %0d, WB_Final_ld_gpr3 = %h", $time, u_pipeline.u_writeback.WB_Final_ld_gpr3);
+        $display ("at time %0d, WB_Final_datasize = %h", $time, u_pipeline.u_writeback.WB_Final_datasize);
+        $display ("at time %0d, WB_Final_ld_seg = %h", $time, u_pipeline.u_writeback.WB_Final_ld_seg);
+        $display ("at time %0d, WB_Final_MM_Data = %h", $time, u_pipeline.u_writeback.WB_Final_MM_Data);
+        $display ("at time %0d, WB_Final_ld_mm  = %h", $time, u_pipeline.u_writeback.WB_Final_ld_mm);
+        $display ("at time %0d, WB_Final_EIP  = %h", $time, u_pipeline.u_writeback.WB_Final_EIP);
+        $display ("at time %0d, WB_Final_ld_eip  = %h", $time, u_pipeline.u_writeback.WB_Final_ld_eip);
+        $display ("at time %0d, WB_Final_Dcache_Data = %h", $time, u_pipeline.u_writeback.WB_Final_Dcache_Data);
+        $display ("at time %0d, WB_Final_Dcache_address = %h", $time, u_pipeline.u_writeback.WB_Final_Dcache_address);
+        $display ("at time %0d, DEP_v_wb_ld_gpr1 = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_gpr1);
+        $display ("at time %0d, DEP_v_wb_ld_gpr2 = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_gpr2);
+        $display ("at time %0d, DEP_v_wb_ld_gpr3 = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_gpr3);
+        $display ("at time %0d, DEP_v_wb_ld_seg = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_seg);
+        $display ("at time %0d, DEP_v_wb_ld_mm = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_mm);
+        $display ("at time %0d, DEP_v_wb_dcache_write = %h", $time, u_pipeline.u_writeback.DEP_v_wb_dcache_write);
+        $display ("at time %0d, wb_halt_all  = %h", $time, u_pipeline.u_writeback.wb_halt_all);
+        $display ("at time %0d, wb_repne_terminate_all = %h", $time, u_pipeline.u_writeback.wb_repne_terminate_all);
+        $display ("at time %0d, WB_stall = %h", $time, u_pipeline.u_writeback.WB_stall);
+        $display ("at time %0d, CF_dataforwarded = %h", $time, u_pipeline.u_writeback.CF_dataforwarded);
+        $display ("at time %0d, AF_dataforwarded = %h", $time, u_pipeline.u_writeback.AF_dataforwarded);
 /*********************************************************/
            // Ignore all stall cycles; do not compare them against trace cycles.
            //while (stall_signal == 1'b1) begin
