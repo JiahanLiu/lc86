@@ -34,7 +34,7 @@ module operand_select_wb(
 	wire [31:0] temp_neip;
 	reg32e$ u_temp_neip(CLK, WB_NEIP, temp_neip, , CLR, PRE, CS_SAVE_NEIP_WB);
 
-	wire [15:0] temp_ncs, 
+	wire [15:0] temp_ncs;
 	wire [31:0] temp_cs_reg_out;
 	reg32e$ u_temp_ncs (CLK, {16'h0000,WB_NCS}, temp_cs_reg_out, , CLR, PRE, CS_SAVE_NCS_WB);
 	assign temp_ncs = temp_cs_reg_out[15:0];
