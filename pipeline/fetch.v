@@ -54,6 +54,8 @@ module fetch (
    assign FE_buf_3_in = 128'hABCD1234;
    FE_full_shifter FE_full_shifter1 (FE_buf_0_out, FE_buf_1_out, FE_buf_2_out, FE_buf_3_out, read_ptr, IR);
 
+   adder32_w_carry_in add_read_ptr (read_ptr, ,read_ptr, instr_length_updt, 1'b0);
+
    decode_stage1 u_decode_stage1 (clk, set, reset,
 				  IR, ,
 				  instr_length_updt,

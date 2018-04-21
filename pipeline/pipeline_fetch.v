@@ -152,22 +152,45 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire [3:0] DE_INSTR_LENGTH_UPDT_OUT; 
     wire [31:0] DE_INSTR_LENGTH_UPDT_OUT_T;
 
-    //fetch u_fetch(
-    //    CLK, PRE, CLR, 
-    //    FE_EIP_IN, 
-    //    IC_DOUT, 
-    //    IC_R,
-    //	      
-    //    FE_JMP_FP, FE_TRAP_FP,
-    //    CSDOUT,
-    //    FE_FP_MUX,
-    //    FE_LD_EIP,
-    //
-    //    DE_EIP_IN,
-    //    DE_CS_IN,
-    //    IC_EN,
-    //    IC_PADDR,
-    //    FE_SEG_LIM_EXC,
+    fetch u_fetch(
+        CLK, PRE, CLR, 
+        FE_EIP_IN, 
+        IC_DOUT, 
+        IC_R,
+    	      
+        FE_JMP_FP, FE_TRAP_FP,
+        CSDOUT,
+        FE_FP_MUX,
+        FE_LD_EIP,
+    
+        DE_EIP_IN,
+        DE_CS_IN,
+        IC_EN,
+        IC_PADDR,
+        FE_SEG_LIM_EXC,
+        IR,
+        DE_INSTR_LENGTH_UPDT_IN,
+        DE_OPCODE_IN,
+        DE_PRE_SIZE_IN,
+        DE_PRE_PRES_IN,  DE_SEG_OVR_IN,  DE_OP_OVR_IN,  DE_RE_PRE_IN, 
+        DE_MODRM_PRES_IN,  DE_IMM_PRES_IN, 
+        DE_IMM_SIZE_IN, 
+        DE_SIB_PRES_IN,  DE_DISP_PRES_IN,  DE_DISP_SIZE_IN, 
+        DE_IMM_SEL_IN, 
+        DE_DISP_SEL_IN, 
+        DE_OFFSET_PRES_IN, 
+        DE_OP_SIZE_IN, 
+        DE_OFFSET_SIZE_IN, 
+        DE_SEGID_IN, 
+        DE_MODRM_IN,  DE_SIB_IN, 
+        DE_MODRM_SEL_IN,
+    
+        IR_IN
+    ); 
+
+    //decode_stage1 u_decode_stage1 (
+    //    CLK, PRE, CLR,
+    //    IR,
     //    IR_IN,
     //    DE_INSTR_LENGTH_UPDT_IN,
     //    DE_OPCODE_IN,
@@ -184,30 +207,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
     //    DE_SEGID_IN, 
     //    DE_MODRM_IN,  DE_SIB_IN, 
     //    DE_MODRM_SEL_IN
-    //
-    //    IR_OUT,
-    //); 
-
-    decode_stage1 u_decode_stage1 (
-        CLK, PRE, CLR,
-        IR,
-        IR_IN,
-        DE_INSTR_LENGTH_UPDT_IN,
-        DE_OPCODE_IN,
-        DE_PRE_SIZE_IN,
-        DE_PRE_PRES_IN,  DE_SEG_OVR_IN,  DE_OP_OVR_IN,  DE_RE_PRE_IN, 
-        DE_MODRM_PRES_IN,  DE_IMM_PRES_IN, 
-        DE_IMM_SIZE_IN, 
-        DE_SIB_PRES_IN,  DE_DISP_PRES_IN,  DE_DISP_SIZE_IN, 
-        DE_IMM_SEL_IN, 
-        DE_DISP_SEL_IN, 
-        DE_OFFSET_PRES_IN, 
-        DE_OP_SIZE_IN, 
-        DE_OFFSET_SIZE_IN, 
-        DE_SEGID_IN, 
-        DE_MODRM_IN,  DE_SIB_IN, 
-        DE_MODRM_SEL_IN
-    );
+    //);
 
 
     //Latches between fetch and decode

@@ -17,7 +17,7 @@
 ../memory/tlb/lsu.v
 ../memory/tlb/ifu.v
 
-./fetch.v
+#./fetch.v
 ./decode/disp_selector.v
 ./decode/immediate_detector.v
 ./decode/imm_selector.v

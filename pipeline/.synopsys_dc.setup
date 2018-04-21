@@ -1,0 +1,8 @@
+set link_library {"*" /usr/local/packages/cadence_2007/FreePDK45/osu_soc/lib/files/gscl45nm.db} ;    
+set search_path {. synopsys_root + "/libraries/syn"} ; 
+set target_library {/usr/local/packages/cadence_2007/FreePDK45/osu_soc/lib/files/gscl45nm.db} ; 
+set synthetic_library {} ;
+set command_log_file "./command.log";
+
+set symbol_library {class.sdb} ; 
+

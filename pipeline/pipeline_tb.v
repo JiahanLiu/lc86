@@ -1,3 +1,4 @@
+`include "constants.v"
 `timescale 1ns/1ps
 `define EOF = 32'hFFFF_FFFF
 `define NULL 0
@@ -36,344 +37,16 @@ module TOP;
    integer j=14;
 
     reg [31:0] EIP_UPDATE;
-    // Internal reg/wires
-    //signals from EX to Dependency Checks
-    reg DEP_v_ex_ld_gpr1;
-    reg DEP_v_ex_ld_gpr2;
-    reg DEP_v_ex_ld_gpr3;
-    reg Dep_v_ex_ld_seg;
-    reg Dep_v_ex_ld_mm;
-    reg Dep_v_ex_dcache_write;
-    //signals from WB to Dependency Checks
-    reg DEP_v_wb_ld_gpr1;
-    reg DEP_v_wb_ld_gpr2;
-    reg DEP_v_wb_ld_gpr3;
-    reg DEP_v_wb_ld_seg;
-    reg DEP_v_wb_ld_mm;
-    reg DEP_v_wb_dcache_write;
-    //signals from WB to dcache
-    reg [2:0] WB_Final_DR1;
-    reg [2:0] WB_Final_DR2;
-    reg [2:0] WB_Final_DR3;
-    reg [31:0] WB_Final_data1;
-    reg [31:0] WB_Final_data2;
-    reg [31:0] WB_Final_data3;
-    reg WB_Final_ld_gpr1;
-    reg WB_Final_ld_gpr2;
-    reg WB_Final_ld_gpr3;
-    reg [1:0] WB_Final_datasize;
-    reg WB_Final_ld_seg; 
-    reg [63:0] WB_Final_MM_Data;
-    reg WB_Final_ld_mm; 
-    reg [31:0] WB_Final_EIP; 
-    reg WB_Final_ld_eip; 
-    reg [63:0] WB_Final_Dcache_Data;
-    reg [31:0] WB_Final_Dcache_address;
-    //signals from d-cache needed by WB
-    //WB outputs
-    reg wb_halt_all;
-    reg wb_repne_terminate_all;
-    reg WB_stall;
-    //Dataforwarded, currently for daa
-    reg CF_dataforwarded;
-    reg AF_dataforwarded; 
-
-    //*******REGISTER FILE*******//
-    reg RST;
-    reg [15:0] SEG_DIN;
-    reg [2:0] 	SEGID1, SEGID2, WRSEGID;
-    reg 	SEGWE;
-    reg [63:0] MM_DIN;
-    reg [2:0] 	MMID1, MMID2, WRMMID;
-    reg 	MMWE;
-    reg [31:0] GPR_DIN0, GPR_DIN1, GPR_DIN2;
-    reg [2:0] 	GPRID0, GPRID1, GPRID2, GPRID3,	WRGPR0, WRGPR1, WRGPR2;
-    reg [1:0] 	GPR_RE0, GPR_RE1, GPR_RE2, GPR_RE3, GPRWE0, GPRWE1, GPRWE2;
-    reg WE0, WE1, WE2;     // WRITE ENABLE SIGNALS
-    reg [15:0] CS_DIN;
-    reg [31:0] EIP_DIN, EFLAGS_DIN;
-    reg 	LD_CS, LD_EIP, LD_EFLAGS;
-    reg  [15:0] SEGDOUT1, SEGDOUT2;
-    reg  [63:0] MMDOUT1, MMDOUT2;
-    reg  [31:0] GPRDOUT0, GPRDOUT1, GPRDOUT2, GPRDOUT3;
-    reg  [15:0] CSDOUT;
-    reg  [31:0] EIPDOUT;
-    reg  [31:0] EFLAGSDOUT;
-    reg [31:0] SR1_DATA, SR2_DATA, SR3_DATA, SIB_I_DATA;
-    reg [2:0] D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT, D2_SEG1_OUT, D2_SEG2_OUT;
-    reg [1:0] D2_DATA_SIZE_AG_OUT;
-
-    //*******CACHE FILES*******//
-    //Cache file systems to be used by the system
-    reg [127:0] IC_DOUT, DC_IN, DC_DOUT;
-    reg [31:0] IC_PADDR, DC_PADDR;
-    reg IC_EN, DC_WE, IC_R, DC_R;	//IC_EN needs to be included
-
-    //*******FETCH STAGE*******//
-    reg [31:0] FE_EIP_IN;	//this signal should be coming out of WB, does not need a latch
-    reg [31:0] FE_JMP_FP, FE_TRAP_FP;//not sure where these signals come from yet
-    reg [1:0] FE_FP_MUX;//not sure where this signal comes from yet
-    reg FE_LD_EIP;//update the EIP!
-    reg FE_SEG_LIM_EXC;//The fetch unit has an exception, needs more support
-
-    reg DE_PRE_PRES_IN, DE_SEG_OVR_IN, DE_OP_OVR_IN, DE_RE_PRE_IN, DE_MODRM_PRES_IN, DE_IMM_PRES_IN, DE_SIB_PRES_IN;
-    reg DE_DISP_PRES_IN, DE_DISP_SIZE_IN, DE_OFFSET_PRES_IN, DE_OP_SIZE_IN;
-    reg [1:0] DE_IMM_SIZE_IN, DE_OFFSET_SIZE_IN, DE_PRE_SIZE_IN;
-    reg [2:0] DE_DISP_SEL_IN, DE_SEGID_IN, DE_MODRM_SEL_IN;
-    reg [3:0] DE_IMM_SEL_IN;
-    reg [7:0] DE_MODRM_IN, DE_SIB_IN;
-    reg [15:0] DE_OPCODE_IN, DE_CS_IN;
-    reg [31:0] DE_EIP_IN, DE_EIP_OUT, DE_EIP_OUT_BAR;
-    reg [127:0] IR_IN;
-    reg [3:0] DE_INSTR_LENGTH_UPDT_IN; 
-
-    //Latches between fetch and decode
-    reg [31:0] DE_V_OUT_T, DE_V_OUT_T_BAR, DE_OP_CS_OUT_T, DE_OP_CS_OUT_T_BAR, MOD_SIB_OUT, MOD_SIB_OUT_BAR;	//temp wires
-    reg [127:0] IR_OUT, IR_BAR_OUT;
-    reg DE_V_IN;
-
-    reg DE_V_OUT;
-    reg [1:0] DE_PRE_SIZE_OUT;
-    reg [1:0] DE_OFFSET_SIZE_OUT;
-    reg [1:0] DE_IMM_SIZE_OUT;
-    reg [2:0] DE_MODRM_SEL_OUT;
-    reg [2:0] DE_SEGID_OUT;
-    reg [2:0] DE_DISP_SEL_OUT;
-    reg [3:0] DE_IMM_SEL_OUT;
-    reg DE_SIB_PRES_OUT;
-    reg DE_IMM_PRES_OUT;
-    reg DE_MODRM_PRES_OUT;
-    reg DE_RE_PRE_OUT;
-    reg DE_OP_OVR_OUT;
-    reg DE_SEG_OVR_OUT;
-    reg DE_PRE_PRES_OUT;
-    reg DE_OP_SIZE_OUT;
-    reg DE_OFFSET_PRES_OUT;
-    reg DE_DISP_SIZE_OUT;
-    reg DE_DISP_PRES_OUT;
-    reg [7:0] DE_SIB_OUT;
-    reg [7:0] DE_MODRM_OUT;
-
-    reg [15:0] DE_OPCODE_OUT;
-    reg [15:0] DE_CS_OUT;
-
-    // Outputs from Decode Stage 2
-    reg [31:0] D2_EIP_OUT;
-    reg [15:0] D2_CS_OUT;
-    reg [127:0] D2_CONTROL_STORE_OUT;
-
-    reg [47:0] D2_OFFSET_OUT;
-
-    reg D2_SR1_NEEDED_AG_OUT, D2_SEG1_NEEDED_AG_OUT, D2_MM1_NEEDED_AG_OUT, D2_MEM_RD_ME_OUT, D2_MEM_WR_ME_OUT;
-    reg [2:0] D2_ALUK_EX_OUT;
-    reg D2_LD_GPR1_WB_OUT, D2_LD_MM_WB_OUT;
-    reg [31:0] D2_IMM32_OUT, D2_DISP32_OUT;
-    reg D2_SIB_EN_AG, D2_DISP_EN_AG, D2_BASE_REG_EN_AG, D2_MUX_SEG_AG, D2_CMPXCHG_AG;
-    reg [1:0] D2_SIB_S_AG;
-
-    reg [2:0] AG_DRID1, AG_DRID2;
-    reg V_AG_LD_GPR1, V_AG_LD_GPR2, V_AG_LD_SEG, V_AG_LD_CSEG, V_AG_LD_MM;
-    reg [2:0] ME_DRID1, ME_DRID2;
-    reg V_ME_LD_GPR1, V_ME_LD_GPR2, V_ME_LD_SEG, V_ME_LD_CSEG, V_ME_LD_MM;
-    reg [2:0] EX_DRID1, EX_DRID2;
-    reg V_EX_LD_GPR1, V_EX_LD_GPR2, V_EX_LD_SEG, V_EX_LD_CSEG, V_EX_LD_MM;
-
-   reg [31:0] AG_PS_EIP;
-   reg [15:0] AG_PS_CS, AG_PS_CS_NC;
-   
-   reg [127:0] AG_PS_CONTROL_STORE;
-   reg [47:0] 	AG_PS_OFFSET;
-   
-   reg [1:0] AG_PS_DATA_SIZE;
-   reg AG_PS_D2_SR1_NEEDED_AG, AG_PS_D2_SEG1_NEEDED_AG, AG_PS_D2_MM1_NEEDED_AG;
-
-   reg AG_PS_D2_MEM_RD_ME, AG_PS_D2_MEM_WR_ME;
-   reg [2:0] AG_PS_D2_ALUK_EX;
-   reg AG_PS_D2_LD_GPR1_WB, AG_PS_D2_LD_MM_WB;
-
-   reg [2:0] AG_PS_SR1, AG_PS_SR2, AG_PS_SR3, AG_PS_SIB_I, AG_PS_SEG1, AG_PS_SEG2;
-   reg [31:0] AG_PS_IMM32, AG_PS_DISP32;
-
-   reg AG_PS_DE_SIB_EN_AG, AG_PS_DE_DISP_EN_AG, AG_PS_DE_BASE_REG_EN_AG;
-   reg AG_PS_DE_MUX_SEG_AG, AG_PS_DE_CMPXCHG_AG;
-   reg [1:0] AG_PS_DE_SIB_S_AG;
-
-   reg [15:0] SEG1_DATA, SEG2_DATA;
-   reg [63:0] MM1_DATA, MM2_DATA;
-
-   reg [3:0] DE_EXC_CODE_AG;
-
-   // Signals to register file
-   reg [2:0] AG_SR1_OUT, AG_SR2_OUT, AG_SR3_OUT, AG_SIB_I_OUT, AG_SEG1_OUT, AG_SEG2_OUT, AG_MM1_OUT, AG_MM2_OUT;
-   reg [1:0] AG_DATA_SIZE_OUT;
-   
-   // Signals for next stage latches
-   reg [31:0] AG_NEIP_OUT;
-   reg [15:0] AG_NCS_OUT;
-   reg [127:0] AG_CONTROL_STORE_OUT;
-
-   reg [31:0] AG_A_OUT, AG_B_OUT;
-   reg [63:0] AG_MM_A_OUT, AG_MM_B_OUT;
-   reg [31:0] AG_SP_XCHG_DATA_OUT;
-   reg [31:0] AG_MEM_RD_ADDR_OUT, AG_MEM_WR_ADDR_OUT;
-   
-   reg [2:0]  AG_D2_ALUK_EX_OUT;
-   reg [2:0]  AG_DRID1_OUT, AG_DRID2_OUT;
-
-   reg        AG_D2_MEM_RD_ME_OUT, AG_D2_MEM_WR_WB_OUT;
-   reg        AG_D2_LD_GPR1_WB_OUT, AG_D2_LD_MM_WB_OUT;
-   reg        AG_DEP_STALL_OUT, AG_SEG_LIMIT_EXC_OUT;
-   reg [127:0] D2_CONTROL_STORE;
-   reg [127:0] AG_PS_CONTROL_STORE_OUT;
-   
-   reg [31:0] D2_OUT1_AG_PS, D2_OUT2_AG_PS, AG_PS_IN1, AG_PS_IN2;
-   reg [31:0] D2_CS_OUT32;
-   reg NextV;
-   reg [31:0] ME_PS_NEIP;
-   reg [15:0] ME_PS_NCS, ME_PS_NCS_NC;
-   reg [127:0] ME_PS_CONTROL_STORE;
-   reg [127:0] ME_PS_CONTROL_STORE_OUT;
-
-   reg [31:0] ME_PS_A, ME_PS_B;
-   reg [63:0] ME_PS_MM_A, ME_PS_MM_B;
-   reg [31:0] ME_PS_SP_XCHG_DATA;
-
-   reg [31:0] ME_PS_MEM_RD_ADDR, ME_PS_MEM_WR_ADDR;
-   reg [1:0] ME_PS_DATA_SIZE;
-
-   reg [2:0] ME_PS_D2_ALUK_EX;
-   reg [2:0] ME_PS_DRID1, ME_PS_DRID2;
-
-   reg ME_PS_D2_MEM_RD_ME, ME_PS_D2_MEM_WR_WB, ME_PS_D2_LD_GPR1_WB, ME_PS_D2_LD_MM_WB;
-
-   // Signals not from latches
-   reg [63:0] DCACHE_DATA;
-   reg DCACHE_READY;
-
-   reg ME_DCACHE_EN;
-
-   reg [31:0] ME_NEIP_OUT;
-   reg [15:0] ME_NCS_OUT;
-   reg [127:0] ME_CONTROL_STORE_OUT;
-
-   reg [31:0] ME_A_OUT, ME_B_OUT;
-   reg [63:0] ME_MM_A_OUT, ME_MM_B_OUT;
-   reg [31:0] ME_SP_XCHG_DATA_OUT;
-
-   reg [31:0] ME_MEM_RD_ADDR_OUT, ME_MEM_WR_ADDR_OUT;
-   reg [1:0] ME_DATA_SIZE_OUT;
-
-   reg [2:0] ME_D2_ALUK_EX_OUT;
-   reg [2:0] ME_DRID1_OUT, ME_DRID2_OUT;
-
-   reg ME_D2_MEM_WR_WB_OUT, ME_D2_LD_GPR1_WB_OUT, ME_D2_LD_MM_WB_OUT;
-
-   reg [31:0] AG_OUT1_ME_PS, ME_PS_IN1;
-   reg [31:0] AG_NCS_OUT32;
-   reg [127:0] AG_CONTROL_STORE;
-
-    reg [31:0] EX_V_out; 
-    reg EX_V;
-
-    reg [31:0] EX_NEIP_next;
-    reg [31:0] EX_NEIP;
-
-    reg [15:0] EX_NCS_next;
-    reg [31:0] EX_NCS_out; 
-    reg [15:0] EX_NCS;    
-
-    reg [127:0] EX_CONTROL_STORE_next;
-    reg [127:0] EX_CONTROL_STORE;
-
-    reg [1:0] EX_de_datasize_all_next;
-    reg [31:0] EX_de_datasize_all_out;
-    reg [1:0] EX_de_datasize_all;
-
-    reg [2:0] EX_de_aluk_ex_next;
-    reg [31:0] EX_de_aluk_ex_out;
-    reg [2:0] EX_de_aluk_ex; 
-
-    reg [31:0] EX_de_shift_dir_ex_out;
-    reg EX_de_shift_dir_ex;
-
-    reg EX_de_ld_gpr1_ex_next;
-    reg [31:0] EX_de_ld_gpr1_ex_out;
-    reg EX_de_ld_gpr1_ex;
-
-    reg EX_de_dcache_write_ex_next;
-    reg [31:0] EX_de_dcache_write_ex_out;
-    reg EX_de_dcache_write_ex; 
-
-    reg [31:0] EX_de_repne_wb_out; 
-    reg EX_de_repne_wb; 
-    reg [31:0] EX_A_next;
-    reg [31:0] EX_B_next;
-    reg [31:0] EX_A, EX_B, EX_C;
-    reg [63:0] EX_MM_A_next;
-    reg [63:0] EX_MM_B_next;
-    reg [63:0] EX_MM_A, EX_MM_B;
-    reg [2:0] EX_DR1_next;
-    reg [2:0] EX_DR2_next;
-    reg [2:0] EX_DR3_next;
-    reg [31:0] EX_DR1_out, EX_DR2_out, EX_DR3_out;
-    reg [2:0] EX_DR1, EX_DR2, EX_DR3;
-    reg [31:0] EX_ADDRESS_next;
-    reg [31:0] EX_ADDRESS;
-
-    //Execute Outputs
-    reg WB_V_next;
-    reg [31:0] WB_NEIP_next; 
-    reg [15:0] WB_NCS_next;
-    reg [127:0] WB_CONTROL_STORE_next;
-    reg [1:0] WB_de_datasize_all_next;
-    reg WB_ex_ld_gpr1_wb_next;
-    reg WB_ex_ld_gpr2_wb_next; 
-    reg WB_ex_dcache_write_wb_next; 
-    reg WB_de_repne_wb_next; 
-    reg [31:0] WB_RESULT_A_next;
-    reg [31:0] WB_RESULT_B_next;
-    reg [31:0] WB_RESULT_C_next;
-    reg [31:0] WB_FLAGS_next;
-    reg [63:0] WB_RESULT_MM_next; 
-    reg [2:0] WB_DR1_next;
-    reg [2:0] WB_DR2_next;
-    reg [2:0] WB_DR3_next;
-    reg [31:0] WB_ADDRESS_next;   
-    reg WB_ld_latches;
-
-    //register between EX and WB
-    reg [31:0] WB_V_out;
-    reg WB_V; 
-    reg [31:0] WB_NEIP;
-    reg [31:0] WB_NCS_out;
-    reg [15:0] WB_NCS;
-    reg [127:0] WB_CONTROL_STORE;
-    reg [31:0] WB_de_datasize_all_out; 
-    reg [1:0] WB_de_datasize_all; 
-    reg [31:0] WB_ex_ld_gpr1_wb_out; 
-    reg WB_ex_ld_gpr1_wb; 
-    reg [31:0] WB_ex_ld_gpr2_wb_out; 
-    reg WB_ex_ld_gpr2_wb; 
-    reg [31:0] WB_ex_dcache_write_wb_out; 
-    reg WB_ex_dcache_write_wb; 
-    reg [31:0] WB_de_repne_wb_out; 
-    reg WB_de_repne_wb; 
-    reg [31:0] WB_RESULT_A;
-    reg [31:0] WB_RESULT_B;
-    reg [31:0] WB_RESULT_C;
-    reg [31:0] WB_FLAGS;
-    reg [63:0] WB_RESULT_MM; 
-    reg [31:0] WB_DR1_out, WB_DR2_out, WB_DR3_out;
-    reg [2:0] WB_DR1, WB_DR2, WB_DR3;
-    reg [31:0] WB_ADDRESS; 
-
+    reg [2:0] SR1, SR2;
+    reg [1:0] SR1_size, SR2_size;
+    reg NextV;
 
     /************************************************************************/
     /*
                             BEHAVIOURAL REGISTER FILE 
                                                                            */
     /***********************************************************************/
-    reg [7:0] reg_array[31:0];
+    reg [31:0] reg_array[7:0];
     initial begin
         reg_array[0] = 32'h08000800;
         reg_array[1] = 32'h09010901;
@@ -384,6 +57,31 @@ module TOP;
         reg_array[6] = 32'h0E060E06;
         reg_array[7] = 32'h0F070F07;
     end
+
+    reg [15:0] reg_array_seg[7:0];
+    initial begin
+        reg_array_seg[0] = 16'h08;
+        reg_array_seg[1] = 16'h09;
+        reg_array_seg[2] = 16'h0A;
+        reg_array_seg[3] = 16'h0B;
+        reg_array_seg[4] = 16'h0C;
+        reg_array_seg[5] = 16'h0D;
+        reg_array_seg[6] = 16'h0E;
+        reg_array_seg[7] = 16'h0F;
+    end
+
+    reg [63:0] reg_array_mm[7:0];
+    initial begin
+        reg_array_seg[0] = 63'h08;
+        reg_array_seg[1] = 63'h09;
+        reg_array_seg[2] = 63'h0A;
+        reg_array_seg[3] = 63'h0B;
+        reg_array_seg[4] = 63'h0C;
+        reg_array_seg[5] = 63'h0D;
+        reg_array_seg[6] = 63'h0E;
+        reg_array_seg[7] = 63'h0F;
+    end
+
 
    PIPELINE u_pipeline(clk, clr, pre, IR);
 
@@ -511,7 +209,8 @@ module TOP;
             (opcode==16'h00FF);
 
             if(modrm_present == 1'b1) begin 
-                modrm = {$random};
+//                modrm = {$random};
+                modrm = 8'b10010101;
                 j=j-1;
                 IR[8*j +: 8] = modrm;
 //                $display ("Time: %0d MODRM = %h", $time, modrm);
@@ -534,13 +233,15 @@ module TOP;
             if(disp_present == 1'b1) begin
                 if(disp_size==1) begin
                     j=j-1;
-                    disp[7:0] = {$random};
+//                    disp[7:0] = {$random};
+                    disp[7:0] = 8'h0A;
                     IR[8*j +: 8] = disp[7:0];
                     disp_size_en=1;
 //                    $display ("Time: %0 DISP = %h", $time, disp[7:0]);
                 end else begin
                     j=j-4;
-                    disp = {$random};
+//                    disp = {$random};
+                    disp = 32'h0A;
                     disp_size = 4;
                     IR[8*j +: 32] = disp;
                     disp_size_en=0;
@@ -566,27 +267,30 @@ module TOP;
             imm_present = imm_size8 | imm_size16 | imm_size32;
 
             if(imm_size8) begin
-                imm[7:0] = {$random};
+//                imm[7:0] = {$random};
                 j=j-1;
                 imm_size = 1;
                 imm_size_en = 0;
                 IR[8*j +: 8] = imm[7:0];
 //                $display ("Time: %0d IMM = %h", $time, imm[7:0]);
             end else if(imm_size16) begin
-                imm[15:0] = {$random};
+//                imm[15:0] = {$random};
                 j=j-2;
                 imm_size = 2;
                 imm_size_en = 1;
                 IR[8*j +: 16] = imm[15:0];
 //                $display ("Time: %0d IMM = %h", $time, imm[15:0]);
             end else if(imm_size32) begin
-                imm = {$random};
+//                imm = {$random};
                 j=j-4;
                 imm_size = 4;
                 imm_size_en = 2;
                 IR[8*j +: 32] = imm;
 //                $display ("Time: %0d IMM = %h", $time, imm);
             end
+
+            if(imm_present) 
+                imm = 32'd1234;
 
             offset_size8 = (opcode==16'hEB) || (opcode==16'h77) || (opcode==16'h75);
             offset_size16 = operand_override && ((opcode==16'hE8) || (opcode==16'hE9) || (opcode==16'h0F87) || (opcode==16'h0F85));
@@ -753,7 +457,7 @@ module TOP;
            end
           end
 
-/*************************** ADDRESS GENERATION STAGE INPUTS COMPARE ******************************/
+/*************************** ADDRESS GENERATION STAGE INPUT VALUES GENERATION ******************************/
             EIP_UPDATE = u_pipeline.DE_INSTR_LENGTH_UPDATE_OUT + u_pipeline.DE_EIP_OUT;
 
             if(offset_present) begin
@@ -805,17 +509,73 @@ module TOP;
             end
 
             if(disp_present) begin
-                if(disp_size) begin
+                if(disp_size == 4) begin
                     disp_compare[31:24] = disp[7:0];
                     disp_compare[23:16] = disp[15:8];
                     disp_compare[15:8] = disp[23:16];
                     disp_compare[7:0] = disp[31:24];
                 end else begin
                     disp_compare[7:0] = disp[7:0];
-                    disp_compare[31:8] = 0;
+                    disp_compare[31:8] = {24{disp[7]}};
                 end
             end
 
+            SR2 = modrm[5:3];
+            SR1 = (modrm[2:0]==3'b100)?sib[5:3]:modrm[2:0];
+
+            case(opcode)
+                // ADD_AL
+                16'h04: begin
+                    SR1 = `AL;
+                    SR1_size = 0;
+                end
+
+                // ADD_AX
+                16'h05: begin
+                    SR1 = `EAX;
+                    if(operand_override)
+                        SR1_size = 1;
+                    else
+                        SR1_size = 2;
+                end
+
+                // ADD r/m32, imm32
+                16'h81: begin
+                    SR1 = (modrm[2:0]==3'b100)?sib[5:3]:modrm[2:0];
+                    SR1_size = operand_override ? 2:1;
+                end
+
+                // ADD r/m16, imm8
+                16'h83: begin
+                    SR1 = (modrm[2:0]==3'b100)?sib[5:3]:modrm[2:0];
+                    SR1_size = operand_override ? 2:1;
+                end
+
+                // ADD r/m16, r16
+                16'h01: begin
+                    SR1 = (modrm[2:0]==3'b100)?sib[5:3]:modrm[2:0];
+                    SR1_size = 1;
+                    SR2 = (modrm[2:0]==3'b100)?sib[2:0]:modrm[5:3];
+                    SR2_size = 1;
+                end
+
+                // ADD r/m8, r8
+                16'h00: begin
+                    SR1 = (modrm[2:0]==3'b100)?sib[5:3]:modrm[2:0];
+                    SR1_size = 0;
+                    SR2 = (modrm[2:0]==3'b100)?sib[2:0]:modrm[5:3];
+                    SR2_size = 0;
+                end
+
+                // ADD r16, r/m16
+                16'h03: begin
+                    SR1 = (modrm[2:0]==3'b100)?sib[5:3]:modrm[2:0];
+                    SR2 = modrm[5:3];
+
+                end
+
+
+            endcase
 
 /*************************** ADDRESS GENERATION STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
@@ -861,18 +621,60 @@ module TOP;
                 end
             end
 
-            if(u_pipeline.SR1_DATA !== reg_array[u_pipeline.AG_PS_SR1]) begin
-                $display("time: %0d AG_PS_DISP32 error!! %h", $time, u_pipeline.AG_PS_DISP32);
+//            if(u_pipeline.AG_PS_SR1 !== SR1) begin
+//                $display("time: %0d AG_PS_SR1 error!! %h %h", $time, u_pipeline.AG_PS_SR1, SR1);
+////                $stop;
+//            end
+//
+//            if(u_pipeline.AG_PS_SR2 !== SR2) begin
+//                $display("time: %0d AG_PS_SR2 error!! %h %h", $time, u_pipeline.AG_PS_SR2, SR2);
+////                $stop;
+//            end
+
+            if(u_pipeline.SR1_DATA !== reg_array[u_pipeline.AG_PS_SR1] ) begin
+                $display("time: %0d REG_SR1_DATA error!! %h ", $time, u_pipeline.SR1_DATA);
+//                $stop;
             end
+
+            if(u_pipeline.SR2_DATA !== reg_array[u_pipeline.AG_PS_SR2]) begin
+                $display("time: %0d REG_SR2_DATA error!! %h", $time, u_pipeline.SR2_DATA);
+            end
+
+            if(u_pipeline.SR3_DATA !== reg_array[u_pipeline.AG_PS_SR3]) begin
+                $display("time: %0d REG_SR3_DATA error!! %h", $time, u_pipeline.SR3_DATA);
+            end
+
+            if(u_pipeline.SIB_I_DATA !== reg_array[u_pipeline.AG_PS_SIB_I]) begin
+                $display("time: %0d REG_SIB_I_DATA error!! %h", $time, u_pipeline.SIB_I_DATA);
+            end
+
+//            if(u_pipeline.SEG1_DATA !== reg_array_seg[u_pipeline.AG_PS_SEG1]) begin
+//                $display("time: %0d REG_SEG1_DATA error!! %h", $time, u_pipeline.SEG1_DATA);
+//            end
+//
+//            if(u_pipeline.SEG2_DATA !== reg_array_seg[u_pipeline.AG_PS_SEG2]) begin
+//                $display("time: %0d REG_SEG2_DATA error!! %h", $time, u_pipeline.SEG2_DATA);
+//            end
+//
+//            if(u_pipeline.MM1_DATA !== reg_array_seg[u_pipeline.AG_PS_SR1]) begin
+//                $display("time: %0d REG_MM1_DATA error!! %h", $time, u_pipeline.MM1_DATA);
+//            end
+//
+//            if(u_pipeline.MM2_DATA !== reg_array_seg[u_pipeline.AG_PS_SR2]) begin
+//                $display("time: %0d REG_MM2_DATA error!! %h", $time, u_pipeline.MM2_DATA);
+//            end
+
+
+
 
 /*************************** MEMORY STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
             #1;    // Allow for setup time
 
             // Opcode == 04
-            if(opcode == 16'h4 || opcode==16'h5 || opcode==16'h81 || opcode==16'h83 || opcode==16'h01) begin
-                result = ME_A_OUT + ME_B_OUT;
-            end
+//            if(opcode == 16'h4 || opcode==16'h5 || opcode==16'h81 || opcode==16'h83 || opcode==16'h01) begin
+//                result = ME_A_OUT + ME_B_OUT;
+//            end
 
 /*************************** EXECUTE STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
@@ -881,6 +683,35 @@ module TOP;
 /*************************** WRITEBACK STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
             #1;    // Allow for setup time
+        $strobe ("at time %0d, WB_current_flags = %h", $time, u_pipeline.u_writeback.current_flags);
+        $strobe ("at time %0d, WB_Final_DR1 = %h", $time, u_pipeline.u_writeback.WB_Final_DR1);
+        $strobe ("at time %0d, WB_Final_DR2 = %h", $time, u_pipeline.u_writeback.WB_Final_DR2);
+        $strobe ("at time %0d, WB_Final_DR3 = %h", $time, u_pipeline.u_writeback.WB_Final_DR3);
+        $strobe ("at time %0d, WB_Final_data1 = %h", $time, u_pipeline.u_writeback.WB_Final_data1);
+        $strobe ("at time %0d, WB_Final_data2 = %h", $time, u_pipeline.u_writeback.WB_Final_data2);
+        $strobe ("at time %0d, WB_Final_data3 = %h", $time, u_pipeline.u_writeback.WB_Final_data3);
+        $strobe ("at time %0d, WB_Final_ld_gpr1 = %h", $time, u_pipeline.u_writeback.WB_Final_ld_gpr1);
+        $strobe ("at time %0d, WB_Final_ld_gpr2 = %h", $time, u_pipeline.u_writeback.WB_Final_ld_gpr2);
+        $strobe ("at time %0d, WB_Final_ld_gpr3 = %h", $time, u_pipeline.u_writeback.WB_Final_ld_gpr3);
+        $strobe ("at time %0d, WB_Final_datasize = %h", $time, u_pipeline.u_writeback.WB_Final_datasize);
+        $strobe ("at time %0d, WB_Final_ld_seg = %h", $time, u_pipeline.u_writeback.WB_Final_ld_seg);
+        $strobe ("at time %0d, WB_Final_MM_Data = %h", $time, u_pipeline.u_writeback.WB_Final_MM_Data);
+        $strobe ("at time %0d, WB_Final_ld_mm  = %h", $time, u_pipeline.u_writeback.WB_Final_ld_mm);
+        $strobe ("at time %0d, WB_Final_EIP  = %h", $time, u_pipeline.u_writeback.WB_Final_EIP);
+        $strobe ("at time %0d, WB_Final_ld_eip  = %h", $time, u_pipeline.u_writeback.WB_Final_ld_eip);
+        $strobe ("at time %0d, WB_Final_Dcache_Data = %h", $time, u_pipeline.u_writeback.WB_Final_Dcache_Data);
+        $strobe ("at time %0d, WB_Final_Dcache_address = %h", $time, u_pipeline.u_writeback.WB_Final_Dcache_address);
+        $strobe ("at time %0d, DEP_v_wb_ld_gpr1 = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_gpr1);
+        $strobe ("at time %0d, DEP_v_wb_ld_gpr2 = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_gpr2);
+        $strobe ("at time %0d, DEP_v_wb_ld_gpr3 = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_gpr3);
+        $strobe ("at time %0d, DEP_v_wb_ld_seg = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_seg);
+        $strobe ("at time %0d, DEP_v_wb_ld_mm = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_mm);
+        $strobe ("at time %0d, DEP_v_wb_dcache_write = %h", $time, u_pipeline.u_writeback.DEP_v_wb_dcache_write);
+        $strobe ("at time %0d, wb_halt_all  = %h", $time, u_pipeline.u_writeback.wb_halt_all);
+        $strobe ("at time %0d, wb_repne_terminate_all = %h", $time, u_pipeline.u_writeback.wb_repne_terminate_all);
+        $strobe ("at time %0d, WB_stall = %h", $time, u_pipeline.u_writeback.WB_stall);
+        $strobe ("at time %0d, CF_dataforwarded = %h", $time, u_pipeline.u_writeback.CF_dataforwarded);
+        $strobe ("at time %0d, AF_dataforwarded = %h", $time, u_pipeline.u_writeback.AF_dataforwarded);
 
 
 /*********************************************************/
@@ -1069,6 +900,7 @@ module TOP;
         $strobe ("at time %0d, EX_WB_DR3_next = %h", $time, u_pipeline.u_execute.WB_DR3_next);
 
         // WRITEBACK SIGNALS
+        $strobe ("at time %0d, WB_current_flags = %h", $time, u_pipeline.u_writeback.current_flags);
         $strobe ("at time %0d, WB_Final_DR1 = %h", $time, u_pipeline.u_writeback.WB_Final_DR1);
         $strobe ("at time %0d, WB_Final_DR2 = %h", $time, u_pipeline.u_writeback.WB_Final_DR2);
         $strobe ("at time %0d, WB_Final_DR3 = %h", $time, u_pipeline.u_writeback.WB_Final_DR3);
@@ -1099,6 +931,5 @@ module TOP;
         $strobe ("at time %0d, AF_dataforwarded = %h", $time, u_pipeline.u_writeback.AF_dataforwarded);
 
     end
-*/
-   
+*/   
 endmodule
