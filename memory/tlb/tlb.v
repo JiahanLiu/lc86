@@ -1,3 +1,54 @@
+module comp20 (out, out_bar, in0, in1);
+   input [19:0] in0, in1;
+
+   // outputs EQ or NEQ
+   output out, out_bar;
+
+   wire [19:0] xnor_out;
+   wire and0_out, and1_out, and2_out, and3_out, and4_out, and5_out, and6_out;
+
+   xnor2$ xnor0 [19:0] (xnor_out, in0, in1);
+   and4$
+      and0 (and0_out, xnor_out[3], xnor_out[2], xnor_out[1], xnor_out[0]),
+      and1 (and1_out, xnor_out[7], xnor_out[6], xnor_out[5], xnor_out[4]),
+      and2 (and2_out, xnor_out[11], xnor_out[10], xnor_out[9], xnor_out[8]),
+      and3 (and3_out, xnor_out[15], xnor_out[14], xnor_out[13], xnor_out[12]),
+      and4 (and4_out, xnor_out[19], xnor_out[18], xnor_out[17], xnor_out[16]);
+
+   and3$
+      and5 (and5_out, and0_out, and1_out, and2_out);
+   and2$
+      and6 (and6_out, and3_out, and4_out),
+      and7 (out, and5_out, and6_out);
+
+   nand2$ nand0 (out_bar, and5_out, and6_out);
+
+endmodule
+
+module mux8_32 (
+   output [31:0] out,
+
+   input [31:0] in0, in1, in2, in3,
+   input [31:0] in4, in5, in6, in7,
+
+   input [2:0] s
+);
+
+   wire [15:0] mux0_out, mux1_out, mux2_out, mux3_out;
+
+   mux4_16$
+      mux0 (mux0_out, in0[31:16], in1[31:16], in2[31:16], in3[31:16], s[0], s[1]),
+      mux1 (mux1_out, in4[31:16], in5[31:16], in6[31:16], in7[31:16], s[0], s[1]),
+
+      mux2 (mux2_out, in0[15:0], in1[15:0], in2[15:0], in3[15:0], s[0], s[1]),
+      mux3 (mux3_out, in4[15:0], in5[15:0], in6[15:0], in7[15:0], s[0], s[1]);
+
+   mux2_16$
+      mux4 (out[31:16], mux0_out, mux1_out, s[2]),
+      mux5 (out[15:0], mux2_out, mux3_out, s[2]);
+
+endmodule
+
 module tlb (
    input [19:0] VPN1, VPN1_END,
    input [19:0] VPN2, VPN2_END,
