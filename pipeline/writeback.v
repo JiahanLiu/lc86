@@ -52,7 +52,7 @@ module writeback (
    output WB_Final_ld_mm, 
    output [31:0] WB_Final_EIP, 
    output WB_Final_ld_eip, 
-   output [31:0] WB_Final_CS, 
+   output [15:0] WB_Final_CS, 
    output WB_Final_ld_cs, 
    output [63:0] WB_Final_Dcache_Data,
    output [31:0] WB_Final_Dcache_address,
@@ -101,7 +101,7 @@ module writeback (
    conditional_support_wb u_conditional_support_wb(wb_ld_eip, wb_ld_gpr2, CS_IS_JNBE_WB, CS_IS_JNE_WB, CS_LD_EIP_WB, CF, ZF, CS_IS_CMOVC_WB, WB_ex_ld_gpr2_wb);
    validate_signals_wb u_validate_signals_wb(v_wb_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3,
       v_cs_ld_seg,v_cs_ld_mm,v_ex_dcache_write,v_cs_ld_flags,v_wb_ld_eip, v_cs_ld_cs,
-      WB_V,wb_ld_gpr1,WB_ex_ld_gpr2_wb,CS_LD_GPR3_WB,CS_LD_SEG_WB,CS_LD_MM_WB, WB_ex_dcache_write_wb,
+      WB_V,WB_ex_ld_gpr1_wb,wb_ld_gpr2,CS_LD_GPR3_WB,CS_LD_SEG_WB,CS_LD_MM_WB, WB_ex_dcache_write_wb,
       CS_LD_FLAGS_WB, wb_ld_eip,CS_LD_CS_WB,CS_IS_CMPS_SECOND_UOP_ALL,WB_de_repne_wb,
       wb_repne_terminate_all);
    assign DEP_v_wb_ld_gpr1 = v_wb_ld_gpr1;
