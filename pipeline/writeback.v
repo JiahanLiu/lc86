@@ -94,7 +94,7 @@ module writeback (
    wire [63:0] data1_64; //64 because dcache data-in port is 64 bits incase the input is mm 
    //stall
    wire In_write_ready_not;
-   operand_select_wb(data1, WB_Final_EIP, WB_Final_CS, CLK, PRE, CLR, 
+   operand_select_wb u_operand_select_wb (data1, WB_Final_EIP, WB_Final_CS, CLK, PRE, CLR, 
       CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_CMPS_SECOND_UOP_ALL, CS_SAVE_NEIP_WB, 
       CS_SAVE_NCS_WB, CS_PUSH_FLAGS_WB, CS_USE_TEMP_NEIP_WB, CS_USE_TEMP_NCS_WB,
       current_flags, WB_RESULT_A, WB_NEIP, WB_NCS);
