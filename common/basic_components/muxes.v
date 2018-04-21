@@ -8,7 +8,8 @@
 // mux1_8way                        - 1-bit Mux with 8 inputs        
 // mux32_2way                       - 32-bit Mux with 2 inputs       
 // mux32_4way                       - 32-bit Mux with 4 inputs       
-// mux32_8way                       - 32-bit Mux with 8 inputs       
+// mux32_8way                       - 32-bit Mux with 8 inputs
+// mux4_128$                        - 128-bit Mux with 4 inputs
 //
 //-------------------------------------------------------------------------------------
 
@@ -200,3 +201,20 @@ module mux64_8way(
 	mux64_2way final_choices(mux_out, low_result, high_result, select[2]);
 
 endmodule // mux32_8way
+
+module mux4_128$(output [127:0] Y,
+		                 input [127:0] IN0,input [127:0] IN1, input [127:0] IN2,
+		 input  [127:0] IN3,
+		 input S0, input S1);
+
+   genvar 	       i;
+
+   generate
+      for(i=0;i<8;i=i+1)
+	begin : generate_loop
+	           mux4_8$ mux6 (Y[i*8 +7:i*8], IN0[i*8 +7:i*8], IN1[i*8 +7:i*8], IN2[i*8 +7:i*8], IN3[i*8 +7:i*8], S0, S1);
+
+	end
+        endgenerate
+
+endmodule // mux4_128
