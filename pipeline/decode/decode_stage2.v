@@ -49,7 +49,8 @@ module decode_stage2 (
    wire [2:0] IR_REG_OP, IR_MOD_RM, IR_SIB_BASE; 
 
    wire outs1, outs2, outs4, outs5, outs7, outs8, outs9, outs10, outs11, outs12, outs13;
-   wire [2:0] pp_ovr, push_pop_override;
+   wire [2:0] pp_ovr;
+   wire push_pop_override;
    wire op7_b, op6_b, op5_b, op4_b, op3_b, op2_b, op1_b, op0_b;
    wire out1o, out2o, offset_ovr, ss_override;
    wire [2:0] segID_mux1;
