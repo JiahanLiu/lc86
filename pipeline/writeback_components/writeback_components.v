@@ -32,10 +32,10 @@ module operand_select_wb(
 	//module reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
 	
 	wire [31:0] temp_neip;
-	reg32e$ u_temp_neip (CLK, NEIP, temp_eip, , CLR, PRE, CS_SAVE_NEIP_WB);
+	reg32e$ u_temp_neip (CLK, WB_NEIP, temp_eip, , CLR, PRE, CS_SAVE_NEIP_WB);
 
 	wire [31:0] temp_ncs;
-	reg32e$ u_temp_ncs (CLK, NEIP, temp_ncs, , CLR, PRE, CS_SAVE_NCS_WB);
+	reg32e$ u_temp_ncs (CLK, WB_NCS, temp_ncs, , CLR, PRE, CS_SAVE_NCS_WB);
 
 	wire [31:0] post_mux1_data1; 
 	mux32_2way u_mux1_data1_pre(post_mux1_data1, WB_RESULT_A, current_flags, CS_PUSH_FLAGS_WB);
