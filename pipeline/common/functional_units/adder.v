@@ -51,6 +51,41 @@ endmodule
 
 //-------------------------------------------------------------------------------------
 //
+// 					Kogge Stone 32-bit Adder, NO flags, NO carry in
+//
+//-------------------------------------------------------------------------------------
+// Functionality: Fastest adder (NO flags, NO carry in)
+//
+// Combinational Delay: 4.2ns
+//
+module adder16(sum, carry_out, a, b);
+	output [15:0] sum;
+	output [15:0] carry_out; 
+	input [15:0] a,b;
+	wire carry_in;
+
+	assign carry_in = 0; 
+
+	wire [31:0] internal_sum, internal_carry_out, internal_a, internal_b; 
+	wire [31:0] propagate32_result, generate32_result, internal_carry;
+	
+	assign sum = internal_sum[15:0]; 
+	assign internal_carry_out = internal_carry[15:0]; 
+	assign internal_a = {{16{1'b0}}, a};
+	assign internal_b = {{16{1'b0}}, b};
+
+
+	generate32 generate32_m (generate32_result, internal_a, internal_b);
+  	propagate32 propagate32_m (propagate32_result, internal_a, internal_b);
+   	gp_group32 kogge_stone_lookahead (internal_carry, generate32_result, propagate32_result);
+   	sum32 sum32_m (internal_sum, internal_a, internal_b, internal_carry, carry_in);
+
+   	assign carry_out = internal_carry_out;
+
+endmodule
+
+//-------------------------------------------------------------------------------------
+//
 // 				 Kogge Stone 32-bit Adder, NO flags, YES carry in
 //
 //-------------------------------------------------------------------------------------

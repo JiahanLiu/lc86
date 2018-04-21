@@ -9,18 +9,43 @@
 //
 module operand_select_wb(
 	output [31:0] data1,
+	output [31:0] WB_Final_EIP,
+	output [15:0] WB_Final_CS,
 	input CLK, 
+	input PRE,
+	input CLR,
 	input CS_IS_CMPS_FIRST_UOP_ALL,
 	input CS_IS_CMPS_SECOND_UOP_ALL,
-	input [31:0] WB_RESULT_A
+	input CS_SAVE_NEIP_WB,
+	input CS_SAVE_NCS_WB,
+	input CS_PUSH_FLAGS_WB,
+	input CS_USE_TEMP_NEIP_WB,
+	input CS_USE_TEMP_NCS_WB,
+	input [31:0] current_flags,
+	input [31:0] WB_RESULT_A,
+	input [31:0] WB_NEIP,
+	input [15:0] WB_NCS
 	);
 
 	wire [31:0] cmps_first_pointer; 
-
-	reg32e$ u_cmps_temp_mem (CLK, WB_RESULT_A, cmps_first_pointer, , 1'b1, 1'b1, CS_IS_CMPS_FIRST_UOP_ALL);
+	reg32e$ u_cmps_temp_mem (CLK, WB_RESULT_A, cmps_first_pointer, , CLR, PRE, CS_IS_CMPS_FIRST_UOP_ALL);
 	//module reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
+	
+	wire [31:0] temp_neip;
+	reg32e$ u_temp_neip(CLK, WB_NEIP, temp_neip, , CLR, PRE, CS_SAVE_NEIP_WB);
 
-	mux32_2way u_mux_data1(data1, WB_RESULT_A, cmps_first_pointer, CS_IS_CMPS_SECOND_UOP_ALL);
+	wire [15:0] temp_ncs;
+	wire [31:0] temp_cs_reg_out;
+	reg32e$ u_temp_ncs (CLK, {16'h0000,WB_NCS}, temp_cs_reg_out, , CLR, PRE, CS_SAVE_NCS_WB);
+	assign temp_ncs = temp_cs_reg_out[15:0];
+
+	wire [31:0] post_mux1_data1; 
+	mux32_2way u_mux1_data1_pre(post_mux1_data1, WB_RESULT_A, current_flags, CS_PUSH_FLAGS_WB);
+	mux32_2way u_mux1_data1_final(data1, post_mux1_data1, cmps_first_pointer, CS_IS_CMPS_SECOND_UOP_ALL);
+
+	mux32_2way u_mux_neip(WB_Final_EIP, WB_NEIP, temp_neip, CS_USE_TEMP_NEIP_WB);
+
+	mux16_2way u_mux_ncs(WB_Final_CS, WB_NCS, temp_ncs, CS_USE_TEMP_NCS_WB);
 
 endmodule // operand_select_wb
 
@@ -35,14 +60,14 @@ endmodule // operand_select_wb
 //
 module conditional_support_wb(
 	output wb_ld_eip,
-	output wb_ld_gpr1, 
+	output wb_ld_gpr2, 
 	input CS_IS_JNBE_WB,
 	input CS_IS_JNE_WB,
 	input CS_LD_EIP_WB,
 	input CF,
 	input ZF,
 	input CS_IS_CMOVC_WB,
-	input WB_ex_ld_gpr1_wb
+	input WB_ex_ld_gpr2_wb
 	);
 
 	wire cf_not, zf_not, cf_zf_equal_zero;
@@ -55,7 +80,7 @@ module conditional_support_wb(
 	and2$ u_cf_zf_zero(cf_zf_equal_zero, cf_not, zf_not);
 	mux2$ u_mux_jnbe(wb_ld_eip, post_jne_ld_eip, cf_zf_equal_zero, CS_IS_JNBE_WB);
 
-	mux2$ u_mux_ld_gpr1(wb_ld_gpr1, WB_ex_ld_gpr1_wb, CF, CS_IS_CMOVC_WB); 
+	mux2$ u_mux_ld_gpr1(wb_ld_gpr2, WB_ex_ld_gpr2_wb, CF, CS_IS_CMOVC_WB); 
 endmodule // conditional_support_wb
 
 //-------------------------------------------------------------------------------------
@@ -76,6 +101,7 @@ module validate_signals_wb(
 	output v_ex_dcache_write,
 	output v_cs_ld_flags,
 	output v_wb_ld_eip, 
+	output v_cs_ld_cs,
 	input WB_V,
 	input wb_ld_gpr1,
 	input WB_ex_ld_gpr2_wb,
@@ -84,7 +110,11 @@ module validate_signals_wb(
 	input CS_LD_MM_WB,
 	input WB_ex_dcache_write_wb,
 	input CS_LD_FLAGS_WB,
-	input wb_ld_eip
+	input wb_ld_eip,
+	input CS_LD_CS_WB,
+	input CS_IS_CMPS_SECOND_UOP_ALL,
+	input WB_de_repne_wb,
+	input wb_repne_terminate_all
 	);
 
 	and2$ u_and_gpr1(v_wb_ld_gpr1, WB_V, wb_ld_gpr1); 
@@ -94,7 +124,12 @@ module validate_signals_wb(
 	and2$ u_and_mm(v_cs_ld_mm, WB_V, CS_LD_MM_WB); 
 	and2$ u_and_dcache(v_ex_dcache_write, WB_V, WB_ex_dcache_write_wb); 
 	and2$ u_and_flags(v_cs_ld_flags, WB_V, CS_LD_FLAGS_WB); 
-	and2$ u_and_eip(v_wb_ld_eip, WB_V, wb_ld_eip);
+
+	wire regular_ld_eip, repne_second_uop_cmps;
+	or2$ u_second_uop_of_repne(repne_second_uop_cmps, CS_IS_CMPS_SECOND_UOP_ALL, WB_de_repne_wb);
+	and2$ u_and_regular_eip(regular_ld_eip, WB_V, wb_ld_eip);
+	mux2$ u_and_final_eip(v_cs_ld_eip, regular_ld_eip, wb_repne_terminate_all, repne_second_uop_cmps);
+	and2$ u_and_cs(v_cs_ld_cs, WB_V, CS_LD_CS_WB);
 
 endmodule // validate_signals_wb
 
@@ -151,11 +186,17 @@ module flags_wb(
 	output [31:0] current_flags,
 	input CLK, 
 	input v_cs_ld_flags_wb,
+	input CS_POP_FLAGS_WB,
 	input [6:0] CS_FLAGS_AFFECTED_WB,
-	input [31:0] WB_FLAGS
+	input [31:0] WB_FLAGS,
+	input [31:0] WB_RESULT_A
 	);
 
-	wire [31:0] prev_flags, internal_current_flags;
+	wire [31:0] prev_flags, internal_current_flags, and_flags_top, and_flags_bottom, interrupt_flags, next_flags;
+	and32_2way u_and_top(and_flags_top, WB_RESULT_A, 32'h00257FD5);
+	and32_2way u_and_bottom(and_flags_bottom, internal_current_flags, 32'h00A10000);
+	or32_2way u_or_flags(interrupt_flags, and_flags_top, and_flags_bottom);
+	mux32_2way u_next_flags(next_flags, internal_current_flags, interrupt_flags, CS_POP_FLAGS_WB);
 
 	assign current_flags = internal_current_flags; 
 

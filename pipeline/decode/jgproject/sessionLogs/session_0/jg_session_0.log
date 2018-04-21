@@ -1,0 +1,2280 @@
+#----------------------------------------
+# JasperGold Version Info
+# tool      : JasperGold 2015.09
+# platform  : Linux 2.6.32-696.23.1.el6.x86_64
+# version   : 2015.09 FCS 64 bits
+# build date: 2015.09.29 22:07:32 PDT
+#----------------------------------------
+# started Wed Apr 18 16:53:52 CDT 2018
+# hostname  : wario
+# pid       : 16528
+# arguments : '-label' 'session_0' '-console' 'wario:46338' '-style' 'windows' '-proj' '/home/ecelrc/students/anarkhede/micro/lc86/pipeline/decode/jgproject/sessionLogs/session_0' '-init' '-hidden' '/home/ecelrc/students/anarkhede/micro/lc86/pipeline/decode/jgproject/.tmp/.initCmds.tcl'
+
+Any disclosure about the Cadence Design Systems software or its use
+model to any third party violates the written Non-Disclosure Agreement
+between Cadence Design Systems, Inc. and the customer.
+
+THIS SOFTWARE CONTAINS CONFIDENTIAL INFORMATION AND TRADE SECRETS OF
+CADENCE DESIGN SYSTEMS, INC. USE, DISCLOSURE, OR REPRODUCTION IS
+PROHIBITED WITHOUT THE PRIOR EXPRESS WRITTEN PERMISSION OF CADENCE
+DESIGN SYSTEMS, INC.
+
+Copyright (C) 2000-2015 Cadence Design Systems, Inc. All Rights
+Reserved.  Unpublished -- rights reserved under the copyright laws of
+the United States.
+
+This product includes software developed by others and redistributed
+according to license agreement. See doc/third_party_readme.txt for
+further details.
+
+RESTRICTED RIGHTS LEGEND
+
+Use, duplication, or disclosure by the Government is subject to
+restrictions as set forth in subparagraph (c) (1) (ii) of the Rights in
+Technical Data and Computer Software clause at DFARS 252.227-7013 or
+subparagraphs (c) (1) and (2) of Commercial Computer Software -- Restricted
+Rights at 48 CFR 52.227-19, as applicable.
+
+
+                          Cadence Design Systems, Inc. 
+                          2655 Seely Avenue
+                          San Jose, CA 95134
+                          Phone: 408.943.1234
+
+For technical assistance visit http://support.cadence.com.
+
+JasperGold Apps Analysis Session - /home/ecelrc/students/anarkhede/micro/lc86/pipeline/decode/jgproject/sessionLogs/session_0
+
+INFO: successfully checked out licenses "jasper_interactive" and "jasper_fpv".
+INFO: reading configuration file "/home/ecelrc/students/anarkhede/.config/jasper/jaspergold.conf".
+% source ./decode_merge12.tcl
+WARNING (WCD032): Passing arguments to "analyze" as lists has been deprecated.
+    For message help, type "help -message wcd032"
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib1
+[-- (VERI-1482)] Analyzing Verilog file ./lib2
+[ERROR (VERI-1137)] ./lib2(941): syntax error near end
+[ERROR (VERI-1072)] ./lib2(943): module reg32e$ ignored due to previous errors
+[ERROR (VERI-1072)] ./lib2(1001): module ioreg8$ ignored due to previous errors
+[ERROR (VERI-1072)] ./lib2(1060): module ioreg16$ ignored due to previous errors
+Summary of errors detected:
+	[ERROR (VERI-1137)] ./lib2(941): syntax error near end
+	[ERROR (VERI-1072)] ./lib2(943): module reg32e$ ignored due to previous errors
+	[ERROR (VERI-1072)] ./lib2(1001): module ioreg8$ ignored due to previous errors
+	[ERROR (VERI-1072)] ./lib2(1060): module ioreg16$ ignored due to previous errors
+ERROR (ENL034): 4 errors detected in the design file(s).
+
+% source ./decode_merge12.tcl
+WARNING (WCD032): Passing arguments to "analyze" as lists has been deprecated.
+    For message help, type "help -message wcd032"
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib1
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(39): overwriting previous definition of module nand2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(39): previous definition of module nand2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(54): overwriting previous definition of module nand3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(54): previous definition of module nand3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(70): overwriting previous definition of module nand4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(70): previous definition of module nand4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(87): overwriting previous definition of module and2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(87): previous definition of module and2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(102): overwriting previous definition of module and3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(102): previous definition of module and3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(118): overwriting previous definition of module and4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(118): previous definition of module and4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(135): overwriting previous definition of module nor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(135): previous definition of module nor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(150): overwriting previous definition of module nor3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(150): previous definition of module nor3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(166): overwriting previous definition of module nor4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(166): previous definition of module nor4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(181): overwriting previous definition of module or2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(181): previous definition of module or2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(198): overwriting previous definition of module or3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(198): previous definition of module or3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(214): overwriting previous definition of module or4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(214): previous definition of module or4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(231): overwriting previous definition of module xor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(231): previous definition of module xor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(247): overwriting previous definition of module xnor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(247): previous definition of module xnor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(263): overwriting previous definition of module inv1$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(263): previous definition of module inv1$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(290): overwriting previous definition of module table_dffq
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(290): previous definition of module table_dffq is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(314): overwriting previous definition of module dff$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(314): previous definition of module dff$ is here
+[-- (VERI-1482)] Analyzing Verilog file ./lib2
+[WARN (VERI-1206)] ./lib2(115): overwriting previous definition of module dff8$
+[INFO (VERI-2142)] ./lib2(115): previous definition of module dff8$ is here
+[WARN (VERI-1206)] ./lib2(176): overwriting previous definition of module dff16$
+[INFO (VERI-2142)] ./lib2(176): previous definition of module dff16$ is here
+[WARN (VERI-1206)] ./lib2(238): overwriting previous definition of module jkff8$
+[INFO (VERI-2142)] ./lib2(238): previous definition of module jkff8$ is here
+[WARN (VERI-1206)] ./lib2(301): overwriting previous definition of module jkff16$
+[INFO (VERI-2142)] ./lib2(301): previous definition of module jkff16$ is here
+[WARN (VERI-1206)] ./lib2(317): overwriting previous definition of module buffer$
+[INFO (VERI-2142)] ./lib2(317): previous definition of module buffer$ is here
+[WARN (VERI-1206)] ./lib2(324): overwriting previous definition of module buffer8$
+[INFO (VERI-2142)] ./lib2(324): previous definition of module buffer8$ is here
+[WARN (VERI-1206)] ./lib2(330): overwriting previous definition of module buffer16$
+[INFO (VERI-2142)] ./lib2(330): previous definition of module buffer16$ is here
+[WARN (VERI-1206)] ./lib2(346): overwriting previous definition of module bufferH16$
+[INFO (VERI-2142)] ./lib2(346): previous definition of module bufferH16$ is here
+[WARN (VERI-1206)] ./lib2(357): overwriting previous definition of module bufferH64$
+[INFO (VERI-2142)] ./lib2(357): previous definition of module bufferH64$ is here
+[WARN (VERI-1206)] ./lib2(368): overwriting previous definition of module bufferH256$
+[INFO (VERI-2142)] ./lib2(368): previous definition of module bufferH256$ is here
+[WARN (VERI-1206)] ./lib2(379): overwriting previous definition of module bufferH1024$
+[INFO (VERI-2142)] ./lib2(379): previous definition of module bufferH1024$ is here
+[WARN (VERI-1206)] ./lib2(396): overwriting previous definition of module bufferHInv16$
+[INFO (VERI-2142)] ./lib2(396): previous definition of module bufferHInv16$ is here
+[WARN (VERI-1206)] ./lib2(407): overwriting previous definition of module bufferHInv64$
+[INFO (VERI-2142)] ./lib2(407): previous definition of module bufferHInv64$ is here
+[WARN (VERI-1206)] ./lib2(418): overwriting previous definition of module bufferHInv256$
+[INFO (VERI-2142)] ./lib2(418): previous definition of module bufferHInv256$ is here
+[WARN (VERI-1206)] ./lib2(429): overwriting previous definition of module bufferHInv1024$
+[INFO (VERI-2142)] ./lib2(429): previous definition of module bufferHInv1024$ is here
+[WARN (VERI-1206)] ./lib2(458): overwriting previous definition of module latch_sr
+[INFO (VERI-2142)] ./lib2(458): previous definition of module latch_sr is here
+[WARN (VERI-1206)] ./lib2(482): overwriting previous definition of module latch$
+[INFO (VERI-2142)] ./lib2(482): previous definition of module latch$ is here
+[WARN (VERI-1206)] ./lib2(527): overwriting previous definition of module latch8$
+[INFO (VERI-2142)] ./lib2(527): previous definition of module latch8$ is here
+[WARN (VERI-1206)] ./lib2(571): overwriting previous definition of module latch16$
+[INFO (VERI-2142)] ./lib2(571): previous definition of module latch16$ is here
+[WARN (VERI-1206)] ./lib2(593): overwriting previous definition of module tristateL$
+[INFO (VERI-2142)] ./lib2(593): previous definition of module tristateL$ is here
+[WARN (VERI-1206)] ./lib2(606): overwriting previous definition of module tristate8L$
+[INFO (VERI-2142)] ./lib2(606): previous definition of module tristate8L$ is here
+[WARN (VERI-1206)] ./lib2(618): overwriting previous definition of module tristate16L$
+[INFO (VERI-2142)] ./lib2(618): previous definition of module tristate16L$ is here
+[WARN (VERI-1206)] ./lib2(638): overwriting previous definition of module tristateH$
+[INFO (VERI-2142)] ./lib2(638): previous definition of module tristateH$ is here
+[WARN (VERI-1206)] ./lib2(651): overwriting previous definition of module tristate8H$
+[INFO (VERI-2142)] ./lib2(651): previous definition of module tristate8H$ is here
+[WARN (VERI-1206)] ./lib2(663): overwriting previous definition of module tristate16H$
+[INFO (VERI-2142)] ./lib2(663): previous definition of module tristate16H$ is here
+[WARN (VERI-1206)] ./lib2(675): overwriting previous definition of module tristate_bus_driver1$
+[INFO (VERI-2142)] ./lib2(675): previous definition of module tristate_bus_driver1$ is here
+[WARN (VERI-1206)] ./lib2(687): overwriting previous definition of module tristate_bus_driver8$
+[INFO (VERI-2142)] ./lib2(687): previous definition of module tristate_bus_driver8$ is here
+[WARN (VERI-1206)] ./lib2(699): overwriting previous definition of module tristate_bus_driver16$
+[INFO (VERI-2142)] ./lib2(699): previous definition of module tristate_bus_driver16$ is here
+[WARN (VERI-1206)] ./lib2(762): overwriting previous definition of module dff16b$
+[INFO (VERI-2142)] ./lib2(762): previous definition of module dff16b$ is here
+[WARN (VERI-1206)] ./lib2(824): overwriting previous definition of module dff32b$
+[INFO (VERI-2142)] ./lib2(824): previous definition of module dff32b$ is here
+[WARN (VERI-1206)] ./lib2(887): overwriting previous definition of module reg64e$
+[INFO (VERI-2142)] ./lib2(887): previous definition of module reg64e$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib3
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib4
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib5
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib6
+WARNING (WCD032): Passing arguments to "analyze" as lists has been deprecated.
+    For message help, type "help -message wcd032"
+[-- (VERI-1482)] Analyzing Verilog file ../common.v
+[WARN (VERI-1214)] ../common.v(370): assignment to input AF
+[-- (VERI-1482)] Analyzing Verilog file opcode_length_decoder.v
+[-- (VERI-1482)] Analyzing Verilog file ucontrol_store.v
+[-- (VERI-1482)] Analyzing Verilog file sib_disp_detector.v
+[-- (VERI-1482)] Analyzing Verilog file immediate_detector.v
+[-- (VERI-1482)] Analyzing Verilog file modrm_detector.v
+[-- (VERI-1482)] Analyzing Verilog file offset_detector.v
+[-- (VERI-1482)] Analyzing Verilog file modrm_pointer.v
+[-- (VERI-1482)] Analyzing Verilog file offset_selector.v
+[-- (VERI-1482)] Analyzing Verilog file disp_selector.v
+[-- (VERI-1482)] Analyzing Verilog file imm_selector.v
+[-- (VERI-1482)] Analyzing Verilog file prefix_decoder.v
+[-- (VERI-1482)] Analyzing Verilog file prefix_checker.v
+[-- (VERI-1482)] Analyzing Verilog file modrm_selector.v
+[-- (VERI-1482)] Analyzing Verilog file sib_selector.v
+[-- (VERI-1482)] Analyzing Verilog file instruction_length_decoder.v
+[-- (VERI-1482)] Analyzing Verilog file decode_stage1.v
+[-- (VERI-1482)] Analyzing Verilog file decode_stage2.v
+[ERROR (VERI-1245)] decode_stage2.v(41): cannot open include file ./control_store/control_store_wires.v
+[ERROR (VERI-1245)] decode_stage2.v(42): cannot open include file ./control_store/control_store_signals.v
+[ERROR (VERI-1072)] decode_stage2.v(142): module decode_stage2 ignored due to previous errors
+Summary of errors detected:
+	[ERROR (VERI-1245)] decode_stage2.v(41): cannot open include file ./control_store/control_store_wires.v
+	[ERROR (VERI-1245)] decode_stage2.v(42): cannot open include file ./control_store/control_store_signals.v
+	[ERROR (VERI-1072)] decode_stage2.v(142): module decode_stage2 ignored due to previous errors
+ERROR (ENL034): 3 errors detected in the design file(s).
+
+% source ./decode_merge12.tcl
+WARNING (WCD032): Passing arguments to "analyze" as lists has been deprecated.
+    For message help, type "help -message wcd032"
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib1
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(39): overwriting previous definition of module nand2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(39): previous definition of module nand2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(54): overwriting previous definition of module nand3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(54): previous definition of module nand3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(70): overwriting previous definition of module nand4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(70): previous definition of module nand4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(87): overwriting previous definition of module and2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(87): previous definition of module and2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(102): overwriting previous definition of module and3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(102): previous definition of module and3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(118): overwriting previous definition of module and4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(118): previous definition of module and4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(135): overwriting previous definition of module nor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(135): previous definition of module nor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(150): overwriting previous definition of module nor3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(150): previous definition of module nor3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(166): overwriting previous definition of module nor4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(166): previous definition of module nor4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(181): overwriting previous definition of module or2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(181): previous definition of module or2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(198): overwriting previous definition of module or3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(198): previous definition of module or3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(214): overwriting previous definition of module or4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(214): previous definition of module or4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(231): overwriting previous definition of module xor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(231): previous definition of module xor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(247): overwriting previous definition of module xnor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(247): previous definition of module xnor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(263): overwriting previous definition of module inv1$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(263): previous definition of module inv1$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(290): overwriting previous definition of module table_dffq
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(290): previous definition of module table_dffq is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(314): overwriting previous definition of module dff$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(314): previous definition of module dff$ is here
+[-- (VERI-1482)] Analyzing Verilog file ./lib2
+[WARN (VERI-1206)] ./lib2(115): overwriting previous definition of module dff8$
+[INFO (VERI-2142)] ./lib2(115): previous definition of module dff8$ is here
+[WARN (VERI-1206)] ./lib2(176): overwriting previous definition of module dff16$
+[INFO (VERI-2142)] ./lib2(176): previous definition of module dff16$ is here
+[WARN (VERI-1206)] ./lib2(238): overwriting previous definition of module jkff8$
+[INFO (VERI-2142)] ./lib2(238): previous definition of module jkff8$ is here
+[WARN (VERI-1206)] ./lib2(301): overwriting previous definition of module jkff16$
+[INFO (VERI-2142)] ./lib2(301): previous definition of module jkff16$ is here
+[WARN (VERI-1206)] ./lib2(317): overwriting previous definition of module buffer$
+[INFO (VERI-2142)] ./lib2(317): previous definition of module buffer$ is here
+[WARN (VERI-1206)] ./lib2(324): overwriting previous definition of module buffer8$
+[INFO (VERI-2142)] ./lib2(324): previous definition of module buffer8$ is here
+[WARN (VERI-1206)] ./lib2(330): overwriting previous definition of module buffer16$
+[INFO (VERI-2142)] ./lib2(330): previous definition of module buffer16$ is here
+[WARN (VERI-1206)] ./lib2(346): overwriting previous definition of module bufferH16$
+[INFO (VERI-2142)] ./lib2(346): previous definition of module bufferH16$ is here
+[WARN (VERI-1206)] ./lib2(357): overwriting previous definition of module bufferH64$
+[INFO (VERI-2142)] ./lib2(357): previous definition of module bufferH64$ is here
+[WARN (VERI-1206)] ./lib2(368): overwriting previous definition of module bufferH256$
+[INFO (VERI-2142)] ./lib2(368): previous definition of module bufferH256$ is here
+[WARN (VERI-1206)] ./lib2(379): overwriting previous definition of module bufferH1024$
+[INFO (VERI-2142)] ./lib2(379): previous definition of module bufferH1024$ is here
+[WARN (VERI-1206)] ./lib2(396): overwriting previous definition of module bufferHInv16$
+[INFO (VERI-2142)] ./lib2(396): previous definition of module bufferHInv16$ is here
+[WARN (VERI-1206)] ./lib2(407): overwriting previous definition of module bufferHInv64$
+[INFO (VERI-2142)] ./lib2(407): previous definition of module bufferHInv64$ is here
+[WARN (VERI-1206)] ./lib2(418): overwriting previous definition of module bufferHInv256$
+[INFO (VERI-2142)] ./lib2(418): previous definition of module bufferHInv256$ is here
+[WARN (VERI-1206)] ./lib2(429): overwriting previous definition of module bufferHInv1024$
+[INFO (VERI-2142)] ./lib2(429): previous definition of module bufferHInv1024$ is here
+[WARN (VERI-1206)] ./lib2(458): overwriting previous definition of module latch_sr
+[INFO (VERI-2142)] ./lib2(458): previous definition of module latch_sr is here
+[WARN (VERI-1206)] ./lib2(482): overwriting previous definition of module latch$
+[INFO (VERI-2142)] ./lib2(482): previous definition of module latch$ is here
+[WARN (VERI-1206)] ./lib2(527): overwriting previous definition of module latch8$
+[INFO (VERI-2142)] ./lib2(527): previous definition of module latch8$ is here
+[WARN (VERI-1206)] ./lib2(571): overwriting previous definition of module latch16$
+[INFO (VERI-2142)] ./lib2(571): previous definition of module latch16$ is here
+[WARN (VERI-1206)] ./lib2(593): overwriting previous definition of module tristateL$
+[INFO (VERI-2142)] ./lib2(593): previous definition of module tristateL$ is here
+[WARN (VERI-1206)] ./lib2(606): overwriting previous definition of module tristate8L$
+[INFO (VERI-2142)] ./lib2(606): previous definition of module tristate8L$ is here
+[WARN (VERI-1206)] ./lib2(618): overwriting previous definition of module tristate16L$
+[INFO (VERI-2142)] ./lib2(618): previous definition of module tristate16L$ is here
+[WARN (VERI-1206)] ./lib2(638): overwriting previous definition of module tristateH$
+[INFO (VERI-2142)] ./lib2(638): previous definition of module tristateH$ is here
+[WARN (VERI-1206)] ./lib2(651): overwriting previous definition of module tristate8H$
+[INFO (VERI-2142)] ./lib2(651): previous definition of module tristate8H$ is here
+[WARN (VERI-1206)] ./lib2(663): overwriting previous definition of module tristate16H$
+[INFO (VERI-2142)] ./lib2(663): previous definition of module tristate16H$ is here
+[WARN (VERI-1206)] ./lib2(675): overwriting previous definition of module tristate_bus_driver1$
+[INFO (VERI-2142)] ./lib2(675): previous definition of module tristate_bus_driver1$ is here
+[WARN (VERI-1206)] ./lib2(687): overwriting previous definition of module tristate_bus_driver8$
+[INFO (VERI-2142)] ./lib2(687): previous definition of module tristate_bus_driver8$ is here
+[WARN (VERI-1206)] ./lib2(699): overwriting previous definition of module tristate_bus_driver16$
+[INFO (VERI-2142)] ./lib2(699): previous definition of module tristate_bus_driver16$ is here
+[WARN (VERI-1206)] ./lib2(762): overwriting previous definition of module dff16b$
+[INFO (VERI-2142)] ./lib2(762): previous definition of module dff16b$ is here
+[WARN (VERI-1206)] ./lib2(824): overwriting previous definition of module dff32b$
+[INFO (VERI-2142)] ./lib2(824): previous definition of module dff32b$ is here
+[WARN (VERI-1206)] ./lib2(887): overwriting previous definition of module reg64e$
+[INFO (VERI-2142)] ./lib2(887): previous definition of module reg64e$ is here
+[WARN (VERI-1206)] ./lib2(943): overwriting previous definition of module reg32e$
+[INFO (VERI-2142)] ./lib2(943): previous definition of module reg32e$ is here
+[WARN (VERI-1206)] ./lib2(1001): overwriting previous definition of module ioreg8$
+[INFO (VERI-2142)] ./lib2(1001): previous definition of module ioreg8$ is here
+[WARN (VERI-1206)] ./lib2(1060): overwriting previous definition of module ioreg16$
+[INFO (VERI-2142)] ./lib2(1060): previous definition of module ioreg16$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib3
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(113): overwriting previous definition of module regfile$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(113): previous definition of module regfile$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(230): overwriting previous definition of module regfile8x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(230): previous definition of module regfile8x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(400): overwriting previous definition of module ram8b8w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(400): previous definition of module ram8b8w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(419): overwriting previous definition of module ram16b8w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(419): previous definition of module ram16b8w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(590): overwriting previous definition of module ram8b4w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(590): previous definition of module ram8b4w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(643): overwriting previous definition of module rom4b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(643): previous definition of module rom4b32w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(673): overwriting previous definition of module rom32b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(673): previous definition of module rom32b32w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(704): overwriting previous definition of module rom64b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(704): previous definition of module rom64b32w$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib4
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(38): overwriting previous definition of module table_imux2
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(38): previous definition of module table_imux2 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(64): overwriting previous definition of module table_imux3
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(64): previous definition of module table_imux3 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(94): overwriting previous definition of module table_imux4
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(94): previous definition of module table_imux4 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(109): overwriting previous definition of module mux2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(109): previous definition of module mux2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(127): overwriting previous definition of module mux3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(127): previous definition of module mux3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(146): overwriting previous definition of module mux4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(146): previous definition of module mux4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(173): overwriting previous definition of module mux2_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(173): previous definition of module mux2_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(197): overwriting previous definition of module mux2_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(197): previous definition of module mux2_16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(231): overwriting previous definition of module mux3_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(231): previous definition of module mux3_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(263): overwriting previous definition of module mux3_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(263): previous definition of module mux3_16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(301): overwriting previous definition of module mux4_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(301): previous definition of module mux4_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(338): overwriting previous definition of module mux4_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(338): previous definition of module mux4_16$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib5
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(57): overwriting previous definition of module decoder2_4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(57): previous definition of module decoder2_4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(89): overwriting previous definition of module decoder3_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(89): previous definition of module decoder3_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(121): overwriting previous definition of module syn_cntr8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(121): previous definition of module syn_cntr8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(241): overwriting previous definition of module syn_cntr
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(241): previous definition of module syn_cntr is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(291): overwriting previous definition of module pencoder8_3v$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(291): previous definition of module pencoder8_3v$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(332): overwriting previous definition of module pencoder8_3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(332): previous definition of module pencoder8_3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(354): overwriting previous definition of module mag_comp8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(354): previous definition of module mag_comp8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(375): overwriting previous definition of module mag_comp4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(375): previous definition of module mag_comp4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(521): overwriting previous definition of module alu4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(521): previous definition of module alu4$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib6
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(115): overwriting previous definition of module sram128x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(115): previous definition of module sram128x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(220): overwriting previous definition of module sram32x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(220): previous definition of module sram32x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(231): overwriting previous definition of module sram32x16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(231): previous definition of module sram32x16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(463): overwriting previous definition of module sram32x32$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(463): previous definition of module sram32x32$ is here
+WARNING (WCD032): Passing arguments to "analyze" as lists has been deprecated.
+    For message help, type "help -message wcd032"
+[-- (VERI-1482)] Analyzing Verilog file ../common.v
+[WARN (VERI-1206)] ../common.v(17): overwriting previous definition of module sar32
+[INFO (VERI-2142)] ../common.v(17): previous definition of module sar32 is here
+[WARN (VERI-1206)] ../common.v(33): overwriting previous definition of module sal32
+[INFO (VERI-2142)] ../common.v(33): previous definition of module sal32 is here
+[WARN (VERI-1206)] ../common.v(46): overwriting previous definition of module comp4
+[INFO (VERI-2142)] ../common.v(46): previous definition of module comp4 is here
+[WARN (VERI-1206)] ../common.v(66): overwriting previous definition of module comp16
+[INFO (VERI-2142)] ../common.v(66): previous definition of module comp16 is here
+[WARN (VERI-1206)] ../common.v(123): overwriting previous definition of module mag_comp32
+[INFO (VERI-2142)] ../common.v(123): previous definition of module mag_comp32 is here
+[WARN (VERI-1206)] ../common.v(161): overwriting previous definition of module full_adder
+[INFO (VERI-2142)] ../common.v(161): previous definition of module full_adder is here
+[WARN (VERI-1206)] ../common.v(225): overwriting previous definition of module carry_lookahead
+[INFO (VERI-2142)] ../common.v(225): previous definition of module carry_lookahead is here
+[WARN (VERI-1206)] ../common.v(290): overwriting previous definition of module carry_lookahead_sat
+[INFO (VERI-2142)] ../common.v(290): previous definition of module carry_lookahead_sat is here
+[WARN (VERI-1206)] ../common.v(355): overwriting previous definition of module carry_lookahead16_sat
+[INFO (VERI-2142)] ../common.v(355): previous definition of module carry_lookahead16_sat is here
+[WARN (VERI-1214)] ../common.v(370): assignment to input AF
+[WARN (VERI-1206)] ../common.v(421): overwriting previous definition of module carry_lookahead16_AF
+[INFO (VERI-2142)] ../common.v(421): previous definition of module carry_lookahead16_AF is here
+[WARN (VERI-1206)] ../common.v(456): overwriting previous definition of module carry_lookahead32
+[INFO (VERI-2142)] ../common.v(456): previous definition of module carry_lookahead32 is here
+[-- (VERI-1482)] Analyzing Verilog file opcode_length_decoder.v
+[WARN (VERI-1206)] opcode_length_decoder.v(79): overwriting previous definition of module opcode_length_decoder
+[INFO (VERI-2142)] opcode_length_decoder.v(79): previous definition of module opcode_length_decoder is here
+[-- (VERI-1482)] Analyzing Verilog file ucontrol_store.v
+[WARN (VERI-1206)] ucontrol_store.v(32): overwriting previous definition of module ucontrol_store
+[INFO (VERI-2142)] ucontrol_store.v(32): previous definition of module ucontrol_store is here
+[-- (VERI-1482)] Analyzing Verilog file sib_disp_detector.v
+[WARN (VERI-1206)] sib_disp_detector.v(36): overwriting previous definition of module sib_disp_detector
+[INFO (VERI-2142)] sib_disp_detector.v(36): previous definition of module sib_disp_detector is here
+[-- (VERI-1482)] Analyzing Verilog file immediate_detector.v
+[WARN (VERI-1206)] immediate_detector.v(198): overwriting previous definition of module immediate_detector
+[INFO (VERI-2142)] immediate_detector.v(198): previous definition of module immediate_detector is here
+[-- (VERI-1482)] Analyzing Verilog file modrm_detector.v
+[WARN (VERI-1206)] modrm_detector.v(139): overwriting previous definition of module modrm_detector
+[INFO (VERI-2142)] modrm_detector.v(139): previous definition of module modrm_detector is here
+[-- (VERI-1482)] Analyzing Verilog file offset_detector.v
+[WARN (VERI-1206)] offset_detector.v(102): overwriting previous definition of module offset_detector
+[INFO (VERI-2142)] offset_detector.v(102): previous definition of module offset_detector is here
+[-- (VERI-1482)] Analyzing Verilog file modrm_pointer.v
+[WARN (VERI-1206)] modrm_pointer.v(51): overwriting previous definition of module modrm_pointer
+[INFO (VERI-2142)] modrm_pointer.v(51): previous definition of module modrm_pointer is here
+[-- (VERI-1482)] Analyzing Verilog file offset_selector.v
+[WARN (VERI-1206)] offset_selector.v(67): overwriting previous definition of module offset_selector
+[INFO (VERI-2142)] offset_selector.v(67): previous definition of module offset_selector is here
+[-- (VERI-1482)] Analyzing Verilog file disp_selector.v
+[WARN (VERI-1206)] disp_selector.v(64): overwriting previous definition of module disp_selector
+[INFO (VERI-2142)] disp_selector.v(64): previous definition of module disp_selector is here
+[-- (VERI-1482)] Analyzing Verilog file imm_selector.v
+[WARN (VERI-1206)] imm_selector.v(102): overwriting previous definition of module imm_selector
+[INFO (VERI-2142)] imm_selector.v(102): previous definition of module imm_selector is here
+[-- (VERI-1482)] Analyzing Verilog file prefix_decoder.v
+[WARN (VERI-1206)] prefix_decoder.v(46): overwriting previous definition of module prefix_decoder
+[INFO (VERI-2142)] prefix_decoder.v(46): previous definition of module prefix_decoder is here
+[-- (VERI-1482)] Analyzing Verilog file prefix_checker.v
+[WARN (VERI-1206)] prefix_checker.v(84): overwriting previous definition of module prefix_checker
+[INFO (VERI-2142)] prefix_checker.v(84): previous definition of module prefix_checker is here
+[-- (VERI-1482)] Analyzing Verilog file modrm_selector.v
+[WARN (VERI-1206)] modrm_selector.v(26): overwriting previous definition of module modrm_selector
+[INFO (VERI-2142)] modrm_selector.v(26): previous definition of module modrm_selector is here
+[-- (VERI-1482)] Analyzing Verilog file sib_selector.v
+[WARN (VERI-1206)] sib_selector.v(26): overwriting previous definition of module sib_selector
+[INFO (VERI-2142)] sib_selector.v(26): previous definition of module sib_selector is here
+[-- (VERI-1482)] Analyzing Verilog file instruction_length_decoder.v
+[WARN (VERI-1206)] instruction_length_decoder.v(82): overwriting previous definition of module instruction_length_decoder
+[INFO (VERI-2142)] instruction_length_decoder.v(82): previous definition of module instruction_length_decoder is here
+[-- (VERI-1482)] Analyzing Verilog file decode_stage1.v
+[WARN (VERI-1206)] decode_stage1.v(137): overwriting previous definition of module decode_stage1
+[INFO (VERI-2142)] decode_stage1.v(137): previous definition of module decode_stage1 is here
+[-- (VERI-1482)] Analyzing Verilog file decode_stage2.v
+[INFO (VERI-1328)] decode_stage2.v(41): analyzing included file ../control_store/control_store_wires.v
+[INFO (VERI-1328)] decode_stage2.v(42): analyzing included file ../control_store/control_store_signals.v
+[-- (VERI-1482)] Analyzing Verilog file decode_merge.v
+[-- (VERI-1482)] Analyzing Verilog file /misc/linuxws/packages/cadence_2016/jasper_2015.09/lib/verilog/packages/std/std.sv into library std
+[-- (VERI-1482)] Analyzing Verilog file decode_merge_test.sv
+[WARN (VERI-2170)] decode_merge_test.sv(423): data object disp_sel_val is already declared
+[INFO (VERI-1967)] decode_merge_test.sv(418): previous declaration of disp_sel_val is from here
+[WARN (VERI-1329)] decode_merge_test.sv(423): second declaration of disp_sel_val ignored
+[WARN (VERI-2170)] decode_merge_test.sv(424): data object prefix_p is already declared
+[INFO (VERI-1967)] decode_merge_test.sv(417): previous declaration of prefix_p is from here
+[WARN (VERI-1329)] decode_merge_test.sv(424): second declaration of prefix_p ignored
+INFO (ISW003): Top module name is "PIPELINE".
+[INFO (VERI-1018)] decode_merge.v(250): compiling module PIPELINE
+[INFO (VERI-1018)] decode_stage1.v(1): compiling module decode_stage1
+[INFO (VERI-1018)] prefix_checker.v(1): compiling module prefix_checker
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(254): compiling module inv1$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(262): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(106): compiling module and4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(117): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(77): compiling module and2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(86): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(91): compiling module and3$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(101): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(202): compiling module or4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(213): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(171): compiling module or2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(180): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(187): compiling module or3$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(197): specify block ignored for synthesis
+[INFO (VERI-1018)] prefix_decoder.v(1): compiling module prefix_decoder
+[INFO (VERI-1018)] ./lib2(339): compiling module bufferH16$
+[WARN (VERI-2199)] ./lib2(345): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(131): compiling module mux4$
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(66): compiling module table_imux4
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(145): specify block ignored for synthesis
+[WARN (VERI-9028)] decode_stage1.v(87): missing/open ports on instance mux_segID of module mux4$
+[INFO (VERI-1018)] opcode_length_decoder.v(1): compiling module opcode_length_decoder
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(266): compiling module mux4_8$
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(299): expression size 32 truncated to fit in target size 8
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(151): compiling module mux2_8$
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(171): expression size 32 truncated to fit in target size 8
+[INFO (VERI-1018)] modrm_detector.v(1): compiling module modrm_detector
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(97): compiling module mux2$
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(23): compiling module table_imux2
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(108): specify block ignored for synthesis
+[INFO (VERI-1018)] immediate_detector.v(1): compiling module immediate_detector
+[INFO (VERI-1018)] modrm_pointer.v(1): compiling module modrm_pointer
+[INFO (VERI-1018)] modrm_selector.v(3): compiling module modrm_selector
+[INFO (VERI-1018)] sib_disp_detector.v(1): compiling module sib_disp_detector
+[INFO (VERI-1018)] sib_selector.v(3): compiling module sib_selector
+[INFO (VERI-1018)] offset_detector.v(1): compiling module offset_detector
+[INFO (VERI-1018)] instruction_length_decoder.v(1): compiling module instruction_length_decoder
+[INFO (VERI-1018)] ../common.v(166): compiling module carry_lookahead
+[INFO (VERI-1018)] ../common.v(149): compiling module full_adder
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(221): compiling module xor2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(230): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(29): compiling module nand2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(38): specify block ignored for synthesis
+[WARN (VDB-1013)] decode_stage1.v(87): input port in3 is not connected on this instance
+[INFO (VERI-1018)] ./lib2(894): compiling module reg32e$
+[INFO (VERI-9012)] ./lib2(901): Unintentional Sequential element inferred for Q read before write using blocking assignment
+[WARN (VDB-1000)] ./lib2(931): net Q[31] is constantly driven from multiple places
+[WARN (VDB-1001)] ./lib2(941): another driver from here
+[INFO (VERI-1018)] decode_stage2.v(1): compiling module decode_stage2
+[INFO (VERI-1018)] disp_selector.v(1): compiling module disp_selector
+[INFO (VERI-1018)] ./lib2(350): compiling module bufferH64$
+[WARN (VERI-2199)] ./lib2(356): specify block ignored for synthesis
+[INFO (VERI-1018)] imm_selector.v(5): compiling module imm_selector
+[INFO (VERI-1018)] ./lib2(361): compiling module bufferH256$
+[WARN (VERI-2199)] ./lib2(367): specify block ignored for synthesis
+[WARN (VERI-9028)] imm_selector.v(67): missing/open ports on instance mux1_l1 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(68): missing/open ports on instance mux1_l2 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(69): missing/open ports on instance mux1_l3 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(70): missing/open ports on instance mux1_l4 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(82): missing/open ports on instance mux2_l1 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(83): missing/open ports on instance mux2_l2 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(84): missing/open ports on instance mux2_l3 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(85): missing/open ports on instance mux2_l4 of module mux4_8$
+[WARN (VDB-1013)] imm_selector.v(67): input port IN0[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(68): input port IN0[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(69): input port IN0[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(70): input port IN0[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(82): input port IN3[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(83): input port IN3[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(84): input port IN3[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(85): input port IN3[7] is not connected on this instance
+[INFO (VERI-1018)] offset_selector.v(2): compiling module offset_selector
+[INFO (VERI-1018)] ucontrol_store.v(1): compiling module ucontrol_store
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(677): compiling module rom64b32w$
+[WARN (VERI-1221)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(698): mem should be on the sensitivity list
+[WARN (VDB-1002)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(690): net mem[31][63] does not have a driver
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(303): compiling module mux4_16$
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(336): expression size 32 truncated to fit in target size 16
+[INFO (VERI-1018)] ../common.v(48): compiling module comp16
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(237): compiling module xnor2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(246): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(58): compiling module nand4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(69): specify block ignored for synthesis
+[INFO (VERI-1018)] ./lib2(831): compiling module reg64e$
+[WARN (VERI-9010)] ./lib2(877): Using only the typical value of the mintypmax expression
+[WARN (VERI-9010)] ./lib2(879): Using only the typical value of the mintypmax expression
+[WARN (VERI-9010)] ./lib2(880): Using only the typical value of the mintypmax expression
+[INFO (VERI-9012)] ./lib2(841): Unintentional Sequential element inferred for D_temp read before write using blocking assignment
+[INFO (VERI-9012)] ./lib2(838): Unintentional Sequential element inferred for Q read before write using blocking assignment
+[WARN (VERI-2199)] ./lib2(886): specify block ignored for synthesis
+[WARN (VDB-1000)] ./lib2(869): net Q[63] is constantly driven from multiple places
+[WARN (VDB-1001)] ./lib2(872): another driver from here
+[INFO (VERI-1018)] decode_merge_test.sv(376): compiling module decode_stage1_props
+[WARN (VDB-1002)] decode_merge.v(264): net RST does not have a driver
+[WARN (VDB-1002)] decode_merge.v(330): net DE_CS_IN[15] does not have a driver
+[WARN (VDB-1002)] decode_merge.v(331): net DE_EIP_IN[31] does not have a driver
+[WARN (VDB-1002)] decode_merge.v(334): net IR[127] does not have a driver
+[WARN (VDB-1002)] decode_merge.v(399): net DE_V_IN does not have a driver
+[WARN (VDB-1002)] decode_merge.v(552): net D2_OUT2_AG_PS[24] does not have a driver
+[INFO] Beginning multiple driver analysis
+[INFO] Finished multiple driver analysis
+[INFO] Module Name PIPELINE
+INFO (IPM031): Invalidating proof results of all properties in the Property Manager.
+INFO (IRS006): Current reset condition is "RST".
+INFO (IPF031): Settings used for this proof:
+    time_limit                    = 86400s
+    per_property_time_limit       = 1s * 10 ^ scan
+    engine_mode                   = Hp Ht N B 
+    proofgrid_per_engine_max_jobs = 1
+    proofgrid_mode                = local
+    proofgrid_restarts            = 10
+background
+INFO (IPF036): Starting proof on task: "<embedded>", 16 properties to prove with 0 already proven/unreachable
+INFO (IRS029): Starting reset analysis: phase 1 of 4.
+INFO (IRS030): Running reset analysis phase 2 of 4.
+INFO (IRS031): Running reset analysis phase 3 of 4.
+INFO (IRS020): Starting the reset analysis simulation with a limit of 100 iterations (phase 4 of 4).
+INFO (IRS024): Reset iterations 0 to 4 analyzed.
+INFO (IRS018): Reset analysis simulation executed for 3 iterations. Assigned values for 0 of 128 design flops, 0 of 576 design latches, 47 of 623 internal elements.
+Using multistage preprocessing
+Starting reduce
+Finished reduce in 0.005s
+Performing Proof Simplification...
+0.Hp: clocks: 2, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 1, bothedge: 0
+0.Hp: Proof Simplification Iteration 1	[0.00 s]
+0.Hp: Proof Simplification Iteration 2	[0.00 s]
+0.Hp: Proof Simplification Iteration 3	[0.01 s]
+0.Hp: Proof Simplification Iteration 4	[0.01 s]
+0.Hp: Proof Simplification Iteration 5	[0.01 s]
+Proof Simplification completed in 0.03 s
+0.Hp: Identified and disabled 1 duplicated target.
+About to start distributed ProofGrid in its own thread with a limit of 20 pending notifications.
+ProofGrid usable level: 15
+0.Ht: Proofgrid shell started at 19818@wario(local) jg_16528_wario_1
+0.N: Proofgrid shell started at 19830@wario(local) jg_16528_wario_1
+0.Hp: Proofgrid shell started at 19807@wario(local) jg_16528_wario_1
+0.B: Proofgrid shell started at 19843@wario(local) jg_16528_wario_1
+0.Hp: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.Ht: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.N: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.N: Next scan (0) will use per property time limit: 1s * 10 ^ 0 = 1s
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_1:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.B: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.N: A trace with 1 cycles was found. [0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_1:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_26:precondition1" was covered in 1 cycles in 0.01 s by the incidental trace "PIPELINE.wrp_decode_stage1._assume_1:precondition1".
+0.B: Next scan (0) will use per property time limit: 1s * 10 ^ 0 = 1s
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_1:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_2:precondition1"	[0.00 s].
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_22:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_2:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_7:precondition1" was covered in 1 cycles in 0.01 s by the incidental trace "PIPELINE.wrp_decode_stage1._assume_2:precondition1".
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_22:precondition1" was covered in 1 cycles in 0.01 s by the incidental trace "PIPELINE.wrp_decode_stage1._assume_2:precondition1".
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_3:precondition1"	[0.00 s].
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_3:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.Ht: Trace Attempt  1	[0.01 s]
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_3:precondition1" was covered in 1 cycles in 0.00 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_4:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_4:precondition1" was covered in 1 cycles in 0.01 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_5:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_4:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_5:precondition1"	[0.00 s].
+0.Ht: A trace with 1 cycles was found. [0.02 s]
+INFO (IPF047): 0.Ht: The cover property "PIPELINE.wrp_decode_stage1._assume_5:precondition1" was covered in 1 cycles in 0.03 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_6:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_6:precondition1" was covered in 1 cycles in 0.01 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_8:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_8:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_25:precondition1" was covered in 1 cycles in 0.01 s by the incidental trace "PIPELINE.wrp_decode_stage1._assume_8:precondition1".
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_9:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_9:precondition1" was covered in 1 cycles in 0.00 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_10:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_10:precondition1" was covered in 1 cycles in 0.00 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_11:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_6:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_8:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.Hp: Trace Attempt  1	[0.03 s]
+0.Ht: A trace with 1 cycles was found. [0.03 s]
+INFO (IPF047): 0.Ht: The cover property "PIPELINE.wrp_decode_stage1._assume_11:precondition1" was covered in 1 cycles in 0.06 s.
+0.Ht: A trace with 1 cycles was found. [0.03 s]
+INFO (IPF047): 0.Ht: The cover property "PIPELINE.wrp_decode_stage1._assert_28:precondition1" was covered in 1 cycles in 0.07 s.
+0.Ht: Trace Attempt  2	[0.03 s]
+0.Ht: Trace Attempt  3	[0.04 s]
+0.Ht: A trace with 3 cycles was found. [0.04 s]
+INFO (IPF055): 0.Ht: A counterexample (cex) with 3 cycles was found for the property "PIPELINE.wrp_decode_stage1._assert_28" in 0.07 s.
+0.Ht: All properties determined. [0.04 s]
+Initiating shutdown of proof (@ 0.06 s)
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Cluster is entering permanent allocation mode.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assert_28"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Trace Attempt  2	[0.00 s]
+0.N: Trace Attempt  3	[0.00 s]
+0.N: Trace Attempt  3	[0.01 s]
+0.N: All properties determined. [0.05 s]
+0.B: Cluster is entering permanent allocation mode.
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_11:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assert_28"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.B: All properties determined. [0.06 s]
+0.Hp: Interrupted (multi)
+0.Hp: Interrupted. [0.06 s]
+0.Ht: Exited with Success (@ 0.08 s)
+0.N: Exited with Success (@ 0.08 s)
+0.B: Exited with Success (@ 0.08 s)
+0.Hp: Exited with Success (@ 0.08 s)
+ProofGrid usable level: 0
+ProofGrid usable level: 0
+All pending notifications were processed.
+INFO (IPF059): Completed proof on task: <embedded>
+
+==============================================================
+SUMMARY
+==============================================================
+	Properties Considered : 16
+	      assertions      : 1
+	       - proven       : 0 (0%)
+	       - marked_proven: 0 (0%)
+	       - cex          : 1 (100%)
+	       - ar_cex       : 0 (0%)
+	       - undetermined : 0 (0%)
+	       - unprocessed  : 0 (0%)
+	       - error        : 0 (0%)
+	      covers          : 15
+	       - unreachable  : 0 (0%)
+	       - covered      : 15 (100%)
+	       - ar_covered   : 0 (0%)
+	       - undetermined : 0 (0%)
+	       - unprocessed  : 0 (0%)
+	       - error        : 0 (0%)
+[<embedded>] % visualize -violation -property <embedded>::PIPELINE.wrp_decode_stage1._assert_28 -new_window
+INFO (IVS015): Setting Visualize task to "<embedded>".
+INFO (IVS008): Expanding analysis region to enable visualization of "<embedded>::PIPELINE.wrp_decode_stage1._assert_28".
+cex
+[<embedded>] % source ./decode_merge12.tcl
+WARNING (WCD032): Passing arguments to "analyze" as lists has been deprecated.
+    For message help, type "help -message wcd032"
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib1
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(39): overwriting previous definition of module nand2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(39): previous definition of module nand2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(54): overwriting previous definition of module nand3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(54): previous definition of module nand3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(70): overwriting previous definition of module nand4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(70): previous definition of module nand4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(87): overwriting previous definition of module and2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(87): previous definition of module and2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(102): overwriting previous definition of module and3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(102): previous definition of module and3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(118): overwriting previous definition of module and4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(118): previous definition of module and4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(135): overwriting previous definition of module nor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(135): previous definition of module nor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(150): overwriting previous definition of module nor3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(150): previous definition of module nor3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(166): overwriting previous definition of module nor4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(166): previous definition of module nor4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(181): overwriting previous definition of module or2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(181): previous definition of module or2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(198): overwriting previous definition of module or3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(198): previous definition of module or3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(214): overwriting previous definition of module or4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(214): previous definition of module or4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(231): overwriting previous definition of module xor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(231): previous definition of module xor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(247): overwriting previous definition of module xnor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(247): previous definition of module xnor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(263): overwriting previous definition of module inv1$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(263): previous definition of module inv1$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(290): overwriting previous definition of module table_dffq
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(290): previous definition of module table_dffq is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(314): overwriting previous definition of module dff$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(314): previous definition of module dff$ is here
+[-- (VERI-1482)] Analyzing Verilog file ./lib2
+[WARN (VERI-1206)] ./lib2(115): overwriting previous definition of module dff8$
+[INFO (VERI-2142)] ./lib2(115): previous definition of module dff8$ is here
+[WARN (VERI-1206)] ./lib2(176): overwriting previous definition of module dff16$
+[INFO (VERI-2142)] ./lib2(176): previous definition of module dff16$ is here
+[WARN (VERI-1206)] ./lib2(238): overwriting previous definition of module jkff8$
+[INFO (VERI-2142)] ./lib2(238): previous definition of module jkff8$ is here
+[WARN (VERI-1206)] ./lib2(301): overwriting previous definition of module jkff16$
+[INFO (VERI-2142)] ./lib2(301): previous definition of module jkff16$ is here
+[WARN (VERI-1206)] ./lib2(317): overwriting previous definition of module buffer$
+[INFO (VERI-2142)] ./lib2(317): previous definition of module buffer$ is here
+[WARN (VERI-1206)] ./lib2(324): overwriting previous definition of module buffer8$
+[INFO (VERI-2142)] ./lib2(324): previous definition of module buffer8$ is here
+[WARN (VERI-1206)] ./lib2(330): overwriting previous definition of module buffer16$
+[INFO (VERI-2142)] ./lib2(330): previous definition of module buffer16$ is here
+[WARN (VERI-1206)] ./lib2(346): overwriting previous definition of module bufferH16$
+[INFO (VERI-2142)] ./lib2(346): previous definition of module bufferH16$ is here
+[WARN (VERI-1206)] ./lib2(357): overwriting previous definition of module bufferH64$
+[INFO (VERI-2142)] ./lib2(357): previous definition of module bufferH64$ is here
+[WARN (VERI-1206)] ./lib2(368): overwriting previous definition of module bufferH256$
+[INFO (VERI-2142)] ./lib2(368): previous definition of module bufferH256$ is here
+[WARN (VERI-1206)] ./lib2(379): overwriting previous definition of module bufferH1024$
+[INFO (VERI-2142)] ./lib2(379): previous definition of module bufferH1024$ is here
+[WARN (VERI-1206)] ./lib2(396): overwriting previous definition of module bufferHInv16$
+[INFO (VERI-2142)] ./lib2(396): previous definition of module bufferHInv16$ is here
+[WARN (VERI-1206)] ./lib2(407): overwriting previous definition of module bufferHInv64$
+[INFO (VERI-2142)] ./lib2(407): previous definition of module bufferHInv64$ is here
+[WARN (VERI-1206)] ./lib2(418): overwriting previous definition of module bufferHInv256$
+[INFO (VERI-2142)] ./lib2(418): previous definition of module bufferHInv256$ is here
+[WARN (VERI-1206)] ./lib2(429): overwriting previous definition of module bufferHInv1024$
+[INFO (VERI-2142)] ./lib2(429): previous definition of module bufferHInv1024$ is here
+[WARN (VERI-1206)] ./lib2(458): overwriting previous definition of module latch_sr
+[INFO (VERI-2142)] ./lib2(458): previous definition of module latch_sr is here
+[WARN (VERI-1206)] ./lib2(482): overwriting previous definition of module latch$
+[INFO (VERI-2142)] ./lib2(482): previous definition of module latch$ is here
+[WARN (VERI-1206)] ./lib2(527): overwriting previous definition of module latch8$
+[INFO (VERI-2142)] ./lib2(527): previous definition of module latch8$ is here
+[WARN (VERI-1206)] ./lib2(571): overwriting previous definition of module latch16$
+[INFO (VERI-2142)] ./lib2(571): previous definition of module latch16$ is here
+[WARN (VERI-1206)] ./lib2(593): overwriting previous definition of module tristateL$
+[INFO (VERI-2142)] ./lib2(593): previous definition of module tristateL$ is here
+[WARN (VERI-1206)] ./lib2(606): overwriting previous definition of module tristate8L$
+[INFO (VERI-2142)] ./lib2(606): previous definition of module tristate8L$ is here
+[WARN (VERI-1206)] ./lib2(618): overwriting previous definition of module tristate16L$
+[INFO (VERI-2142)] ./lib2(618): previous definition of module tristate16L$ is here
+[WARN (VERI-1206)] ./lib2(638): overwriting previous definition of module tristateH$
+[INFO (VERI-2142)] ./lib2(638): previous definition of module tristateH$ is here
+[WARN (VERI-1206)] ./lib2(651): overwriting previous definition of module tristate8H$
+[INFO (VERI-2142)] ./lib2(651): previous definition of module tristate8H$ is here
+[WARN (VERI-1206)] ./lib2(663): overwriting previous definition of module tristate16H$
+[INFO (VERI-2142)] ./lib2(663): previous definition of module tristate16H$ is here
+[WARN (VERI-1206)] ./lib2(675): overwriting previous definition of module tristate_bus_driver1$
+[INFO (VERI-2142)] ./lib2(675): previous definition of module tristate_bus_driver1$ is here
+[WARN (VERI-1206)] ./lib2(687): overwriting previous definition of module tristate_bus_driver8$
+[INFO (VERI-2142)] ./lib2(687): previous definition of module tristate_bus_driver8$ is here
+[WARN (VERI-1206)] ./lib2(699): overwriting previous definition of module tristate_bus_driver16$
+[INFO (VERI-2142)] ./lib2(699): previous definition of module tristate_bus_driver16$ is here
+[WARN (VERI-1206)] ./lib2(762): overwriting previous definition of module dff16b$
+[INFO (VERI-2142)] ./lib2(762): previous definition of module dff16b$ is here
+[WARN (VERI-1206)] ./lib2(824): overwriting previous definition of module dff32b$
+[INFO (VERI-2142)] ./lib2(824): previous definition of module dff32b$ is here
+[WARN (VERI-1206)] ./lib2(887): overwriting previous definition of module reg64e$
+[INFO (VERI-2142)] ./lib2(887): previous definition of module reg64e$ is here
+[WARN (VERI-1206)] ./lib2(943): overwriting previous definition of module reg32e$
+[INFO (VERI-2142)] ./lib2(943): previous definition of module reg32e$ is here
+[WARN (VERI-1206)] ./lib2(1001): overwriting previous definition of module ioreg8$
+[INFO (VERI-2142)] ./lib2(1001): previous definition of module ioreg8$ is here
+[WARN (VERI-1206)] ./lib2(1060): overwriting previous definition of module ioreg16$
+[INFO (VERI-2142)] ./lib2(1060): previous definition of module ioreg16$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib3
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(113): overwriting previous definition of module regfile$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(113): previous definition of module regfile$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(230): overwriting previous definition of module regfile8x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(230): previous definition of module regfile8x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(400): overwriting previous definition of module ram8b8w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(400): previous definition of module ram8b8w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(419): overwriting previous definition of module ram16b8w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(419): previous definition of module ram16b8w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(590): overwriting previous definition of module ram8b4w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(590): previous definition of module ram8b4w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(643): overwriting previous definition of module rom4b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(643): previous definition of module rom4b32w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(673): overwriting previous definition of module rom32b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(673): previous definition of module rom32b32w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(704): overwriting previous definition of module rom64b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(704): previous definition of module rom64b32w$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib4
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(38): overwriting previous definition of module table_imux2
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(38): previous definition of module table_imux2 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(64): overwriting previous definition of module table_imux3
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(64): previous definition of module table_imux3 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(94): overwriting previous definition of module table_imux4
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(94): previous definition of module table_imux4 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(109): overwriting previous definition of module mux2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(109): previous definition of module mux2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(127): overwriting previous definition of module mux3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(127): previous definition of module mux3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(146): overwriting previous definition of module mux4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(146): previous definition of module mux4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(173): overwriting previous definition of module mux2_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(173): previous definition of module mux2_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(197): overwriting previous definition of module mux2_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(197): previous definition of module mux2_16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(231): overwriting previous definition of module mux3_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(231): previous definition of module mux3_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(263): overwriting previous definition of module mux3_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(263): previous definition of module mux3_16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(301): overwriting previous definition of module mux4_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(301): previous definition of module mux4_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(338): overwriting previous definition of module mux4_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(338): previous definition of module mux4_16$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib5
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(57): overwriting previous definition of module decoder2_4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(57): previous definition of module decoder2_4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(89): overwriting previous definition of module decoder3_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(89): previous definition of module decoder3_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(121): overwriting previous definition of module syn_cntr8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(121): previous definition of module syn_cntr8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(241): overwriting previous definition of module syn_cntr
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(241): previous definition of module syn_cntr is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(291): overwriting previous definition of module pencoder8_3v$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(291): previous definition of module pencoder8_3v$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(332): overwriting previous definition of module pencoder8_3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(332): previous definition of module pencoder8_3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(354): overwriting previous definition of module mag_comp8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(354): previous definition of module mag_comp8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(375): overwriting previous definition of module mag_comp4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(375): previous definition of module mag_comp4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(521): overwriting previous definition of module alu4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(521): previous definition of module alu4$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib6
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(115): overwriting previous definition of module sram128x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(115): previous definition of module sram128x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(220): overwriting previous definition of module sram32x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(220): previous definition of module sram32x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(231): overwriting previous definition of module sram32x16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(231): previous definition of module sram32x16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(463): overwriting previous definition of module sram32x32$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(463): previous definition of module sram32x32$ is here
+WARNING (WCD032): Passing arguments to "analyze" as lists has been deprecated.
+    For message help, type "help -message wcd032"
+[-- (VERI-1482)] Analyzing Verilog file ../common.v
+[WARN (VERI-1206)] ../common.v(17): overwriting previous definition of module sar32
+[INFO (VERI-2142)] ../common.v(17): previous definition of module sar32 is here
+[WARN (VERI-1206)] ../common.v(33): overwriting previous definition of module sal32
+[INFO (VERI-2142)] ../common.v(33): previous definition of module sal32 is here
+[WARN (VERI-1206)] ../common.v(46): overwriting previous definition of module comp4
+[INFO (VERI-2142)] ../common.v(46): previous definition of module comp4 is here
+[WARN (VERI-1206)] ../common.v(66): overwriting previous definition of module comp16
+[INFO (VERI-2142)] ../common.v(66): previous definition of module comp16 is here
+[WARN (VERI-1206)] ../common.v(123): overwriting previous definition of module mag_comp32
+[INFO (VERI-2142)] ../common.v(123): previous definition of module mag_comp32 is here
+[WARN (VERI-1206)] ../common.v(161): overwriting previous definition of module full_adder
+[INFO (VERI-2142)] ../common.v(161): previous definition of module full_adder is here
+[WARN (VERI-1206)] ../common.v(225): overwriting previous definition of module carry_lookahead
+[INFO (VERI-2142)] ../common.v(225): previous definition of module carry_lookahead is here
+[WARN (VERI-1206)] ../common.v(290): overwriting previous definition of module carry_lookahead_sat
+[INFO (VERI-2142)] ../common.v(290): previous definition of module carry_lookahead_sat is here
+[WARN (VERI-1206)] ../common.v(355): overwriting previous definition of module carry_lookahead16_sat
+[INFO (VERI-2142)] ../common.v(355): previous definition of module carry_lookahead16_sat is here
+[WARN (VERI-1214)] ../common.v(370): assignment to input AF
+[WARN (VERI-1206)] ../common.v(421): overwriting previous definition of module carry_lookahead16_AF
+[INFO (VERI-2142)] ../common.v(421): previous definition of module carry_lookahead16_AF is here
+[WARN (VERI-1206)] ../common.v(456): overwriting previous definition of module carry_lookahead32
+[INFO (VERI-2142)] ../common.v(456): previous definition of module carry_lookahead32 is here
+[-- (VERI-1482)] Analyzing Verilog file opcode_length_decoder.v
+[WARN (VERI-1206)] opcode_length_decoder.v(79): overwriting previous definition of module opcode_length_decoder
+[INFO (VERI-2142)] opcode_length_decoder.v(79): previous definition of module opcode_length_decoder is here
+[-- (VERI-1482)] Analyzing Verilog file ucontrol_store.v
+[WARN (VERI-1206)] ucontrol_store.v(32): overwriting previous definition of module ucontrol_store
+[INFO (VERI-2142)] ucontrol_store.v(32): previous definition of module ucontrol_store is here
+[-- (VERI-1482)] Analyzing Verilog file sib_disp_detector.v
+[WARN (VERI-1206)] sib_disp_detector.v(36): overwriting previous definition of module sib_disp_detector
+[INFO (VERI-2142)] sib_disp_detector.v(36): previous definition of module sib_disp_detector is here
+[-- (VERI-1482)] Analyzing Verilog file immediate_detector.v
+[WARN (VERI-1206)] immediate_detector.v(198): overwriting previous definition of module immediate_detector
+[INFO (VERI-2142)] immediate_detector.v(198): previous definition of module immediate_detector is here
+[-- (VERI-1482)] Analyzing Verilog file modrm_detector.v
+[WARN (VERI-1206)] modrm_detector.v(139): overwriting previous definition of module modrm_detector
+[INFO (VERI-2142)] modrm_detector.v(139): previous definition of module modrm_detector is here
+[-- (VERI-1482)] Analyzing Verilog file offset_detector.v
+[WARN (VERI-1206)] offset_detector.v(102): overwriting previous definition of module offset_detector
+[INFO (VERI-2142)] offset_detector.v(102): previous definition of module offset_detector is here
+[-- (VERI-1482)] Analyzing Verilog file modrm_pointer.v
+[WARN (VERI-1206)] modrm_pointer.v(51): overwriting previous definition of module modrm_pointer
+[INFO (VERI-2142)] modrm_pointer.v(51): previous definition of module modrm_pointer is here
+[-- (VERI-1482)] Analyzing Verilog file offset_selector.v
+[WARN (VERI-1206)] offset_selector.v(67): overwriting previous definition of module offset_selector
+[INFO (VERI-2142)] offset_selector.v(67): previous definition of module offset_selector is here
+[-- (VERI-1482)] Analyzing Verilog file disp_selector.v
+[WARN (VERI-1206)] disp_selector.v(64): overwriting previous definition of module disp_selector
+[INFO (VERI-2142)] disp_selector.v(64): previous definition of module disp_selector is here
+[-- (VERI-1482)] Analyzing Verilog file imm_selector.v
+[WARN (VERI-1206)] imm_selector.v(102): overwriting previous definition of module imm_selector
+[INFO (VERI-2142)] imm_selector.v(102): previous definition of module imm_selector is here
+[-- (VERI-1482)] Analyzing Verilog file prefix_decoder.v
+[WARN (VERI-1206)] prefix_decoder.v(46): overwriting previous definition of module prefix_decoder
+[INFO (VERI-2142)] prefix_decoder.v(46): previous definition of module prefix_decoder is here
+[-- (VERI-1482)] Analyzing Verilog file prefix_checker.v
+[WARN (VERI-1206)] prefix_checker.v(84): overwriting previous definition of module prefix_checker
+[INFO (VERI-2142)] prefix_checker.v(84): previous definition of module prefix_checker is here
+[-- (VERI-1482)] Analyzing Verilog file modrm_selector.v
+[WARN (VERI-1206)] modrm_selector.v(26): overwriting previous definition of module modrm_selector
+[INFO (VERI-2142)] modrm_selector.v(26): previous definition of module modrm_selector is here
+[-- (VERI-1482)] Analyzing Verilog file sib_selector.v
+[WARN (VERI-1206)] sib_selector.v(26): overwriting previous definition of module sib_selector
+[INFO (VERI-2142)] sib_selector.v(26): previous definition of module sib_selector is here
+[-- (VERI-1482)] Analyzing Verilog file instruction_length_decoder.v
+[WARN (VERI-1206)] instruction_length_decoder.v(82): overwriting previous definition of module instruction_length_decoder
+[INFO (VERI-2142)] instruction_length_decoder.v(82): previous definition of module instruction_length_decoder is here
+[-- (VERI-1482)] Analyzing Verilog file decode_stage1.v
+[WARN (VERI-1206)] decode_stage1.v(137): overwriting previous definition of module decode_stage1
+[INFO (VERI-2142)] decode_stage1.v(137): previous definition of module decode_stage1 is here
+[-- (VERI-1482)] Analyzing Verilog file decode_stage2.v
+[INFO (VERI-1328)] decode_stage2.v(41): analyzing included file ../control_store/control_store_wires.v
+[INFO (VERI-1328)] decode_stage2.v(42): analyzing included file ../control_store/control_store_signals.v
+[WARN (VERI-1206)] decode_stage2.v(142): overwriting previous definition of module decode_stage2
+[INFO (VERI-2142)] decode_stage2.v(142): previous definition of module decode_stage2 is here
+[-- (VERI-1482)] Analyzing Verilog file decode_merge.v
+[WARN (VERI-1206)] decode_merge.v(248): overwriting previous definition of module TOP
+[INFO (VERI-2142)] decode_merge.v(248): previous definition of module TOP is here
+[WARN (VERI-1206)] decode_merge.v(964): overwriting previous definition of module PIPELINE
+[INFO (VERI-2142)] decode_merge.v(964): previous definition of module PIPELINE is here
+[-- (VERI-1482)] Analyzing Verilog file decode_merge_test.sv
+[WARN (VERI-1206)] decode_merge_test.sv(32): overwriting previous definition of module prefix_decoder_props
+[INFO (VERI-2142)] decode_merge_test.sv(32): previous definition of module prefix_decoder_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(73): overwriting previous definition of module prefix_checker_props
+[INFO (VERI-2142)] decode_merge_test.sv(73): previous definition of module prefix_checker_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(111): overwriting previous definition of module opcode_length_decoder_props
+[INFO (VERI-2142)] decode_merge_test.sv(111): previous definition of module opcode_length_decoder_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(150): overwriting previous definition of module modrm_detector_props
+[INFO (VERI-2142)] decode_merge_test.sv(150): previous definition of module modrm_detector_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(196): overwriting previous definition of module immediate_detector_props
+[INFO (VERI-2142)] decode_merge_test.sv(196): previous definition of module immediate_detector_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(231): overwriting previous definition of module sib_disp_detector_props
+[INFO (VERI-2142)] decode_merge_test.sv(231): previous definition of module sib_disp_detector_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(259): overwriting previous definition of module offset_detector_props
+[INFO (VERI-2142)] decode_merge_test.sv(259): previous definition of module offset_detector_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(279): overwriting previous definition of module modrm_pointer_props
+[INFO (VERI-2142)] decode_merge_test.sv(279): previous definition of module modrm_pointer_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(294): overwriting previous definition of module modrm_selector_props
+[INFO (VERI-2142)] decode_merge_test.sv(294): previous definition of module modrm_selector_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(309): overwriting previous definition of module sib_selector_props
+[INFO (VERI-2142)] decode_merge_test.sv(309): previous definition of module sib_selector_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(373): overwriting previous definition of module instruction_length_decoder_props
+[INFO (VERI-2142)] decode_merge_test.sv(373): previous definition of module instruction_length_decoder_props is here
+[WARN (VERI-2170)] decode_merge_test.sv(423): data object disp_sel_val is already declared
+[INFO (VERI-1967)] decode_merge_test.sv(418): previous declaration of disp_sel_val is from here
+[WARN (VERI-1329)] decode_merge_test.sv(423): second declaration of disp_sel_val ignored
+[WARN (VERI-2170)] decode_merge_test.sv(424): data object prefix_p is already declared
+[INFO (VERI-1967)] decode_merge_test.sv(417): previous declaration of prefix_p is from here
+[WARN (VERI-1329)] decode_merge_test.sv(424): second declaration of prefix_p ignored
+[WARN (VERI-1206)] decode_merge_test.sv(767): overwriting previous definition of module decode_stage1_props
+[INFO (VERI-2142)] decode_merge_test.sv(767): previous definition of module decode_stage1_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(932): overwriting previous definition of module Wrapper
+[INFO (VERI-2142)] decode_merge_test.sv(932): previous definition of module Wrapper is here
+INFO (ISW003): Top module name is "PIPELINE".
+WARNING (WNL044): Performing forced "elaborate -clear" due to conflicts related to external reference handling.
+[INFO (VERI-1018)] decode_merge.v(250): compiling module PIPELINE
+[INFO (VERI-1018)] decode_stage1.v(1): compiling module decode_stage1
+[INFO (VERI-1018)] prefix_checker.v(1): compiling module prefix_checker
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(254): compiling module inv1$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(262): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(106): compiling module and4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(117): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(77): compiling module and2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(86): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(91): compiling module and3$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(101): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(202): compiling module or4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(213): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(171): compiling module or2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(180): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(187): compiling module or3$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(197): specify block ignored for synthesis
+[INFO (VERI-1018)] prefix_decoder.v(1): compiling module prefix_decoder
+[INFO (VERI-1018)] ./lib2(339): compiling module bufferH16$
+[WARN (VERI-2199)] ./lib2(345): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(131): compiling module mux4$
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(66): compiling module table_imux4
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(145): specify block ignored for synthesis
+[WARN (VERI-9028)] decode_stage1.v(87): missing/open ports on instance mux_segID of module mux4$
+[INFO (VERI-1018)] opcode_length_decoder.v(1): compiling module opcode_length_decoder
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(266): compiling module mux4_8$
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(299): expression size 32 truncated to fit in target size 8
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(151): compiling module mux2_8$
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(171): expression size 32 truncated to fit in target size 8
+[INFO (VERI-1018)] modrm_detector.v(1): compiling module modrm_detector
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(97): compiling module mux2$
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(23): compiling module table_imux2
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(108): specify block ignored for synthesis
+[INFO (VERI-1018)] immediate_detector.v(1): compiling module immediate_detector
+[INFO (VERI-1018)] modrm_pointer.v(1): compiling module modrm_pointer
+[INFO (VERI-1018)] modrm_selector.v(3): compiling module modrm_selector
+[INFO (VERI-1018)] sib_disp_detector.v(1): compiling module sib_disp_detector
+[INFO (VERI-1018)] sib_selector.v(3): compiling module sib_selector
+[INFO (VERI-1018)] offset_detector.v(1): compiling module offset_detector
+[INFO (VERI-1018)] instruction_length_decoder.v(1): compiling module instruction_length_decoder
+[INFO (VERI-1018)] ../common.v(166): compiling module carry_lookahead
+[INFO (VERI-1018)] ../common.v(149): compiling module full_adder
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(221): compiling module xor2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(230): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(29): compiling module nand2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(38): specify block ignored for synthesis
+[WARN (VDB-1013)] decode_stage1.v(87): input port in3 is not connected on this instance
+[INFO (VERI-1018)] ./lib2(894): compiling module reg32e$
+[INFO (VERI-9012)] ./lib2(901): Unintentional Sequential element inferred for Q read before write using blocking assignment
+[WARN (VDB-1000)] ./lib2(931): net Q[31] is constantly driven from multiple places
+[WARN (VDB-1001)] ./lib2(941): another driver from here
+[INFO (VERI-1018)] decode_stage2.v(1): compiling module decode_stage2
+[INFO (VERI-1018)] disp_selector.v(1): compiling module disp_selector
+[INFO (VERI-1018)] ./lib2(350): compiling module bufferH64$
+[WARN (VERI-2199)] ./lib2(356): specify block ignored for synthesis
+[INFO (VERI-1018)] imm_selector.v(5): compiling module imm_selector
+[INFO (VERI-1018)] ./lib2(361): compiling module bufferH256$
+[WARN (VERI-2199)] ./lib2(367): specify block ignored for synthesis
+[WARN (VERI-9028)] imm_selector.v(67): missing/open ports on instance mux1_l1 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(68): missing/open ports on instance mux1_l2 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(69): missing/open ports on instance mux1_l3 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(70): missing/open ports on instance mux1_l4 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(82): missing/open ports on instance mux2_l1 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(83): missing/open ports on instance mux2_l2 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(84): missing/open ports on instance mux2_l3 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(85): missing/open ports on instance mux2_l4 of module mux4_8$
+[WARN (VDB-1013)] imm_selector.v(67): input port IN0[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(68): input port IN0[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(69): input port IN0[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(70): input port IN0[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(82): input port IN3[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(83): input port IN3[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(84): input port IN3[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(85): input port IN3[7] is not connected on this instance
+[INFO (VERI-1018)] offset_selector.v(2): compiling module offset_selector
+[INFO (VERI-1018)] ucontrol_store.v(1): compiling module ucontrol_store
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(677): compiling module rom64b32w$
+[WARN (VERI-1221)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(698): mem should be on the sensitivity list
+[WARN (VDB-1002)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(690): net mem[31][63] does not have a driver
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(303): compiling module mux4_16$
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(336): expression size 32 truncated to fit in target size 16
+[INFO (VERI-1018)] ../common.v(48): compiling module comp16
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(237): compiling module xnor2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(246): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(58): compiling module nand4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(69): specify block ignored for synthesis
+[INFO (VERI-1018)] ./lib2(831): compiling module reg64e$
+[WARN (VERI-9010)] ./lib2(877): Using only the typical value of the mintypmax expression
+[WARN (VERI-9010)] ./lib2(879): Using only the typical value of the mintypmax expression
+[WARN (VERI-9010)] ./lib2(880): Using only the typical value of the mintypmax expression
+[INFO (VERI-9012)] ./lib2(841): Unintentional Sequential element inferred for D_temp read before write using blocking assignment
+[INFO (VERI-9012)] ./lib2(838): Unintentional Sequential element inferred for Q read before write using blocking assignment
+[WARN (VERI-2199)] ./lib2(886): specify block ignored for synthesis
+[WARN (VDB-1000)] ./lib2(869): net Q[63] is constantly driven from multiple places
+[WARN (VDB-1001)] ./lib2(872): another driver from here
+[INFO (VERI-1018)] decode_merge_test.sv(376): compiling module decode_stage1_props
+[WARN (VDB-1002)] decode_merge.v(264): net RST does not have a driver
+[WARN (VDB-1002)] decode_merge.v(330): net DE_CS_IN[15] does not have a driver
+[WARN (VDB-1002)] decode_merge.v(331): net DE_EIP_IN[31] does not have a driver
+[WARN (VDB-1002)] decode_merge.v(334): net IR[127] does not have a driver
+[WARN (VDB-1002)] decode_merge.v(399): net DE_V_IN does not have a driver
+[WARN (VDB-1002)] decode_merge.v(552): net D2_OUT2_AG_PS[24] does not have a driver
+[INFO] Beginning multiple driver analysis
+[INFO] Finished multiple driver analysis
+[INFO] Module Name PIPELINE
+INFO (IVS027): Removed Visualize window "visualize:0".
+INFO (INL003): Clearing all state information (assumes, stopats, etc.).
+INFO (IPM031): Invalidating proof results of all properties in the Property Manager.
+INFO (IRS006): Current reset condition is "RST".
+INFO (IPF031): Settings used for this proof:
+    time_limit                    = 86400s
+    per_property_time_limit       = 1s * 10 ^ scan
+    engine_mode                   = Hp Ht N B 
+    proofgrid_per_engine_max_jobs = 1
+    proofgrid_mode                = local
+    proofgrid_restarts            = 10
+background
+INFO (IPF036): Starting proof on task: "<embedded>", 16 properties to prove with 0 already proven/unreachable
+INFO (IRS029): Starting reset analysis: phase 1 of 4.
+INFO (IRS030): Running reset analysis phase 2 of 4.
+INFO (IRS031): Running reset analysis phase 3 of 4.
+INFO (IRS020): Starting the reset analysis simulation with a limit of 100 iterations (phase 4 of 4).
+INFO (IRS024): Reset iterations 0 to 4 analyzed.
+INFO (IRS018): Reset analysis simulation executed for 3 iterations. Assigned values for 0 of 128 design flops, 0 of 576 design latches, 46 of 622 internal elements.
+Using multistage preprocessing
+Starting reduce
+Finished reduce in 0.007s
+Performing Proof Simplification...
+0.Hp: clocks: 2, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 1, bothedge: 0
+0.Hp: Proof Simplification Iteration 1	[0.00 s]
+0.Hp: Proof Simplification Iteration 2	[0.00 s]
+0.Hp: Proof Simplification Iteration 3	[0.01 s]
+0.Hp: Proof Simplification Iteration 4	[0.01 s]
+0.Hp: Proof Simplification Iteration 5	[0.02 s]
+Proof Simplification completed in 0.04 s
+0.Hp: Identified and disabled 1 duplicated target.
+About to start distributed ProofGrid in its own thread with a limit of 20 pending notifications.
+ProofGrid usable level: 15
+0.Ht: Proofgrid shell started at 22446@wario(local) jg_16528_wario_2
+0.N: Proofgrid shell started at 22457@wario(local) jg_16528_wario_2
+0.Hp: Proofgrid shell started at 22436@wario(local) jg_16528_wario_2
+0.Ht: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.N: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.B: Proofgrid shell started at 22468@wario(local) jg_16528_wario_2
+0.Hp: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.N: Next scan (0) will use per property time limit: 1s * 10 ^ 0 = 1s
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_1:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.B: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.B: Next scan (0) will use per property time limit: 1s * 10 ^ 0 = 1s
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_1:precondition1"	[0.00 s].
+0.N: A trace with 1 cycles was found. [0.01 s]
+0.N: A trace with 1 cycles was found. [0.01 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_1:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_26:precondition1" was covered in 1 cycles in 0.01 s by the incidental trace "PIPELINE.wrp_decode_stage1._assume_1:precondition1".
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_2:precondition1"	[0.00 s].
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_22:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_2:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_7:precondition1" was covered in 1 cycles in 0.00 s by the incidental trace "PIPELINE.wrp_decode_stage1._assume_2:precondition1".
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_22:precondition1" was covered in 1 cycles in 0.00 s by the incidental trace "PIPELINE.wrp_decode_stage1._assume_2:precondition1".
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_3:precondition1"	[0.00 s].
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_3:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_3:precondition1" was covered in 1 cycles in 0.01 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_4:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_4:precondition1" was covered in 1 cycles in 0.01 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_5:precondition1"	[0.00 s].
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_5:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_5:precondition1" was covered in 1 cycles in 0.01 s.
+0.B: Trace Attempt  1	[0.00 s]
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_6:precondition1"	[0.00 s].
+0.Ht: Trace Attempt  1	[0.02 s]
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_6:precondition1" was covered in 1 cycles in 0.00 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_8:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_8:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_25:precondition1" was covered in 1 cycles in 0.01 s by the incidental trace "PIPELINE.wrp_decode_stage1._assume_8:precondition1".
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_9:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_9:precondition1" was covered in 1 cycles in 0.01 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_10:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_10:precondition1" was covered in 1 cycles in 0.01 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_11:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_11:precondition1" was covered in 1 cycles in 0.01 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assert_28"	[0.00 s].
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_6:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_8:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.Hp: Trace Attempt  1	[0.03 s]
+0.Ht: A trace with 1 cycles was found. [0.04 s]
+INFO (IPF047): 0.Ht: The cover property "PIPELINE.wrp_decode_stage1._assert_28:precondition1" was covered in 1 cycles in 0.08 s.
+0.Ht: Trace Attempt  2	[0.05 s]
+0.Ht: A trace with 2 cycles was found. [0.05 s]
+INFO (IPF055): 0.Ht: A counterexample (cex) with 2 cycles was found for the property "PIPELINE.wrp_decode_stage1._assert_28" in 0.08 s.
+0.Ht: All properties determined. [0.04 s]
+Initiating shutdown of proof (@ 0.08 s)
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Trace Attempt  2	[0.00 s]
+0.N: Trace Attempt  2	[0.01 s]
+0.N: All properties determined. [0.04 s]
+0.B: Cluster is entering permanent allocation mode.
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_10:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assert_28"	[0.00 s].
+0.B: Trace Attempt  1	[0.01 s]
+0.B: Trace Attempt  2	[0.02 s]
+0.Hp: Trace Attempt  2	[0.06 s]
+0.Hp: All properties determined. [0.07 s]
+0.Ht: Exited with Success (@ 0.09 s)
+0.N: Exited with Success (@ 0.09 s)
+0.Hp: Exited with Success (@ 0.09 s)
+ProofGrid usable level: 0
+0.B: Interrupted. [0.09 s]
+0.B: Exited with Success (@ 0.10 s)
+ProofGrid usable level: 0
+All pending notifications were processed.
+INFO (IPF059): Completed proof on task: <embedded>
+
+==============================================================
+SUMMARY
+==============================================================
+	Properties Considered : 16
+	      assertions      : 1
+	       - proven       : 0 (0%)
+	       - marked_proven: 0 (0%)
+	       - cex          : 1 (100%)
+	       - ar_cex       : 0 (0%)
+	       - undetermined : 0 (0%)
+	       - unprocessed  : 0 (0%)
+	       - error        : 0 (0%)
+	      covers          : 15
+	       - unreachable  : 0 (0%)
+	       - covered      : 15 (100%)
+	       - ar_covered   : 0 (0%)
+	       - undetermined : 0 (0%)
+	       - unprocessed  : 0 (0%)
+	       - error        : 0 (0%)
+[<embedded>] % visualize -violation -property <embedded>::PIPELINE.wrp_decode_stage1._assert_28 -new_window
+INFO (IVS015): Setting Visualize task to "<embedded>".
+INFO (IVS008): Expanding analysis region to enable visualization of "<embedded>::PIPELINE.wrp_decode_stage1._assert_28".
+cex
+[<embedded>] % visualize -min_length [expr [visualize -get_length -window visualize:0] + 2] -window visualize:0; visualize -freeze [visualize -get_length -window visualize:0] -window visualize:0; visualize -replot -bg -window visualize:0
+INFO (IPF031): Settings used for this proof:
+    time_limit                    = 86400s
+    per_property_time_limit       = 1s * 10 ^ scan
+    engine_mode                   = Hp Ht N B 
+    proofgrid_per_engine_max_jobs = 1
+    proofgrid_mode                = local
+    proofgrid_restarts            = 10
+INFO (IVS008): Expanding analysis region to enable visualization of "1".
+background
+Using multistage preprocessing
+Starting reduce
+Finished reduce in 0.005s
+Performing Proof Simplification...
+0.Hp: clocks: 2, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 1, bothedge: 0
+0.Hp: Proof Simplification Iteration 1	[0.00 s]
+0.Hp: Proof Simplification Iteration 2	[0.00 s]
+Proof Simplification completed in 0.01 s
+About to start distributed ProofGrid in its own thread with a limit of 20 pending notifications.
+0.Ht: Proofgrid shell started at 23195@wario(local) jg_16528_wario_3
+0.N: Proofgrid shell started at 23206@wario(local) jg_16528_wario_3
+0.N: Cluster is entering permanent allocation mode.
+0.Hp: Proofgrid shell started at 23184@wario(local) jg_16528_wario_3
+0.Ht: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.N: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.Hp: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.B: Proofgrid shell started at 23224@wario(local) jg_16528_wario_3
+0.B: Cluster is entering permanent allocation mode.
+0.N: Next scan (0) will use per property time limit: 1s * 10 ^ 0 = 1s
+0.B: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Trace Attempt  2	[0.00 s]
+0.N: Trace Attempt  3	[0.00 s]
+0.B: Next scan (0) will use per property time limit: 1s * 10 ^ 0 = 1s
+0.N: Trace Attempt  3	[0.00 s]
+0.B: Trace Attempt  1	[0.00 s]
+0.B: Trace Attempt  2	[0.00 s]
+0.B: Trace Attempt  3	[0.00 s]
+0.N: A trace with 3 cycles was found. [0.00 s]
+0.B: All properties determined. [0.01 s]
+Initiating shutdown of proof (@ 0.01 s)
+0.N: All properties determined. [0.01 s]
+0.B: Exited with Success (@ 0.01 s)
+0.Ht: Interrupted (multi)
+0.Ht: All properties determined. [0.01 s]
+0.N: Exited with Success (@ 0.01 s)
+0.Ht: Exited with Success (@ 0.01 s)
+0.Hp: Interrupted (multi)
+0.Hp: All properties determined. [0.01 s]
+0.Hp: Exited with Success (@ 0.01 s)
+All pending notifications were processed.
+[<embedded>] % visualize -min_length [expr [visualize -get_length -window visualize:0] + 2] -window visualize:0; visualize -freeze [visualize -get_length -window visualize:0] -window visualize:0; visualize -replot -bg -window visualize:0
+INFO (IPF031): Settings used for this proof:
+    time_limit                    = 86400s
+    per_property_time_limit       = 1s * 10 ^ scan
+    engine_mode                   = Hp Ht N B 
+    proofgrid_per_engine_max_jobs = 1
+    proofgrid_mode                = local
+    proofgrid_restarts            = 10
+INFO (IVS008): Expanding analysis region to enable visualization of "1".
+background
+Using multistage preprocessing
+Starting reduce
+Finished reduce in 0.008s
+Performing Proof Simplification...
+0.Hp: clocks: 2, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 1, bothedge: 0
+0.Hp: Proof Simplification Iteration 1	[0.00 s]
+0.Hp: Proof Simplification Iteration 2	[0.00 s]
+Proof Simplification completed in 0.02 s
+About to start distributed ProofGrid in its own thread with a limit of 20 pending notifications.
+0.Ht: Proofgrid shell started at 23865@wario(local) jg_16528_wario_4
+0.N: Proofgrid shell started at 23876@wario(local) jg_16528_wario_4
+0.N: Cluster is entering permanent allocation mode.
+0.Hp: Proofgrid shell started at 23853@wario(local) jg_16528_wario_4
+0.Hp: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.Ht: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.N: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.N: Next scan (0) will use per property time limit: 1s * 10 ^ 0 = 1s
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Trace Attempt  2	[0.00 s]
+0.N: Trace Attempt  3	[0.00 s]
+0.N: Trace Attempt  3	[0.00 s]
+0.B: Proofgrid shell started at 23888@wario(local) jg_16528_wario_4
+0.B: Cluster is entering permanent allocation mode.
+0.B: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.B: Next scan (0) will use per property time limit: 1s * 10 ^ 0 = 1s
+0.N: A trace with 3 cycles was found. [0.01 s]
+0.B: Trace Attempt  1	[0.00 s]
+0.B: Trace Attempt  2	[0.00 s]
+0.B: Trace Attempt  3	[0.00 s]
+0.N: All properties determined. [0.01 s]
+Initiating shutdown of proof (@ 0.01 s)
+0.N: Exited with Success (@ 0.01 s)
+0.Ht: Interrupted (multi)
+0.Ht: All properties determined. [0.01 s]
+0.Ht: Exited with Success (@ 0.01 s)
+0.B: All properties determined. [0.00 s]
+0.Hp: Interrupted (multi)
+0.Hp: All properties determined. [0.01 s]
+0.B: Exited with Success (@ 0.02 s)
+0.Hp: Exited with Success (@ 0.02 s)
+All pending notifications were processed.
+[<embedded>] % source ./decode_merge12.tcl
+WARNING (WCD032): Passing arguments to "analyze" as lists has been deprecated.
+    For message help, type "help -message wcd032"
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib1
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(39): overwriting previous definition of module nand2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(39): previous definition of module nand2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(54): overwriting previous definition of module nand3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(54): previous definition of module nand3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(70): overwriting previous definition of module nand4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(70): previous definition of module nand4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(87): overwriting previous definition of module and2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(87): previous definition of module and2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(102): overwriting previous definition of module and3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(102): previous definition of module and3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(118): overwriting previous definition of module and4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(118): previous definition of module and4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(135): overwriting previous definition of module nor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(135): previous definition of module nor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(150): overwriting previous definition of module nor3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(150): previous definition of module nor3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(166): overwriting previous definition of module nor4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(166): previous definition of module nor4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(181): overwriting previous definition of module or2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(181): previous definition of module or2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(198): overwriting previous definition of module or3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(198): previous definition of module or3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(214): overwriting previous definition of module or4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(214): previous definition of module or4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(231): overwriting previous definition of module xor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(231): previous definition of module xor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(247): overwriting previous definition of module xnor2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(247): previous definition of module xnor2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(263): overwriting previous definition of module inv1$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(263): previous definition of module inv1$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(290): overwriting previous definition of module table_dffq
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(290): previous definition of module table_dffq is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(314): overwriting previous definition of module dff$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(314): previous definition of module dff$ is here
+[-- (VERI-1482)] Analyzing Verilog file ./lib2
+[WARN (VERI-1206)] ./lib2(115): overwriting previous definition of module dff8$
+[INFO (VERI-2142)] ./lib2(115): previous definition of module dff8$ is here
+[WARN (VERI-1206)] ./lib2(176): overwriting previous definition of module dff16$
+[INFO (VERI-2142)] ./lib2(176): previous definition of module dff16$ is here
+[WARN (VERI-1206)] ./lib2(238): overwriting previous definition of module jkff8$
+[INFO (VERI-2142)] ./lib2(238): previous definition of module jkff8$ is here
+[WARN (VERI-1206)] ./lib2(301): overwriting previous definition of module jkff16$
+[INFO (VERI-2142)] ./lib2(301): previous definition of module jkff16$ is here
+[WARN (VERI-1206)] ./lib2(317): overwriting previous definition of module buffer$
+[INFO (VERI-2142)] ./lib2(317): previous definition of module buffer$ is here
+[WARN (VERI-1206)] ./lib2(324): overwriting previous definition of module buffer8$
+[INFO (VERI-2142)] ./lib2(324): previous definition of module buffer8$ is here
+[WARN (VERI-1206)] ./lib2(330): overwriting previous definition of module buffer16$
+[INFO (VERI-2142)] ./lib2(330): previous definition of module buffer16$ is here
+[WARN (VERI-1206)] ./lib2(346): overwriting previous definition of module bufferH16$
+[INFO (VERI-2142)] ./lib2(346): previous definition of module bufferH16$ is here
+[WARN (VERI-1206)] ./lib2(357): overwriting previous definition of module bufferH64$
+[INFO (VERI-2142)] ./lib2(357): previous definition of module bufferH64$ is here
+[WARN (VERI-1206)] ./lib2(368): overwriting previous definition of module bufferH256$
+[INFO (VERI-2142)] ./lib2(368): previous definition of module bufferH256$ is here
+[WARN (VERI-1206)] ./lib2(379): overwriting previous definition of module bufferH1024$
+[INFO (VERI-2142)] ./lib2(379): previous definition of module bufferH1024$ is here
+[WARN (VERI-1206)] ./lib2(396): overwriting previous definition of module bufferHInv16$
+[INFO (VERI-2142)] ./lib2(396): previous definition of module bufferHInv16$ is here
+[WARN (VERI-1206)] ./lib2(407): overwriting previous definition of module bufferHInv64$
+[INFO (VERI-2142)] ./lib2(407): previous definition of module bufferHInv64$ is here
+[WARN (VERI-1206)] ./lib2(418): overwriting previous definition of module bufferHInv256$
+[INFO (VERI-2142)] ./lib2(418): previous definition of module bufferHInv256$ is here
+[WARN (VERI-1206)] ./lib2(429): overwriting previous definition of module bufferHInv1024$
+[INFO (VERI-2142)] ./lib2(429): previous definition of module bufferHInv1024$ is here
+[WARN (VERI-1206)] ./lib2(458): overwriting previous definition of module latch_sr
+[INFO (VERI-2142)] ./lib2(458): previous definition of module latch_sr is here
+[WARN (VERI-1206)] ./lib2(482): overwriting previous definition of module latch$
+[INFO (VERI-2142)] ./lib2(482): previous definition of module latch$ is here
+[WARN (VERI-1206)] ./lib2(527): overwriting previous definition of module latch8$
+[INFO (VERI-2142)] ./lib2(527): previous definition of module latch8$ is here
+[WARN (VERI-1206)] ./lib2(571): overwriting previous definition of module latch16$
+[INFO (VERI-2142)] ./lib2(571): previous definition of module latch16$ is here
+[WARN (VERI-1206)] ./lib2(593): overwriting previous definition of module tristateL$
+[INFO (VERI-2142)] ./lib2(593): previous definition of module tristateL$ is here
+[WARN (VERI-1206)] ./lib2(606): overwriting previous definition of module tristate8L$
+[INFO (VERI-2142)] ./lib2(606): previous definition of module tristate8L$ is here
+[WARN (VERI-1206)] ./lib2(618): overwriting previous definition of module tristate16L$
+[INFO (VERI-2142)] ./lib2(618): previous definition of module tristate16L$ is here
+[WARN (VERI-1206)] ./lib2(638): overwriting previous definition of module tristateH$
+[INFO (VERI-2142)] ./lib2(638): previous definition of module tristateH$ is here
+[WARN (VERI-1206)] ./lib2(651): overwriting previous definition of module tristate8H$
+[INFO (VERI-2142)] ./lib2(651): previous definition of module tristate8H$ is here
+[WARN (VERI-1206)] ./lib2(663): overwriting previous definition of module tristate16H$
+[INFO (VERI-2142)] ./lib2(663): previous definition of module tristate16H$ is here
+[WARN (VERI-1206)] ./lib2(675): overwriting previous definition of module tristate_bus_driver1$
+[INFO (VERI-2142)] ./lib2(675): previous definition of module tristate_bus_driver1$ is here
+[WARN (VERI-1206)] ./lib2(687): overwriting previous definition of module tristate_bus_driver8$
+[INFO (VERI-2142)] ./lib2(687): previous definition of module tristate_bus_driver8$ is here
+[WARN (VERI-1206)] ./lib2(699): overwriting previous definition of module tristate_bus_driver16$
+[INFO (VERI-2142)] ./lib2(699): previous definition of module tristate_bus_driver16$ is here
+[WARN (VERI-1206)] ./lib2(762): overwriting previous definition of module dff16b$
+[INFO (VERI-2142)] ./lib2(762): previous definition of module dff16b$ is here
+[WARN (VERI-1206)] ./lib2(824): overwriting previous definition of module dff32b$
+[INFO (VERI-2142)] ./lib2(824): previous definition of module dff32b$ is here
+[WARN (VERI-1206)] ./lib2(887): overwriting previous definition of module reg64e$
+[INFO (VERI-2142)] ./lib2(887): previous definition of module reg64e$ is here
+[WARN (VERI-1206)] ./lib2(943): overwriting previous definition of module reg32e$
+[INFO (VERI-2142)] ./lib2(943): previous definition of module reg32e$ is here
+[WARN (VERI-1206)] ./lib2(1001): overwriting previous definition of module ioreg8$
+[INFO (VERI-2142)] ./lib2(1001): previous definition of module ioreg8$ is here
+[WARN (VERI-1206)] ./lib2(1060): overwriting previous definition of module ioreg16$
+[INFO (VERI-2142)] ./lib2(1060): previous definition of module ioreg16$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib3
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(113): overwriting previous definition of module regfile$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(113): previous definition of module regfile$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(230): overwriting previous definition of module regfile8x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(230): previous definition of module regfile8x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(400): overwriting previous definition of module ram8b8w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(400): previous definition of module ram8b8w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(419): overwriting previous definition of module ram16b8w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(419): previous definition of module ram16b8w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(590): overwriting previous definition of module ram8b4w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(590): previous definition of module ram8b4w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(643): overwriting previous definition of module rom4b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(643): previous definition of module rom4b32w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(673): overwriting previous definition of module rom32b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(673): previous definition of module rom32b32w$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(704): overwriting previous definition of module rom64b32w$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(704): previous definition of module rom64b32w$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib4
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(38): overwriting previous definition of module table_imux2
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(38): previous definition of module table_imux2 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(64): overwriting previous definition of module table_imux3
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(64): previous definition of module table_imux3 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(94): overwriting previous definition of module table_imux4
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(94): previous definition of module table_imux4 is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(109): overwriting previous definition of module mux2$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(109): previous definition of module mux2$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(127): overwriting previous definition of module mux3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(127): previous definition of module mux3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(146): overwriting previous definition of module mux4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(146): previous definition of module mux4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(173): overwriting previous definition of module mux2_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(173): previous definition of module mux2_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(197): overwriting previous definition of module mux2_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(197): previous definition of module mux2_16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(231): overwriting previous definition of module mux3_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(231): previous definition of module mux3_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(263): overwriting previous definition of module mux3_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(263): previous definition of module mux3_16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(301): overwriting previous definition of module mux4_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(301): previous definition of module mux4_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(338): overwriting previous definition of module mux4_16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(338): previous definition of module mux4_16$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib5
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(57): overwriting previous definition of module decoder2_4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(57): previous definition of module decoder2_4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(89): overwriting previous definition of module decoder3_8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(89): previous definition of module decoder3_8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(121): overwriting previous definition of module syn_cntr8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(121): previous definition of module syn_cntr8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(241): overwriting previous definition of module syn_cntr
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(241): previous definition of module syn_cntr is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(291): overwriting previous definition of module pencoder8_3v$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(291): previous definition of module pencoder8_3v$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(332): overwriting previous definition of module pencoder8_3$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(332): previous definition of module pencoder8_3$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(354): overwriting previous definition of module mag_comp8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(354): previous definition of module mag_comp8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(375): overwriting previous definition of module mag_comp4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(375): previous definition of module mag_comp4$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(521): overwriting previous definition of module alu4$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib5(521): previous definition of module alu4$ is here
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib6
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(115): overwriting previous definition of module sram128x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(115): previous definition of module sram128x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(220): overwriting previous definition of module sram32x8$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(220): previous definition of module sram32x8$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(231): overwriting previous definition of module sram32x16$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(231): previous definition of module sram32x16$ is here
+[WARN (VERI-1206)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(463): overwriting previous definition of module sram32x32$
+[INFO (VERI-2142)] /home/projects/courses/spring_16/ee382n-16785/lib/lib6(463): previous definition of module sram32x32$ is here
+WARNING (WCD032): Passing arguments to "analyze" as lists has been deprecated.
+    For message help, type "help -message wcd032"
+[-- (VERI-1482)] Analyzing Verilog file ../common.v
+[WARN (VERI-1206)] ../common.v(17): overwriting previous definition of module sar32
+[INFO (VERI-2142)] ../common.v(17): previous definition of module sar32 is here
+[WARN (VERI-1206)] ../common.v(33): overwriting previous definition of module sal32
+[INFO (VERI-2142)] ../common.v(33): previous definition of module sal32 is here
+[WARN (VERI-1206)] ../common.v(46): overwriting previous definition of module comp4
+[INFO (VERI-2142)] ../common.v(46): previous definition of module comp4 is here
+[WARN (VERI-1206)] ../common.v(66): overwriting previous definition of module comp16
+[INFO (VERI-2142)] ../common.v(66): previous definition of module comp16 is here
+[WARN (VERI-1206)] ../common.v(123): overwriting previous definition of module mag_comp32
+[INFO (VERI-2142)] ../common.v(123): previous definition of module mag_comp32 is here
+[WARN (VERI-1206)] ../common.v(161): overwriting previous definition of module full_adder
+[INFO (VERI-2142)] ../common.v(161): previous definition of module full_adder is here
+[WARN (VERI-1206)] ../common.v(225): overwriting previous definition of module carry_lookahead
+[INFO (VERI-2142)] ../common.v(225): previous definition of module carry_lookahead is here
+[WARN (VERI-1206)] ../common.v(290): overwriting previous definition of module carry_lookahead_sat
+[INFO (VERI-2142)] ../common.v(290): previous definition of module carry_lookahead_sat is here
+[WARN (VERI-1206)] ../common.v(355): overwriting previous definition of module carry_lookahead16_sat
+[INFO (VERI-2142)] ../common.v(355): previous definition of module carry_lookahead16_sat is here
+[WARN (VERI-1214)] ../common.v(370): assignment to input AF
+[WARN (VERI-1206)] ../common.v(421): overwriting previous definition of module carry_lookahead16_AF
+[INFO (VERI-2142)] ../common.v(421): previous definition of module carry_lookahead16_AF is here
+[WARN (VERI-1206)] ../common.v(456): overwriting previous definition of module carry_lookahead32
+[INFO (VERI-2142)] ../common.v(456): previous definition of module carry_lookahead32 is here
+[-- (VERI-1482)] Analyzing Verilog file opcode_length_decoder.v
+[WARN (VERI-1206)] opcode_length_decoder.v(79): overwriting previous definition of module opcode_length_decoder
+[INFO (VERI-2142)] opcode_length_decoder.v(79): previous definition of module opcode_length_decoder is here
+[-- (VERI-1482)] Analyzing Verilog file ucontrol_store.v
+[WARN (VERI-1206)] ucontrol_store.v(32): overwriting previous definition of module ucontrol_store
+[INFO (VERI-2142)] ucontrol_store.v(32): previous definition of module ucontrol_store is here
+[-- (VERI-1482)] Analyzing Verilog file sib_disp_detector.v
+[WARN (VERI-1206)] sib_disp_detector.v(36): overwriting previous definition of module sib_disp_detector
+[INFO (VERI-2142)] sib_disp_detector.v(36): previous definition of module sib_disp_detector is here
+[-- (VERI-1482)] Analyzing Verilog file immediate_detector.v
+[WARN (VERI-1206)] immediate_detector.v(198): overwriting previous definition of module immediate_detector
+[INFO (VERI-2142)] immediate_detector.v(198): previous definition of module immediate_detector is here
+[-- (VERI-1482)] Analyzing Verilog file modrm_detector.v
+[WARN (VERI-1206)] modrm_detector.v(139): overwriting previous definition of module modrm_detector
+[INFO (VERI-2142)] modrm_detector.v(139): previous definition of module modrm_detector is here
+[-- (VERI-1482)] Analyzing Verilog file offset_detector.v
+[WARN (VERI-1206)] offset_detector.v(102): overwriting previous definition of module offset_detector
+[INFO (VERI-2142)] offset_detector.v(102): previous definition of module offset_detector is here
+[-- (VERI-1482)] Analyzing Verilog file modrm_pointer.v
+[WARN (VERI-1206)] modrm_pointer.v(51): overwriting previous definition of module modrm_pointer
+[INFO (VERI-2142)] modrm_pointer.v(51): previous definition of module modrm_pointer is here
+[-- (VERI-1482)] Analyzing Verilog file offset_selector.v
+[WARN (VERI-1206)] offset_selector.v(67): overwriting previous definition of module offset_selector
+[INFO (VERI-2142)] offset_selector.v(67): previous definition of module offset_selector is here
+[-- (VERI-1482)] Analyzing Verilog file disp_selector.v
+[WARN (VERI-1206)] disp_selector.v(64): overwriting previous definition of module disp_selector
+[INFO (VERI-2142)] disp_selector.v(64): previous definition of module disp_selector is here
+[-- (VERI-1482)] Analyzing Verilog file imm_selector.v
+[WARN (VERI-1206)] imm_selector.v(102): overwriting previous definition of module imm_selector
+[INFO (VERI-2142)] imm_selector.v(102): previous definition of module imm_selector is here
+[-- (VERI-1482)] Analyzing Verilog file prefix_decoder.v
+[WARN (VERI-1206)] prefix_decoder.v(46): overwriting previous definition of module prefix_decoder
+[INFO (VERI-2142)] prefix_decoder.v(46): previous definition of module prefix_decoder is here
+[-- (VERI-1482)] Analyzing Verilog file prefix_checker.v
+[WARN (VERI-1206)] prefix_checker.v(84): overwriting previous definition of module prefix_checker
+[INFO (VERI-2142)] prefix_checker.v(84): previous definition of module prefix_checker is here
+[-- (VERI-1482)] Analyzing Verilog file modrm_selector.v
+[WARN (VERI-1206)] modrm_selector.v(26): overwriting previous definition of module modrm_selector
+[INFO (VERI-2142)] modrm_selector.v(26): previous definition of module modrm_selector is here
+[-- (VERI-1482)] Analyzing Verilog file sib_selector.v
+[WARN (VERI-1206)] sib_selector.v(26): overwriting previous definition of module sib_selector
+[INFO (VERI-2142)] sib_selector.v(26): previous definition of module sib_selector is here
+[-- (VERI-1482)] Analyzing Verilog file instruction_length_decoder.v
+[WARN (VERI-1206)] instruction_length_decoder.v(82): overwriting previous definition of module instruction_length_decoder
+[INFO (VERI-2142)] instruction_length_decoder.v(82): previous definition of module instruction_length_decoder is here
+[-- (VERI-1482)] Analyzing Verilog file decode_stage1.v
+[WARN (VERI-1206)] decode_stage1.v(137): overwriting previous definition of module decode_stage1
+[INFO (VERI-2142)] decode_stage1.v(137): previous definition of module decode_stage1 is here
+[-- (VERI-1482)] Analyzing Verilog file decode_stage2.v
+[INFO (VERI-1328)] decode_stage2.v(41): analyzing included file ../control_store/control_store_wires.v
+[INFO (VERI-1328)] decode_stage2.v(42): analyzing included file ../control_store/control_store_signals.v
+[WARN (VERI-1206)] decode_stage2.v(142): overwriting previous definition of module decode_stage2
+[INFO (VERI-2142)] decode_stage2.v(142): previous definition of module decode_stage2 is here
+[-- (VERI-1482)] Analyzing Verilog file decode_merge.v
+[WARN (VERI-1206)] decode_merge.v(248): overwriting previous definition of module TOP
+[INFO (VERI-2142)] decode_merge.v(248): previous definition of module TOP is here
+[WARN (VERI-1206)] decode_merge.v(964): overwriting previous definition of module PIPELINE
+[INFO (VERI-2142)] decode_merge.v(964): previous definition of module PIPELINE is here
+[-- (VERI-1482)] Analyzing Verilog file decode_merge_test.sv
+[WARN (VERI-1206)] decode_merge_test.sv(32): overwriting previous definition of module prefix_decoder_props
+[INFO (VERI-2142)] decode_merge_test.sv(32): previous definition of module prefix_decoder_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(73): overwriting previous definition of module prefix_checker_props
+[INFO (VERI-2142)] decode_merge_test.sv(73): previous definition of module prefix_checker_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(111): overwriting previous definition of module opcode_length_decoder_props
+[INFO (VERI-2142)] decode_merge_test.sv(111): previous definition of module opcode_length_decoder_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(150): overwriting previous definition of module modrm_detector_props
+[INFO (VERI-2142)] decode_merge_test.sv(150): previous definition of module modrm_detector_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(196): overwriting previous definition of module immediate_detector_props
+[INFO (VERI-2142)] decode_merge_test.sv(196): previous definition of module immediate_detector_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(231): overwriting previous definition of module sib_disp_detector_props
+[INFO (VERI-2142)] decode_merge_test.sv(231): previous definition of module sib_disp_detector_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(259): overwriting previous definition of module offset_detector_props
+[INFO (VERI-2142)] decode_merge_test.sv(259): previous definition of module offset_detector_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(279): overwriting previous definition of module modrm_pointer_props
+[INFO (VERI-2142)] decode_merge_test.sv(279): previous definition of module modrm_pointer_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(294): overwriting previous definition of module modrm_selector_props
+[INFO (VERI-2142)] decode_merge_test.sv(294): previous definition of module modrm_selector_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(309): overwriting previous definition of module sib_selector_props
+[INFO (VERI-2142)] decode_merge_test.sv(309): previous definition of module sib_selector_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(373): overwriting previous definition of module instruction_length_decoder_props
+[INFO (VERI-2142)] decode_merge_test.sv(373): previous definition of module instruction_length_decoder_props is here
+[WARN (VERI-2170)] decode_merge_test.sv(423): data object disp_sel_val is already declared
+[INFO (VERI-1967)] decode_merge_test.sv(418): previous declaration of disp_sel_val is from here
+[WARN (VERI-1329)] decode_merge_test.sv(423): second declaration of disp_sel_val ignored
+[WARN (VERI-2170)] decode_merge_test.sv(424): data object prefix_p is already declared
+[INFO (VERI-1967)] decode_merge_test.sv(417): previous declaration of prefix_p is from here
+[WARN (VERI-1329)] decode_merge_test.sv(424): second declaration of prefix_p ignored
+[WARN (VERI-1206)] decode_merge_test.sv(767): overwriting previous definition of module decode_stage1_props
+[INFO (VERI-2142)] decode_merge_test.sv(767): previous definition of module decode_stage1_props is here
+[WARN (VERI-1206)] decode_merge_test.sv(932): overwriting previous definition of module Wrapper
+[INFO (VERI-2142)] decode_merge_test.sv(932): previous definition of module Wrapper is here
+INFO (ISW003): Top module name is "PIPELINE".
+WARNING (WNL044): Performing forced "elaborate -clear" due to conflicts related to external reference handling.
+[INFO (VERI-1018)] decode_merge.v(250): compiling module PIPELINE
+[INFO (VERI-1018)] decode_stage1.v(1): compiling module decode_stage1
+[INFO (VERI-1018)] prefix_checker.v(1): compiling module prefix_checker
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(254): compiling module inv1$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(262): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(106): compiling module and4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(117): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(77): compiling module and2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(86): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(91): compiling module and3$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(101): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(202): compiling module or4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(213): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(171): compiling module or2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(180): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(187): compiling module or3$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(197): specify block ignored for synthesis
+[INFO (VERI-1018)] prefix_decoder.v(1): compiling module prefix_decoder
+[INFO (VERI-1018)] ./lib2(339): compiling module bufferH16$
+[WARN (VERI-2199)] ./lib2(345): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(131): compiling module mux4$
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(66): compiling module table_imux4
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(145): specify block ignored for synthesis
+[WARN (VERI-9028)] decode_stage1.v(87): missing/open ports on instance mux_segID of module mux4$
+[INFO (VERI-1018)] opcode_length_decoder.v(1): compiling module opcode_length_decoder
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(266): compiling module mux4_8$
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(299): expression size 32 truncated to fit in target size 8
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(151): compiling module mux2_8$
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(171): expression size 32 truncated to fit in target size 8
+[INFO (VERI-1018)] modrm_detector.v(1): compiling module modrm_detector
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(97): compiling module mux2$
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(23): compiling module table_imux2
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(108): specify block ignored for synthesis
+[INFO (VERI-1018)] immediate_detector.v(1): compiling module immediate_detector
+[INFO (VERI-1018)] modrm_pointer.v(1): compiling module modrm_pointer
+[INFO (VERI-1018)] modrm_selector.v(3): compiling module modrm_selector
+[INFO (VERI-1018)] sib_disp_detector.v(1): compiling module sib_disp_detector
+[INFO (VERI-1018)] sib_selector.v(3): compiling module sib_selector
+[INFO (VERI-1018)] offset_detector.v(1): compiling module offset_detector
+[INFO (VERI-1018)] instruction_length_decoder.v(1): compiling module instruction_length_decoder
+[INFO (VERI-1018)] ../common.v(166): compiling module carry_lookahead
+[INFO (VERI-1018)] ../common.v(149): compiling module full_adder
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(221): compiling module xor2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(230): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(29): compiling module nand2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(38): specify block ignored for synthesis
+[WARN (VDB-1013)] decode_stage1.v(87): input port in3 is not connected on this instance
+[INFO (VERI-1018)] ./lib2(894): compiling module reg32e$
+[INFO (VERI-9012)] ./lib2(901): Unintentional Sequential element inferred for Q read before write using blocking assignment
+[WARN (VDB-1000)] ./lib2(931): net Q[31] is constantly driven from multiple places
+[WARN (VDB-1001)] ./lib2(941): another driver from here
+[INFO (VERI-1018)] decode_stage2.v(1): compiling module decode_stage2
+[INFO (VERI-1018)] disp_selector.v(1): compiling module disp_selector
+[INFO (VERI-1018)] ./lib2(350): compiling module bufferH64$
+[WARN (VERI-2199)] ./lib2(356): specify block ignored for synthesis
+[INFO (VERI-1018)] imm_selector.v(5): compiling module imm_selector
+[INFO (VERI-1018)] ./lib2(361): compiling module bufferH256$
+[WARN (VERI-2199)] ./lib2(367): specify block ignored for synthesis
+[WARN (VERI-9028)] imm_selector.v(67): missing/open ports on instance mux1_l1 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(68): missing/open ports on instance mux1_l2 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(69): missing/open ports on instance mux1_l3 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(70): missing/open ports on instance mux1_l4 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(82): missing/open ports on instance mux2_l1 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(83): missing/open ports on instance mux2_l2 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(84): missing/open ports on instance mux2_l3 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(85): missing/open ports on instance mux2_l4 of module mux4_8$
+[WARN (VDB-1013)] imm_selector.v(67): input port IN0[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(68): input port IN0[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(69): input port IN0[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(70): input port IN0[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(82): input port IN3[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(83): input port IN3[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(84): input port IN3[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(85): input port IN3[7] is not connected on this instance
+[INFO (VERI-1018)] offset_selector.v(2): compiling module offset_selector
+[INFO (VERI-1018)] ucontrol_store.v(1): compiling module ucontrol_store
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(677): compiling module rom64b32w$
+[WARN (VERI-1221)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(698): mem should be on the sensitivity list
+[WARN (VDB-1002)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(690): net mem[31][63] does not have a driver
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(303): compiling module mux4_16$
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(336): expression size 32 truncated to fit in target size 16
+[INFO (VERI-1018)] ../common.v(48): compiling module comp16
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(237): compiling module xnor2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(246): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(58): compiling module nand4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(69): specify block ignored for synthesis
+[INFO (VERI-1018)] ./lib2(831): compiling module reg64e$
+[WARN (VERI-9010)] ./lib2(877): Using only the typical value of the mintypmax expression
+[WARN (VERI-9010)] ./lib2(879): Using only the typical value of the mintypmax expression
+[WARN (VERI-9010)] ./lib2(880): Using only the typical value of the mintypmax expression
+[INFO (VERI-9012)] ./lib2(841): Unintentional Sequential element inferred for D_temp read before write using blocking assignment
+[INFO (VERI-9012)] ./lib2(838): Unintentional Sequential element inferred for Q read before write using blocking assignment
+[WARN (VERI-2199)] ./lib2(886): specify block ignored for synthesis
+[WARN (VDB-1000)] ./lib2(869): net Q[63] is constantly driven from multiple places
+[WARN (VDB-1001)] ./lib2(872): another driver from here
+[INFO (VERI-1018)] decode_merge_test.sv(376): compiling module decode_stage1_props
+[WARN (VDB-1002)] decode_merge.v(264): net RST does not have a driver
+[WARN (VDB-1002)] decode_merge.v(330): net DE_CS_IN[15] does not have a driver
+[WARN (VDB-1002)] decode_merge.v(331): net DE_EIP_IN[31] does not have a driver
+[WARN (VDB-1002)] decode_merge.v(334): net IR[127] does not have a driver
+[WARN (VDB-1002)] decode_merge.v(399): net DE_V_IN does not have a driver
+[WARN (VDB-1002)] decode_merge.v(552): net D2_OUT2_AG_PS[24] does not have a driver
+[INFO] Beginning multiple driver analysis
+[INFO] Finished multiple driver analysis
+[INFO] Module Name PIPELINE
+INFO (IVS027): Removed Visualize window "visualize:0".
+INFO (INL003): Clearing all state information (assumes, stopats, etc.).
+INFO (IPM031): Invalidating proof results of all properties in the Property Manager.
+INFO (IRS006): Current reset condition is "RST".
+INFO (IPF031): Settings used for this proof:
+    time_limit                    = 86400s
+    per_property_time_limit       = 1s * 10 ^ scan
+    engine_mode                   = Hp Ht N B 
+    proofgrid_per_engine_max_jobs = 1
+    proofgrid_mode                = local
+    proofgrid_restarts            = 10
+INFO (IPF036): Starting proof on task: "<embedded>", 16 properties to prove with 0 already proven/unreachable
+background
+INFO (IRS029): Starting reset analysis: phase 1 of 4.
+INFO (IRS030): Running reset analysis phase 2 of 4.
+INFO (IRS031): Running reset analysis phase 3 of 4.
+INFO (IRS020): Starting the reset analysis simulation with a limit of 100 iterations (phase 4 of 4).
+INFO (IRS024): Reset iterations 0 to 4 analyzed.
+INFO (IRS018): Reset analysis simulation executed for 3 iterations. Assigned values for 0 of 128 design flops, 0 of 576 design latches, 47 of 623 internal elements.
+Using multistage preprocessing
+Starting reduce
+Finished reduce in 0.006s
+Performing Proof Simplification...
+0.Hp: clocks: 2, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 1, bothedge: 0
+0.Hp: Proof Simplification Iteration 1	[0.00 s]
+0.Hp: Proof Simplification Iteration 2	[0.00 s]
+0.Hp: Proof Simplification Iteration 3	[0.01 s]
+0.Hp: Proof Simplification Iteration 4	[0.01 s]
+0.Hp: Proof Simplification Iteration 5	[0.01 s]
+Proof Simplification completed in 0.03 s
+0.Hp: Identified and disabled 1 duplicated target.
+About to start distributed ProofGrid in its own thread with a limit of 20 pending notifications.
+ProofGrid usable level: 15
+0.Ht: Proofgrid shell started at 24497@wario(local) jg_16528_wario_5
+0.N: Proofgrid shell started at 24511@wario(local) jg_16528_wario_5
+0.Hp: Proofgrid shell started at 24487@wario(local) jg_16528_wario_5
+0.Ht: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.N: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.N: Next scan (0) will use per property time limit: 1s * 10 ^ 0 = 1s
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_1:precondition1"	[0.00 s].
+0.B: Proofgrid shell started at 24522@wario(local) jg_16528_wario_5
+0.Hp: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.B: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_1:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_26:precondition1" was covered in 1 cycles in 0.01 s by the incidental trace "PIPELINE.wrp_decode_stage1._assume_1:precondition1".
+0.B: Next scan (0) will use per property time limit: 1s * 10 ^ 0 = 1s
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_1:precondition1"	[0.00 s].
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_2:precondition1"	[0.00 s].
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_22:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.B: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_2:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_7:precondition1" was covered in 1 cycles in 0.01 s by the incidental trace "PIPELINE.wrp_decode_stage1._assume_2:precondition1".
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_22:precondition1" was covered in 1 cycles in 0.01 s by the incidental trace "PIPELINE.wrp_decode_stage1._assume_2:precondition1".
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_3:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_3:precondition1"	[0.00 s].
+0.Ht: Trace Attempt  1	[0.01 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_3:precondition1" was covered in 1 cycles in 0.01 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_4:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_4:precondition1" was covered in 1 cycles in 0.00 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_5:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_4:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_5:precondition1" was covered in 1 cycles in 0.00 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_6:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_6:precondition1" was covered in 1 cycles in 0.00 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_8:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_8:precondition1" was covered in 1 cycles in 0.00 s.
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_25:precondition1" was covered in 1 cycles in 0.00 s by the incidental trace "PIPELINE.wrp_decode_stage1._assume_8:precondition1".
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_9:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_6:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_9:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.Hp: Trace Attempt  1	[0.03 s]
+0.Ht: A trace with 1 cycles was found. [0.03 s]
+INFO (IPF047): 0.Ht: The cover property "PIPELINE.wrp_decode_stage1._assume_9:precondition1" was covered in 1 cycles in 0.05 s.
+0.Ht: A trace with 1 cycles was found. [0.03 s]
+INFO (IPF047): 0.Ht: The cover property "PIPELINE.wrp_decode_stage1._assume_10:precondition1" was covered in 1 cycles in 0.05 s.
+0.Ht: A trace with 1 cycles was found. [0.03 s]
+INFO (IPF047): 0.Ht: The cover property "PIPELINE.wrp_decode_stage1._assume_11:precondition1" was covered in 1 cycles in 0.06 s.
+0.Ht: A trace with 1 cycles was found. [0.03 s]
+INFO (IPF047): 0.Ht: The cover property "PIPELINE.wrp_decode_stage1._assert_28:precondition1" was covered in 1 cycles in 0.06 s.
+0.Ht: Trace Attempt  2	[0.04 s]
+0.N: Cluster is entering permanent allocation mode.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_10:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_11:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assert_28"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Trace Attempt  2	[0.00 s]
+0.N: Trace Attempt  3	[0.00 s]
+0.B: Cluster is entering permanent allocation mode.
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_10:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_11:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assert_28"	[0.00 s].
+0.B: Trace Attempt  1	[0.01 s]
+0.Ht: Trace Attempt  3	[0.04 s]
+0.Ht: A trace with 3 cycles was found. [0.05 s]
+INFO (IPF055): 0.Ht: A counterexample (cex) with 3 cycles was found for the property "PIPELINE.wrp_decode_stage1._assert_28" in 0.08 s.
+0.Ht: All properties determined. [0.04 s]
+Initiating shutdown of proof (@ 0.07 s)
+0.N: Trace Attempt  3	[0.01 s]
+0.N: Interrupted. [0.05 s]
+0.B: Trace Attempt  2	[0.02 s]
+0.Ht: Exited with Success (@ 0.07 s)
+0.N: Exited with Success (@ 0.07 s)
+0.Hp: Interrupted (multi)
+0.Hp: Interrupted. [0.07 s]
+0.Hp: Exited with Success (@ 0.08 s)
+0.B: Interrupted. [0.09 s]
+0.B: Exited with Success (@ 0.09 s)
+ProofGrid usable level: 0
+ProofGrid usable level: 0
+All pending notifications were processed.
+INFO (IPF059): Completed proof on task: <embedded>
+
+==============================================================
+SUMMARY
+==============================================================
+	Properties Considered : 16
+	      assertions      : 1
+	       - proven       : 0 (0%)
+	       - marked_proven: 0 (0%)
+	       - cex          : 1 (100%)
+	       - ar_cex       : 0 (0%)
+	       - undetermined : 0 (0%)
+	       - unprocessed  : 0 (0%)
+	       - error        : 0 (0%)
+	      covers          : 15
+	       - unreachable  : 0 (0%)
+	       - covered      : 15 (100%)
+	       - ar_covered   : 0 (0%)
+	       - undetermined : 0 (0%)
+	       - unprocessed  : 0 (0%)
+	       - error        : 0 (0%)
+[<embedded>] % visualize -violation -property <embedded>::PIPELINE.wrp_decode_stage1._assert_28 -new_window
+INFO (IVS015): Setting Visualize task to "<embedded>".
+INFO (IVS008): Expanding analysis region to enable visualization of "<embedded>::PIPELINE.wrp_decode_stage1._assert_28".
+cex
+[<embedded>] % clear -all
+INFO (IPF121): Cleared environment completely for new design analysis.
+% source ./decode_merge12.tcl
+WARNING (WCD032): Passing arguments to "analyze" as lists has been deprecated.
+    For message help, type "help -message wcd032"
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib1
+[-- (VERI-1482)] Analyzing Verilog file ./lib2
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib3
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib4
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib5
+[-- (VERI-1482)] Analyzing Verilog file /home/projects/courses/spring_16/ee382n-16785/lib/lib6
+WARNING (WCD032): Passing arguments to "analyze" as lists has been deprecated.
+    For message help, type "help -message wcd032"
+[-- (VERI-1482)] Analyzing Verilog file ../common.v
+[WARN (VERI-1214)] ../common.v(370): assignment to input AF
+[-- (VERI-1482)] Analyzing Verilog file opcode_length_decoder.v
+[-- (VERI-1482)] Analyzing Verilog file ucontrol_store.v
+[-- (VERI-1482)] Analyzing Verilog file sib_disp_detector.v
+[-- (VERI-1482)] Analyzing Verilog file immediate_detector.v
+[-- (VERI-1482)] Analyzing Verilog file modrm_detector.v
+[-- (VERI-1482)] Analyzing Verilog file offset_detector.v
+[-- (VERI-1482)] Analyzing Verilog file modrm_pointer.v
+[-- (VERI-1482)] Analyzing Verilog file offset_selector.v
+[-- (VERI-1482)] Analyzing Verilog file disp_selector.v
+[-- (VERI-1482)] Analyzing Verilog file imm_selector.v
+[-- (VERI-1482)] Analyzing Verilog file prefix_decoder.v
+[-- (VERI-1482)] Analyzing Verilog file prefix_checker.v
+[-- (VERI-1482)] Analyzing Verilog file modrm_selector.v
+[-- (VERI-1482)] Analyzing Verilog file sib_selector.v
+[-- (VERI-1482)] Analyzing Verilog file instruction_length_decoder.v
+[-- (VERI-1482)] Analyzing Verilog file decode_stage1.v
+[-- (VERI-1482)] Analyzing Verilog file decode_stage2.v
+[INFO (VERI-1328)] decode_stage2.v(41): analyzing included file ../control_store/control_store_wires.v
+[INFO (VERI-1328)] decode_stage2.v(42): analyzing included file ../control_store/control_store_signals.v
+[-- (VERI-1482)] Analyzing Verilog file decode_merge.v
+[-- (VERI-1482)] Analyzing Verilog file /misc/linuxws/packages/cadence_2016/jasper_2015.09/lib/verilog/packages/std/std.sv into library std
+[-- (VERI-1482)] Analyzing Verilog file decode_merge_test.sv
+[WARN (VERI-2170)] decode_merge_test.sv(423): data object disp_sel_val is already declared
+[INFO (VERI-1967)] decode_merge_test.sv(418): previous declaration of disp_sel_val is from here
+[WARN (VERI-1329)] decode_merge_test.sv(423): second declaration of disp_sel_val ignored
+[WARN (VERI-2170)] decode_merge_test.sv(424): data object prefix_p is already declared
+[INFO (VERI-1967)] decode_merge_test.sv(417): previous declaration of prefix_p is from here
+[WARN (VERI-1329)] decode_merge_test.sv(424): second declaration of prefix_p ignored
+INFO (ISW003): Top module name is "PIPELINE".
+[INFO (VERI-1018)] decode_merge.v(250): compiling module PIPELINE
+[INFO (VERI-1018)] decode_stage1.v(1): compiling module decode_stage1
+[INFO (VERI-1018)] prefix_checker.v(1): compiling module prefix_checker
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(254): compiling module inv1$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(262): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(106): compiling module and4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(117): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(77): compiling module and2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(86): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(91): compiling module and3$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(101): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(202): compiling module or4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(213): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(171): compiling module or2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(180): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(187): compiling module or3$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(197): specify block ignored for synthesis
+[INFO (VERI-1018)] prefix_decoder.v(1): compiling module prefix_decoder
+[INFO (VERI-1018)] ./lib2(339): compiling module bufferH16$
+[WARN (VERI-2199)] ./lib2(345): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(131): compiling module mux4$
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(66): compiling module table_imux4
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(145): specify block ignored for synthesis
+[WARN (VERI-9028)] decode_stage1.v(87): missing/open ports on instance mux_segID of module mux4$
+[INFO (VERI-1018)] opcode_length_decoder.v(1): compiling module opcode_length_decoder
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(266): compiling module mux4_8$
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(299): expression size 32 truncated to fit in target size 8
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(151): compiling module mux2_8$
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(171): expression size 32 truncated to fit in target size 8
+[INFO (VERI-1018)] modrm_detector.v(1): compiling module modrm_detector
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(97): compiling module mux2$
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(23): compiling module table_imux2
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(108): specify block ignored for synthesis
+[INFO (VERI-1018)] immediate_detector.v(1): compiling module immediate_detector
+[INFO (VERI-1018)] modrm_pointer.v(1): compiling module modrm_pointer
+[INFO (VERI-1018)] modrm_selector.v(3): compiling module modrm_selector
+[INFO (VERI-1018)] sib_disp_detector.v(1): compiling module sib_disp_detector
+[INFO (VERI-1018)] sib_selector.v(3): compiling module sib_selector
+[INFO (VERI-1018)] offset_detector.v(1): compiling module offset_detector
+[INFO (VERI-1018)] instruction_length_decoder.v(1): compiling module instruction_length_decoder
+[INFO (VERI-1018)] ../common.v(166): compiling module carry_lookahead
+[INFO (VERI-1018)] ../common.v(149): compiling module full_adder
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(221): compiling module xor2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(230): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(29): compiling module nand2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(38): specify block ignored for synthesis
+[WARN (VDB-1013)] decode_stage1.v(87): input port in3 is not connected on this instance
+[INFO (VERI-1018)] ./lib2(894): compiling module reg32e$
+[INFO (VERI-9012)] ./lib2(901): Unintentional Sequential element inferred for Q read before write using blocking assignment
+[WARN (VDB-1000)] ./lib2(931): net Q[31] is constantly driven from multiple places
+[WARN (VDB-1001)] ./lib2(941): another driver from here
+[INFO (VERI-1018)] decode_stage2.v(1): compiling module decode_stage2
+[INFO (VERI-1018)] disp_selector.v(1): compiling module disp_selector
+[INFO (VERI-1018)] ./lib2(350): compiling module bufferH64$
+[WARN (VERI-2199)] ./lib2(356): specify block ignored for synthesis
+[INFO (VERI-1018)] imm_selector.v(5): compiling module imm_selector
+[INFO (VERI-1018)] ./lib2(361): compiling module bufferH256$
+[WARN (VERI-2199)] ./lib2(367): specify block ignored for synthesis
+[WARN (VERI-9028)] imm_selector.v(67): missing/open ports on instance mux1_l1 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(68): missing/open ports on instance mux1_l2 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(69): missing/open ports on instance mux1_l3 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(70): missing/open ports on instance mux1_l4 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(82): missing/open ports on instance mux2_l1 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(83): missing/open ports on instance mux2_l2 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(84): missing/open ports on instance mux2_l3 of module mux4_8$
+[WARN (VERI-9028)] imm_selector.v(85): missing/open ports on instance mux2_l4 of module mux4_8$
+[WARN (VDB-1013)] imm_selector.v(67): input port IN0[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(68): input port IN0[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(69): input port IN0[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(70): input port IN0[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(82): input port IN3[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(83): input port IN3[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(84): input port IN3[7] is not connected on this instance
+[WARN (VDB-1013)] imm_selector.v(85): input port IN3[7] is not connected on this instance
+[INFO (VERI-1018)] offset_selector.v(2): compiling module offset_selector
+[INFO (VERI-1018)] ucontrol_store.v(1): compiling module ucontrol_store
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(677): compiling module rom64b32w$
+[WARN (VERI-1221)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(698): mem should be on the sensitivity list
+[WARN (VDB-1002)] /home/projects/courses/spring_16/ee382n-16785/lib/lib3(690): net mem[31][63] does not have a driver
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(303): compiling module mux4_16$
+[WARN (VERI-1209)] /home/projects/courses/spring_16/ee382n-16785/lib/lib4(336): expression size 32 truncated to fit in target size 16
+[INFO (VERI-1018)] ../common.v(48): compiling module comp16
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(237): compiling module xnor2$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(246): specify block ignored for synthesis
+[INFO (VERI-1018)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(58): compiling module nand4$
+[WARN (VERI-2199)] /home/projects/courses/spring_16/ee382n-16785/lib/lib1(69): specify block ignored for synthesis
+[INFO (VERI-1018)] ./lib2(831): compiling module reg64e$
+[WARN (VERI-9010)] ./lib2(877): Using only the typical value of the mintypmax expression
+[WARN (VERI-9010)] ./lib2(879): Using only the typical value of the mintypmax expression
+[WARN (VERI-9010)] ./lib2(880): Using only the typical value of the mintypmax expression
+[INFO (VERI-9012)] ./lib2(841): Unintentional Sequential element inferred for D_temp read before write using blocking assignment
+[INFO (VERI-9012)] ./lib2(838): Unintentional Sequential element inferred for Q read before write using blocking assignment
+[WARN (VERI-2199)] ./lib2(886): specify block ignored for synthesis
+[WARN (VDB-1000)] ./lib2(869): net Q[63] is constantly driven from multiple places
+[WARN (VDB-1001)] ./lib2(872): another driver from here
+[INFO (VERI-1018)] decode_merge_test.sv(376): compiling module decode_stage1_props
+[WARN (VDB-1002)] decode_merge.v(264): net RST does not have a driver
+[WARN (VDB-1002)] decode_merge.v(330): net DE_CS_IN[15] does not have a driver
+[WARN (VDB-1002)] decode_merge.v(331): net DE_EIP_IN[31] does not have a driver
+[WARN (VDB-1002)] decode_merge.v(334): net IR[127] does not have a driver
+[WARN (VDB-1002)] decode_merge.v(399): net DE_V_IN does not have a driver
+[WARN (VDB-1002)] decode_merge.v(552): net D2_OUT2_AG_PS[24] does not have a driver
+[INFO] Beginning multiple driver analysis
+[INFO] Finished multiple driver analysis
+[INFO] Module Name PIPELINE
+INFO (INL003): Clearing all state information (assumes, stopats, etc.).
+INFO (IPM031): Invalidating proof results of all properties in the Property Manager.
+INFO (IRS006): Current reset condition is "RST".
+INFO (IPF031): Settings used for this proof:
+    time_limit                    = 86400s
+    per_property_time_limit       = 1s * 10 ^ scan
+    engine_mode                   = Hp Ht N B 
+    proofgrid_per_engine_max_jobs = 1
+    proofgrid_mode                = local
+    proofgrid_restarts            = 10
+INFO (IPF036): Starting proof on task: "<embedded>", 16 properties to prove with 0 already proven/unreachable
+background
+INFO (IRS029): Starting reset analysis: phase 1 of 4.
+INFO (IRS030): Running reset analysis phase 2 of 4.
+INFO (IRS031): Running reset analysis phase 3 of 4.
+INFO (IRS020): Starting the reset analysis simulation with a limit of 100 iterations (phase 4 of 4).
+INFO (IRS024): Reset iterations 0 to 4 analyzed.
+INFO (IRS018): Reset analysis simulation executed for 3 iterations. Assigned values for 0 of 128 design flops, 0 of 576 design latches, 47 of 623 internal elements.
+Using multistage preprocessing
+Starting reduce
+Finished reduce in 0.003s
+Performing Proof Simplification...
+0.Hp: clocks: 2, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 1, bothedge: 0
+0.Hp: Proof Simplification Iteration 1	[0.00 s]
+0.Hp: Proof Simplification Iteration 2	[0.00 s]
+0.Hp: Proof Simplification Iteration 3	[0.01 s]
+0.Hp: Proof Simplification Iteration 4	[0.01 s]
+0.Hp: Proof Simplification Iteration 5	[0.01 s]
+Proof Simplification completed in 0.02 s
+0.Hp: Identified and disabled 1 duplicated target.
+About to start distributed ProofGrid in its own thread with a limit of 20 pending notifications.
+ProofGrid usable level: 15
+0.Ht: Proofgrid shell started at 26428@wario(local) jg_16528_wario_6
+0.N: Proofgrid shell started at 26437@wario(local) jg_16528_wario_6
+0.Hp: Proofgrid shell started at 26419@wario(local) jg_16528_wario_6
+0.Ht: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.N: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.Hp: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.B: Proofgrid shell started at 26446@wario(local) jg_16528_wario_6
+0.B: clocks: 1, declared: 1, disabling: 0, posedge: 1, negedge: 0, noedge: 0, bothedge: 0
+0.N: Next scan (0) will use per property time limit: 1s * 10 ^ 0 = 1s
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_1:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_1:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_26:precondition1" was covered in 1 cycles in 0.01 s by the incidental trace "PIPELINE.wrp_decode_stage1._assume_1:precondition1".
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_2:precondition1"	[0.00 s].
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_22:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.B: Next scan (0) will use per property time limit: 1s * 10 ^ 0 = 1s
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_1:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_2:precondition1" was covered in 1 cycles in 0.01 s.
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_7:precondition1" was covered in 1 cycles in 0.01 s by the incidental trace "PIPELINE.wrp_decode_stage1._assume_2:precondition1".
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_22:precondition1" was covered in 1 cycles in 0.01 s by the incidental trace "PIPELINE.wrp_decode_stage1._assume_2:precondition1".
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_3:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_3:precondition1" was covered in 1 cycles in 0.01 s.
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_2:precondition1"	[0.00 s].
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_22:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.Ht: Trace Attempt  1	[0.01 s]
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_4:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: A trace with 1 cycles was found. [0.00 s]
+INFO (IPF047): 0.N: The cover property "PIPELINE.wrp_decode_stage1._assume_4:precondition1" was covered in 1 cycles in 0.01 s.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_5:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_4:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.Hp: Trace Attempt  1	[0.03 s]
+0.Ht: A trace with 1 cycles was found. [0.02 s]
+INFO (IPF047): 0.Ht: The cover property "PIPELINE.wrp_decode_stage1._assume_6:precondition1" was covered in 1 cycles in 0.04 s.
+0.Ht: A trace with 1 cycles was found. [0.02 s]
+INFO (IPF047): 0.Ht: The cover property "PIPELINE.wrp_decode_stage1._assume_5:precondition1" was covered in 1 cycles in 0.05 s.
+0.Ht: A trace with 1 cycles was found. [0.02 s]
+0.Ht: A trace with 1 cycles was found. [0.02 s]
+INFO (IPF047): 0.Ht: The cover property "PIPELINE.wrp_decode_stage1._assume_8:precondition1" was covered in 1 cycles in 0.05 s.
+INFO (IPF047): 0.Ht: The cover property "PIPELINE.wrp_decode_stage1._assume_25:precondition1" was covered in 1 cycles in 0.05 s by the incidental trace "PIPELINE.wrp_decode_stage1._assume_8:precondition1".
+0.Ht: A trace with 1 cycles was found. [0.03 s]
+INFO (IPF047): 0.Ht: The cover property "PIPELINE.wrp_decode_stage1._assume_9:precondition1" was covered in 1 cycles in 0.06 s.
+0.Ht: A trace with 1 cycles was found. [0.03 s]
+INFO (IPF047): 0.Ht: The cover property "PIPELINE.wrp_decode_stage1._assume_10:precondition1" was covered in 1 cycles in 0.06 s.
+0.Ht: A trace with 1 cycles was found. [0.03 s]
+INFO (IPF047): 0.Ht: The cover property "PIPELINE.wrp_decode_stage1._assume_11:precondition1" was covered in 1 cycles in 0.07 s.
+0.Ht: A trace with 1 cycles was found. [0.03 s]
+INFO (IPF047): 0.Ht: The cover property "PIPELINE.wrp_decode_stage1._assert_28:precondition1" was covered in 1 cycles in 0.07 s.
+0.Ht: Trace Attempt  2	[0.03 s]
+0.Ht: Trace Attempt  3	[0.03 s]
+0.N: Cluster is entering permanent allocation mode.
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_6:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_8:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_9:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_10:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_11:precondition1"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Starting proof for property "PIPELINE.wrp_decode_stage1._assert_28"	[0.00 s].
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Trace Attempt  1	[0.00 s]
+0.N: Trace Attempt  2	[0.00 s]
+0.N: Trace Attempt  3	[0.00 s]
+0.B: Cluster is entering permanent allocation mode.
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_5:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_6:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_8:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.Hp: Trace Attempt  2	[0.08 s]
+0.Hp: Trace Attempt  3	[0.08 s]
+0.Hp: A trace with 3 cycles was found. [0.08 s]
+INFO (IPF055): 0.Hp: A counterexample (cex) with 3 cycles was found for the property "PIPELINE.wrp_decode_stage1._assert_28" in 0.09 s.
+0.Hp: All properties determined. [0.08 s]
+Initiating shutdown of proof (@ 0.09 s)
+0.Ht: All properties determined. [0.04 s]
+0.N: Trace Attempt  3	[0.01 s]
+0.N: Interrupted. [0.04 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assume_9:precondition1"	[0.00 s].
+0.B: Trace Attempt  1	[0.00 s]
+0.B: Starting proof for property "PIPELINE.wrp_decode_stage1._assert_28"	[0.00 s].
+0.B: Trace Attempt  1	[0.01 s]
+0.B: Trace Attempt  2	[0.02 s]
+0.Hp: Exited with Success (@ 0.10 s)
+0.Ht: Exited with Success (@ 0.10 s)
+0.N: Exited with Success (@ 0.10 s)
+0.B: Interrupted. [0.09 s]
+0.B: Exited with Success (@ 0.10 s)
+ProofGrid usable level: 0
+ProofGrid usable level: 0
+All pending notifications were processed.
+INFO (IPF059): Completed proof on task: <embedded>
+
+==============================================================
+SUMMARY
+==============================================================
+	Properties Considered : 16
+	      assertions      : 1
+	       - proven       : 0 (0%)
+	       - marked_proven: 0 (0%)
+	       - cex          : 1 (100%)
+	       - ar_cex       : 0 (0%)
+	       - undetermined : 0 (0%)
+	       - unprocessed  : 0 (0%)
+	       - error        : 0 (0%)
+	      covers          : 15
+	       - unreachable  : 0 (0%)
+	       - covered      : 15 (100%)
+	       - ar_covered   : 0 (0%)
+	       - undetermined : 0 (0%)
+	       - unprocessed  : 0 (0%)
+	       - error        : 0 (0%)
+[<embedded>] % visualize -violation -property <embedded>::PIPELINE.wrp_decode_stage1._assert_28 -new_window
+INFO (IVS015): Setting Visualize task to "<embedded>".
+INFO (IVS008): Expanding analysis region to enable visualization of "<embedded>::PIPELINE.wrp_decode_stage1._assert_28".
+cex
+[<embedded>] % visualize -violation -property <embedded>::PIPELINE.wrp_decode_stage1._assert_28 -new_window
+INFO (IVS015): Setting Visualize task to "<embedded>".
+INFO (IVS008): Expanding analysis region to enable visualization of "<embedded>::PIPELINE.wrp_decode_stage1._assert_28".
+cex
+[<embedded>] % visualize -violation -property <embedded>::PIPELINE.wrp_decode_stage1._assert_28 -new_window
+INFO (IVS015): Setting Visualize task to "<embedded>".
+INFO (IVS008): Expanding analysis region to enable visualization of "<embedded>::PIPELINE.wrp_decode_stage1._assert_28".
+cex
+[<embedded>] % exit
+INFO: Waiting for proof threads to stop...
+INFO: Proof threads stopped.

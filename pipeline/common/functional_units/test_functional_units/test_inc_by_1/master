@@ -7,5 +7,5 @@
 ../../../functional_units/inc_by_1.v
 ../../../basic_components/muxes.v
 ../../../basic_components/logic_gates.v
-../../../flags/eflag.v
+../../../flags/eflags.v
 test_inc_by_1.v

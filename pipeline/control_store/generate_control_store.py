@@ -78,7 +78,10 @@ def generate_signals(filename):
                         for j in xrange(0, 2):
                             romfilelist[rom_num][j].write("@%02x" % (rom_addr))
                             romfilelist[rom_num][j].write(" // %s (%s)\n" % (desc, opcode_full))
-                    elif col_num >= signalcol and col_num <= maxcol:
+                    elif col_num >= signalcol and col_num < maxcol:
+                        if (signal == 'x'):
+                            signal = '0'
+
                         if col_num < (signalcol + 64):
                             current_row[0].append(signal)
                         else:

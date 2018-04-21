@@ -29,11 +29,14 @@
 //
 // Combinational Delay:
 //
-module alu32 (alu_out, flags, a, b, op);
-	output [31:0] alu_out;
-	output [31:0] flags;
-	input [31:0] a, b;
-	input [2:0] op;
+module alu32 (
+	output [31:0] alu_out,
+	output [31:0] flags,
+	input [31:0] a, b,
+	input [2:0] op,
+	input CF_dataforwarded,
+	input AF_dataforwarded
+	);
 
 	wire [31:0] adder_result, or_result, not_result, daa_result, and_result, cld_result, cmp_result, std_result;
 	wire [31:0] adder_flags, or_flags, not_flags, daa_flags, and_flags, cld_flags, cmp_flags, std_flags;
@@ -41,10 +44,10 @@ module alu32 (alu_out, flags, a, b, op);
 	alu_adder u_alu_adder (adder_result, adder_flags, a, b);
 	alu_or u_alu_or (or_result, or_flags, a, b);
 	alu_not u_alu_not (not_result, not_flags, a);
-	alu_daa u_alu_daa (daa_result, daa_flags, a);
+	alu_daa u_alu_daa (daa_result, daa_flags, a, CF_dataforwarded, AF_dataforwarded);
 	alu_and u_alu_and (and_result, and_flags, a, b);
 	alu_cld u_alu_cld (cld_result, cld_flags);
-	alu_cmp u_alu_cmp (cmp_result, cmp_flags, b, a); //inverted because of how Nelson gives me the data
+	alu_cmp u_alu_cmp (cmp_result, cmp_flags, a, b); //inverted because of how Nelson gives me the data
 	alu_std u_alu_std (std_result, std_flags);
 
 	mux32_8way out_selection(alu_out, adder_result, or_result, not_result, daa_result, and_result, cld_result, cmp_result, std_result, op[2:0]);
@@ -154,109 +157,49 @@ endmodule
 module alu_daa (
 	output [31:0] daa_result,
 	output [31:0] flags,
-	input [31:0] a
+	input [31:0] a,
+	input CF_dataforwarded,
+	input AF_dataforwarded
 	);
 
-	wire [1:0] daa_carry_out;
-	daa_double_digit u_daa_double_digit(daa_result[7:0], daa_carry_out, a[7:0]);
+	wire low_or, high_or, low_and, high_and, low_needs_daa, high_needs_daa; 
+	or2$ u_or_low(low_or, a[2], a[1]);
+	and2$ u_and_low(low_and, a[3], low_or);
+	or2$ u_or_high(high_or, a[6], a[5]);
+	and2$ u_and_high(high_and, a[7], high_or); 
+	or2$ u_or_low_needs_daa(low_needs_daa, low_and, AF_dataforwarded); 
+	or2$ u_or_high_needs_daa(high_needs_daa, high_and, CF_dataforwarded); 
+
+	wire [31:0] low_sum, high_sum, AL_part1, AL_part2, low_carry;
+	wire carry_low; 
+	adder32 u_add_low(low_sum, low_carry, a, 32'h00000006);
+	mux32_2way u_mux_sum_low(AL_part1, a, low_sum, low_needs_daa);
+	assign carry_low = low_carry[3];
+	adder32 u_add_high(high_sum, ,AL_part1, 32'h00000060); 
+	mux32_2way u_mux_sum_high(AL_part2, AL_part1, high_sum, high_needs_daa);
+
+	wire CF_or; 
+	wire CF_part1, CF_part2; 
+	or2$ u_or_cf(CF_or, CF_dataforwarded, carry_low);
+	mux2$ u_mux_CF_low(CF_part1, CF_dataforwarded, CF_or, low_needs_daa);
+	mux2$ u_mux_CF_high(CF_part2, 1'b0, 1'b1, high_needs_daa);
+
+	wire AF_part2;
+	mux2$ u_mux_AF(AF_part2, 1'b0, 1'b1, low_needs_daa);	
 
 	wire OF, DF, SF, ZF, AF, PF, CF;  
 
     assign daa_result[31:8] = 24'b0;
+    assign daa_result[7:0] = AL_part2; 
 	assign OF = 0;
 	assign DF = 0;
 	assign SF = 0; //bcd is unsigned, vol1, page 80
 	ZF_logic_daa u_ZF_logic_daa(ZF, daa_result[7:0]);
-	or2$ u_AF(AF, daa_carry_out[0], daa_carry_out[1]); //different for DAA
+	assign AF = AF_part2;
 	PF_logic u_PF_logic(PF, daa_result[7:0]);
-	or2$ u_CF(CF, daa_carry_out[0], daa_carry_out[1]); //different for DAA
+	assign CF = CF_part2;
 
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
-endmodule
-
-//-------------------------------------------------------------------------------------
-//
-// 									 DAA for Single Digit
-//
-//-------------------------------------------------------------------------------------
-// Functionality: decimal adjust for 1-digit (4 bits)
-//
-// Combinational Delay: 
-//
-module daa_single_digit (
-	output [3:0] digit_out, 
-	output carry_out, 
-	input [3:0] a,
-	input carry_in
-	);
-
-	wire [3:0] a_not;
-	wire carry_in_not;
-
-	not4_1way not_a(a_not, a);
-	inv1$ not_carry_in(carry_in_not, carry_in);
-
-	wire and3_comp1, and3_comp2, and3_comp3;
-	wire and2_comp1, and2_comp2, and2_comp3, and2_comp4, and2_comp5;
-	wire and1_comp1, and1_comp2, and1_comp3, and1_comp4, and1_comp5, and1_comp6;
-	wire and0_comp1, and0_comp2;
-	wire andCarry_comp1, andCarry_comp2, andCarry_comp3;
-	
-	//or_comp1
-	and1_5way u_and3_comp1(and3_comp1, a_not[3], a[2], a[1], a[0], carry_in);
-	and4$ u_and3_comp2(and3_comp2, a[3], a_not[2], a_not[1], a_not[0]);
-	and4$ u_and3_comp3(and3_comp3, a[3], a_not[2], a_not[1], carry_in_not);
-	//or_comp2
-	and1_5way u_and2_comp1(and2_comp1, a_not[3], a_not[2], a[1], a[0], carry_in);
-	and3$ u_and2_comp2(and2_comp2, a[3], a[2], a[1]);
-	and3$ u_and2_comp3(and2_comp3, a_not[3], a[2], a_not[0]);
-	and3$ u_and2_comp4(and2_comp4, a_not[3], a[2], carry_in_not);
-	and4$ u_and2_comp5(and2_comp5, a[2], a_not[1], a[0], carry_in);
-	//or_comp3
-	and4$ u_and1_comp1(and1_comp1, a_not[3], a_not[1], a[0], carry_in);
-	and3$ u_and1_comp2(and1_comp2, a_not[3], a[1], a_not[0]);
-	and3$ u_and1_comp3(and1_comp3, a_not[3], a[1], carry_in_not);
-	and4$ u_and1_comp4(and1_comp4, a[3], a[1], a[0], carry_in);
-	and4$ u_and1_comp5(and1_comp5, a[3], a[2], a_not[1], a_not[0]);
-	and4$ u_and1_comp6(and1_comp6, a[3], a[2], a_not[1], carry_in_not);
-	//or_comp4
-	and2$ u_and0_comp1(and0_comp1, a_not[0], carry_in);
-	and2$ u_and0_comp2(and0_comp2, a[0], carry_in_not);
-	//or_comp5
-	and3$ u_andCarry_comp1(andCarry_comp1, a[3], a[0], carry_in);
-	and2$ u_andCarry_comp2(andCarry_comp2, a[3], a[1]);
-	and2$ u_andCarry_comp3(andCarry_comp3, a[3], a[2]);
-
-	or3$ u_or_final_1(digit_out[3], and3_comp1, and3_comp2, and3_comp3);
-	or1_5way u_or_final_2(digit_out[2], and2_comp1, and2_comp2, and2_comp3, and2_comp4, and2_comp5);
-	or1_6way u_or_final_3(digit_out[1], and1_comp1, and1_comp2, and1_comp3, and1_comp4, and1_comp5, and1_comp6);
-	or2$ u_or_final_4(digit_out[0], and0_comp1, and0_comp2);
-	or3$ u_or_final_5(carry_out, andCarry_comp1, andCarry_comp2, andCarry_comp3);
-
-endmodule
-
-//-------------------------------------------------------------------------------------
-//
-// 									 DAA for Double Digit
-//
-//-------------------------------------------------------------------------------------
-// Functionality: decimal adjust for 2-digit (8 bits), produces flags
-//
-// Combinational Delay: 
-//
-module daa_double_digit (
-	output [7:0] digits_out,
-	output [1:0] carry_out, 
-	input [7:0] digits_in
-	);
-
-	wire intermediate_carry;
-
-	daa_single_digit u_digit_low(digits_out[3:0], intermediate_carry, digits_in[3:0], 1'b0);
-	daa_single_digit u_digit_high(digits_out[7:4], carry_out[1], digits_in[7:4], intermediate_carry);
-	assign carry_out[0] = intermediate_carry;
-
-
 endmodule
 
 //-------------------------------------------------------------------------------------

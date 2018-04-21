@@ -3,6 +3,7 @@ module decode_stage2 (
     input [127:0] IR, 
     input [31:0] EIP,
     input [15:0] CS,
+    input [3:0] instr_length_updt,
     input [15:0] opcode, 
     input [1:0] prefix_size,
     input prefix_present, segment_override, operand_override, repeat_prefix, 
@@ -47,12 +48,23 @@ module decode_stage2 (
    wire OPERAND_OVERRIDE_EN;
    wire [2:0] IR_REG_OP, IR_MOD_RM, IR_SIB_BASE; 
 
+   wire outs1, outs2, outs4, outs5, outs7, outs8, outs9, outs10, outs11, outs12, outs13;
+   wire [2:0] pp_ovr;
+   wire push_pop_override;
+   wire op7_b, op6_b, op5_b, op4_b, op3_b, op2_b, op1_b, op0_b;
+   wire out1o, out2o, offset_ovr, ss_override;
+   wire [2:0] segID_mux1;
+
+
+   and4$ and1o (out1o, opcode[7], opcode[6], opcode[5], op4_b);
+   and4$ and2o (out2o, opcode[3], op2_b, opcode[1], op0_b);
+   and3$ and3o (offset_ovr, out1o, out2o, operand_override);
 
    // 32-bit disp, imm and 48-bit offset selection
    // Need to send the offset bits to disp and imm field based on opcode
    disp_selector u_disp_selector (.IR(IR), .disp_sel(disp_sel), .disp_size(disp_size), .disp(DISP32_OUT) );
    imm_selector u_imm_selector (.IR(IR), .opcode(opcode), .imm_sel(imm_sel), .imm_size(imm_size), .imm(IMM32_OUT) );
-   offset_selector u_offset_selector (.IR(IR), .off_sel(modrm_sel), .offset_size(offset_size), .offset(offset) );
+   offset_selector u_offset_selector (.IR(IR), .off_sel(modrm_sel), .offset_size(offset_size), .ovr(offset_ovr), .offset(offset) );
 
    assign OPERAND_OVERRIDE_EN = operand_override;
    assign DE_SIB_EN_AG = sib_present;
@@ -63,7 +75,23 @@ module decode_stage2 (
     assign IR_REG_OP = modrm[5:3];
     assign IR_MOD_RM = modrm[2:0];
     assign IR_SIB_BASE = sib[2:0];
-    assign DE_SEG1_ID = 3'b000;
+    wire [2:0] DE_SEG1_ID;
+    assign DE_SIB_S_AG = sib[7:6];
+    assign SR3_OUT = modrm[5:3];
+    assign SR4_OUT = sib[5:3];
+
+//   if(opcode == 16'h00FF) begin
+//       if(IR_REG_OP == 3'h2)
+//           control_address = 5'h1A;
+//       else if(IR_REG_OP == 3'h0)
+//           control_address = 5'h18;
+//       else if(IR_REG_OP == 3'h4)
+//           control_address = 5'h1C;
+//       else if(IR_REG_OP == 3'h1E)
+//           control_address = 5'h1E);
+//       else 
+//           control_address = opcode[4:0];
+//   end
 
     ucontrol_store u_ucontrol_store2 (.opcode(opcode[7:0]), .opcode_size(opcode_size), .control_signal(CONTROL_STORE[63:0]));
     ucontrol_store u_ucontrol_store1 (.opcode(opcode[7:0]), .opcode_size(opcode_size), .control_signal(CONTROL_STORE[127:64]));
@@ -85,6 +113,58 @@ module decode_stage2 (
     xor2$ xor2p (out2p, modrm[7], modrm[6]);
     and3$ and3p (out3p, modrm[0], modrm1_b, modrm[2]);
     and3$ and4p (mod_seg_ovr, modrm_present, out2p, out3p); 
+    or2$ or2 (ss_override, sib_seg_ovr, mod_seg_ovr);
+
+    // SegID override for PUSH, POP - instr_seg_ovr
+/*    ES = 000
+    CS = 001
+    SS = 010
+    DS = 011
+    FS = 100
+    GS  = 101 */
+
+//    segID2 = (op7 &!op6 &op5 &!op4 &!op2 &!op1);
+//
+//    segID1 = (!op7 &!op6 &!op5 &op4 &op2 &op1);
+//
+//    segID0 = (op7 &!op6 &op5 &!op4 &op3 &!op2 &!op1) | (!op7 &!op6 &!op5 &op3 &op2 &op1
+//         &!op0) | (!op7 &!op6 &!op5 &op4 &op3 &op2 &op1);
+//
+//    push_ovr = (op7 &!op6 &op5 &!op4 &!op2 &!op1) | (!op7 &!op6 &!op5 &!op3 &op2 &op1) | (
+//         !op7 &!op6 &!op5 &op3 &op2 &op1 &!op0) | (!op7 &!op6 &!op5 &op4 &op3 &op2 &op1);
+
+    inv1$ inv1d (op7_b, opcode[7]);
+    inv1$ inv2d (op6_b, opcode[6]);
+    inv1$ inv3d (op5_b, opcode[5]);
+    inv1$ inv4d (op4_b, opcode[4]);
+    inv1$ inv5d (op3_b, opcode[3]);
+    inv1$ inv6d (op2_b, opcode[2]);
+    inv1$ inv7d (op1_b, opcode[1]);
+    inv1$ inv8d (op0_b, opcode[0]);
+
+    and3$ ands1 (outs1, opcode[7], op6_b, opcode[5]);
+    and3$ ands2 (outs2, op4_b, op2_b, op1_b);
+    and2$ ands3 (pp_ovr[2], outs1, outs2);
+
+    and3$ ands4 (outs4, op7_b, op6_b, op5_b);
+    and3$ ands5 (outs5, opcode[4], opcode[2], opcode[1]);
+    and2$ ands6 (pp_ovr[1], outs4, outs5);
+    
+    and3$ and7 (outs7, outs1, outs2, opcode[3]);
+
+    and3$ and8 (outs8, opcode[3], opcode[2], opcode[1]);
+    and3$ and9 (outs9, outs8, outs4, op0_b);
+
+    and3$ and10 (outs10, outs4, outs8, opcode[4]);
+    or3$ ors1 (pp_ovr[0], outs9, outs7, outs10);
+   
+    and3$ and11 (outs11, op3_b, opcode[2], opcode[1]);
+    and2$ and12 (outs12, outs4, outs11); 
+    and3$ and13 (outs13, outs4, outs8, op0_b); 
+    or4$ ors2 (push_pop_override, pp_ovr[2], outs10, outs12, outs13);
+
+    mux4$ muxs1[2:0] (segID_mux1, 3'b011, 3'b010, pp_ovr, ,ss_override, push_pop_override);
+    mux2$ muxs2[2:0] (DE_SEG1_ID, segID_mux1, segID, segment_override);
 
     // DE_BASE_REG_EN_AG=1 when mod=00 and rm=101 - disp32, base not required
     inv1$ inv3k (modrm7_b, modrm[7]);
@@ -95,22 +175,16 @@ module decode_stage2 (
     inv1$ inv2k (segID1_b, segID[1]);
 
     and3$ and1k (DE_MUX_SEG_AG, segID2_b, segID1_b, segID[0]); // CS override
-    assign DE_SIB_S_AG = sib[7:6];
-    assign SR3_OUT = modrm[5:3];
-    assign SR4_OUT = sib[5:3];
 
-    // SegID override for PUSH, POP - instr_seg_ovr
-    
-//    mux2$ muxs1[2:0] (DE_SEG1_ID, segID, 3'b010, seg_ovr_overall);
 
 //module  mux2$(outb, in0, in1, s0);
    mux2$
-     mux_data_size [1:0] (D2_DATA_SIZE_AG, CS_DATA_SIZE_DE, 2'b01, OPERAND_OVERRIDE_EN),
-     mux_seg1_needed (D2_SEG1_NEEDED_AG, CS_SEG1_NEEDED_AG, MOD_EQ_MEM, CS_MUX_SEG1_NEEDED_AG),
-     mux_mem_rd (D2_MEM_RD_ME, CS_MEM_RD_DE, MOD_EQ_MEM, CS_MUX_MEM_RD_DE),
-     mux_mem_wr (D2_MEM_WR_ME, CS_MEM_WR_DE, MOD_EQ_MEM, CS_MUX_MEM_WR_DE),
-     mux_aluk [2:0] (D2_ALUK_EX, CS_ALUK_DE, IR_REG_OP, CS_MUX_ALUK_DE),
-     mux_ld_gpr (D2_LD_GPR1_WB, CS_LD_GPR1_DE, MOD_EQ_REG, CS_MUX_LD_GPR1_DE);
+     mux_data_size [1:0] (.outb(D2_DATA_SIZE_AG), .in1(CS_DATA_SIZE_DE), .in0(2'b01), .s0(OPERAND_OVERRIDE_EN)),
+     mux_seg1_needed (.outb(D2_SEG1_NEEDED_AG), .in1(CS_SEG1_NEEDED_AG), .in0(MOD_EQ_MEM), .s0(CS_MUX_SEG1_NEEDED_AG)),
+     mux_mem_rd (.outb(D2_MEM_RD_ME), .in1(CS_MEM_RD_DE), .in0(MOD_EQ_MEM), .s0(CS_MUX_MEM_RD_DE)),
+     mux_mem_wr (.outb(D2_MEM_WR_ME), .in1(CS_DCACHE_WRITE_DE), .in0(MOD_EQ_MEM), .s0(CS_MUX_MEM_WR_DE)),
+     mux_aluk [2:0] (.outb(D2_ALUK_EX), .in1(CS_ALUK_DE), .in0(IR_REG_OP), .s0(CS_MUX_ALUK_DE)),
+     mux_ld_gpr (.outb(D2_LD_GPR1_WB), .in1(CS_LD_GPR1_DE), .in0(MOD_EQ_REG), .s0(CS_MUX_LD_GPR1_DE));
 // CS_MUX_SR1_D2 == CS_MUX_SR1_AG??, CS_SR1_D2 == CS_SR1_AG??
    mux2$
      mux_base_reg_id [2:0] (mux_base_reg_id_out, IR_MOD_RM, IR_SIB_BASE, DE_SIB_EN_AG),
@@ -134,9 +208,8 @@ module decode_stage2 (
 
    comp16 comp_0FB0 (DE_CMPXCHG_AG, , {opcode[15:1], 1'b0}, 16'h0FB0); // set for cmpxchg
 
+   // Increment the EIP with proper length
+   adder32_w_carry_in add_rel (EIP_OUT, , EIP, {28'b0, instr_length_updt}, 1'b0);
 
-//   register_file u_register_file (clk, set, reset, SR1, SR2, SR3, SR4, DR1, DR2, DR3,
-//       write_DR1, write_DR2, write_DR3, result1, result2, result3, write_size, read_size,
-//       regA, regB, regC, regD);
 
 endmodule

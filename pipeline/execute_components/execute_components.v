@@ -10,6 +10,8 @@
 module operand_select_ex(
 	output [31:0] b,
 	input CLK,
+	input PRE,
+	input CLR,
 	input CS_IS_CMPS_FIRST_UOP_ALL,
 	input CS_IS_CMPS_SECOND_UOP_ALL,
 	input [31:0] EX_A,
@@ -18,7 +20,7 @@ module operand_select_ex(
 
 	wire [31:0] cmps_first_mem;
 
-	reg32e$ u_cmps_temp_mem (CLK, EX_A, cmps_first_mem, , 1'b1, 1'b1, CS_IS_CMPS_FIRST_UOP_ALL);
+	reg32e$ u_cmps_temp_mememory (CLK, EX_A, cmps_first_mem, , CLR, PRE, CS_IS_CMPS_FIRST_UOP_ALL);
 	//module reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
 
 	mux32_2way u_mux_b(b, EX_B, cmps_first_mem, CS_IS_CMPS_SECOND_UOP_ALL);
@@ -40,7 +42,7 @@ module cmpxchg_decision_ex(
 	output ex_dcache_write,
 	input CS_IS_CMPXCHG_EX,
 	input EX_de_ld_gpr1_ex,
-	input CS_LD_GPR2_WB,
+	input CS_LD_GPR2_EX,
 	input EX_de_dcache_write_ex,
 	input ZF
 	);
@@ -54,7 +56,7 @@ module cmpxchg_decision_ex(
 
 	mux2$ u_mux_gpr1(ex_ld_gpr1, EX_de_ld_gpr1_ex, equal_and_gpr1, CS_IS_CMPXCHG_EX);
 
-	mux2$ u_mux_gpr2(ex_ld_gpr2, CS_LD_GPR2_WB, ZF_not, CS_IS_CMPXCHG_EX); 
+	mux2$ u_mux_gpr2(ex_ld_gpr2, CS_LD_GPR2_EX, ZF_not, CS_IS_CMPXCHG_EX); 
 
 	mux2$ u_mux_dcache(ex_dcache_write, EX_de_dcache_write_ex, equal_and_dcache, CS_IS_CMPXCHG_EX);
 
@@ -122,7 +124,7 @@ module result_select_ex(
 	input [31:0] shift_xchg_result,
 	input [63:0] alu64_result,
 	input [31:0] EX_A,
-	input [31:0] EX_B,
+	input [31:0] b,
 	input [31:0] EX_C
 	);
 
@@ -136,9 +138,9 @@ module result_select_ex(
 	mux32_2way u_mux_functional_unit(post_mux_functional_unit, alu32_result, shift_xchg_result, CS_MUX_FUNCTION_UNIT_EX);
 	mux32_2way u_mux_resultA_c(post_mux_c, post_mux_functional_unit, EX_C, CS_IS_CMPXCHG_EX);
 	mux32_2way u_mux_resultA_a(post_mux_a, post_mux_c, EX_A, CS_PASS_A_EX);
-	mux32_2way u_mux_resultA_b(WB_RESULT_A_next, post_mux_a, EX_B, choose_a_as_b_signal);
+	mux32_2way u_mux_resultA_b(WB_RESULT_A_next, post_mux_a, b, choose_a_as_b_signal);
 
-	mux32_2way u_mux_resultB(WB_RESULT_B_next, EX_B, EX_A, choose_b_as_a_signal);
+	mux32_2way u_mux_resultB(WB_RESULT_B_next, b, EX_A, choose_b_as_a_signal);
 
 	mux32_2way u_mux_increment_size(increment_value, 32'h00000002, 32'h00000004, EX_de_datasize_all[1]);
 	adder32 stack_adder(new_stack_pointer, , EX_C, increment_value);
