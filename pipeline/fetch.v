@@ -99,12 +99,15 @@ module shift128$(input [127:0] Din_low,
 	wire [127:0] mux_array [3:0];
 	genvar i;
     generate
-for(i=0;i<16;i=i+1)
+for(i=1;i<15;i=i+1)
   begin : generate_loop
   //Allowed since i is constant when the loop is unrolled
-  assign array[i] = {Din_high[127-i*8:0], Din_low[127:127-i*8]};
+  assign array[i] = {Din_high[127-i*8:0], Din_low[127:128-i*8]};
   end
     endgenerate
+   array[0] = Din_high;
+   array[15] = Din_low;
+   
 
 //muxes to select shifted value, first round of muxes
 mux4_128$ mux1 (mux_array[0],array[0],array[1],array[2],array[3],amnt[0],amnt[1]);
