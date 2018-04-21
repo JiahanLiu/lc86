@@ -178,12 +178,12 @@ module decode_stage2 (
 
 //module  mux2$(outb, in0, in1, s0);
    mux2$
-     mux_data_size [1:0] (D2_DATA_SIZE_AG, CS_DATA_SIZE_DE, 2'b01, OPERAND_OVERRIDE_EN),
-     mux_seg1_needed (D2_SEG1_NEEDED_AG, CS_SEG1_NEEDED_AG, MOD_EQ_MEM, CS_MUX_SEG1_NEEDED_AG),
-     mux_mem_rd (D2_MEM_RD_ME, CS_MEM_RD_DE, MOD_EQ_MEM, CS_MUX_MEM_RD_DE),
-     mux_mem_wr (D2_MEM_WR_ME, CS_MEM_WR_DE, MOD_EQ_MEM, CS_MUX_MEM_WR_DE),
-     mux_aluk [2:0] (D2_ALUK_EX, CS_ALUK_DE, IR_REG_OP, CS_MUX_ALUK_DE),
-     mux_ld_gpr (D2_LD_GPR1_WB, CS_LD_GPR1_DE, MOD_EQ_REG, CS_MUX_LD_GPR1_DE);
+     mux_data_size [1:0] (D2_DATA_SIZE_AG, .S1(CS_DATA_SIZE_DE), .S0(2'b01), OPERAND_OVERRIDE_EN),
+     mux_seg1_needed (D2_SEG1_NEEDED_AG, .S1(CS_SEG1_NEEDED_AG), .S0(MOD_EQ_MEM), CS_MUX_SEG1_NEEDED_AG),
+     mux_mem_rd (D2_MEM_RD_ME, .S1(CS_MEM_RD_DE), .S0(MOD_EQ_MEM), CS_MUX_MEM_RD_DE),
+     mux_mem_wr (D2_MEM_WR_ME, .S1(CS_MEM_WR_DE), .S0(MOD_EQ_MEM), CS_MUX_MEM_WR_DE),
+     mux_aluk [2:0] (D2_ALUK_EX, .S1(CS_ALUK_DE), .S0(IR_REG_OP), CS_MUX_ALUK_DE),
+     mux_ld_gpr (D2_LD_GPR1_WB, .S1(CS_LD_GPR1_DE), .S0(MOD_EQ_REG), CS_MUX_LD_GPR1_DE);
 // CS_MUX_SR1_D2 == CS_MUX_SR1_AG??, CS_SR1_D2 == CS_SR1_AG??
    mux2$
      mux_base_reg_id [2:0] (mux_base_reg_id_out, IR_MOD_RM, IR_SIB_BASE, DE_SIB_EN_AG),
