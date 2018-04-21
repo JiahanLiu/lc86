@@ -99,7 +99,7 @@ module shift128$(input [127:0] Din_low,
 	wire [127:0] mux_array [3:0];
 	genvar i;
     generate
-for(i=0;i<8;i=i+1)
+for(i=0;i<16;i=i+1)
   begin : generate_loop
   //Allowed since i is constant when the loop is unrolled
   assign array[i] = {Din_high[127-i*8:0], Din_low[127:127-i*8]};
@@ -113,7 +113,7 @@ mux4_128$ mux3 (mux_array[2],array[8],array[9],array[10],array[11],amnt[0],amnt[
 mux4_128$ mux4 (mux_array[3],array[12],array[13],array[14],array[15],amnt[0],amnt[1]);
 
 //last round of muxes
-mux4_128$ mux5 (Dout,mux_array[0],mux_array[0],mux_array[0],mux_array[0],amnt[2],amnt[3]);
+mux4_128$ mux5 (Dout,mux_array[0],mux_array[1],mux_array[2],mux_array[3],amnt[2],amnt[3]);
 	
 
 endmodule
@@ -124,7 +124,7 @@ module mux4_128$(output [127:0] Y,
 		input S0, input S1);
 genvar i;
 generate
-for(i=0;i<8;i=i+1)
+for(i=0;i<16;i=i+1)
   begin : generate_loop
 	mux4_8$ mux6 (Y[i*8 +7:i*8], IN0[i*8 +7:i*8], IN1[i*8 +7:i*8], IN2[i*8 +7:i*8], IN3[i*8 +7:i*8],
 			S0, S1);
