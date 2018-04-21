@@ -182,7 +182,7 @@ module decode_stage2 (
      mux_data_size [1:0] (.outb(D2_DATA_SIZE_AG), .in1(CS_DATA_SIZE_DE), .in0(2'b01), .s0(OPERAND_OVERRIDE_EN)),
      mux_seg1_needed (.outb(D2_SEG1_NEEDED_AG), .in1(CS_SEG1_NEEDED_AG), .in0(MOD_EQ_MEM), .s0(CS_MUX_SEG1_NEEDED_AG)),
      mux_mem_rd (.outb(D2_MEM_RD_ME), .in1(CS_MEM_RD_DE), .in0(MOD_EQ_MEM), .s0(CS_MUX_MEM_RD_DE)),
-     mux_mem_wr (.outb(D2_MEM_WR_ME), .in1(CS_MEM_WR_DE), .in0(MOD_EQ_MEM), .s0(CS_MUX_MEM_WR_DE)),
+     mux_mem_wr (.outb(D2_MEM_WR_ME), .in1(CS_DCACHE_WRITE_DE), .in0(MOD_EQ_MEM), .s0(CS_MUX_MEM_WR_DE)),
      mux_aluk [2:0] (.outb(D2_ALUK_EX), .in1(CS_ALUK_DE), .in0(IR_REG_OP), .s0(CS_MUX_ALUK_DE)),
      mux_ld_gpr (.outb(D2_LD_GPR1_WB), .in1(CS_LD_GPR1_DE), .in0(MOD_EQ_REG), .s0(CS_MUX_LD_GPR1_DE));
 // CS_MUX_SR1_D2 == CS_MUX_SR1_AG??, CS_SR1_D2 == CS_SR1_AG??
