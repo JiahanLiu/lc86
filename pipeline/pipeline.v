@@ -619,12 +619,6 @@ module PIPELINE(CLK, CLR, PRE, IR);
     reg32e$ u_EX_de_aluk_ex_latch(CLK, {29'b0, EX_de_aluk_ex_next}, EX_de_aluk_ex_out, ,CLR,PRE,EN);
     assign EX_de_aluk_ex = EX_de_aluk_ex_out[2:0]; 
 
-    wire EX_de_shift_dir_ex_next = 3'b0; //Nelson
-    wire [31:0] EX_de_shift_dir_ex_out;
-    wire EX_de_shift_dir_ex;
-    reg32e$ u_EX_de_shift_dir_ex_latch(CLK, {31'b0, EX_de_shift_dir_ex_next}, EX_de_shift_dir_ex_out, ,CLR,PRE,EN);
-    assign EX_de_shift_dir_ex = EX_de_shift_dir_ex_out[0]; 
-
     wire EX_de_ld_gpr1_ex_next = ME_D2_LD_GPR1_WB_OUT;
     wire [31:0] EX_de_ld_gpr1_ex_out;
     wire EX_de_ld_gpr1_ex;
@@ -716,7 +710,6 @@ module PIPELINE(CLK, CLR, PRE, IR);
         //pseudo-control store signals not from control store but generated in decode
         EX_de_datasize_all,
         EX_de_aluk_ex, 
-        EX_de_shift_dir_ex, 
         EX_de_ld_gpr1_ex,
         EX_de_dcache_write_ex, 
         EX_de_repne_wb, 
