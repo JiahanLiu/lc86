@@ -43,18 +43,19 @@ module fetch (
    reg128e$ u_FE_buf_2(clk, FE_buf_2_in, FE_buf_2_out, , reset, set,FE_buf_2_en);
    reg128e$ u_FE_buf_3(clk, FE_buf_3_in, FE_buf_3_out, , reset, set, FE_buf_3_en);
 
+   wire [5:0] read_ptr;
+
    assign IR_OUT = IR;
-   wire [5:0] 	 read_ptr;
+   wire [31:0] read_ptr_out;
+   wire [31:0] read_ptr_in;
    //temporary read_ptr assign until the fetch is finished
-   assign read_ptr = 0;
    //Values of the fetch buffers until the fetch unit is finished
-   assign FE_buf_0_in = 128'hFEEDBEEF;
-   assign FE_buf_1_in = 128'hABCD1234;
-   assign FE_buf_2_in = 128'hABCD1234;
-   assign FE_buf_3_in = 128'hABCD1234;
    FE_full_shifter FE_full_shifter1 (FE_buf_0_out, FE_buf_1_out, FE_buf_2_out, FE_buf_3_out, read_ptr, IR);
 
-   adder32_w_carry_in add_read_ptr (read_ptr, ,read_ptr, instr_length_updt, 1'b0);
+   adder32_w_carry_in add_read_ptr (read_ptr_in, ,{26'h0, read_ptr}, {28'b0, instr_length_updt}, 1'b0);
+   reg32e$ IR_2(clk, read_ptr_in, read_ptr_out, ,set, reset, 1'b1);
+   assign read_ptr = read_ptr_out[5:0];
+
 
    decode_stage1 u_decode_stage1 (clk, set, reset,
 				  IR, ,
