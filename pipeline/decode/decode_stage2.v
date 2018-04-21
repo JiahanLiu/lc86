@@ -48,10 +48,11 @@ module decode_stage2 (
    wire OPERAND_OVERRIDE_EN;
    wire [2:0] IR_REG_OP, IR_MOD_RM, IR_SIB_BASE; 
 
-   wire outs1, outs2, outs4, outs5, outs7, outs8, outs9, outs10;
-   wire [2:0] pp_ovr;
+   wire outs1, outs2, outs4, outs5, outs7, outs8, outs9, outs10, outs11, outs12, outs13;
+   wire [2:0] pp_ovr, push_pop_override;
    wire op7_b, op6_b, op5_b, op4_b, op3_b, op2_b, op1_b, op0_b;
-   wire out1o, out2o, offset_ovr;
+   wire out1o, out2o, offset_ovr, ss_override;
+   wire [2:0] segID_mux1;
 
 
    and4$ and1o (out1o, opcode[7], opcode[6], opcode[5], op4_b);
@@ -73,7 +74,7 @@ module decode_stage2 (
     assign IR_REG_OP = modrm[5:3];
     assign IR_MOD_RM = modrm[2:0];
     assign IR_SIB_BASE = sib[2:0];
-    assign DE_SEG1_ID = 3'b000;
+    wire [2:0] DE_SEG1_ID;
     assign DE_SIB_S_AG = sib[7:6];
     assign SR3_OUT = modrm[5:3];
     assign SR4_OUT = sib[5:3];
@@ -111,6 +112,7 @@ module decode_stage2 (
     xor2$ xor2p (out2p, modrm[7], modrm[6]);
     and3$ and3p (out3p, modrm[0], modrm1_b, modrm[2]);
     and3$ and4p (mod_seg_ovr, modrm_present, out2p, out3p); 
+    or2$ or2 (ss_override, sib_seg_ovr, mod_seg_ovr);
 
     // SegID override for PUSH, POP - instr_seg_ovr
 /*    ES = 000
@@ -126,6 +128,9 @@ module decode_stage2 (
 //
 //    segID0 = (op7 &!op6 &op5 &!op4 &op3 &!op2 &!op1) | (!op7 &!op6 &!op5 &op3 &op2 &op1
 //         &!op0) | (!op7 &!op6 &!op5 &op4 &op3 &op2 &op1);
+//
+//    push_ovr = (op7 &!op6 &op5 &!op4 &!op2 &!op1) | (!op7 &!op6 &!op5 &!op3 &op2 &op1) | (
+//         !op7 &!op6 &!op5 &op3 &op2 &op1 &!op0) | (!op7 &!op6 &!op5 &op4 &op3 &op2 &op1);
 
     inv1$ inv1d (op7_b, opcode[7]);
     inv1$ inv2d (op6_b, opcode[6]);
@@ -151,8 +156,14 @@ module decode_stage2 (
 
     and3$ and10 (outs10, outs4, outs8, opcode[4]);
     or3$ ors1 (pp_ovr[0], outs9, outs7, outs10);
-    
-    //mux2$ muxs1[2:0] (DE_SEG1_ID, segID, 3'b010, seg_ovr_overall);
+   
+    and3$ and11 (outs11, op3_b, opcode[2], opcode[1]);
+    and2$ and12 (outs12, outs4, outs11); 
+    and3$ and13 (outs13, outs4, outs8, op0_b); 
+    or4$ ors2 (push_pop_override, pp_ovr[2], outs10, outs12, outs13);
+
+    mux4$ muxs1[2:0] (segID_mux1, 3'b011, 3'b010, pp_ovr, ,ss_override, push_pop_override);
+    mux2$ muxs2[2:0] (DE_SEG1_ID, segID_mux1, segID, segment_override);
 
     // DE_BASE_REG_EN_AG=1 when mod=00 and rm=101 - disp32, base not required
     inv1$ inv3k (modrm7_b, modrm[7]);
