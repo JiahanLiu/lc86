@@ -144,7 +144,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire [15:0] DE_OPCODE_IN;
     // Placeholder for now
     wire [15:0] DE_CS_IN = 16'h1A;
-    wire [31:0] DE_EIP_IN = 32'hA;
+    wire [31:0] DE_EIP_IN = 32'h01;
     wire [31:0] DE_EIP_OUT, DE_EIP_OUT_BAR;
     wire [127:0] IR_IN;
     //Debug - change reg to wire

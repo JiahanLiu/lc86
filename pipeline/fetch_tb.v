@@ -14,8 +14,8 @@ module TOP;
 //the clk cycle used to drive the entire system
    reg clk, clr, pre;
    reg [127:0] IR;
-   integer clk_cycle = 16;
-   integer half_cycle = 8;
+   integer clk_cycle = 12;
+   integer half_cycle = 6;
 
    // Signals for testbench loop
    integer file, char, retval, lineno, cntErrors;
@@ -85,13 +85,14 @@ module TOP;
 
    PIPELINE u_pipeline(clk, clr, pre, IR);
 
-   initial begin
+    initial begin
         clk = 0;
         clr = 1;
         pre = 1;
+        #6
+        forever #(half_cycle)  clk = ~clk;
     end
 
-    always #(half_cycle)  clk = ~clk;
     // Set the register values
     // reg0 = 32'h08000800
     // reg1 = 32'h09010901
@@ -139,27 +140,25 @@ module TOP;
         u_pipeline.u_register_file.gpr.reg7_hh.Q = 32'hF000000;
 
         u_pipeline.u_fetch.IR_2.Q = 32'h0000000;
-        u_pipeline.u_fetch.u_FE_buf_0.low.Q = 64'h81773D090CDB1283;
-        u_pipeline.u_fetch.u_FE_buf_1.low.Q = 64'h85BC148878235B49;
-        u_pipeline.u_fetch.u_FE_buf_2.low.Q = 64'h81773D090CDB1283;
-        u_pipeline.u_fetch.u_FE_buf_3.low.Q = 64'h85BC148878235B49;
-        u_pipeline.u_fetch.u_FE_buf_0.high.Q = 64'h0F6FEB254B212F96;
-        u_pipeline.u_fetch.u_FE_buf_1.high.Q = 64'h7E6D39201F21D322;
-        u_pipeline.u_fetch.u_FE_buf_2.high.Q = 64'h0F6FEB254B212F96;
-        u_pipeline.u_fetch.u_FE_buf_3.high.Q = 64'h7E6D39201F21D322;
+        u_pipeline.u_fetch.u_FE_buf_3.low.Q = 64'h81773D090CDB1283;
+        u_pipeline.u_fetch.u_FE_buf_2.low.Q = 64'h85BC148878235B49;
+        u_pipeline.u_fetch.u_FE_buf_1.low.Q = 64'h81773D090CDB1283;
+        u_pipeline.u_fetch.u_FE_buf_0.low.Q = 64'h85BC148878235B49;
+        u_pipeline.u_fetch.u_FE_buf_3.high.Q = 64'h0F6FEB254B212F96;
+        u_pipeline.u_fetch.u_FE_buf_2.high.Q = 64'h7E6D39201F21D322;
+        u_pipeline.u_fetch.u_FE_buf_1.high.Q = 64'h0F6FEB254B212F96;
+        u_pipeline.u_fetch.u_FE_buf_0.high.Q = 64'h7E6D39201F21D322;
 
      end 
 
-     initial #20 $finish;
+     initial #100 $finish;
 
-     always @(*) begin
+     always @(posedge clk) begin
          $strobe ("at time %0d, IR = %h", $time, u_pipeline.u_fetch.IR);
          $strobe ("at time %0d, read_ptr = %h", $time, u_pipeline.u_fetch.read_ptr);
-         $strobe ("at time %0d, FE_buf_0 = %h", $time, u_pipeline.u_fetch.FE_buf_0_out);
-         $strobe ("at time %0d, FE_buf_1 = %h", $time, u_pipeline.u_fetch.FE_buf_1_out);
-         $strobe ("at time %0d, FE_buf_2 = %h", $time, u_pipeline.u_fetch.FE_buf_2_out);
-         $strobe ("at time %0d, FE_buf_3 = %h", $time, u_pipeline.u_fetch.FE_buf_3_out);
          $strobe ("at time %0d, instr_length_updt = %h", $time, u_pipeline.u_fetch.instr_length_updt);
+         $strobe ("at time %0d, Opcode = %h", $time, u_pipeline.u_fetch.opcode);
+
     end
 
    initial begin
