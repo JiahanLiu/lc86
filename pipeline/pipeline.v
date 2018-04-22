@@ -92,45 +92,48 @@ module PIPELINE(CLK, CLR, PRE, IR);
     assign LD_CS = WB_Final_ld_cs; 
     assign EIP_DIN = WB_Final_EIP;
     assign LD_EIP = WB_Final_ld_eip;
+   wire [15:0] SEG1_DATA, SEG2_DATA;
+   wire [63:0] MM1_DATA, MM2_DATA;
 
 // Make changes to the register file ports in the commented section- TODO
-//    register_file u_register_file (CLK, 
-//        SEG_DIN, SEGID1, SEGID2, WRSEGID, WB_Final_ld_seg,
-//        WB_Final_MM_Data, MMID1, MMID2, WRMMID, WB_Final_ld_mm, 
-//        WB_Final_data1, WB_Final_data2, WB_Final_data3,
-//        D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT,
-//        // For now, all the 4 read datasizes are same
-//        2'd2, 2'd2, 2'd2, 2'd2,
-//        // D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT,
-//        WB_Final_DR1, WB_Final_DR2, WB_Final_DR3, WB_Final_datasize, WB_Final_datasize, WB_Final_datasize,
-//        // Enable signals from writeback
-//        WB_Final_ld_gpr1, WB_Final_ld_gpr2, WB_Final_ld_gpr3, 
-//        CS_DIN, WB_Final_EIP, EFLAGS_DIN,
-//        LD_CS, WB_Final_ld_eip, LD_EFLAGS,
-//        SEGDOUT1, SEGDOUT2, MMDOUT1, MMDOUT2,
-//        SR1_DATA, SR2_DATA, SR3_DATA, SIB_I_DATA,
-//        CSDOUT, EIPDOUT, EFLAGSDOUT, CLR
-//    );
-       
-
     register_file u_register_file (CLK, 
-        SEG_DIN, SEGID1, SEGID2, WRSEGID, SEGWE,
-        MM_DIN, MMID1, MMID2, WRMMID, MMWE, 
-        GPR_DIN0, GPR_DIN1, GPR_DIN2, 
+        SEG_DIN, D2_SEG1_OUT, D2_SEG2_OUT, WRSEGID, WB_Final_ld_seg,
+        WB_Final_MM_Data, D2_SR1_OUT, D2_SR2_OUT, WRMMID, WB_Final_ld_mm, 
+        WB_Final_data1, WB_Final_data2, WB_Final_data3,
         D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT,
         // For now, all the 4 read datasizes are same
         2'd2, 2'd2, 2'd2, 2'd2,
         // D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT,
-        WRGPR0, WRGPR1, WRGPR2, GPRWE0, GPRWE1, GPRWE2,
+        WB_Final_DR1, WB_Final_DR2, WB_Final_DR3, WB_Final_datasize, WB_Final_datasize, WB_Final_datasize,
         // Enable signals from writeback
-        // WE0, WE1, WE2,
         1'b0, 1'b0, 1'b0,
-        CS_DIN, EIP_DIN, EFLAGS_DIN,
-        LD_CS, LD_EIP, LD_EFLAGS,
-        SEGDOUT1, SEGDOUT2, MMDOUT1, MMDOUT2,
+//        WB_Final_ld_gpr1, WB_Final_ld_gpr2, WB_Final_ld_gpr3, 
+        CS_DIN, WB_Final_EIP, EFLAGS_DIN,
+        LD_CS, WB_Final_ld_eip, LD_EFLAGS,
+        SEG1_DATA, SEG2_DATA, MM1_DATA, MM2_DATA,
         SR1_DATA, SR2_DATA, SR3_DATA, SIB_I_DATA,
         CSDOUT, EIPDOUT, EFLAGSDOUT, CLR
     );
+       
+
+//    register_file u_register_file (CLK, 
+//        SEG_DIN, SEGID1, SEGID2, WRSEGID, SEGWE,
+//        MM_DIN, MMID1, MMID2, WRMMID, MMWE, 
+//        GPR_DIN0, GPR_DIN1, GPR_DIN2, 
+//        D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT,
+//        // For now, all the 4 read datasizes are same
+//        2'd2, 2'd2, 2'd2, 2'd2,
+//        // D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT, D2_DATA_SIZE_AG_OUT,
+//        WRGPR0, WRGPR1, WRGPR2, GPRWE0, GPRWE1, GPRWE2,
+//        // Enable signals from writeback
+//        // WE0, WE1, WE2,
+//        1'b0, 1'b0, 1'b0,
+//        CS_DIN, EIP_DIN, EFLAGS_DIN,
+//        LD_CS, LD_EIP, LD_EFLAGS,
+//        SEGDOUT1, SEGDOUT2, MMDOUT1, MMDOUT2,
+//        SR1_DATA, SR2_DATA, SR3_DATA, SIB_I_DATA,
+//        CSDOUT, EIPDOUT, EFLAGSDOUT, CLR
+//    );
 
     //*******CACHE FILES*******//
     //Cache file systems to be used by the system
@@ -363,8 +366,6 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire AG_PS_DE_MUX_SEG_AG, AG_PS_DE_CMPXCHG_AG;
    wire [1:0] AG_PS_DE_SIB_S_AG;
 
-   wire [15:0] SEG1_DATA, SEG2_DATA;
-   wire [63:0] MM1_DATA, MM2_DATA;
 
    wire [3:0] DE_EXC_CODE_AG;
 

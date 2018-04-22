@@ -424,6 +424,25 @@ module TOP;
         u_pipeline.u_register_file.gpr.reg5_hh.Q = 32'hD000000;
         u_pipeline.u_register_file.gpr.reg6_hh.Q = 32'hE000000;
         u_pipeline.u_register_file.gpr.reg7_hh.Q = 32'hF000000;
+
+        u_pipeline.u_register_file.segr.regfilelo.mem_array[0] = 8'h0;
+        u_pipeline.u_register_file.segr.regfilelo.mem_array[1] = 8'h1;
+        u_pipeline.u_register_file.segr.regfilelo.mem_array[2] = 8'h2;
+        u_pipeline.u_register_file.segr.regfilelo.mem_array[3] = 8'h3;
+        u_pipeline.u_register_file.segr.regfilelo.mem_array[4] = 8'h4;
+        u_pipeline.u_register_file.segr.regfilelo.mem_array[5] = 8'h5;
+        u_pipeline.u_register_file.segr.regfilelo.mem_array[6] = 8'h6;
+        u_pipeline.u_register_file.segr.regfilelo.mem_array[7] = 8'h7;
+
+        u_pipeline.u_register_file.segr.regfilehi.mem_array[0] = 8'h0;
+        u_pipeline.u_register_file.segr.regfilehi.mem_array[1] = 8'h1;
+        u_pipeline.u_register_file.segr.regfilehi.mem_array[2] = 8'h2;
+        u_pipeline.u_register_file.segr.regfilehi.mem_array[3] = 8'h3;
+        u_pipeline.u_register_file.segr.regfilehi.mem_array[4] = 8'h4;
+        u_pipeline.u_register_file.segr.regfilehi.mem_array[5] = 8'h5;
+        u_pipeline.u_register_file.segr.regfilehi.mem_array[6] = 8'h6;
+        u_pipeline.u_register_file.segr.regfilehi.mem_array[7] = 8'h7;
+
      end 
 
      initial begin
@@ -553,7 +572,7 @@ module TOP;
 
             if(imm_size8) begin
                 imm[7:0] = {$random};
-                imm = 31'd12340000;
+                imm[7:0] = 31'h12;
                 j=j-1;
                 imm_size = 1;
                 imm_size_en = 0;
@@ -561,7 +580,7 @@ module TOP;
 //                $display ("Time: %0d IMM = %h", $time, imm[7:0]);
             end else if(imm_size16) begin
                 imm[15:0] = {$random};
-                imm = 31'd12340000;
+                imm[15:0] = 31'h1234;
                 j=j-2;
                 imm_size = 2;
                 imm_size_en = 1;
@@ -569,7 +588,7 @@ module TOP;
 //                $display ("Time: %0d IMM = %h", $time, imm[15:0]);
             end else if(imm_size32) begin
                 imm = {$random};
-                imm = 31'd12340000;
+                imm = 31'h12345678;
                 j=j-4;
                 imm_size = 4;
                 imm_size_en = 2;
@@ -814,9 +833,12 @@ module TOP;
             #1;    // Allow for setup time
 
             // Opcode == 04
-            if(opcode == 16'h4 || opcode==16'h5 || opcode==16'h81 || opcode==16'h83 || opcode==16'h01) begin
-                result = ME_A_OUT + ME_B_OUT;
-            end
+            //if(opcode == 16'h4 || opcode==16'h5 || opcode==16'h81 || opcode==16'h83 || opcode==16'h01) begin
+            //    result = ME_A_OUT + ME_B_OUT;
+            //end
+
+        $display ("at time %0d, MEM_A = %h", $time, u_pipeline.u_memory_stage.A);
+        $display ("at time %0d, MEM_b = %h", $time, u_pipeline.u_memory_stage.B);
 
 /*************************** EXECUTE STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
