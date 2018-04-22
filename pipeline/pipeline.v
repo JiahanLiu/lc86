@@ -72,6 +72,26 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire [31:0] SR1_DATA, SR2_DATA, SR3_DATA, SIB_I_DATA;
     wire [2:0] D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT, D2_SEG1_OUT, D2_SEG2_OUT;
     wire [1:0] D2_DATA_SIZE_AG_OUT;
+    assign SEG_DIN = WB_Final_data1[15:0];
+    assign WRSEGID = WB_Final_DR1;
+    assign SEGWE = WB_Final_ld_seg;
+    assign MM_DIN = WB_Final_MM_Data;
+    assign WRMMID = WB_Final_DR1;
+    assign MMWE = WB_Final_ld_mm;
+    assign GPR_DIN0 = WB_Final_data1;
+    assign GPR_DIN1 =  WB_Final_data2;
+    assign GPR_DIN2 = WB_Final_data3;
+    assign WRGPR0 = WB_Final_DR1;
+    assign WRGPR1 = WB_Final_DR2;
+    assign WRGPR2 = WB_Final_DR3;
+    //Jim Ask Apruv for Datasize inputs
+    assign WE0 = WB_Final_ld_gpr1;
+    assign WE1 = WB_Final_ld_gpr2;
+    assign WE2 = WB_Final_ld_gpr3;
+    assign CS_DIN = WB_Final_CS;
+    assign LD_CS = WB_Final_ld_cs; 
+    assign EIP_DIN = WB_Final_EIP;
+    assign LD_EIP = WB_Final_ld_eip;
 
 // Make changes to the register file ports in the commented section- TODO
 //    register_file u_register_file (CLK, 
