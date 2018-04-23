@@ -293,6 +293,10 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire D2_SIB_EN_AG, D2_DISP_EN_AG, D2_BASE_REG_EN_AG, D2_MUX_SEG_AG, D2_CMPXCHG_AG;
     wire [1:0] D2_SIB_S_AG;
 
+    wire [1:0] D2_SR1_SIZE_AG_OUT, D2_SR2_SIZE_AG_OUT;
+    wire [1:0] D2_DR1_SIZE_WB_OUT, D2_DR2_SIZE_WB_OUT;
+    wire [1:0] D2_MEM_SIZE_WB_OUT;
+
     // Assigned 1 for now - placeholder
     assign LD_AG=1;
 
@@ -330,7 +334,10 @@ module PIPELINE(CLK, CLR, PRE, IR);
         D2_CONTROL_STORE_OUT,
         D2_OFFSET_OUT,
                       
-        D2_DATA_SIZE_AG_OUT,
+        D2_SR1_SIZE_AG_OUT, D2_SR2_SIZE_AG_OUT,
+        D2_DR1_SIZE_WB_OUT, D2_DR2_SIZE_WB_OUT,
+        D2_MEM_SIZE_WB_OUT,
+
         D2_SR1_NEEDED_AG_OUT, D2_SEG1_NEEDED_AG_OUT, D2_MM1_NEEDED_AG_OUT,
 
         D2_MEM_RD_ME_OUT, D2_MEM_WR_ME_OUT, 
@@ -343,7 +350,6 @@ module PIPELINE(CLK, CLR, PRE, IR);
         D2_SIB_EN_AG, D2_DISP_EN_AG, D2_BASE_REG_EN_AG,
         D2_MUX_SEG_AG, D2_CMPXCHG_AG,
         D2_SIB_S_AG
-
     );
 
    wire [31:0] AG_PS_EIP;
