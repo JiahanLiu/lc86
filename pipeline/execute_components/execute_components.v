@@ -15,7 +15,7 @@ module operand_select_ex(
 	input CLR,
 	input CS_IS_CMPS_FIRST_UOP_ALL,
 	input CS_IS_CMPS_SECOND_UOP_ALL,
-	input EX_REPNE_STEADY_STATE_EX,
+	input CS_REPNE_STEADY_STATE_EX,
 	input [31:0] EX_A,
 	input [31:0] EX_B,
 	input [31:0] EX_C,
@@ -29,7 +29,7 @@ module operand_select_ex(
 
 	mux32_2way u_mux_b(b, EX_B, cmps_first_mem, CS_IS_CMPS_SECOND_UOP_ALL);
 
-	mux32_2way u_mux_count(count, EX_C, count_dataforwarded, EX_REPNE_STEADY_STATE_EX);
+	mux32_2way u_mux_count(count, EX_C, count_dataforwarded, CS_REPNE_STEADY_STATE_EX);
 
 endmodule // operand_select_ex
 
@@ -114,16 +114,16 @@ module functional_unit_ex(
 	output [31:0] shift_flags,
 	output [31:0] count_minus_one,
 	output [31:0] stack_pointer_pop,
-	input EX_d2_aluk_ex,
+	input [2:0] EX_d2_aluk_ex,
 	input [1:0] EX_d2_datasize_all,
-	input D2_POP_SIZE_EX,
+	input [1:0] EX_d2_pop_size,
 	input [31:0] EX_A,
 	input [31:0] EX_B,
 	input [31:0] b,
 	input [31:0] EX_C,
 	input [31:0] count,
 	input [31:0] flags_dataforwarded,
-	input CS_ALUK_D2,
+	input [2:0] CS_ALUK_D2,
 	input [63:0] EX_MM_A,
 	input [63:0] EX_MM_B
 	);
@@ -137,7 +137,7 @@ module functional_unit_ex(
   	alu64 u_alu64(alu64_result, EX_MM_A, EX_MM_B, b, CS_ALUK_D2);
   	shifter32 u_shifter32(shift_result, shift_flags, EX_d2_aluk_ex[0], EX_A, EX_B, EX_d2_datasize_all);
  	adder32 u_count_minus_one(count_minus_one, ,count, 32'hffff_ffff);
- 	mux32_4way u_pop_mux(pop_increment, 32'h0000_0002, 32'h0000_0004, 32'h0000_0008, 32'h0000_000C, EX_d2_datasize_all);
+ 	mux32_4way u_pop_mux(pop_increment, 32'h0000_0002, 32'h0000_0004, 32'h0000_0008, 32'h0000_000C, EX_d2_pop_size);
  	adder32 u_stack_add(stack_pointer_pop, ,EX_C, pop_increment);
 
 endmodule // functional_unit_ex
@@ -183,7 +183,7 @@ module result_select_ex(
 	or2$ u_a_as_b(choose_a_as_b_signal, CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_XCHG_EX);
 	or2$ u_b_as_a(choose_b_as_a_signal, CS_IS_CMPXCHG_EX, CS_IS_XCHG_EX);
 
-	mux32_2way u_mux_c(post_mux_c, shift_xchg_result, EX_C, CS_IS_CMPXCHG_EX);
+	mux32_2way u_mux_c(post_mux_c, shift_result, EX_C, CS_IS_CMPXCHG_EX);
 	mux32_2way u_mux_a(post_mux_a, post_mux_c, EX_A, CS_PASS_A_EX);
 	mux32_2way u_mux_b(post_mux_b, post_mux_a, EX_B, choose_a_as_b_signal);
 	mux32_2way u_mux_resultA(WB_RESULT_A_next, post_mux_b, alu32_result, CS_IS_ALU32_EX);
