@@ -543,16 +543,17 @@ module PIPELINE(CLK, CLR, PRE, IR);
      u_reg_me_mem_rd_addr (CLK, AG_MEM_RD_ADDR_OUT, ME_PS_MEM_RD_ADDR, , CLR, PRE, LD_ME),
      u_reg_me_mem_wr_addr (CLK, AG_MEM_WR_ADDR_OUT, ME_PS_MEM_WR_ADDR, , CLR, PRE, LD_ME);
 
-   assign AG_OUT1_ME_PS[31:22] = {
+   assign AG_OUT1_ME_PS = {
           AG_D2_ALUK_EX_OUT, AG_DRID1_OUT, AG_DRID2_OUT, AG_D2_MEM_RD_ME_OUT, AG_D2_MEM_WR_WB_OUT,
-	      AG_D2_LD_GPR1_WB_OUT, AG_D2_LD_MM_WB_OUT };
-
-   assign { ME_PS_D2_ALUK_EX, ME_PS_DRID1, ME_PS_DRID2, ME_PS_D2_MEM_RD_ME, ME_PS_D2_MEM_WR_WB,
-            ME_PS_D2_LD_GPR1_WB, ME_PS_D2_LD_MM_WB } = ME_PS_IN1[31:22];
+	      AG_D2_LD_GPR1_WB_OUT, AG_D2_LD_MM_WB_OUT, 19'b0 };
 
    reg32e$
      u_reg_me_ps_in1 (CLK, AG_OUT1_ME_PS, ME_PS_IN1, , CLR, PRE, LD_ME);
-   
+
+     assign { ME_PS_D2_ALUK_EX, ME_PS_DRID1, ME_PS_DRID2, ME_PS_D2_MEM_RD_ME, ME_PS_D2_MEM_WR_WB,
+            ME_PS_D2_LD_GPR1_WB, ME_PS_D2_LD_MM_WB } = ME_PS_IN1[31:19];
+
+ 
     wire V;
 
     //******************************************************************************//

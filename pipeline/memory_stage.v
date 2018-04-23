@@ -44,6 +44,9 @@ module memory_stage (
 
    wire [31:0] mux_imm_out;
 
+   // PLACEHOLDER FOR DEBUG - TODO
+   assign DCACHE_DATA = 63'h12; 
+
    assign NEIP_OUT = NEIP;
    assign NCS_OUT = NCS;
    assign CONTROL_STORE_OUT = CONTROL_STORE;

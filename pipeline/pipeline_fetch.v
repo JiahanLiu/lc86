@@ -128,7 +128,6 @@ module PIPELINE(CLK, CLR, PRE, IR);
         IC_EN,
         IC_PADDR,
         FE_SEG_LIM_EXC,
-        IR,
         IR_IN,
         DE_INSTR_LENGTH_UPDT_IN,
         DE_OPCODE_IN,

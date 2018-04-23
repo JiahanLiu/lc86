@@ -56,6 +56,7 @@ module decode_stage2 (
    wire [2:0] segID_mux1;
 
 
+   assign CS_OUT = CS;
    and4$ and1o (out1o, opcode[7], opcode[6], opcode[5], op4_b);
    and4$ and2o (out2o, opcode[3], op2_b, opcode[1], op0_b);
    and3$ and3o (offset_ovr, out1o, out2o, operand_override);
@@ -166,10 +167,10 @@ module decode_stage2 (
     mux4$ muxs1[2:0] (segID_mux1, 3'b011, 3'b010, pp_ovr, ,ss_override, push_pop_override);
     mux2$ muxs2[2:0] (DE_SEG1_ID, segID_mux1, segID, segment_override);
 
-    // DE_BASE_REG_EN_AG=1 when mod=00 and rm=101 - disp32, base not required
+    // DE_BASE_REG_EN_AG=0 when mod=00 and rm=101 - disp32, base not required
     inv1$ inv3k (modrm7_b, modrm[7]);
     inv1$ inv4k (modrm6_b, modrm[6]);
-    and3$ and3k (DE_BASE_REG_EN_AG, out3p, modrm7_b, modrm6_b);
+    nand3$ and3k (DE_BASE_REG_EN_AG, out3p, modrm7_b, modrm6_b);
 
     inv1$ inv1k (segID2_b, segID[2]);
     inv1$ inv2k (segID1_b, segID[1]);
