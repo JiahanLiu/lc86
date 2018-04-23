@@ -11,6 +11,7 @@ module operand_select_wb(
 	output [31:0] data1,
 	output [31:0] WB_Final_EIP,
 	output [15:0] WB_Final_CS,
+	output [31:0] count,
 	input CLK, 
 	input PRE,
 	input CLR,
@@ -21,10 +22,11 @@ module operand_select_wb(
 	input CS_PUSH_FLAGS_WB,
 	input CS_USE_TEMP_NEIP_WB,
 	input CS_USE_TEMP_NCS_WB,
-	input [31:0] current_flags,
 	input [31:0] WB_RESULT_A,
+	input [31:0] WB_RESULT_C,
 	input [31:0] WB_NEIP,
-	input [15:0] WB_NCS
+	input [15:0] WB_NCS,
+	input [31:0] current_flags
 	);
 
 	wire [31:0] cmps_first_pointer; 
@@ -64,11 +66,14 @@ module conditional_support_wb(
 	input CS_IS_JNBE_WB,
 	input CS_IS_JNE_WB,
 	input CS_LD_EIP_WB,
-	input CF,
-	input ZF,
+	input [31:0] current_flags,
 	input CS_IS_CMOVC_WB,
 	input WB_ex_ld_gpr2_wb
 	);
+
+	wire CF, ZF;
+	assign CF = current_flags[0];
+	assign ZF = current_flags[6];
 
 	wire cf_not, zf_not, cf_zf_equal_zero;
 	wire post_jne_ld_eip; 
@@ -113,7 +118,7 @@ module validate_signals_wb(
 	input wb_ld_eip,
 	input CS_LD_CS_WB,
 	input CS_IS_CMPS_SECOND_UOP_ALL,
-	input WB_de_repne_wb,
+	input WB_d2_repne_wb,
 	input wb_repne_terminate_all
 	);
 
@@ -126,7 +131,7 @@ module validate_signals_wb(
 	and2$ u_and_flags(v_cs_ld_flags, WB_V, CS_LD_FLAGS_WB); 
 
 	wire regular_ld_eip, repne_second_uop_cmps;
-	or2$ u_second_uop_of_repne(repne_second_uop_cmps, CS_IS_CMPS_SECOND_UOP_ALL, WB_de_repne_wb);
+	or2$ u_second_uop_of_repne(repne_second_uop_cmps, CS_IS_CMPS_SECOND_UOP_ALL, WB_d2_repne_wb);
 	and2$ u_and_regular_eip(regular_ld_eip, WB_V, wb_ld_eip);
 	mux2$ u_and_final_eip(v_cs_ld_eip, regular_ld_eip, wb_repne_terminate_all, repne_second_uop_cmps);
 	and2$ u_and_cs(v_cs_ld_cs, WB_V, CS_LD_CS_WB);
@@ -148,16 +153,19 @@ module repne_halt_wb(
 	input WB_V,
 	input CS_IS_HALT_WB,
 	input CS_IS_CMPS_SECOND_UOP_ALL,
-	input WB_de_repne_wb,
-	input ZF,
+	input WB_d2_repne_wb,
+	input [31:0] current_flags,
 	input [31:0] WB_RESULT_C
 	);
 
+	wire ZF;
+	assign ZF = current_flags[6];
+	
 	wire zero_count, second_uop_of_repne, repne_termination_conditions;
 
 	equal_to_zero u_zero_count(zero_count, WB_RESULT_C);
 	or2$ u_repne_terminate(repne_termination_conditions, ZF, zero_count);
-	and2$ u_second_uop_repne(second_uop_of_repne, CS_IS_CMPS_SECOND_UOP_ALL, WB_de_repne_wb);
+	and2$ u_second_uop_repne(second_uop_of_repne, CS_IS_CMPS_SECOND_UOP_ALL, WB_d2_repne_wb);
 	and3$ u_terminate_repne(wb_repne_terminate_all, WB_V, repne_termination_conditions, second_uop_of_repne); 
 
 	and2$ u_halt(wb_halt_all, WB_V, CS_IS_HALT_WB); 

@@ -220,6 +220,38 @@ module mag_comp32 (A, B, AGB, BGA, EQ);
 
 endmodule
 
+module mux2_2 (Y, IN0, IN1, S0);
+   output [1:0] Y;
+
+   input [1:0] IN0, IN1;
+   input S0;
+
+   wire [7:0] in0, in1;
+   wire [5:0] Y_NC;
+
+   assign in0[1:0] = IN0;
+   assign in1[1:0] = IN1;
+
+   mux2_8$ mux0 ({Y_NC, Y}, in0, in1, S0);
+
+endmodule
+
+module mux2_3 (Y, IN0, IN1, S0);
+   output [2:0] Y;
+
+   input [2:0] IN0, IN1;
+   input S0;
+
+   wire [7:0] in0, in1;
+   wire [4:0] Y_NC;
+
+   assign in0[2:0] = IN0;
+   assign in1[2:0] = IN1;
+
+   mux2_8$ mux0 ({Y_NC, Y}, in0, in1, S0);
+
+endmodule
+
 module mux2_4 (Y, IN0, IN1, S0);
    output [3:0] Y;
 
@@ -251,6 +283,36 @@ module mux4_4 (Y, IN0, IN1, IN2, IN3, S0, S1);
    assign in3[3:0] = IN3;
 
    mux4_8$ mux0 ({Y_NC, Y}, in0, in1, in2, in3, S0, S1);
+
+endmodule
+
+module mux8 (Y, IN0, IN1, IN2, IN3, IN4, IN5, IN6, IN7, S);
+   output Y;
+
+   input IN0, IN1, IN2, IN3, IN4, IN5, IN6, IN7;
+   input [2:0] S;
+
+   wire mux0_out, mux1_out;
+
+   mux4$ mux0 (mux0_out, IN0, IN1, IN2, IN3, S[0], S[1]);
+   mux4$ mux1 (mux1_out, IN4, IN5, IN6, IN7, S[0], S[1]);
+
+   mux2$ mux2 (Y, mux0_out, mux1_out, S[2]);
+
+endmodule
+
+module mux8_4 (Y, IN0, IN1, IN2, IN3, IN4, IN5, IN6, IN7, S);
+   output [3:0] Y;
+
+   input [3:0] IN0, IN1, IN2, IN3, IN4, IN5, IN6, IN7;
+   input [2:0] S;
+
+   wire [3:0] mux0_out, mux1_out;
+
+   mux4_4 mux0 (mux0_out, IN0, IN1, IN2, IN3, S[0], S[1]);
+   mux4_4 mux1 (mux1_out, IN4, IN5, IN6, IN7, S[0], S[1]);
+
+   mux2_4 mux2 (Y, mux0_out, mux1_out, S[2]);
 
 endmodule
 

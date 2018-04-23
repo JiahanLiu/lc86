@@ -1,43 +1,45 @@
 module decode_stage2 (
-    input clk, set, reset,
-    input [127:0] IR, 
-    input [31:0] EIP,
-    input [15:0] CS,
-    input [3:0] instr_length_updt,
-    input [15:0] opcode, 
-    input [1:0] prefix_size,
-    input prefix_present, segment_override, operand_override, repeat_prefix, 
-    input modrm_present, imm_present,
-    input [1:0] imm_size,
-    input sib_present, disp_present, disp_size,
-    input [3:0] imm_sel,
-    input [2:0] disp_sel,
-    input [2:0] modrm_sel,
-    input offset_present,
-    input opcode_size, 
-    input [1:0] offset_size,
-    input [2:0] segID,
-    input [7:0] modrm, sib,
+   input clk, set, reset,
+   input [127:0] IR, 
+   input [31:0] EIP,
+   input [15:0] CS,
+   input [3:0] instr_length_updt,
+   input [15:0] opcode, 
+   input [1:0] prefix_size,
+   input prefix_present, segment_override, operand_override, repeat_prefix, 
+   input modrm_present, imm_present,
+   input [1:0] imm_size,
+   input sib_present, disp_present, disp_size,
+   input [3:0] imm_sel,
+   input [2:0] disp_sel,
+   input [2:0] modrm_sel,
+   input offset_present,
+   input opcode_size, 
+   input [1:0] offset_size,
+   input [2:0] segID,
+   input [7:0] modrm, sib,
 
-    output [31:0] EIP_OUT, 
-    output [15:0] CS_OUT,
-    output [127:0] CONTROL_STORE,
-    output [47:0] offset,
+   output [31:0] EIP_OUT, 
+   output [15:0] CS_OUT,
+   output [127:0] CONTROL_STORE,
+   output [47:0] offset,
 
-    output [1:0] D2_DATA_SIZE_AG,
+   output [1:0] D2_SR1_SIZE_AG_OUT, D2_SR2_SIZE_AG_OUT,
+   output [1:0] D2_DR1_SIZE_WB_OUT, D2_DR2_SIZE_WB_OUT,
+   output [1:0] D2_MEM_SIZE_WB_OUT,
+
    output D2_SR1_NEEDED_AG, D2_SEG1_NEEDED_AG, D2_MM1_NEEDED_AG,
 
    output D2_MEM_RD_ME, D2_MEM_WR_ME, 
    output [2:0] D2_ALUK_EX,
    output D2_LD_GPR1_WB, D2_LD_MM_WB,
 
-    output [2:0] SR1_OUT, SR2_OUT, SR3_OUT, SR4_OUT, SEG1_OUT, SEG2_OUT,
+   output [2:0] SR1_OUT, SR2_OUT, SR3_OUT, SR4_OUT, SEG1_OUT, SEG2_OUT,
    output [31:0] IMM32_OUT, DISP32_OUT,
 
    output DE_SIB_EN_AG, DE_DISP_EN_AG, DE_BASE_REG_EN_AG,
    output DE_MUX_SEG_AG, DE_CMPXCHG_AG,
    output [1:0] DE_SIB_S_AG
-
 );
 `include "./control_store/control_store_wires.v"
 `include "./control_store/control_store_signals.v"
@@ -179,15 +181,46 @@ module decode_stage2 (
 
 
 //module  mux2$(outb, in0, in1, s0);
+   wire [1:0] mux_op_ovr_out, mux0_out, mux1_out, mux_sr1_size_out;
+   wire [1:0] mux_sr2_size_out, mux_op_ovr_mem_out, mux_mem_size_out;
+   wire [1:0] mux_dr1_size_out, mux_dr2_size_out;
+   wire and_mux_sr1_out;
+
+   and2$ and_mux_sr1 (and_mux_sr1_out, MOD_EQ_MEM, modrm_present);
+   or2$ or_mux_sr1 (or_mux_sr1_out, and_mux_sr1_out, CS_MUX_SR1_SIZE);
+
+   mux2_2
+     mux_op_ovr (.Y(mux_op_ovr_out), .IN0(2'b10), .IN1(2'b01), .S0(OPERAND_OVERRIDE_EN)), // if operand override, 16-bits; else 32-bits;
+     mux0 (.Y(mux0_out), .IN0(mux_op_ovr_out), .IN1(CS_OP_SIZE), .S0(CS_MUX_OP_SIZE)), // if op override possible, else from control store
+     mux1 (.Y(mux1_out), .IN0(mux_op_ovr_out), .IN1(CS_OP_SIZE), .S0(CS_MUX_OP_SIZE)), // if op override possible, else from control store
+     mux_sr1_size (.Y(mux_sr1_size_out), .IN0(mux0_out), .IN1(2'b10), .S0(or_mux_sr1_out)); // if modrm possible and mod is mem OR control store wants, else other
+   assign D2_SR1_SIZE_AG_OUT = mux_sr1_size_out;
+
+   mux2_2
+     mux_sr2_size (.Y(mux_sr2_size_out), .IN0(mux0_out), .IN1(CS_SR2_SIZE), .S0(CS_MUX_SR2_SIZE));
+   assign D2_SR2_SIZE_AG_OUT = mux_sr2_size_out;
+
+   mux2_2
+     mux_op_ovr_mem (.Y(mux_op_ovr_mem_out), .IN0(2'b11), .IN1(2'b10), .S0(OPERAND_OVERRIDE_EN)),
+     mux_mem_size (.Y(mux_mem_size_out), .IN0(mux0_out), .IN1(mux_op_ovr_mem_out), .S0(CS_FAR_CALL));
+   assign D2_MEM_SIZE_WB_OUT = mux_mem_size_out;
+
+   mux2_2
+     mux_dr1_size (.Y(mux_dr1_size_out), .IN0(mux0_out), .IN1(2'b10), .S0(CS_MUX_DR1_SIZE)),
+     mux_dr2_size (.Y(mux_dr2_size_out), .IN0(mux1_out), .IN1(2'b10), .S0(CS_MUX_DR2_SIZE));
+   assign D2_DR1_SIZE_WB_OUT = mux_dr1_size_out;
+   assign D2_DR2_SIZE_WB_OUT = mux_dr2_size_out;
+
    mux2$
-     mux_data_size [1:0] (.outb(D2_DATA_SIZE_AG), .in1(CS_DATA_SIZE_DE), .in0(2'b01), .s0(OPERAND_OVERRIDE_EN)),
-     mux_seg1_needed (.outb(D2_SEG1_NEEDED_AG), .in1(CS_SEG1_NEEDED_AG), .in0(MOD_EQ_MEM), .s0(CS_MUX_SEG1_NEEDED_AG)),
-     mux_mem_rd (.outb(D2_MEM_RD_ME), .in1(CS_MEM_RD_DE), .in0(MOD_EQ_MEM), .s0(CS_MUX_MEM_RD_DE)),
-     mux_mem_wr (.outb(D2_MEM_WR_ME), .in1(CS_DCACHE_WRITE_DE), .in0(MOD_EQ_MEM), .s0(CS_MUX_MEM_WR_DE)),
-     mux_aluk [2:0] (.outb(D2_ALUK_EX), .in1(CS_ALUK_DE), .in0(IR_REG_OP), .s0(CS_MUX_ALUK_DE)),
-     mux_ld_gpr (.outb(D2_LD_GPR1_WB), .in1(CS_LD_GPR1_DE), .in0(MOD_EQ_REG), .s0(CS_MUX_LD_GPR1_DE));
+     mux_seg1_needed (.outb(D2_SEG1_NEEDED_AG), .in0(MOD_EQ_MEM), .in1(CS_SEG1_NEEDED_AG), .s0(CS_MUX_SEG1_NEEDED_AG)),
+     mux_mem_rd (.outb(D2_MEM_RD_ME), .in0(MOD_EQ_MEM), .in1(CS_MEM_RD_DE), .s0(CS_MUX_MEM_RD_DE)),
+     mux_mem_wr (.outb(D2_MEM_WR_ME), .in0(MOD_EQ_MEM), .in1(CS_DCACHE_WRITE_DE), .s0(CS_MUX_MEM_WR_DE)),
+     mux_ld_gpr (.outb(D2_LD_GPR1_WB), .in0(MOD_EQ_REG), .in1(CS_LD_GPR1_DE), .s0(CS_MUX_LD_GPR1_DE));
+
+   mux2_3
+     mux_aluk [2:0] (.Y(D2_ALUK_EX), .IN0(IR_REG_OP), .IN1(CS_ALUK_DE), .S0(CS_MUX_ALUK_DE));
 // CS_MUX_SR1_D2 == CS_MUX_SR1_AG??, CS_SR1_D2 == CS_SR1_AG??
-   mux2$
+   mux2_3
      mux_base_reg_id [2:0] (mux_base_reg_id_out, IR_MOD_RM, IR_SIB_BASE, DE_SIB_EN_AG),
      mux_sr1_id [2:0] (SR1_OUT, mux_base_reg_id_out, CS_SR1_D2, CS_MUX_SR1_D2),
      mux_sr2_id [2:0] (SR2_OUT, IR_REG_OP, CS_SR2_D2, CS_MUX_SR2_D2),
@@ -200,9 +233,10 @@ module decode_stage2 (
    or2$ or_ld_mm (D2_LD_MM_WB, CS_LD_MM_WB, and_ld_mm_out);
  
    //CS_MM1_NEEDED_DE??, CS_SR1_NEEDED_DE?? CS_LD_MM_DE??
-   // SR1_NEEDED = SR1_NEEDED || (CS_MM1_NEEDED && MOD_EQ_MEM): MM INSTs
-   and2$ and_sr1_needed (and_sr1_needed_out, CS_MM1_NEEDED_AG, MOD_EQ_MEM);
-   or2$ or_sr1_needed (D2_SR1_NEEDED_AG, CS_SR1_NEEDED_AG, and_sr1_needed_out);
+   // SR1_NEEDED = SR1_NEEDED || (CS_MM1_NEEDED && MOD_EQ_MEM) || (MOD_EQ_MEM && modrm_present): MM INSTs
+   // and2$ and_sr1_needed (and_sr1_needed_out, CS_MM1_NEEDED_AG, MOD_EQ_MEM);
+   // or3$ or_sr1_needed (D2_SR1_NEEDED_AG, CS_SR1_NEEDED_AG, and_sr1_needed_out, and_mux_sr1_out);
+   or2$ or_sr1_needed (D2_SR1_NEEDED_AG, CS_SR1_NEEDED_AG, and_mux_sr1_out);
 
    // MM1_NEEDED = (CS_MM1_NEEDED && MOD == 11 REG && OPCODE != 0x0F7F)
    and3$ and2 (D2_MM1_NEEDED_AG, CS_MM1_NEEDED_AG, MOD_EQ_REG, op_0F7F_bar);
@@ -212,5 +246,5 @@ module decode_stage2 (
    // Increment the EIP with proper length
    adder32_w_carry_in add_rel (EIP_OUT, , EIP, {28'b0, instr_length_updt}, 1'b0);
 
-
 endmodule
+
