@@ -128,6 +128,10 @@ module functional_unit_ex(
 	);
 
 	wire [31:0] pop_increment;
+	wire CF_dataforwarded, AF_dataforwarded; 
+	assign CF_dataforwarded = flags_dataforwarded[0];
+	assign AF_dataforwarded = flags_dataforwarded[4];
+
  	alu32 u_alu32(alu32_result, alu32_flags, EX_A, b, EX_de_aluk_ex, flags_dataforwarded);
   	alu64 u_alu64(alu64_result, EX_MM_A, EX_MM_B, b, CS_ALUK_D2);
   	shifter32 u_shifter32(shift_result, shift_flags, EX_de_aluk_ex[0], EX_A, EX_B, EX_d2_datasize_all);
@@ -205,7 +209,7 @@ module stall_and_bubble_ex(
 	input wb_repne_terminate_all
 	);
 
-	inv1$(WB_ld_latches, WB_Stall);
+	inv1$ not_wb_stall(WB_ld_latches, WB_Stall);
 
 	wire valid_terminate;
 	and2$ and_terminate(valid_terminate, EX_V, wb_repne_terminate_all);
