@@ -36,6 +36,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire WB_Final_ld_cs;
     wire [31:0] WB_Final_EIP; 
     wire WB_Final_ld_eip; 
+    wire [31:0] WB_Final_Flags,
+    wire  WB_Final_ld_flags,
     wire [63:0] WB_Final_Dcache_Data;
     wire [31:0] WB_Final_Dcache_address;
     //signals from d-cache needed by WB
@@ -45,8 +47,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire wb_repne_terminate_all;
     wire WB_stall;
     //Dataforwarded, currently for daa
-    wire CF_dataforwarded;
-    wire AF_dataforwarded; 
+    wire [31:0] flags_dataforwarded, count_dataforwarded;
    
 //*******REGISTER FILE*******//
    wire RST;
@@ -92,6 +93,9 @@ module PIPELINE(CLK, CLR, PRE, IR);
     assign LD_CS = WB_Final_ld_cs; 
     assign EIP_DIN = WB_Final_EIP;
     assign LD_EIP = WB_Final_ld_eip;
+    assign EFLAGS_DIN = WB_Final_Flags;
+    assign LD_EFLAGS = WB_Final_ld_flags;; 
+
    wire [15:0] SEG1_DATA, SEG2_DATA;
    wire [63:0] MM1_DATA, MM2_DATA;
 
@@ -637,35 +641,35 @@ module PIPELINE(CLK, CLR, PRE, IR);
     reg64e$ u_EX_control_store_latch1(CLK, EX_CONTROL_STORE_next[63:0], EX_CONTROL_STORE[63:0], ,CLR,PRE,EN);
     reg64e$ u_EX_control_store_latch2(CLK, EX_CONTROL_STORE_next[127:64], EX_CONTROL_STORE[127:64], ,CLR,PRE,EN);
 
-    wire [1:0] EX_de_datasize_all_next = ME_DATA_SIZE_OUT; 
-    wire [31:0] EX_de_datasize_all_out;
-    wire [1:0] EX_de_datasize_all;
-    reg32e$ u_EX_de_datasize_all_all(CLK, {30'b0,EX_de_datasize_all_next}, EX_de_datasize_all_out, ,CLR,PRE,EN);
-    assign EX_de_datasize_all = EX_de_datasize_all_out[1:0]; 
+    wire [1:0] EX_d2_datasize_all_next = ME_DATA_SIZE_OUT; 
+    wire [31:0] EX_d2_datasize_all_out;
+    wire [1:0] EX_d2_datasize_all;
+    reg32e$ u_EX_d2_datasize_all_all(CLK, {30'b0,EX_d2_datasize_all_next}, EX_d2_datasize_all_out, ,CLR,PRE,EN);
+    assign EX_d2_datasize_all = EX_d2_datasize_all_out[1:0]; 
 
-    wire [2:0] EX_de_aluk_ex_next = ME_D2_ALUK_EX_OUT;
-    wire [31:0] EX_de_aluk_ex_out;
-    wire [2:0] EX_de_aluk_ex; 
-    reg32e$ u_EX_de_aluk_ex_latch(CLK, {29'b0, EX_de_aluk_ex_next}, EX_de_aluk_ex_out, ,CLR,PRE,EN);
-    assign EX_de_aluk_ex = EX_de_aluk_ex_out[2:0]; 
+    wire [2:0] EX_d2_aluk_ex_next = ME_D2_ALUK_EX_OUT;
+    wire [31:0] EX_d2_aluk_ex_out;
+    wire [2:0] EX_d2_aluk_ex; 
+    reg32e$ u_EX_de_aluk_ex_latch(CLK, {29'b0, EX_d2_aluk_ex_next}, EX_d2_aluk_ex_out, ,CLR,PRE,EN);
+    assign EX_d2_aluk_ex = EX_d2_aluk_ex_out[2:0]; 
 
-    wire EX_de_ld_gpr1_ex_next = ME_D2_LD_GPR1_WB_OUT;
-    wire [31:0] EX_de_ld_gpr1_ex_out;
-    wire EX_de_ld_gpr1_ex;
-    reg32e$ u_EX_de_ld_gpr1_wb_latch (CLK, {31'b0, EX_de_ld_gpr1_ex_next}, EX_de_ld_gpr1_ex_out, ,CLR,PRE,EN);
-    assign EX_de_ld_gpr1_ex = EX_de_ld_gpr1_ex_out[0]; 
+    wire EX_d2_ld_gpr1_ex_next = ME_D2_LD_GPR1_WB_OUT;
+    wire [31:0] EX_d2_ld_gpr1_ex_out;
+    wire EX_d2_ld_gpr1_ex;
+    reg32e$ u_EX_de_ld_gpr1_wb_latch (CLK, {31'b0, EX_d2_ld_gpr1_ex_next}, EX_d2_ld_gpr1_ex_out, ,CLR,PRE,EN);
+    assign EX_d2_ld_gpr1_ex = EX_d2_ld_gpr1_ex_out[0]; 
 
-    wire EX_de_dcache_write_ex_next = ME_D2_MEM_WR_WB_OUT;
-    wire [31:0] EX_de_dcache_write_ex_out;
-    wire EX_de_dcache_write_ex; 
-    reg32e$ u_EX_de_dcache_write_wb_latch(CLK, {31'b0, EX_de_dcache_write_ex_next}, EX_de_dcache_write_ex_out, ,CLR,PRE,EN);
-    assign EX_de_dcache_write_ex = EX_de_dcache_write_ex_out[0]; 
+    wire EX_d2_dcache_write_ex_next = ME_D2_MEM_WR_WB_OUT;
+    wire [31:0] EX_d2_dcache_write_ex_out;
+    wire EX_d2_dcache_write_ex; 
+    reg32e$ u_EX_d2_dcache_write_wb_latch(CLK, {31'b0, EX_d2_dcache_write_ex_next}, EX_d2_dcache_write_ex_out, ,CLR,PRE,EN);
+    assign EX_d2_dcache_write_ex = EX_d2_dcache_write_ex_out[0]; 
 
-    wire EX_de_repne_wb_next = 1'b0; //Nelson
-    wire [31:0] EX_de_repne_wb_out; 
-    wire EX_de_repne_wb; 
-    reg32e$ u_EX_de_repne_wb_latch(CLK, {31'b0, EX_de_repne_wb_next}, EX_de_repne_wb_out, ,CLR,PRE,EN);
-    assign EX_de_repne_wb = EX_de_repne_wb_out[0]; 
+    wire EX_d2_repne_wb_next = 1'b0; //Nelson
+    wire [31:0] EX_d2_repne_wb_out; 
+    wire EX_d2_repne_wb; 
+    reg32e$ u_EX_d2_repne_wb_latch(CLK, {31'b0, EX_d2_repne_wb_next}, EX_d2_repne_wb_out, ,CLR,PRE,EN);
+    assign EX_d2_repne_wb = EX_d2_repne_wb_out[0]; 
 
     wire [31:0] EX_A_next = ME_A_OUT;
     wire [31:0] EX_B_next = ME_B_OUT;
@@ -738,11 +742,11 @@ module PIPELINE(CLK, CLR, PRE, IR);
         EX_NCS,
         EX_CONTROL_STORE,
         //pseudo-control store signals not from control store but generated in decode
-        EX_de_datasize_all,
-        EX_de_aluk_ex, 
-        EX_de_ld_gpr1_ex,
-        EX_de_dcache_write_ex, 
-        EX_de_repne_wb, 
+        EX_d2_datasize_all,
+        EX_d2_aluk_ex, 
+        EX_d2_ld_gpr1_ex,
+        EX_d2_dcache_write_ex, 
+        EX_d2_repne_wb, 
 
         //execute results
         EX_A, 
