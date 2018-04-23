@@ -13,6 +13,7 @@ module execute (
     input EX_d2_ld_gpr1_ex,
     input EX_d2_dcache_write_ex,  
     input EX_d2_repne_wb, 
+    input [1:0] EX_d2_pop_size,
 
     //execute results
     input [31:0] EX_A, 
@@ -90,7 +91,7 @@ module execute (
   assign WB_CONTROL_STORE_next = CONTROL_STORE;
 
   operand_select_ex u_operand_select_ex(b, count, CLK, PRE, CLR, CS_IS_CMPS_FIRST_UOP_ALL, 
-    CS_IS_CMPS_SECOND_UOP_ALL, EX_REPNE_STEADY_STATE_EX, EX_A, EX_B, EX_C, count_dataforwarded);
+    CS_IS_CMPS_SECOND_UOP_ALL, CS_REPNE_STEADY_STATE, EX_A, EX_B, EX_C, count_dataforwarded);
   
   cmpxchg_decision_ex u_cmpxchg_decision_ex(ex_ld_gpr1, ex_ld_gpr2, ex_dcache_write, 
     CS_IS_CMPXCHG_EX, EX_d2_ld_gpr1_ex, CS_LD_GPR2_EX, EX_d2_dcache_write_ex, alu32_flags);
@@ -103,7 +104,7 @@ module execute (
 
   functional_unit_ex u_functional_unit_ex(alu32_result, alu32_flags, alu64_result, shift_result,
     shift_flags, count_minus_one, stack_pointer_pop, EX_d2_aluk_ex, EX_d2_datasize_all, 
-    D2_POP_SIZE_EX, EX_A, EX_B, b, EX_C, count, flags_dataforwarded, CS_ALUK_D2, EX_MM_A, EX_MM_B);
+    EX_d2_pop_size, EX_A, EX_B, b, EX_C, count, flags_dataforwarded, CS_ALUK_D2, EX_MM_A, EX_MM_B);
   
   result_select_ex u_result_select_ex(WB_RESULT_A_next, WB_RESULT_B_next, WB_RESULT_C_next, WB_FLAGS_next, 
     WB_RESULT_MM_next, CS_IS_ALU32_EX, CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_XCHG_EX, CS_PASS_A_EX,
@@ -128,7 +129,7 @@ module execute (
   assign Dep_v_ex_ld_seg = v_cs_ld_seg;
   assign Dep_v_ex_ld_mm = v_cs_ld_mm;
 
-  stall_and_bubble_ex u_stall_and_bubble_ex(WB_ld_latches, WB_V_next, WB_Stall, WB_de_repne_all,
+  stall_and_bubble_ex u_stall_and_bubble_ex(WB_ld_latches, WB_V_next, WB_stall, EX_d2_repne_wb,
     EX_V, wb_repne_terminate_all);
 
 endmodule
