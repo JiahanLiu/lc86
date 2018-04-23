@@ -206,6 +206,8 @@ module alu32_props (
     input clk, reset,
     input [31:0] alu_out,
 	input [31:0] flags,
+    input AF_forward,
+    input CF_forward,
 	input [31:0] a, b,
 	input [2:0] op
 );
@@ -219,7 +221,6 @@ assign PF = flags[2];
 assign CF = flags[0];
 
 assume property (@(posedge clk) (op==3) |-> a[31:8] == 24'b0);
-//assume property (@(posedge clk) (op==3) |-> AF == 0);
 
 function reg ZF_flag (reg [31:0] alu_out);
     if(alu_out==32'b0)
@@ -254,20 +255,20 @@ logic [4:0] temp4 = {1'b0, not_a[3:0]} + {1'b0, b[3:0]} + {32'b0, 1};
 logic [31:0] old_a = a;
 logic old_CF = CF;
 
-function reg[9:0] DAA (reg [31:0]a, reg [31:0] flags);
-    if(((a & 8'h0F) > 9) | (flags[4] == 1)) begin
+function reg[9:0] DAA (reg [31:0]a);
+    logic AF_calc, CF_calc;
+    if(((a & 8'h0F) > 9) | (AF_forward == 1)) begin
         a = a+6;
-        flags[0] = flags[0] | a[8];
-        flags[4] = 1;
+        AF_calc = 1;
     end else
-        flags[4] = 0;
+        AF_calc = 0;
     
-    if ((old_a > 8'h99) || (old_CF == 1)) begin
+    if ((old_a > 8'h99) || (CF_forward == 1)) begin
         a = a+8'h60;
-        flags[0] = 1;
+        CF_calc = 1;
     end else 
-        flags[0] = 0;
-    DAA = {flags[0], flags[4], a[7:0]};
+        CF_calc = 0;
+    DAA = {CF_calc, AF_calc, a[7:0]};
 endfunction
 
 //assert property (@(posedge clk)
@@ -276,7 +277,7 @@ endfunction
 //    else if(op==2) (alu_out == ~a) 
 //);
 
-logic [9:0] DAA_result = DAA(a, flags);
+logic [9:0] DAA_result = DAA(a);
 
 assert property (@(posedge clk) (op==0) |-> alu_out == a+b);
 assert property (@(posedge clk) (op==1) |-> alu_out == (a | b));
@@ -335,6 +336,8 @@ bind execute alu32_props wrp_alu32 (
     .a(u_alu32.a),
     .b(u_alu32.b),
     .flags(u_alu32.flags),
+    .CF_forward(u_alu32.CF_dataforwarded),
+    .AF_forward(u_alu32.AF_dataforwarded),
     .alu_out(u_alu32.alu_out),
     .op(u_alu32.op)
 );
