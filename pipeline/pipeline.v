@@ -96,7 +96,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
     assign EIP_DIN = WB_Final_EIP;
     assign LD_EIP = WB_Final_ld_eip;
     assign EFLAGS_DIN = WB_Final_Flags;
-    assign LD_EFLAGS = WB_Final_ld_flags;; 
+    assign LD_EFLAGS = WB_Final_ld_flags;
 
    wire [15:0] SEG1_DATA, SEG2_DATA;
    wire [63:0] MM1_DATA, MM2_DATA;
@@ -673,6 +673,12 @@ module PIPELINE(CLK, CLR, PRE, IR);
     reg32e$ u_EX_d2_repne_wb_latch(CLK, {31'b0, EX_d2_repne_wb_next}, EX_d2_repne_wb_out, ,CLR,PRE,EN);
     assign EX_d2_repne_wb = EX_d2_repne_wb_out[0]; 
 
+    wire [1:0] EX_d2_pop_size_next = 2'b00; //Nelson
+    wire [31:0] EX_d2_pop_size_out;
+    wire [1:0] EX_d2_pop_size;
+    reg32e$ u_EX_d2_pop_size_latch(CLK, {30'b0, EX_d2_pop_size_next}, EX_d2_pop_size_out, ,CLR,PRE,EN);
+    assign EX_d2_pop_size = EX_d2_pop_size_out[1:0];
+
     wire [31:0] EX_A_next = ME_A_OUT;
     wire [31:0] EX_B_next = ME_B_OUT;
     wire [31:0] EX_C_next = 32'b00000000; //Nelson
@@ -747,6 +753,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
         EX_d2_ld_gpr1_ex,
         EX_d2_dcache_write_ex, 
         EX_d2_repne_wb, 
+        EX_d2_pop_size,
 
         //execute results
         EX_A, 

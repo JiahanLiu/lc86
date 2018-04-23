@@ -187,38 +187,38 @@ module decode_stage2 (
    wire and_mux_sr1_out;
 
    and2$ and_mux_sr1 (and_mux_sr1_out, MOD_EQ_MEM, modrm_present);
-   or2$ or_mux_sr1 (or_mux_sr1_out, and_mux_sr1_out, CS_MUX_SR1_SIZE);
+   or2$ or_mux_sr1 (or_mux_sr1_out, and_mux_sr1_out, CS_MUX_SR1_SIZE_D2);
 
    mux2_2
      mux_op_ovr (.Y(mux_op_ovr_out), .IN0(2'b10), .IN1(2'b01), .S0(OPERAND_OVERRIDE_EN)), // if operand override, 16-bits; else 32-bits;
-     mux0 (.Y(mux0_out), .IN0(mux_op_ovr_out), .IN1(CS_OP_SIZE), .S0(CS_MUX_OP_SIZE)), // if op override possible, else from control store
-     mux1 (.Y(mux1_out), .IN0(mux_op_ovr_out), .IN1(CS_OP_SIZE), .S0(CS_MUX_OP_SIZE)), // if op override possible, else from control store
+     mux0 (.Y(mux0_out), .IN0(mux_op_ovr_out), .IN1(CS_OP_SIZE_D2), .S0(CS_MUX_OP_SIZE_D2)), // if op override possible, else from control store
+     mux1 (.Y(mux1_out), .IN0(mux_op_ovr_out), .IN1(CS_OP_SIZE_D2), .S0(CS_MUX_OP_SIZE_D2)), // if op override possible, else from control store
      mux_sr1_size (.Y(mux_sr1_size_out), .IN0(mux0_out), .IN1(2'b10), .S0(or_mux_sr1_out)); // if modrm possible and mod is mem OR control store wants, else other
    assign D2_SR1_SIZE_AG_OUT = mux_sr1_size_out;
 
    mux2_2
-     mux_sr2_size (.Y(mux_sr2_size_out), .IN0(mux0_out), .IN1(CS_SR2_SIZE), .S0(CS_MUX_SR2_SIZE));
+     mux_sr2_size (.Y(mux_sr2_size_out), .IN0(mux0_out), .IN1(CS_SR2_SIZE_D2), .S0(CS_MUX_SR2_SIZE_D2));
    assign D2_SR2_SIZE_AG_OUT = mux_sr2_size_out;
 
    mux2_2
      mux_op_ovr_mem (.Y(mux_op_ovr_mem_out), .IN0(2'b11), .IN1(2'b10), .S0(OPERAND_OVERRIDE_EN)),
-     mux_mem_size (.Y(mux_mem_size_out), .IN0(mux0_out), .IN1(mux_op_ovr_mem_out), .S0(CS_FAR_CALL));
+     mux_mem_size (.Y(mux_mem_size_out), .IN0(mux0_out), .IN1(mux_op_ovr_mem_out), .S0(CS_IS_FAR_CALL_D2));
    assign D2_MEM_SIZE_WB_OUT = mux_mem_size_out;
 
    mux2_2
-     mux_dr1_size (.Y(mux_dr1_size_out), .IN0(mux0_out), .IN1(2'b10), .S0(CS_MUX_DR1_SIZE)),
-     mux_dr2_size (.Y(mux_dr2_size_out), .IN0(mux1_out), .IN1(2'b10), .S0(CS_MUX_DR2_SIZE));
+     mux_dr1_size (.Y(mux_dr1_size_out), .IN0(mux0_out), .IN1(2'b10), .S0(CS_MUX_DR1_SIZE_D2)),
+     mux_dr2_size (.Y(mux_dr2_size_out), .IN0(mux1_out), .IN1(2'b10), .S0(CS_MUX_DR2_SIZE_D2));
    assign D2_DR1_SIZE_WB_OUT = mux_dr1_size_out;
    assign D2_DR2_SIZE_WB_OUT = mux_dr2_size_out;
 
    mux2$
      mux_seg1_needed (.outb(D2_SEG1_NEEDED_AG), .in0(MOD_EQ_MEM), .in1(CS_SEG1_NEEDED_AG), .s0(CS_MUX_SEG1_NEEDED_AG)),
      mux_mem_rd (.outb(D2_MEM_RD_ME), .in0(MOD_EQ_MEM), .in1(CS_MEM_RD_DE), .s0(CS_MUX_MEM_RD_DE)),
-     mux_mem_wr (.outb(D2_MEM_WR_ME), .in0(MOD_EQ_MEM), .in1(CS_DCACHE_WRITE_DE), .s0(CS_MUX_MEM_WR_DE)),
-     mux_ld_gpr (.outb(D2_LD_GPR1_WB), .in0(MOD_EQ_REG), .in1(CS_LD_GPR1_DE), .s0(CS_MUX_LD_GPR1_DE));
+     mux_mem_wr (.outb(D2_MEM_WR_ME), .in0(MOD_EQ_MEM), .in1(CS_DCACHE_WRITE_D2), .s0(CS_MUX_MEM_WR_DE)),
+     mux_ld_gpr (.outb(D2_LD_GPR1_WB), .in0(MOD_EQ_REG), .in1(CS_LD_GPR1_D2), .s0(CS_MUX_LD_GPR1_D2));
 
    mux2_3
-     mux_aluk [2:0] (.Y(D2_ALUK_EX), .IN0(IR_REG_OP), .IN1(CS_ALUK_DE), .S0(CS_MUX_ALUK_DE));
+     mux_aluk [2:0] (.Y(D2_ALUK_EX), .IN0(IR_REG_OP), .IN1(CS_ALUK_D2), .S0(CS_MUX_ALUK_D2));
 // CS_MUX_SR1_D2 == CS_MUX_SR1_AG??, CS_SR1_D2 == CS_SR1_AG??
    mux2_3
      mux_base_reg_id [2:0] (mux_base_reg_id_out, IR_MOD_RM, IR_SIB_BASE, DE_SIB_EN_AG),
