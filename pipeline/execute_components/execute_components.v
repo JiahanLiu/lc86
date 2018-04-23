@@ -114,13 +114,14 @@ module functional_unit_ex(
 	output [31:0] shift_flags,
 	output [31:0] count_minus_one,
 	output [31:0] stack_pointer_pop,
-	input EX_de_aluk_ex,
+	input EX_d2_aluk_ex,
+	input [1:0] EX_d2_datasize_all,
+	input D2_POP_SIZE_EX,
 	input [31:0] EX_A,
 	input [31:0] EX_B,
 	input [31:0] b,
 	input [31:0] EX_C,
 	input [31:0] count,
-	input [1:0] EX_d2_datasize_all,
 	input [31:0] flags_dataforwarded,
 	input CS_ALUK_D2,
 	input [63:0] EX_MM_A,
@@ -132,12 +133,12 @@ module functional_unit_ex(
 	assign CF_dataforwarded = flags_dataforwarded[0];
 	assign AF_dataforwarded = flags_dataforwarded[4];
 
- 	alu32 u_alu32(alu32_result, alu32_flags, EX_A, b, EX_de_aluk_ex, flags_dataforwarded);
+ 	alu32 u_alu32(alu32_result, alu32_flags, EX_A, b, EX_d2_aluk_ex, CF_dataforwarded, AF_dataforwarded);
   	alu64 u_alu64(alu64_result, EX_MM_A, EX_MM_B, b, CS_ALUK_D2);
-  	shifter32 u_shifter32(shift_result, shift_flags, EX_de_aluk_ex[0], EX_A, EX_B, EX_d2_datasize_all);
- 	adder32 u_count_minus_one(count_minus_one, count, 32'hffff_ffff);
- 	mux32_4way u_pop_mux(pop_increment, 32'h0000_0002, 32'h0000_0004, 32'h0000_0008, 32'h0000_000C);
- 	adder32 u_stack_add(stack_pointer_pop, EX_C, pop_increment);
+  	shifter32 u_shifter32(shift_result, shift_flags, EX_d2_aluk_ex[0], EX_A, EX_B, EX_d2_datasize_all);
+ 	adder32 u_count_minus_one(count_minus_one, ,count, 32'hffff_ffff);
+ 	mux32_4way u_pop_mux(pop_increment, 32'h0000_0002, 32'h0000_0004, 32'h0000_0008, 32'h0000_000C, EX_d2_datasize_all);
+ 	adder32 u_stack_add(stack_pointer_pop, ,EX_C, pop_increment);
 
 endmodule // functional_unit_ex
 

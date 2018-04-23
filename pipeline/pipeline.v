@@ -4,6 +4,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
     input [127:0] IR;
     assign EN = 1;//placeholder until stalls are working correctly
    
+    //signals for EX generate WB bubbles or stalling
+    wire WB_ld_latches;
     //signals from EX to Dependency Checks
     wire DEP_v_ex_ld_gpr1;
     wire DEP_v_ex_ld_gpr2;
@@ -732,8 +734,6 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire [2:0] WB_DR3_next;
     wire [31:0] WB_ADDRESS_next;   
 
-    wire WB_ld_latches;
-
     execute u_execute(
         CLK, PRE, CLR, //not uesd SET/RST
 
@@ -761,9 +761,10 @@ module PIPELINE(CLK, CLR, PRE, IR);
         EX_ADDRESS,
 
         WB_stall, 
+        wb_repne_terminate_all,
 
-        CF_dataforwarded,
-        AF_dataforwarded,
+        flags_dataforwarded,
+        count_dataforwarded,
 
         WB_V_next,
         WB_NEIP_next, 
@@ -918,6 +919,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
         WB_Final_ld_eip, 
         WB_Final_CS, 
         WB_Final_ld_cs, 
+        WB_Final_Flags,
+        WB_Final_ld_flags,
         WB_Final_Dcache_Data,
         WB_Final_Dcache_address,
 
@@ -931,8 +934,9 @@ module PIPELINE(CLK, CLR, PRE, IR);
         wb_halt_all, 
         wb_repne_terminate_all,
         WB_stall,
-        CF_dataforwarded,
-        AF_dataforwarded
+
+        flags_dataforwarded,
+        count_dataforwarded
     );
 
 endmodule

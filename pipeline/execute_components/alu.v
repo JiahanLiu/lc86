@@ -47,7 +47,7 @@ module alu32 (
 	alu_daa u_alu_daa (daa_result, daa_flags, a, CF_dataforwarded, AF_dataforwarded);
 	alu_and u_alu_and (and_result, and_flags, a, b);
 	alu_cld u_alu_cld (cld_result, cld_flags);
-	alu_cmp u_alu_cmp (cmp_result, cmp_flags, a, b); //inverted because of how Nelson gives me the data
+	alu_cmp u_alu_cmp (cmp_result, cmp_flags, b, a); //inverted because of how Nelson gives me the data
 	alu_std u_alu_std (std_result, std_flags);
 
 	mux32_8way out_selection(alu_out, adder_result, or_result, not_result, daa_result, and_result, cld_result, cmp_result, std_result, op[2:0]);
@@ -163,15 +163,16 @@ module alu_daa (
 	);
 
 	wire low_or, high_or, low_and, high_and, low_needs_daa, high_needs_daa; 
+	wire [31:0] low_sum, high_sum, AL_part1, AL_part2, low_carry;
+	wire carry_low; 
+
 	or2$ u_or_low(low_or, a[2], a[1]);
 	and2$ u_and_low(low_and, a[3], low_or);
-	or2$ u_or_high(high_or, a[6], a[5]);
-	and2$ u_and_high(high_and, a[7], high_or); 
+	or2$ u_or_high(high_or, AL_part1[6], AL_part1[5]);
+	and2$ u_and_high(high_and, AL_part1[7], high_or); 
 	or2$ u_or_low_needs_daa(low_needs_daa, low_and, AF_dataforwarded); 
 	or2$ u_or_high_needs_daa(high_needs_daa, high_and, CF_dataforwarded); 
 
-	wire [31:0] low_sum, high_sum, AL_part1, AL_part2, low_carry;
-	wire carry_low; 
 	adder32 u_add_low(low_sum, low_carry, a, 32'h00000006);
 	mux32_2way u_mux_sum_low(AL_part1, a, low_sum, low_needs_daa);
 	assign carry_low = low_carry[3];
