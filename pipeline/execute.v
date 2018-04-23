@@ -37,11 +37,11 @@ module execute (
     output [15:0] WB_NCS_next,
     output [127:0] WB_CONTROL_STORE_next,
 
-    output [1:0] WB_de_datasize_all_next,
+    output [1:0] WB_d2_datasize_all_next,
     output WB_ex_ld_gpr1_wb_next,
     output WB_ex_ld_gpr2_wb_next, 
     output WB_ex_dcache_write_wb_next, 
-    output WB_de_repne_wb_next, 
+    output WB_d2_repne_wb_next, 
 
     output [31:0] WB_RESULT_A_next,
     output [31:0] WB_RESULT_B_next,
@@ -95,11 +95,11 @@ module execute (
   cmpxchg_decision_ex u_cmpxchg_decision_ex(ex_ld_gpr1, ex_ld_gpr2, ex_dcache_write, 
     CS_IS_CMPXCHG_EX, EX_d2_ld_gpr1_ex, CS_LD_GPR2_EX, EX_d2_dcache_write_ex, alu32_flags);
 
-  assign WB_de_datasize_all_next = EX_de_datasize_all;
+  assign WB_d2_datasize_all_next = EX_d2_datasize_all;
   assign WB_ex_ld_gpr1_wb_next = ex_ld_gpr1;
   assign WB_ex_ld_gpr2_wb_next = ex_ld_gpr2;
   assign WB_ex_dcache_write_wb_next = ex_dcache_write;
-  assign WB_de_repne_wb_next = EX_de_repne_wb;
+  assign WB_d2_repne_wb_next = EX_d2_repne_wb;
 
   functional_unit_ex u_functional_unit_ex(alu32_result, alu32_flags, alu64_result, shift_result, shift_flags,
     count_minus_one, stack_pointer_pop, EX_d2_aluk_ex, EX_A, EX_B, b, EX_C, count, EX_d2_datasize_all,

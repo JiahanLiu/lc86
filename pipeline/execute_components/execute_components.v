@@ -132,7 +132,7 @@ module functional_unit_ex(
   	alu64 u_alu64(alu64_result, EX_MM_A, EX_MM_B, b, CS_ALUK_D2);
   	shifter32 u_shifter32(shift_result, shift_flags, EX_de_aluk_ex[0], EX_A, EX_B, EX_d2_datasize_all);
  	adder32 u_count_minus_one(count_minus_one, count, 32'hffff_ffff);
- 	mux32_4way u_pop_mux(pop_increment, 32'h0000_00002, 32'h0000_00004, 32'h0000_00008, 32'h0000_0000C);
+ 	mux32_4way u_pop_mux(pop_increment, 32'h0000_0002, 32'h0000_0004, 32'h0000_0008, 32'h0000_000C);
  	adder32 u_stack_add(stack_pointer_pop, EX_C, pop_increment);
 
 endmodule // functional_unit_ex
@@ -209,6 +209,6 @@ module stall_and_bubble_ex(
 
 	wire valid_terminate;
 	and2$ and_terminate(valid_terminate, EX_V, wb_repne_terminate_all);
-	mux2$(WB_V_next, EX_V, valid_terminate, WB_de_repne_all);
+	mux2$ u_mux_wb_valid(WB_V_next, EX_V, valid_terminate, WB_de_repne_all);
 
 endmodule // stall_and_bubble_ex

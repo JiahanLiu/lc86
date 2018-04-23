@@ -102,7 +102,7 @@ module writeback (
    assign DEP_v_wb_ld_mm = v_cs_ld_mm;
    assign DEP_v_wb_dcache_write = v_ex_dcache_write;
 
-   result_select_ex(WB_RESULT_A_next, WB_RESULT_B_next, WB_RESULT_C_next, WB_FLAGS_next, 
+   result_select_ex u_result_select_ex(WB_RESULT_A_next, WB_RESULT_B_next, WB_RESULT_C_next, WB_FLAGS_next, 
       WB_RESULT_MM_next, CS_IS_ALU32_EX, CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_XCHG_EX,
       CS_PASS_A_EX, CS_IS_CMPXCHG_EX, CS_IS_CMPS_SECOND_UOP_ALL, CS_MUX_SP_POP_EX,
       CS_IS_ALU32_FLAGS_EX, shift_result, EX_C, EX_A, EX_B, alu32_result, stack_pointer_pop,
@@ -121,17 +121,15 @@ module writeback (
    assign WB_Final_ld_gpr1 = v_wb_ld_gpr1; 
    assign WB_Final_ld_gpr2 = v_ex_ld_gpr2;
    assign WB_Final_ld_gpr3 = v_cs_ld_gpr3; 
-   assign WB_Final_datasize = WB_de_datasize_all;
+   assign WB_Final_datasize = WB_d2_datasize_all;
    //segfile
    assign WB_Final_ld_seg = v_cs_ld_seg; 
    //regfile64
    assign WB_Final_MM_Data = WB_RESULT_MM; 
    assign WB_Final_ld_mm = v_cs_ld_mm; 
    //EIP register
-   assign WB_Final_EIP = temp_neip; 
    assign WB_Final_ld_eip = v_wb_ld_eip;
    //CS register
-   assign WB_Final_CS = temp_ncs;
    assign WB_Final_ld_cs = v_cs_ld_cs;
    //Flags register
    assign WB_Final_Flags = current_flags;
@@ -147,7 +145,7 @@ module writeback (
    and2$ u_wb_stall(WB_stall, v_ex_dcache_write, In_write_ready_not);
 
    //dataforward
-   flags_dataforwarded = current_flags;
-   count_dataforwarded = count;
+   assign flags_dataforwarded = current_flags;
+   assign count_dataforwarded = count;
 
 endmodule
