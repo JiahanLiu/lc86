@@ -1,0 +1,12 @@
+/home/projects/courses/spring_16/ee382n-16785/lib/time -v
+/home/projects/courses/spring_16/ee382n-16785/lib/lib1
+/home/projects/courses/spring_16/ee382n-16785/lib/lib2
+/home/projects/courses/spring_16/ee382n-16785/lib/lib3
+/home/projects/courses/spring_16/ee382n-16785/lib/lib4
+/home/projects/courses/spring_16/ee382n-16785/lib/lib5
+/home/projects/courses/spring_16/ee382n-16785/lib/lib6
+../../common/basic_components/equality.v
+../../common/basic_components/muxes.v
+../../common/basic_components/logic_gates.v
+./bus_controller.v
+./bus.v
