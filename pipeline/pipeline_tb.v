@@ -951,8 +951,7 @@ module TOP;
         $display ("at time %0d, wb_halt_all  = %h", $time, u_pipeline.u_writeback.wb_halt_all);
         $display ("at time %0d, wb_repne_terminate_all = %h", $time, u_pipeline.u_writeback.wb_repne_terminate_all);
         $display ("at time %0d, WB_stall = %h", $time, u_pipeline.u_writeback.WB_stall);
-        $display ("at time %0d, CF_dataforwarded = %h", $time, u_pipeline.u_writeback.CF_dataforwarded);
-        $display ("at time %0d, AF_dataforwarded = %h", $time, u_pipeline.u_writeback.AF_dataforwarded);
+        $display ("at time %0d, Flags_forwarded = %h", $time, u_pipeline.u_writeback.flags_dataforwarded);
 /*********************************************************/
            // Ignore all stall cycles; do not compare them against trace cycles.
            //while (stall_signal == 1'b1) begin
