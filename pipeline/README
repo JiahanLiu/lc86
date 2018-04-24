@@ -1,0 +1,60 @@
+Steps for debugging:
+./run_pipeline
+./simv
+
+This will print all the WB values for each instruction.
+The pipeline_tb.v is only for running a single instruction, haven't made a testbench to run multiple instructions
+I think we can check the dependency checks by manually providing the appropriate instructions. I have created 
+a pipeline_tb2.v for that
+
+Display statements for other values can also be put, or you can use the waveforms to debug the instructions not
+giving correct values
+
+The pipeline_tb.v takes a "instruction_trace" file as an input which has the following format
+Prefix(either 00 or 66) Opcode (1 or 2 bytes)
+Ex. 
+00 0FB1
+66 83
+00 81
+
+Set values for debugging
+Whenever modrm is present, its value is 10010101
+R/M = EBP
+REG = 010 - DL, DX, EDX, MM2
+IMM32 = 78563412
+DISP32 = 32'0A
+Dcache_data = 63'h12
+
+// GPR 
+reg0 = 32'08000800
+reg1 = 32'09010901
+reg2 = 32'0A020A02
+reg3 = 32'0B030B03
+reg4 = 32'0C040C04
+reg5 = 32'0D050D05
+reg6 = 32'0E060E06
+reg7 = 32'0F070F07
+
+// SEGR
+reg0 = 16'h0000
+reg1 = 16'h0101
+reg2 = 16'h0202
+reg3 = 16'h0303
+reg4 = 16'h0404
+reg5 = 16'h0505
+reg6 = 16'h0606
+reg7 = 16'h0707
+
+// MMR
+reg0 = 64'h0000000000000000
+reg1 = 64'h0101010101010101
+reg2 = 64'h0202020202020202
+reg3 = 64'h0303030303030303
+reg4 = 64'h0404040404040404
+reg5 = 64'h0505050505050505
+reg6 = 64'h0606060606060606
+reg7 = 64'h0707070707070707
+
+EIP = 32'h01
+CS = 3'h1A
+eflags = 32'01

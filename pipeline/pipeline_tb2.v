@@ -13,8 +13,8 @@ module TOP;
 //the clk cycle used to drive the entire system
    reg clk, clr, pre;
    reg [127:0] IR;
-   integer clk_cycle = 10;
-   integer half_cycle = 5;
+   integer clk_cycle = 20;
+   integer half_cycle = 10;
 
    // Signals for testbench loop
    integer file, char, retval, lineno, cntErrors;
@@ -228,7 +228,7 @@ module TOP;
         // Decode_stage 2 signals
         $strobe ("at time %0d, DE2_offset = %h", $time, u_pipeline.u_decode_stage2.offset);
         $strobe ("at time %0d, DE2_CONTROL_STORE = %h", $time, u_pipeline.u_decode_stage2.CONTROL_STORE);
-        $strobe ("at time %0d, DE2_D2_DATA_SIZE_AG = %h", $time, u_pipeline.u_decode_stage2.D2_DATA_SIZE_AG);
+        //$strobe ("at time %0d, DE2_D2_DATA_SIZE_AG = %h", $time, u_pipeline.u_decode_stage2.D2_DATA_SIZE_AG);
         $strobe ("at time %0d, DE2_D2_SR1_NEEDED_AG = %h", $time, u_pipeline.u_decode_stage2.D2_SR1_NEEDED_AG);
         $strobe ("at time %0d, DE2_D2_SEG1_NEEDED_AG = %h", $time, u_pipeline.u_decode_stage2.D2_SEG1_NEEDED_AG);
         $strobe ("at time %0d, DE2_D2_MM1_NEEDED_DE = %h", $time, u_pipeline.u_decode_stage2.D2_MM1_NEEDED_AG);
@@ -320,11 +320,11 @@ module TOP;
         $strobe ("at time %0d, EX_WB_NEIP_next = %h", $time, u_pipeline.u_execute.WB_NEIP_next);
         $strobe ("at time %0d, EX_WB_NCS_next = %h", $time, u_pipeline.u_execute.WB_NCS_next);
         $strobe ("at time %0d, EX_WB_CONTROL_STORE_next = %h", $time, u_pipeline.u_execute.WB_CONTROL_STORE_next);
-        $strobe ("at time %0d, EX_WB_de_datasize_all_next = %h", $time, u_pipeline.u_execute.WB_de_datasize_all_next);
+        //$strobe ("at time %0d, EX_WB_de_datasize_all_next = %h", $time, u_pipeline.u_execute.WB_de_datasize_all_next);
         $strobe ("at time %0d, EX_WB_ex_ld_gpr1_wb_next = %h", $time, u_pipeline.u_execute.WB_ex_ld_gpr1_wb_next);
         $strobe ("at time %0d, EX_WB_ex_ld_gpr2_wb_next = %h", $time, u_pipeline.u_execute.WB_ex_ld_gpr2_wb_next);
         $strobe ("at time %0d, EX_WB_ex_dcache_write_wb_next = %h", $time, u_pipeline.u_execute.WB_ex_dcache_write_wb_next);
-        $strobe ("at time %0d, EX_WB_de_repne_wb_next = %h", $time, u_pipeline.u_execute.WB_de_repne_wb_next);
+        //$strobe ("at time %0d, EX_WB_de_repne_wb_next = %h", $time, u_pipeline.u_execute.WB_de_repne_wb_next);
         $strobe ("at time %0d, EX_WB_RESULT_A_next = %h", $time, u_pipeline.u_execute.WB_RESULT_A_next);
         $strobe ("at time %0d, EX_WB_RESULT_B_next = %h", $time, u_pipeline.u_execute.WB_RESULT_B_next);
         $strobe ("at time %0d, EX_WB_RESULT_C_next = %h", $time, u_pipeline.u_execute.WB_RESULT_C_next);
@@ -369,8 +369,7 @@ module TOP;
         $strobe ("at time %0d, wb_halt_all  = %h", $time, u_pipeline.u_writeback.wb_halt_all);
         $strobe ("at time %0d, wb_repne_terminate_all = %h", $time, u_pipeline.u_writeback.wb_repne_terminate_all);
         $strobe ("at time %0d, WB_stall = %h", $time, u_pipeline.u_writeback.WB_stall);
-//        $strobe ("at time %0d, CF_dataforwarded = %h", $time, u_pipeline.u_writeback.CF_dataforwarded);
-//        $strobe ("at time %0d, AF_dataforwarded = %h", $time, u_pipeline.u_writeback.AF_dataforwarded);
+        $strobe ("at time %0d, Flags_forwarded = %h", $time, u_pipeline.u_writeback.flags_dataforwarded);
 
     end
 
