@@ -28,6 +28,15 @@ module bus_controller(//interface with bus
    //GENERATE CTRL SIGNALS
 
 
+
+   //REGISTERS FOR THE CONTROLLER
+      wire 	[15:0]	    current_size, next_size;
+   ioreg16$ size_reg(BUS_CLK, current_size , next_size, , RST, SET);
+
+   wire [31:0] 		    data_buffer_in, data_buffer_out;
+   ioreg32$ data_buffer(BUS_CLK, data_buffer_in, data_buffer_out, , RST, SET);
+   
+
    
 
 

@@ -8,9 +8,11 @@ module bus();
 
    //bus grant and write signals
    wire [5:0]  BR, BG;
+   wire        SET, RST;
    
    
    bus_controller bus_c_u(BUS_CLK,
+			  RST, SET,
 		      D,
 		      A,
 		      MASTER,
@@ -19,7 +21,8 @@ module bus();
 		      RW,
 		      ACK,
 		      BR[0],
-		      BG[0]);
+		      BG[0],
+			  );
 
    arbitrator arb_u(BUS_CLK,
 		    BR,
