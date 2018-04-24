@@ -23,23 +23,60 @@ module TOP;
       end // initial begin
 endmodule
 
-module cache( input CLK, SET, RST,
+module cache( //interface with the processor
+	      input CLK, SET, RST,
 	      input [127:0] data_write,
 	      input RW,
 	      input enable,
 	      input [15:0] address,
+	      input [3:0] size,
 	      output [127:0] data_read,
-	      output ready);
+	      output ready,
 
-   wire 	     OE = 0;//initially testing read
-   wire [15:0]	     WR = 16'b0000000000000000; //TODO: implement the write mask generator
+	      output BUS_WR,
+	      output BUS_EN,
+	      output [15:0] BUS_ADDR,
+	      output [127:0] BUS_WRITE,
+	      input BUS_R,
+	      input [127:0] BUS_READ
+	      );
+
+
+   //STATE MACHINE ENCODING
+   parameter IDLE  = 8'b00000001,
+	       RD = 8'b00000010,
+	       RDHIT = 8'b00000100,
+	       RDMISS = 8'b00001000,
+	       WR = 8'b00010000,
+	       WRHIT = 8'b00100000,
+	       WRMISS = 8'b01000000;
+   wire [7:0] 	     current_state, next_state;
+   dff8$ state (CLK, next_state, current_state, , RST, SET);
+   
+   //GENERATING NEXT STATE SIGNAL
+   gen_n_state gen_n_state_u(next_state, current_state, enable, RW, HIT,
+			     BUS_R);
+   
+
+   
+   //GENERATING CONTROL SIGNALS BASED ON STATE
+   wire 	     OE, CACHE_WR, BUS_WR, BUS_EN, BUS_WR, BUS_EN, TS_WR, R;
+   gen_ctrl(current_state, OE, CACHE_WR, BUS_WR, BUS_EN, TS_WR, R);
+   
+   
+
+   //ACCESSING THE DATA LINE
+   wire [15:0] 	     DC_WR;
+   write_masker(DC_WR, CACHE_WR, size);
+  
+
    wire [127:0]      data_write_shifted, data_read_shifted;
    leftshifter(data_write_shifted, data_write, address[3:0]);
    //accessing the datacache
    full_cache_d data_u (address[8:4], //bits 8 to 4 in the phys address
 		     data_write_shifted,
 		     OE,
-		     WR,
+		     DC_WR,
 		     data_read);
    rightshifter(data_read_shifted, data_read, address[3:0]);
 
@@ -169,3 +206,36 @@ module  rightshifter(output [127:0] data_write_shifted,
 
 
 endmodule // leftshifter
+
+
+
+module   equalitycheck(output HIT,
+		       input [6:0] A,
+		       input [6:0] B);
+
+
+
+endmodule // equalitycheck
+
+
+module gen_n_state(output [7:0] next_state,
+	    input [7:0] current_state,
+	    input enable, RW, HIT, BUS_R);
+
+
+endmodule // gen_n_state
+
+
+module   gen_ctrl(input [7:0] curprent_state,
+		  output OE, WR, BUS_WR, BUS_EN, TS_WR, R);
+
+endmodule // gen_ctrl
+
+
+
+module  write_masker(output [15:0] DC_WR,
+		     input CACHE_WR,
+		     input [3:0] size);
+
+
+endmodule // write_masker
