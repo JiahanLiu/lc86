@@ -63,8 +63,8 @@ module cache( //interface with the processor
 
    
    //GENERATING CONTROL SIGNALS BASED ON STATE
-   wire 	     OE, CACHE_WR, TS_WR;
-   gen_ctrl gen_ctrl_u(current_state, OE, CACHE_WR, BUS_WR, BUS_EN, TS_WR, ready);
+   wire 	     OE, CACHE_WR, TS_WR, d_mux;
+   gen_ctrl gen_ctrl_u(current_state, OE, CACHE_WR, BUS_WR, BUS_EN, TS_WR, ready, d_mux);
    
    
 
@@ -220,14 +220,14 @@ module equalitycheck(
 	input [6:0] B
 	);
 
-	equalitycheck7(HIT, A, B);
+	equalitycheck7 equalitycheck7_u(HIT, A, B);
 
 endmodule // equalitycheck
 
 
 module gen_n_state(
-	output [7:0] next_state,
-	input [7:0] current_state,
+	output [15:0] next_state,
+	input [15:0] current_state,
 	input enable, 
 	input RW, 
 	input HIT, 
@@ -237,11 +237,11 @@ module gen_n_state(
 	
 	wire enable_not, RW_not, HIT_not, BUS_R_not, EV_not;
 
-	inv1$ u_not_enable(enable_not, enable);	
-	inv1$ u_not_enable(RW_not, RW);	
-	inv1$ u_not_enable(HIT_not, HIT);	
-	inv1$ u_not_enable(BUS_R_not, BUS_R);	
-	inv1$ u_not_enable(EV_not, EV);
+	inv1$ u_not_enable_en(enable_not, enable);	
+	inv1$ u_not_enable_RW(RW_not, RW);	
+	inv1$ u_not_enable_HIT(HIT_not, HIT);	
+	inv1$ u_not_enable_BUSR(BUS_R_not, BUS_R);	
+	inv1$ u_not_enable_EV(EV_not, EV);
 	
 	wire s0_ENnot; //0
 	wire s1_HIT, s3_BUSR; //2
@@ -272,17 +272,49 @@ module gen_n_state(
 	or2$ u_s2(next_state[2], s1_HIT, s3_BUSR);
 	or3$ u_s3(next_state[3], s1_HITnot_EVnot, s4_BUSR, s3_BUSRnot);
 	or2$ u_s4(next_state[4], s1_HITnot_EV, s4_BUSRnot);
-	and3$ u_s5(next_state[5], current_state[0], enable, WR);
+	and3$ u_s5(next_state[5], current_state[0], enable,RW);
 	or2$ u_s6(next_state[6], s5_HIT, s7_BUSR);
 	or3$ u_s7(next_state[7], s5_HITnot_EVnot, s7_BUSRnot, s8_BUSR);
 	or2$ u_s8(next_state[8], s5_HITnot_EV, s8_BUSRnot);	
 
 endmodule // gen_n_state
 
+//D_MUX=0 for sourcing from processor
+//D_MUX=1 for sourcing from bus
+//   parameter IDLE  = 16'b0000_0000_0000_0001,
+//	       RD = 16'b0000_0000_0000_0010,
+//	       RDHIT = 16'b0000_0000_0000_0100,
+//	       RDMISS = 16'b0000_0000_0000_1000,
+//	       RDEVICT = 16'b0000_0000_0001_0000,
+//	       WR = 16'b0000_0000_0010_0000,
+//	       WRHIT = 16'b0000_0000_0100_0000,
+//	       WRMISS = 16'b0000_0000_1000_0000,
+//	       WREVICT = 16'b0000_0001_0000_0000;
+module   gen_ctrl(input [15:0] current_state,
+		  output OE, D_WR, BUS_WR, BUS_EN, TS_WR, R, D_MUX);
+   wire IDLE = current_state[0];
+   wire RD = current_state[1];
+   wire RDHIT = current_state[2];
+   wire   RDMISS = current_state[3];
+   wire RDEVICT = current_state[4];
+   wire WR = current_state[5];
+   wire WRHIT = current_state[6];
+   wire WRMISS = current_state[7];
+   wire WREVICT = current_state[8];
 
-module   gen_ctrl(input [7:0] current_state,
-		  output OE, WR, BUS_WR, BUS_EN, TS_WR, R);
-
+   or4$ oe_or(OE, IDLE, RDMISS, WRHIT, WRMISS);
+   or3$ WR_or(D_WR, RDMISS, WRHIT, WRMISS);
+   or2$ bus_wr_out(BUS_WR, RDEVICT, WREVICT);
+   or4$ bus_en_out(BUS_EN, RDMISS, RDEVICT, WRMISS, WREVICT);
+   or2$ ts_wr_out(TS_WR, RDHIT, WRHIT);
+   or2$ ready_out(R, RDHIT, WRHIT);
+   
+   
+   
+   
+   
+   
+   
 endmodule // gen_ctrl
 
 
