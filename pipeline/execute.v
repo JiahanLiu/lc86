@@ -117,6 +117,7 @@ module execute (
   assign WB_DR1_next = EX_DR1;
   assign WB_DR2_next = EX_DR2;
   assign WB_DR3_next = EX_DR3; 
+  assign WB_ADDRESS_next = EX_ADDRESS;
 
   validate_signal_ex u_validate_signal_ex(v_ex_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3, 
     v_cs_ld_seg, v_cs_ld_mm, v_ex_dcache_write, EX_V, ex_ld_gpr1, ex_ld_gpr2, 
@@ -128,6 +129,8 @@ module execute (
   assign DEP_v_ex_ld_gpr3 = v_cs_ld_gpr3;
   assign Dep_v_ex_ld_seg = v_cs_ld_seg;
   assign Dep_v_ex_ld_mm = v_cs_ld_mm;
+
+  WB_ex_ld_gpr1_wb_next
 
   stall_and_bubble_ex u_stall_and_bubble_ex(WB_ld_latches, WB_V_next, WB_stall, EX_d2_repne_wb,
     EX_V, wb_repne_terminate_all);
