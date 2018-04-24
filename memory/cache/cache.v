@@ -43,17 +43,17 @@ module cache( //interface with the processor
 
 
    //STATE MACHINE ENCODING 00000000
-   parameter IDLE  = 16'b0000000000000001,
-	       RD = 16'b0000000000000010,
-	       RDHIT = 16'b0000000000000100,
-	       RDMISS = 16'b0000000000001000,
-	       RDEVICT = 16'b0000000000010000,
-	       WR = 16'b0000000000100000,
-	       WRHIT = 16'b0000000001000000,
-	       WRMISS = 16'b0000000010000000,
-	       WREVICT = 16'b0000000100000000;
-   wire [7:0] 	     current_state, next_state;
-   dff8$ state (CLK, next_state, current_state, , RST, SET);
+   parameter IDLE  = 16'b0000_0000_0000_0001,
+	       RD = 16'b0000_0000_0000_0010,
+	       RDHIT = 16'b0000_0000_0000_0100,
+	       RDMISS = 16'b0000_0000_0000_1000,
+	       RDEVICT = 16'b0000_0000_0001_0000,
+	       WR = 16'b0000_0000_0010_0000,
+	       WRHIT = 16'b0000_0000_0100_0000,
+	       WRMISS = 16'b0000_0000_1000_0000,
+	       WREVICT = 16'b0000_0001_0000_0000;
+   wire [15:0] 	     current_state, next_state;
+   dff16$ state (CLK, next_state, current_state, , RST, SET);
    
    //GENERATING NEXT STATE SIGNAL
    wire 	     evict;
@@ -221,9 +221,30 @@ module   equalitycheck(output HIT,
 endmodule // equalitycheck
 
 
-module gen_n_state(output [7:0] next_state,
-	    input [7:0] current_state,
-	    input enable, RW, HIT, BUS_R, evict);
+module gen_n_state(
+	output [7:0] next_state,
+	input [7:0] current_state,
+	input enable, 
+	input RW, 
+	input HIT, 
+	input BUS_R
+	);
+	
+	wire enable_not, RW_not, HIT_not, BUS_R_not;
+
+	inv1$ u_not_enable(enable_not, enable);	
+	inv1$ u_not_enable(RW_not, RW);	
+	inv1$ u_not_enable(HIT_not, HIT);	
+	inv1$ u_not_enable(BUS_R_not, BUS_R);	
+	
+	wire s0_ENnot; //0
+	wire s1_HIT, s3_BUSR; //2
+	wire s1_HITnot_EVnot, s4_BUSR, s3_BUSRnot; //3
+	wire s1_HITnot_EV, s4_BUSRnot; //4
+	wire s5_HIT, s7_BUSR; //6
+	wire s5_HITnot_EVnot, s7_BUSRnot, s8_BUSR; //7
+	wire s5_HITnot_EV, s8_BUSRnot;  //8
+
 
 
 endmodule // gen_n_state
