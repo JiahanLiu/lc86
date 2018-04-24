@@ -1,5 +1,5 @@
 module memory_stage (
-   input CLK, SET, RST, V,
+   input CLK, RST, SET, V,
 
    input [31:0] NEIP,
    input [15:0] NCS,
@@ -18,7 +18,6 @@ module memory_stage (
 
    input D2_MEM_RD_ME, D2_MEM_WR_WB, D2_LD_GPR1_WB, D2_LD_MM_WB,
 
-   // Signals not from latches
    input [63:0] DCACHE_DATA,
    input DCACHE_READY,
 

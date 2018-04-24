@@ -34,14 +34,15 @@ module address_generation (
    input [3:0] DE_EXC_CODE_AG,
 
    // Dependency check inputs
-   input [2:0] AG_DRID1, AG_DRID2,
-   input V_AG_LD_GPR1, V_AG_LD_GPR2, V_AG_LD_SEG, V_AG_LD_CSEG, V_AG_LD_MM,
+   input ME_V,
+   input [23:0] ME_GPR_SCOREBOARD,
+   input [7:0] ME_SEG_SCOREBOARD,
+   input [7:0] ME_MM_SCOREBOARD,
 
-   input [2:0] ME_DRID1, ME_DRID2,
-   input V_ME_LD_GPR1, V_ME_LD_GPR2, V_ME_LD_SEG, V_ME_LD_CSEG, V_ME_LD_MM,
-
-   input [2:0] EX_DRID1, EX_DRID2,
-   input V_EX_LD_GPR1, V_EX_LD_GPR2, V_EX_LD_SEG, V_EX_LD_CSEG, V_EX_LD_MM,
+   input EX_V,
+   input [23:0] EX_GPR_SCOREBOARD,
+   input [7:0] EX_SEG_SCOREBOARD,
+   input [7:0] EX_MM_SCOREBOARD,
 
    // Signals to register file
    output [2:0] SR1_OUT, SR2_OUT, SR3_OUT, SIB_I_OUT, SEG1_OUT, SEG2_OUT, MM1_OUT, MM2_OUT,
@@ -66,6 +67,10 @@ module address_generation (
 
    output D2_MEM_RD_ME_OUT, D2_MEM_WR_WB_OUT,
    output D2_LD_GPR1_WB_OUT, D2_LD_MM_WB_OUT,
+
+   output [23:0] GPR_SCOREBOARD_OUT,
+   output [7:0] SEG_SCOREBOARD_OUT,
+   output [7:0] MM_SCOREBOARD_OUT,
 
    // Other signals
    output DEP_STALL_OUT, SEG_LIMIT_EXC_OUT
@@ -112,10 +117,10 @@ module address_generation (
    // Generate next EIP value
    mux2$ mux_rel [31:0] (mux_rel_out, 32'b0, DISP32, CS_MUX_EIP_JMP_REL_AG);
    adder32_w_carry_in add_rel (add_rel_out, , EIP, mux_rel_out, 1'b0);
-   mux2$ mux_eip [31:0] (NEIP_OUT, add_rel_out, IMM32, CS_MUX_NEXT_EIP_AG);
+   mux2$ mux_eip [31:0] (NEIP_OUT, add_rel_out, OFFSET[31:0], CS_MUX_NEXT_EIP_AG);
 
    // Generate next CS register value
-   mux2$ mux_cseg [15:0] (NCS_OUT, CS, DISP32[15:0], CS_MUX_NEXT_CSEG_AG);
+   mux2$ mux_cseg [15:0] (NCS_OUT, CS, OFFSET[47:32], CS_MUX_NEXT_CSEG_AG);
    
    assign CONTROL_STORE_OUT = CONTROL_STORE;
 
@@ -174,17 +179,27 @@ module address_generation (
    assign D2_LD_MM_WB_OUT = D2_LD_MM_WB;
 
    reg_dependency_check
-      u_reg_dependency_check (V, SR1, SR2, SR3, SIB_I, SEG1, SEG2, D2_SR1_NEEDED_AG, CS_SR2_NEEDED_AG,
-                              DE_CMPXCHG_AG, DE_SIB_EN_AG, D2_SEG1_NEEDED_AG, CS_SEG2_NEEDED_AG,
-                              D2_MM1_NEEDED_AG, CS_MM2_NEEDED_AG,
-                              AG_DRID1, AG_DRID2, V_AG_LD_GPR1, V_AG_LD_GPR2, V_AG_LD_SEG, V_AG_LD_CSEG, V_AG_LD_MM,
-                              ME_DRID1, ME_DRID2, V_ME_LD_GPR1, V_ME_LD_GPR2, V_ME_LD_SEG, V_ME_LD_CSEG, V_ME_LD_MM,
-                              EX_DRID1, EX_DRID2, V_EX_LD_GPR1, V_EX_LD_GPR2, V_EX_LD_SEG, V_EX_LD_CSEG, V_EX_LD_MM,
+      u_reg_dependency_check (V, SR1, SR2, SR3, SIB_I, SEG1, SEG2,
+                              D2_SR1_SIZE_AG, D2_SR2_SIZE_AG, sr3_size, sib_i_size,
+                              D2_SR1_NEEDED_AG, CS_SR2_NEEDED_AG, CS_IS_CMPXCHG_EX, DE_SIB_EN_AG,
+                              D2_SEG1_NEEDED_AG, CS_SEG2_NEEDED_AG, D2_MM1_NEEDED_AG, CS_MM2_NEEDED_AG,
+                              ME_V, ME_GPR_SCOREBOARD, ME_SEG_SCOREBOARD, ME_MM_SCOREBOARD,
+                              EX_V, EX_GPR_SCOREBOARD, EX_SEG_SCOREBOARD, EX_MM_SCOREBOARD,
                               DEP_STALL_OUT);
  
    segment_limit_check
       u_seg_limit_check (V, D2_MEM_RD_ME, D2_MEM_WR_ME, CS_MUX_MEM_RD_ADDR_AG, CS_MUX_MEM_WR_ADDR_AG, SEG1, DATA_SIZE, add_base_disp_out, mux_sib_si_out,
                          SEG_LIMIT_EXC_OUT);
+
+   all_scoreboard_generator u_all_scoreboard_generator (V,
+                                                        DRID1_OUT, DRID2_OUT, CS_DR3_D2,
+                                                        D2_DR1_SIZE_WB, D2_DR2_SIZE_WB, 2'b10,
+                                                        D2_LD_GPR1_WB, CS_LD_GPR2_EX, CS_LD_GPR3_WB,
+                                                        CS_LD_SEG_WB, CS_LD_CS_WB,
+                                                        D2_LD_MM_WB,
+                                                        GPR_SCOREBOARD_OUT,
+                                                        SEG_SCOREBOARD_OUT,
+                                                        MM_SCOREBOARD_OUT);
 
 endmodule
 
