@@ -42,14 +42,16 @@ module cache( //interface with the processor
 	      );
 
 
-   //STATE MACHINE ENCODING
-   parameter IDLE  = 8'b00000001,
-	       RD = 8'b00000010,
-	       RDHIT = 8'b00000100,
-	       RDMISS = 8'b00001000,
-	       WR = 8'b00010000,
-	       WRHIT = 8'b00100000,
-	       WRMISS = 8'b01000000;
+   //STATE MACHINE ENCODING 00000000
+   parameter IDLE  = 16'b0000000000000001,
+	       RD = 16'b0000000000000010,
+	       RDHIT = 16'b0000000000000100,
+	       RDMISS = 16'b0000000000001000,
+	       RDEVICT = 16'b0000000000010000,
+	       WR = 16'b0000000000100000,
+	       WRHIT = 16'b0000000001000000,
+	       WRMISS = 16'b0000000010000000,
+	       WREVICT = 16'b0000000100000000;
    wire [7:0] 	     current_state, next_state;
    dff8$ state (CLK, next_state, current_state, , RST, SET);
    
@@ -60,25 +62,25 @@ module cache( //interface with the processor
 
    
    //GENERATING CONTROL SIGNALS BASED ON STATE
-   wire 	     OE, CACHE_WR, BUS_WR, BUS_EN, BUS_WR, BUS_EN, TS_WR, R;
-   gen_ctrl(current_state, OE, CACHE_WR, BUS_WR, BUS_EN, TS_WR, R);
+   wire 	     OE, CACHE_WR, TS_WR;
+   gen_ctrl gen_ctrl_u(current_state, OE, CACHE_WR, BUS_WR, BUS_EN, TS_WR, ready);
    
    
 
    //ACCESSING THE DATA LINE
    wire [15:0] 	     DC_WR;
-   write_masker(DC_WR, CACHE_WR, size);
+   write_masker write_masker_u(DC_WR, CACHE_WR, size);
   
 
    wire [127:0]      data_write_shifted, data_read_shifted;
-   leftshifter(data_write_shifted, data_write, address[3:0]);
+   leftshifter leftshifter_u(data_write_shifted, data_write, address[3:0]);
    //accessing the datacache
    full_cache_d data_u (address[8:4], //bits 8 to 4 in the phys address
 		     data_write_shifted,
 		     OE,
 		     DC_WR,
 		     data_read);
-   rightshifter(data_read_shifted, data_read, address[3:0]);
+   rightshifter rightshifter_u(data_read_shifted, data_read, address[3:0]);
 
 
    //ACCESSING THE TAGSTORE
@@ -185,7 +187,7 @@ endgenerate
    or32_2way masker (valid_in, valid_out, valid_mask);
    wire WR_bar;//WR is active low, but registers are active high
    inv1$ (WR_bar, WR);
-   reg32e$(CLK, valid_in, valid_out, , CLR, PRE,WR_bar);
+   reg32e$ valid_store(CLK, valid_in, valid_out, , CLR, PRE,WR_bar);
 
    //TODO: need a 32 bit logical or circuit
    assign DOUT[8] = 0;
