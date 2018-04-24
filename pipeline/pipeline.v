@@ -864,20 +864,20 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
 
     //register between EX and WB
-    wire [31:0] WB_V_out = WB_V_next;
+    wire [31:0] WB_V_out;
     wire WB_V; 
     reg32e$ u_WB_v_latch(CLK, {{31{1'b0}}, WB_V_next}, WB_V_out, ,CLR,PRE,EN); 
     assign WB_V = WB_V_out[0]; 
 
-    wire [31:0] WB_NEIP = WB_NEIP_next;
+    wire [31:0] WB_NEIP;
     reg32e$ u_WB_neip_latch(CLK, WB_NEIP_next, WB_NEIP, ,CLR,PRE,EN);
 
-    wire [31:0] WB_NCS_out = WB_NCS_next;
+    wire [31:0] WB_NCS_out;
     wire [15:0] WB_NCS;
     reg32e$ u_WB_ncs_latch(CLK, {16'b0, WB_NCS_next}, WB_NCS_out, ,CLR,PRE,EN);
     assign WB_NCS = WB_NCS_out[15:0];
 
-    wire [127:0] WB_CONTROL_STORE = WB_CONTROL_STORE_next;
+    wire [127:0] WB_CONTROL_STORE;
     reg64e$ u_WB_control_store_latch1 (CLK, WB_CONTROL_STORE_next[127:64], WB_CONTROL_STORE[127:64], ,CLR,PRE,EN);
     reg64e$ u_WB_control_store_latch2 (CLK, WB_CONTROL_STORE_next[63:0], WB_CONTROL_STORE[63:0], ,CLR,PRE,EN);
 
@@ -901,29 +901,29 @@ module PIPELINE(CLK, CLR, PRE, IR);
     reg32e$ u_WB_ex_dcache_write_wb_latch(CLK, {31'b0, WB_ex_dcache_write_wb_next}, WB_ex_dcache_write_wb_out, ,CLR,PRE,EN);
     assign WB_ex_dcache_write_wb = WB_ex_dcache_write_wb_out[0]; 
 
-    wire [31:0] WB_de_repne_wb_out = WB_de_repne_wb_next; 
+    wire [31:0] WB_de_repne_wb_out; 
     wire WB_de_repne_wb; 
-    reg32e$ u_WB_de_repne_wb_latch(CLK, {31'b0, WB_de_repne_wb}, WB_de_repne_wb_out, ,CLR,PRE,EN);
+    reg32e$ u_WB_de_repne_wb_latch(CLK, {31'b0, WB_de_repne_wb_next}, WB_de_repne_wb_out, ,CLR,PRE,EN);
     assign WB_de_repne_wb = WB_de_repne_wb_out[0]; 
 
-    wire [31:0] WB_RESULT_A = WB_RESULT_A_next;
+    wire [31:0] WB_RESULT_A;
     reg32e$ u_WB_RESULT_A_latch(CLK, WB_RESULT_A_next, WB_RESULT_A, ,CLR,PRE,EN);
 
-    wire [31:0] WB_RESULT_B = WB_RESULT_B_next;
+    wire [31:0] WB_RESULT_B;
     reg32e$ u_WB_RESULT_B_latch(CLK, WB_RESULT_B_next, WB_RESULT_B, ,CLR,PRE,EN);
 
-    wire [31:0] WB_RESULT_C = WB_RESULT_C_next;
+    wire [31:0] WB_RESULT_C;
     reg32e$ u_WB_RESULT_C_latch(CLK, WB_RESULT_C_next, WB_RESULT_C, ,CLR,PRE,EN);
 
-    wire [31:0] WB_FLAGS = WB_FLAGS_next;
+    wire [31:0] WB_FLAGS;
     reg32e$ u_WB_FLAGS_latch(CLK, WB_FLAGS_next, WB_FLAGS, ,CLR,PRE,EN);
 
-    wire [63:0] WB_RESULT_MM = WB_RESULT_MM_next; 
+    wire [63:0] WB_RESULT_MM; 
     reg64e$ u_WB_RESULT_MM_latch(CLK, WB_RESULT_MM_next, WB_RESULT_MM, ,CLR,PRE,EN);
 
-    wire [31:0] WB_DR1_out = WB_DR1_next; 
-    wire [31:0] WB_DR2_out = WB_DR2_next;
-    wire [31:0] WB_DR3_out = WB_DR3_next;
+    wire [31:0] WB_DR1_out; 
+    wire [31:0] WB_DR2_out;
+    wire [31:0] WB_DR3_out;
     wire [2:0] WB_DR1, WB_DR2, WB_DR3;
     reg32e$ u_WB_DR1_latch(CLK, {29'b0, WB_DR1_next}, WB_DR1_out, ,CLR,PRE,EN);
     reg32e$ u_WB_DR2_latch(CLK, {29'b0, WB_DR2_next}, WB_DR2_out, ,CLR,PRE,EN);
@@ -932,7 +932,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
     assign WB_DR2 = WB_DR2_next[2:0];
     assign WB_DR3 = WB_DR3_next[2:0];
 
-    wire [31:0] WB_ADDRESS = WB_ADDRESS_next; 
+    wire [31:0] WB_ADDRESS; 
     reg32e$ u_WB_ADDRESS_latch(CLK, WB_ADDRESS_next, WB_ADDRESS, ,CLR,PRE,EN);
 
     //******************************************************************************//
