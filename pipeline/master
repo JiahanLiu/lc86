@@ -36,7 +36,12 @@
 ./decode/ucontrol_store.v
 ./decode/decode_stage1.v
 ./decode/decode_stage2.v
-./reg_dependency_check.v
+
+dependency_check/reg_scoreboard_check.v
+dependency_check/reg_scoreboard_generator.v
+dependency_check/all_scoreboard_generator.v
+dependency_check/reg_dependency_check.v
+
 ./segment_limit_check.v
 ./address_generation.v
 ./memory_stage.v

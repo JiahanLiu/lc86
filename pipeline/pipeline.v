@@ -312,14 +312,13 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire [1:0] D2_MEM_SIZE_WB_OUT;
 
     // Assigned 1 for now - placeholder
-    assign LD_AG=1;
 
-    wire [2:0] AG_DRID1, AG_DRID2;
-    wire V_AG_LD_GPR1, V_AG_LD_GPR2, V_AG_LD_SEG, V_AG_LD_CSEG, V_AG_LD_MM;
-    wire [2:0] ME_DRID1, ME_DRID2;
-    wire V_ME_LD_GPR1, V_ME_LD_GPR2, V_ME_LD_SEG, V_ME_LD_CSEG, V_ME_LD_MM;
-    wire [2:0] EX_DRID1, EX_DRID2;
-    wire V_EX_LD_GPR1, V_EX_LD_GPR2, V_EX_LD_SEG, V_EX_LD_CSEG, V_EX_LD_MM;
+//    wire [2:0] AG_DRID1, AG_DRID2;
+//    wire V_AG_LD_GPR1, V_AG_LD_GPR2, V_AG_LD_SEG, V_AG_LD_CSEG, V_AG_LD_MM;
+//    wire [2:0] ME_DRID1, ME_DRID2;
+//    wire V_ME_LD_GPR1, V_ME_LD_GPR2, V_ME_LD_SEG, V_ME_LD_CSEG, V_ME_LD_MM;
+//    wire [2:0] EX_DRID1, EX_DRID2;
+//    wire V_EX_LD_GPR1, V_EX_LD_GPR2, V_EX_LD_SEG, V_EX_LD_CSEG, V_EX_LD_MM;
    
 //*******DECODE STAGE 2*******//
     decode_stage2 u_decode_stage2(
@@ -441,6 +440,23 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire [31:0] D2_OUT1_AG_PS, D2_OUT2_AG_PS, AG_PS_IN1, AG_PS_IN2;
    wire [31:0] D2_CS_OUT32;
 
+   wire D2_AG_V_OUT, AG_PS_V;
+   assign D2_AG_V_OUT = 1'b1;
+
+   wire LD_AG;
+   wire ME_PS_V_OUT_AG_IN, EX_PS_V_OUT_AG_IN;
+
+   wire [23:0] AG_GPR_SCOREBOARD_OUT;
+   wire [7:0] AG_SEG_SCOREBOARD_OUT;
+   wire [7:0] AG_MM_SCOREBOARD_OUT;
+
+   wire [23:0] ME_GPR_SCOREBOARD_OUT, EX_GPR_SCOREBOARD_OUT;
+   wire [7:0] ME_SEG_SCOREBOARD_OUT, EX_SEG_SCOREBOARD_OUT;
+   wire [7:0] ME_MM_SCOREBOARD_OUT, EX_MM_SCOREBOARD_OUT;
+
+   assign LD_AG = 1'b1;
+   //nor2$ nor_ld_ag (LD_AG, AG_DEP_STALL_OUT, 1'b0);
+
    reg32e$
       u_reg_ag_ps_eip (CLK, D2_EIP_OUT, AG_PS_EIP, , CLR, PRE, LD_AG),
       u_reg_ag_ps_cs (CLK, {16'b0, D2_CS_OUT}, {AG_PS_CS_NC, AG_PS_CS}, , CLR, PRE, LD_AG);
@@ -450,10 +466,10 @@ module PIPELINE(CLK, CLR, PRE, IR);
      u_reg_ag_ps_control_store1 (CLK, D2_CONTROL_STORE_OUT[63:0], AG_PS_CONTROL_STORE[63:0], , CLR, PRE, LD_AG);
 
    // [31:2]
-   assign D2_OUT1_AG_PS = { 
+   assign D2_OUT1_AG_PS[31:1] = { D2_AG_V_OUT, 
           D2_DATA_SIZE_AG_OUT, D2_SR1_NEEDED_AG_OUT, D2_SEG1_NEEDED_AG_OUT, D2_MM1_NEEDED_AG_OUT,
           D2_MEM_RD_ME_OUT, D2_MEM_WR_ME_OUT, D2_ALUK_EX_OUT, D2_LD_GPR1_WB_OUT, D2_LD_MM_WB_OUT,
-          D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT, D2_SEG1_OUT, D2_SEG2_OUT, 2'b0 };
+          D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT, D2_SEG1_OUT, D2_SEG2_OUT };
 
    wire [63:0] AG_PS_OFFSET_OUT;
     // reg32e$ IR_1(CLK, IR_IN[63:32], IR_OUT[63:32], IR_BAR_OUT[63:32], CLR, PRE, EN);
@@ -465,9 +481,9 @@ module PIPELINE(CLK, CLR, PRE, IR);
       u_reg_ag_ps_offset16 (CLK, {16'h0, D2_OFFSET_OUT[47:32]}, AG_PS_OFFSET_OUT[63:32], , CLR, PRE, LD_AG);
 
    assign AG_PS_OFFSET = AG_PS_OFFSET_OUT[47:0];
-   assign { AG_PS_DATA_SIZE, AG_PS_D2_SR1_NEEDED_AG, AG_PS_D2_SEG1_NEEDED_AG, AG_PS_D2_MM1_NEEDED_AG,
+   assign { AG_PS_V, AG_PS_DATA_SIZE, AG_PS_D2_SR1_NEEDED_AG, AG_PS_D2_SEG1_NEEDED_AG, AG_PS_D2_MM1_NEEDED_AG,
             AG_PS_D2_MEM_RD_ME, AG_PS_D2_MEM_WR_ME, AG_PS_D2_ALUK_EX, AG_PS_D2_LD_GPR1_WB, AG_PS_D2_LD_MM_WB,
-            AG_PS_SR1, AG_PS_SR2, AG_PS_SR3, AG_PS_SIB_I, AG_PS_SEG1, AG_PS_SEG2 } = AG_PS_IN1[31:2];
+            AG_PS_SR1, AG_PS_SR2, AG_PS_SR3, AG_PS_SIB_I, AG_PS_SEG1, AG_PS_SEG2 } = AG_PS_IN1[31:1];
 
 
    // [31:25]
@@ -485,9 +501,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
             AG_PS_D2_DR1_SIZE_WB, AG_PS_D2_DR2_SIZE_WB,
             AG_PS_D2_MEM_SIZE_WB } = AG_PS_IN2[31:15];
 
-     
-   wire NextV;
-   address_generation u_address_generation (CLK, PRE, CLR, NextV,
+   address_generation u_address_generation (CLK, PRE, CLR, AG_PS_V,
         // s from pipestage latches
         AG_PS_EIP, AG_PS_CS, AG_PS_CONTROL_STORE, AG_PS_OFFSET,
         AG_PS_DATA_SIZE, AG_PS_D2_SR1_NEEDED_AG, AG_PS_D2_SEG1_NEEDED_AG, AG_PS_D2_MM1_NEEDED_AG,
@@ -512,12 +526,17 @@ module PIPELINE(CLK, CLR, PRE, IR);
         DE_EXC_CODE_AG,
 
         // dependency check s
-        AG_DRID1, AG_DRID2,
-        V_AG_LD_GPR1, V_AG_LD_GPR2, V_AG_LD_SEG, V_AG_LD_CSEG, V_AG_LD_MM,
-        ME_DRID1, ME_DRID2,
-        V_ME_LD_GPR1, V_ME_LD_GPR2, V_ME_LD_SEG, V_ME_LD_CSEG, V_ME_LD_MM,
-        EX_DRID1, EX_DRID2,
-        V_EX_LD_GPR1, V_EX_LD_GPR2, V_EX_LD_SEG, V_EX_LD_CSEG, V_EX_LD_MM,
+        ME_PS_V_OUT_AG_IN, ME_GPR_SCOREBOARD_OUT, ME_SEG_SCOREBOARD_OUT, ME_MM_SCOREBOARD_OUT,
+        EX_PS_V_OUT_AG_IN, EX_GPR_SCOREBOARD_OUT, EX_SEG_SCOREBOARD_OUT, EX_MM_SCOREBOARD_OUT,
+//        1'b0, ME_GPR_SCOREBOARD_OUT, ME_SEG_SCOREBOARD_OUT, ME_MM_SCOREBOARD_OUT,
+//        1'b0, EX_GPR_SCOREBOARD_OUT, EX_SEG_SCOREBOARD_OUT, EX_MM_SCOREBOARD_OUT,
+
+//        AG_DRID1, AG_DRID2,
+//        V_AG_LD_GPR1, V_AG_LD_GPR2, V_AG_LD_SEG, V_AG_LD_CSEG, V_AG_LD_MM,
+//        ME_DRID1, ME_DRID2,
+//        V_ME_LD_GPR1, V_ME_LD_GPR2, V_ME_LD_SEG, V_ME_LD_CSEG, V_ME_LD_MM,
+//        EX_DRID1, EX_DRID2,
+//        V_EX_LD_GPR1, V_EX_LD_GPR2, V_EX_LD_SEG, V_EX_LD_CSEG, V_EX_LD_MM,
 
         // outputs to register file
         AG_SR1_OUT, AG_SR2_OUT, AG_SR3_OUT, AG_SIB_I_OUT, AG_SEG1_OUT, AG_SEG2_OUT, AG_MM1_OUT, AG_MM2_OUT,
@@ -535,10 +554,15 @@ module PIPELINE(CLK, CLR, PRE, IR);
         AG_D2_MEM_RD_ME_OUT, AG_D2_MEM_WR_WB_OUT,
         AG_D2_LD_GPR1_WB_OUT, AG_D2_LD_MM_WB_OUT,
 
+        AG_GPR_SCOREBOARD_OUT,
+        AG_SEG_SCOREBOARD_OUT,
+        AG_MM_SCOREBOARD_OUT,
+
         // other outputs
         AG_DEP_STALL_OUT, AG_SEG_LIMIT_EXC_OUT
     );
 
+   wire ME_PS_V;
    wire [31:0] ME_PS_NEIP;
    wire [15:0] ME_PS_NCS, ME_PS_NCS_NC;
    wire [127:0] ME_PS_CONTROL_STORE;
@@ -581,10 +605,26 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire ME_D2_MEM_WR_WB_OUT, ME_D2_LD_GPR1_WB_OUT, ME_D2_LD_MM_WB_OUT;
 
    wire [31:0] AG_OUT1_ME_PS, ME_PS_IN1;
-   // Placeholder for ME
-   assign LD_ME=1;
+
+   wire LD_ME, AG_ME_V_OUT;
+
    wire [31:0] AG_NCS_OUT32;
    wire [127:0] AG_CONTROL_STORE;
+   wire ag_dep_stall_out_bar;
+
+   inv1$ inv_dep_stall (ag_dep_stall_out_bar, AG_DEP_STALL_OUT);
+   and2$ and_ag_me_v (AG_ME_V_OUT, AG_PS_V, ag_dep_stall_out_bar);
+
+   // LD_ME = !ME_STALL && !WB_STALL
+   //
+   assign LD_ME = 1'b1;
+
+   wire [63:0] me_ps_save_sb, ME_PS_SCOREBOARDS;
+   assign me_ps_save_sb[63:26] = { AG_GPR_SCOREBOARD_OUT, AG_SEG_SCOREBOARD_OUT, AG_MM_SCOREBOARD_OUT };
+   assign { ME_GPR_SCOREBOARD_OUT, ME_SEG_SCOREBOARD_OUT, ME_MM_SCOREBOARD_OUT } = ME_PS_SCOREBOARDS[63:26];
+
+   reg64e$
+     u_reg_me_ps_sb (CLK, me_ps_save_sb, ME_PS_SCOREBOARDS, , CLR, PRE, LD_ME);
 
    reg32e$
      u_reg_me_ps_neip (CLK, AG_NEIP_OUT, ME_PS_NEIP, , CLR, PRE, LD_ME),
@@ -607,7 +647,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
      u_reg_me_mem_rd_addr (CLK, AG_MEM_RD_ADDR_OUT, ME_PS_MEM_RD_ADDR, , CLR, PRE, LD_ME),
      u_reg_me_mem_wr_addr (CLK, AG_MEM_WR_ADDR_OUT, ME_PS_MEM_WR_ADDR, , CLR, PRE, LD_ME);
 
-   assign AG_OUT1_ME_PS[31:13] = {
+   assign AG_OUT1_ME_PS[31:12] = { AG_ME_V_OUT,
           AG_D2_ALUK_EX_OUT, AG_DRID1_OUT, AG_DRID2_OUT, AG_D2_MEM_RD_ME_OUT, AG_D2_MEM_WR_WB_OUT,
 	  AG_D2_LD_GPR1_WB_OUT, AG_D2_LD_MM_WB_OUT,
           AG_D2_DR1_SIZE_WB_OUT, AG_D2_DR2_SIZE_WB_OUT,
@@ -616,12 +656,11 @@ module PIPELINE(CLK, CLR, PRE, IR);
    reg32e$
      u_reg_me_ps_in1 (CLK, AG_OUT1_ME_PS, ME_PS_IN1, , CLR, PRE, LD_ME);
 
-   assign { ME_PS_D2_ALUK_EX, ME_PS_DRID1, ME_PS_DRID2, ME_PS_D2_MEM_RD_ME, ME_PS_D2_MEM_WR_WB,
+   assign { ME_PS_V,
+            ME_PS_D2_ALUK_EX, ME_PS_DRID1, ME_PS_DRID2, ME_PS_D2_MEM_RD_ME, ME_PS_D2_MEM_WR_WB,
             ME_PS_D2_LD_GPR1_WB, ME_PS_D2_LD_MM_WB,
             ME_PS_D2_DR1_SIZE_WB, ME_PS_D2_DR2_SIZE_WB,
-            ME_PS_D2_MEM_SIZE_WB } = ME_PS_IN1[31:13];
-
-   wire V;
+            ME_PS_D2_MEM_SIZE_WB } = ME_PS_IN1[31:12];
 
     //******************************************************************************//
     //*
@@ -629,9 +668,10 @@ module PIPELINE(CLK, CLR, PRE, IR);
     //*
     //*******************************************************************************//
 
+    assign ME_PS_V_OUT_AG_IN = ME_PS_V;
 
     memory_stage u_memory_stage (
-        CLK, CLR, PRE, V,
+        CLK, CLR, PRE, ME_PS_V,
 
         ME_PS_NEIP,
         ME_PS_NCS,
@@ -678,12 +718,28 @@ module PIPELINE(CLK, CLR, PRE, IR);
     //register between ME and EX
     //reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
     //reg32e$ REG_DEST_COM(CLK, {{31{1'b0}},REG_DEST_COM_IN}, D_REG_DEST, D_3, CLR, PRE, EN);
-    //EX s
+    //EX_V_next = ME_PS_V && !MEM_RD_STALL && !MEM_DEP_STALL
+    //LD_EX = !MEM_WR_STALL
+   
+// Nelson added
+   wire LD_EX;
+   assign LD_EX = 1'b1;
+
+   wire [63:0] ex_ps_save_sb, EX_PS_SCOREBOARDS;
+   assign ex_ps_save_sb[63:26] = { ME_GPR_SCOREBOARD_OUT, ME_SEG_SCOREBOARD_OUT, ME_MM_SCOREBOARD_OUT };
+   assign { EX_GPR_SCOREBOARD_OUT, EX_SEG_SCOREBOARD_OUT, EX_MM_SCOREBOARD_OUT } = EX_PS_SCOREBOARDS[63:26];
+
+   reg64e$ u_reg_ex_ps_sb (CLK, ex_ps_save_sb, EX_PS_SCOREBOARDS, , CLR, PRE, LD_EX);
+//==============
+//
     wire EX_V_next = 1'b1; // TODO
     wire [31:0] EX_V_out; 
     reg32e$ u_EX_v_latch(CLK, {{31{1'b0}}, EX_V_next}, EX_V_out, ,CLR,PRE,EN); 
     wire EX_V;
     assign EX_V = EX_V_out[0]; 
+
+    // reg dependency checks
+    assign EX_PS_V_OUT_AG_IN = EX_V;
 
     wire [31:0] EX_NEIP_next = ME_NEIP_OUT;
     wire [31:0] EX_NEIP;
