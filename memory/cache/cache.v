@@ -196,6 +196,7 @@ endgenerate
    
 endmodule // full_tagstore
 
+//amnt is in terms of bytes.
 module  leftshifter(output [127:0] data_write_shifted,
 		    input [127:0] data_write,
 		    input [3:0] amnt);
@@ -203,6 +204,7 @@ module  leftshifter(output [127:0] data_write_shifted,
 
 endmodule // leftshifter
 
+//amnt is in terms of bytes.
 module  rightshifter(output [127:0] data_write_shifted,
 		    input [127:0] data_write,
 		    input [3:0] amnt);
@@ -212,11 +214,13 @@ endmodule // leftshifter
 
 
 
-module   equalitycheck(output HIT,
-		       input [6:0] A,
-		       input [6:0] B);
+module equalitycheck(
+	output HIT,
+	input [6:0] A,
+	input [6:0] B
+	);
 
-
+	equalitycheck7(HIT, A, B);
 
 endmodule // equalitycheck
 
@@ -271,7 +275,7 @@ module gen_n_state(
 	and3$ u_s5(next_state[5], current_state[0], enable, WR);
 	or2$ u_s6(next_state[6], s5_HIT, s7_BUSR);
 	or3$ u_s7(next_state[7], s5_HITnot_EVnot, s7_BUSRnot, s8_BUSR);
-	or2$ u_s8(next_state[8], s5_HITnot_EV, s8_BUSRnot);
+	or2$ u_s8(next_state[8], s5_HITnot_EV, s8_BUSRnot);	
 
 endmodule // gen_n_state
 

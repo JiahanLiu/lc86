@@ -34,3 +34,25 @@ module equal_to_zero(
 	inv1$ u_boolean(boolean, all_zero);
 
 endmodule // equal_to_zero
+
+module equalitycheck7(
+	output equal_true,
+	input [6:0] a,
+	input [6:0] b
+	);
+
+	wire [6:0] bit_equality;
+
+	xnor2$ eq_0(bit_equality[0], a[0], b[0]);
+	xnor2$ eq_1(bit_equality[1], a[1], b[1]);
+	xnor2$ eq_2(bit_equality[2], a[2], b[2]);
+	xnor2$ eq_3(bit_equality[3], a[3], b[3]);
+
+	xnor2$ eq_4(bit_equality[4], a[4], b[4]);
+	xnor2$ eq_5(bit_equality[5], a[5], b[5]);
+	xnor2$ eq_6(bit_equality[6], a[6], b[6]);
+
+	and1_7way final_and(equal_true, bit_equality[0], bit_equality[1], bit_equality[2],
+		bit_equality[3], bit_equality[4], bit_equality[5], bit_equality[6]);
+
+endmodule // equalitycheck7
