@@ -10,7 +10,8 @@ module memory_stage (
    input [31:0] SP_XCHG_DATA,
 
    input [31:0] MEM_RD_ADDR, MEM_WR_ADDR,
-   input [1:0] DATA_SIZE,
+   input [1:0] D2_DR1_SIZE_WB, D2_DR2_SIZE_WB,
+   input [1:0] D2_MEM_SIZE_WB,
 
    input [2:0] DE_ALUK_EX,
    input [2:0] DRID1, DRID2,
@@ -32,7 +33,8 @@ module memory_stage (
    output [31:0] SP_XCHG_DATA_OUT,
 
    output [31:0] MEM_RD_ADDR_OUT, MEM_WR_ADDR_OUT,
-   output [1:0] DATA_SIZE_OUT,
+   output [1:0] D2_DR1_SIZE_WB_OUT, D2_DR2_SIZE_WB_OUT,
+   output [1:0] D2_MEM_SIZE_WB_OUT,
 
    output [2:0] DE_ALUK_EX_OUT,
    output [2:0] DRID1_OUT, DRID2_OUT,
@@ -65,7 +67,9 @@ module memory_stage (
 
    assign MEM_RD_ADDR_OUT = MEM_RD_ADDR; // TODO: implement TLB lookup
    assign MEM_WR_ADDR_OUT = MEM_WR_ADDR;
-   assign DATA_SIZE_OUT = DATA_SIZE;
+   assign D2_DR1_SIZE_WB_OUT = D2_DR1_SIZE_WB;
+   assign D2_DR2_SIZE_WB_OUT = D2_DR2_SIZE_WB;
+   assign D2_MEM_SIZE_WB_OUT = D2_MEM_SIZE_WB;
 
    assign DE_ALUK_EX_OUT = DE_ALUK_EX;
    assign DRID1_OUT = DRID1;

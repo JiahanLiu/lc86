@@ -16,6 +16,11 @@ module address_generation (
    input D2_LD_GPR1_WB, D2_LD_MM_WB,
 
    input [2:0] SR1, SR2, SR3, SIB_I, SEG1, SEG2,
+
+   input [1:0] D2_SR1_SIZE_AG, D2_SR2_SIZE_AG,
+   input [1:0] D2_DR1_SIZE_WB, D2_DR2_SIZE_WB,
+   input [1:0] D2_MEM_SIZE_WB,
+
    input [31:0] IMM32, DISP32,
 
    input DE_SIB_EN_AG, DE_DISP_EN_AG, DE_BASE_REG_EN_AG,
@@ -40,7 +45,11 @@ module address_generation (
 
    // Signals to register file
    output [2:0] SR1_OUT, SR2_OUT, SR3_OUT, SIB_I_OUT, SEG1_OUT, SEG2_OUT, MM1_OUT, MM2_OUT,
-   output [1:0] DATA_SIZE_OUT,
+
+   output [1:0] D2_SR1_SIZE_AG_OUT, D2_SR2_SIZE_AG_OUT,
+   output [1:0] D2_SR3_SIZE_AG_OUT, D2_SR4_SIZE_AG_OUT,
+   output [1:0] D2_DR1_SIZE_WB_OUT, D2_DR2_SIZE_WB_OUT,
+   output [1:0] D2_MEM_SIZE_WB_OUT,
 
    // Signals for next stage latches
    output [31:0] NEIP_OUT, 
@@ -85,6 +94,20 @@ module address_generation (
    assign MM1_OUT = SR1;
    assign MM2_OUT = SR2;
    assign DATA_SIZE_OUT = DATA_SIZE;
+
+   assign D2_SR1_SIZE_AG_OUT = D2_SR1_SIZE_AG;
+   assign D2_SR2_SIZE_AG_OUT = D2_SR2_SIZE_AG;
+
+   wire [1:0] sr3_size, sib_i_size;
+   assign sr3_size = D2_SR2_SIZE_AG;
+   assign sib_i_size = 2'b10; // always 32-bits
+
+   assign D2_SR3_SIZE_AG_OUT = D2_SR2_SIZE_AG; // only used in CMPXCHG, same size as EAX in SR2
+   assign D2_SR4_SIZE_AG_OUT = sib_i_size;
+
+   assign D2_DR1_SIZE_WB_OUT = D2_DR1_SIZE_WB;
+   assign D2_DR2_SIZE_WB_OUT = D2_DR2_SIZE_WB;
+   assign D2_MEM_SIZE_WB_OUT = D2_MEM_SIZE_WB;
 
    // Generate next EIP value
    mux2$ mux_rel [31:0] (mux_rel_out, 32'b0, DISP32, CS_MUX_EIP_JMP_REL_AG);
