@@ -56,8 +56,9 @@ module cache( //interface with the processor
    dff8$ state (CLK, next_state, current_state, , RST, SET);
    
    //GENERATING NEXT STATE SIGNAL
+   wire 	     evict;
    gen_n_state gen_n_state_u(next_state, current_state, enable, RW, HIT,
-			     BUS_R);
+			     BUS_R, evict);
    
 
    
@@ -98,7 +99,7 @@ module cache( //interface with the processor
 		      {tagstore_V, tagstore_D,tagstore_tag});
 
    //CHECKING FOR A HIT
-   equalitycheck(HIT, tagstore_tag, address[15:9]);
+   equalitycheck equalitycheck_u(HIT, tagstore_tag, address[15:9]);
    
 
 
@@ -186,7 +187,7 @@ endgenerate
    wire [31:0] valid_mask = 32'hFFFFFFFF;//TODO: this needs to be a 5:32 decoder
    or32_2way masker (valid_in, valid_out, valid_mask);
    wire WR_bar;//WR is active low, but registers are active high
-   inv1$ (WR_bar, WR);
+   inv1$ WR_INV(WR_bar, WR);
    reg32e$ valid_store(CLK, valid_in, valid_out, , CLR, PRE,WR_bar);
 
    //TODO: need a 32 bit logical or circuit
@@ -222,7 +223,7 @@ endmodule // equalitycheck
 
 module gen_n_state(output [7:0] next_state,
 	    input [7:0] current_state,
-	    input enable, RW, HIT, BUS_R);
+	    input enable, RW, HIT, BUS_R, evict);
 
 
 endmodule // gen_n_state
