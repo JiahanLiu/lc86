@@ -130,8 +130,6 @@ module execute (
   assign Dep_v_ex_ld_seg = v_cs_ld_seg;
   assign Dep_v_ex_ld_mm = v_cs_ld_mm;
 
-  WB_ex_ld_gpr1_wb_next
-
   stall_and_bubble_ex u_stall_and_bubble_ex(WB_ld_latches, WB_V_next, WB_stall, EX_d2_repne_wb,
     EX_V, wb_repne_terminate_all);
 
