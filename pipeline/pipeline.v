@@ -824,24 +824,24 @@ module PIPELINE(CLK, CLR, PRE, IR);
     reg64e$ u_WB_control_store_latch1 (CLK, WB_CONTROL_STORE_next[127:64], WB_CONTROL_STORE[127:64], ,CLR,PRE,EN);
     reg64e$ u_WB_control_store_latch2 (CLK, WB_CONTROL_STORE_next[63:0], WB_CONTROL_STORE[63:0], ,CLR,PRE,EN);
 
-    wire [31:0] WB_de_datasize_all_out = WB_de_datasize_all_next; 
+    wire [31:0] WB_de_datasize_all_out; 
     wire [1:0] WB_de_datasize_all; 
     reg32e$ u_WB_de_datasize_all_latch(CLK, {30'b0, WB_de_datasize_all_next}, WB_de_datasize_all_out, ,CLR,PRE,EN);
     assign WB_de_datasize_all = WB_de_datasize_all_out[1:0]; 
 
-    wire [31:0] WB_ex_ld_gpr1_wb_out = WB_ex_ld_gpr1_wb_next; 
+    wire [31:0] WB_ex_ld_gpr1_wb_out; 
     wire WB_ex_ld_gpr1_wb; 
-    reg32e$ u_WB_ex_ld_gpr1_wb_latch(CLK, {31'b0, WB_ex_ld_gpr1_wb}, WB_ex_ld_gpr1_wb_out, ,CLR,PRE,EN);
+    reg32e$ u_WB_ex_ld_gpr1_wb_latch(CLK, {31'b0, WB_ex_ld_gpr1_wb_next}, WB_ex_ld_gpr1_wb_out, ,CLR,PRE,EN);
     assign WB_ex_ld_gpr1_wb = WB_ex_ld_gpr1_wb_out[0]; 
 
-    wire [31:0] WB_ex_ld_gpr2_wb_out = WB_ex_ld_gpr2_wb_next; 
+    wire [31:0] WB_ex_ld_gpr2_wb_out; 
     wire WB_ex_ld_gpr2_wb; 
-    reg32e$ u_WB_ex_ld_gpr2_wb_latch(CLK, {31'b0, WB_ex_ld_gpr2_wb}, WB_ex_ld_gpr2_wb_out, ,CLR,PRE,EN);
+    reg32e$ u_WB_ex_ld_gpr2_wb_latch(CLK, {31'b0, WB_ex_ld_gpr2_wb_next}, WB_ex_ld_gpr2_wb_out, ,CLR,PRE,EN);
     assign WB_ex_ld_gpr2_wb = WB_ex_ld_gpr2_wb_out[0]; 
 
-    wire [31:0] WB_ex_dcache_write_wb_out = WB_ex_dcache_write_wb_next; 
+    wire [31:0] WB_ex_dcache_write_wb_out; 
     wire WB_ex_dcache_write_wb; 
-    reg32e$ u_WB_ex_dcache_write_wb_latch(CLK, {31'b0, WB_ex_dcache_write_wb}, WB_ex_dcache_write_wb_out, ,CLR,PRE,EN);
+    reg32e$ u_WB_ex_dcache_write_wb_latch(CLK, {31'b0, WB_ex_dcache_write_wb_next}, WB_ex_dcache_write_wb_out, ,CLR,PRE,EN);
     assign WB_ex_dcache_write_wb = WB_ex_dcache_write_wb_out[0]; 
 
     wire [31:0] WB_de_repne_wb_out = WB_de_repne_wb_next; 
