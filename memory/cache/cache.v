@@ -227,15 +227,17 @@ module gen_n_state(
 	input enable, 
 	input RW, 
 	input HIT, 
-	input BUS_R
+	input BUS_R,
+	input EV
 	);
 	
-	wire enable_not, RW_not, HIT_not, BUS_R_not;
+	wire enable_not, RW_not, HIT_not, BUS_R_not, EV_not;
 
 	inv1$ u_not_enable(enable_not, enable);	
 	inv1$ u_not_enable(RW_not, RW);	
 	inv1$ u_not_enable(HIT_not, HIT);	
 	inv1$ u_not_enable(BUS_R_not, BUS_R);	
+	inv1$ u_not_enable(EV_not, EV);
 	
 	wire s0_ENnot; //0
 	wire s1_HIT, s3_BUSR; //2
@@ -245,12 +247,36 @@ module gen_n_state(
 	wire s5_HITnot_EVnot, s7_BUSRnot, s8_BUSR; //7
 	wire s5_HITnot_EV, s8_BUSRnot;  //8
 
+	and2$ u_s0_ENnot(s0_ENnot, current_state[0], enable_not); //0
+	and2$ u_s1_HIT(s1_HIT, current_state[1], HIT);
+	and2$ u_s3_BUSR(s3_BUSR, current_state[3], BUS_R); //2
+	and3$ u_s1_HITnot_EVnot(s1_HITnot_EVnot, current_state[1], HIT_not, EV_not);
+	and2$ u_s4_BUSR(s4_BUSR, current_state[4], BUS_R);
+	and2$ u_s3_BUSRnot(s3_BUSRnot, current_state[3], BUS_R_not); //3
+	and3$ u_s1_HITnot_EV(s1_HITnot_EV, current_state[1], HIT_not, EV);
+	and2$ u_s4_BUSRnot(s4_BUSRnot, current_state[4], BUS_R_not); //4
+	and2$ u_s5_HIT(s5_HIT, current_state[5], HIT);
+	and2$ u_s7_BUSR(s7_BUSR, current_state[7], BUS_R); //6
+	and3$ u_s5_HITnot_EVnot(s5_HITnot_EVnot, current_state[5], HIT_not, EV_not);
+	and2$ u_s7_BUSRnot(s7_BUSRnot, current_state[7], BUS_R_not);
+	and2$ u_s8_BUSR(s8_BUSR, current_state[8], BUS_R); //7
+	and3$ u_s5_HITnot_EV(s5_HITnot_EV, current_state[5], HIT_not, EV);
+	and2$ u_s8_BUSRnot(s8_BUSRnot, current_state[8], BUS_R_not);
 
+	or3$ u_s0(next_state[0], current_state[6], current_state[2], s0_ENnot);
+	and3$ u_s1(next_state[1], current_state[0], enable, RW_not); 
+	or2$ u_s2(next_state[2], s1_HIT, s3_BUSR);
+	or3$ u_s3(next_state[3], s1_HITnot_EVnot, s4_BUSR, s3_BUSRnot);
+	or2$ u_s4(next_state[4], s1_HITnot_EV, s4_BUSRnot);
+	and3$ u_s5(next_state[5], current_state[0], enable, WR);
+	or2$ u_s6(next_state[6], s5_HIT, s7_BUSR);
+	or3$ u_s7(next_state[7], s5_HITnot_EVnot, s7_BUSRnot, s8_BUSR);
+	or2$ u_s8(next_state[8], s5_HITnot_EV, s8_BUSRnot);
 
 endmodule // gen_n_state
 
 
-module   gen_ctrl(input [7:0] curprent_state,
+module   gen_ctrl(input [7:0] current_state,
 		  output OE, WR, BUS_WR, BUS_EN, TS_WR, R);
 
 endmodule // gen_ctrl
