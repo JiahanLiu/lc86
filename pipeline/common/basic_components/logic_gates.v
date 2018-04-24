@@ -42,6 +42,29 @@ endmodule
 
 //-------------------------------------------------------------------------------------
 //
+// 					 			1-Bit 5-Input AND Gate
+//
+//-------------------------------------------------------------------------------------
+// Functionality: 1-Bit 5-Input AND Gate
+//
+// Combinational Delay: 
+//
+module and1_7way (
+	output and_out,
+	input a, b, c, d, e, f, g
+	);
+
+	wire intermediate_3side, intermediate_4side;
+
+	and3$ u_and_intermediate3 (intermediate_3side, a, b, c);
+	and4$ u_and_intermedaite2 (intermediate_4side, d, e, f, g);
+
+	and2$ u_and_final (and_out, intermediate_3side, intermediate_4side);
+
+endmodule
+
+//-------------------------------------------------------------------------------------
+//
 // 					 		 32-Bit 2-Input AND Gate
 //
 //-------------------------------------------------------------------------------------
