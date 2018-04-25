@@ -46,15 +46,17 @@ module cache( //interface with the processor
    //ACCESSING THE DATA LINE
    wire [15:0] 	     DC_WR;
    write_masker write_masker_u(DC_WR, CACHE_WR, size, address[3:0]);
-  
 
-   wire [127:0]      data_write_shifted, data_read_shifted;
+   wire [127:0]      data_write_shifted, data_read_shifted, dcache_input;
    shiftleft leftshifter_u(data_write_shifted, data_write, address[3:0]);
-   //accessing the datacache
+   mux4_128$ data_sel(dcache_input, data_write_shifted, data_write_shifted, BUS_READ, BUS_READ, d_mux, d_mux);
+   wire [15:0] 	     dcache_wrmask_input;
+   mux2_16$ mask_sel(dcache_wrmask_input, DC_WR, 16'hFFFF, d_mux);
+      //accessing the datacache
    full_cache_d data_u (address[8:4], //bits 8 to 4 in the phys address
-		     data_write_shifted,
+		     dcache_input,
 		     OE,
-		     DC_WR,
+		     dcache_wrmask_input,
 		     data_read);
    shiftright rightshifter_u(data_read_shifted, data_read, address[3:0]);
 
@@ -75,7 +77,11 @@ module cache( //interface with the processor
 
    //CHECKING FOR A HIT
    equalitycheck equalitycheck_u(HIT, tagstore_tag, address[15:9]);
-   
+
+
+   //DRIVING THE BUS WIRES
+   assign BUS_ADDR = {address[15:4], 4'b0000};
+   assign BUS_WRITE = data_read;
 endmodule
 
 //each cacheline is 128 bits (16 cells)
@@ -202,7 +208,7 @@ module full_tagstore (input [4:0] A,
    inv1$ WR_INV(WR_bar, WR);
    reg32e$ valid_store(CLK, valid_in, valid_out, , CLR, PRE,WR_bar);
 
-   //TODO: need a 32 bit logical or circuit
+   
    assign DOUT[8] = 0;
        
    
