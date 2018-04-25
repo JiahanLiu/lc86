@@ -1,6 +1,6 @@
 module decoder5to32 (
 	output [31:0] out,
-	input [4:0] in,
+	input [4:0] in
 	);
 	
 	wire [4:0] in_not;

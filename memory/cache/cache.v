@@ -63,25 +63,25 @@ module cache( //interface with the processor
 
    
    //GENERATING CONTROL SIGNALS BASED ON STATE
-   wire 	     OE, CACHE_WR, TS_WR;
-   gen_ctrl gen_ctrl_u(current_state, OE, CACHE_WR, BUS_WR, BUS_EN, TS_WR, ready);
+   wire 	     OE, CACHE_WR, TS_WR, d_mux;
+   gen_ctrl gen_ctrl_u(current_state, OE, CACHE_WR, BUS_WR, BUS_EN, TS_WR, ready, d_mux);
    
    
 
    //ACCESSING THE DATA LINE
    wire [15:0] 	     DC_WR;
-   write_masker write_masker_u(DC_WR, CACHE_WR, size);
+   write_masker write_masker_u(DC_WR, CACHE_WR, size, address[3:0]);
   
 
    wire [127:0]      data_write_shifted, data_read_shifted;
-   leftshifter leftshifter_u(data_write_shifted, data_write, address[3:0]);
+   shiftleft leftshifter_u(data_write_shifted, data_write, address[3:0]);
    //accessing the datacache
    full_cache_d data_u (address[8:4], //bits 8 to 4 in the phys address
 		     data_write_shifted,
 		     OE,
 		     DC_WR,
 		     data_read);
-   rightshifter rightshifter_u(data_read_shifted, data_read, address[3:0]);
+   shiftright rightshifter_u(data_read_shifted, data_read, address[3:0]);
 
 
    //ACCESSING THE TAGSTORE
@@ -183,8 +183,9 @@ endgenerate
    mux4_8$ dout_mux (DOUT[7:0],ram_outs[0],ram_outs[1],ram_outs[2],ram_outs[3],A[3],A[4]);
 
    //the valid bit is seperate for convenience
-   wire [31:0] valid_in, valid_out;//the current state of the valid bits
-   wire [31:0] valid_mask = 32'hFFFFFFFF;//TODO: this needs to be a 5:32 decoder
+   wire [31:0] valid_in, valid_out, valid_mask;//the current state of the valid bits
+   decoder5to32(valid_mask, A);
+   
    or32_2way masker (valid_in, valid_out, valid_mask);
    wire WR_bar;//WR is active low, but registers are active high
    inv1$ WR_INV(WR_bar, WR);
@@ -196,22 +197,6 @@ endgenerate
    
 endmodule // full_tagstore
 
-//amnt is in terms of bytes.
-module  leftshifter(output [127:0] data_write_shifted,
-		    input [127:0] data_write,
-		    input [3:0] amnt);
-
-
-endmodule // leftshifter
-
-//amnt is in terms of bytes.
-module  rightshifter(output [127:0] data_write_shifted,
-		    input [127:0] data_write,
-		    input [3:0] amnt);
-
-
-endmodule // leftshifter
-
 
 
 module equalitycheck(
@@ -220,14 +205,14 @@ module equalitycheck(
 	input [6:0] B
 	);
 
-	equalitycheck7(HIT, A, B);
+	equalitycheck7 equalitycheck7_u(HIT, A, B);
 
 endmodule // equalitycheck
 
 
 module gen_n_state(
-	output [7:0] next_state,
-	input [7:0] current_state,
+	output [15:0] next_state,
+	input [15:0] current_state,
 	input enable, 
 	input RW, 
 	input HIT, 
@@ -237,11 +222,11 @@ module gen_n_state(
 	
 	wire enable_not, RW_not, HIT_not, BUS_R_not, EV_not;
 
-	inv1$ u_not_enable(enable_not, enable);	
-	inv1$ u_not_enable(RW_not, RW);	
-	inv1$ u_not_enable(HIT_not, HIT);	
-	inv1$ u_not_enable(BUS_R_not, BUS_R);	
-	inv1$ u_not_enable(EV_not, EV);
+	inv1$ u_not_enable_en(enable_not, enable);	
+	inv1$ u_not_enable_RW(RW_not, RW);	
+	inv1$ u_not_enable_HIT(HIT_not, HIT);	
+	inv1$ u_not_enable_BUSR(BUS_R_not, BUS_R);	
+	inv1$ u_not_enable_EV(EV_not, EV);
 	
 	wire s0_ENnot; //0
 	wire s1_HIT, s3_BUSR; //2
@@ -272,24 +257,208 @@ module gen_n_state(
 	or2$ u_s2(next_state[2], s1_HIT, s3_BUSR);
 	or3$ u_s3(next_state[3], s1_HITnot_EVnot, s4_BUSR, s3_BUSRnot);
 	or2$ u_s4(next_state[4], s1_HITnot_EV, s4_BUSRnot);
-	and3$ u_s5(next_state[5], current_state[0], enable, WR);
+	and3$ u_s5(next_state[5], current_state[0], enable,RW);
 	or2$ u_s6(next_state[6], s5_HIT, s7_BUSR);
 	or3$ u_s7(next_state[7], s5_HITnot_EVnot, s7_BUSRnot, s8_BUSR);
 	or2$ u_s8(next_state[8], s5_HITnot_EV, s8_BUSRnot);	
 
 endmodule // gen_n_state
 
+//D_MUX=0 for sourcing from processor
+//D_MUX=1 for sourcing from bus
+//   parameter IDLE  = 16'b0000_0000_0000_0001,
+//	       RD = 16'b0000_0000_0000_0010,
+//	       RDHIT = 16'b0000_0000_0000_0100,
+//	       RDMISS = 16'b0000_0000_0000_1000,
+//	       RDEVICT = 16'b0000_0000_0001_0000,
+//	       WR = 16'b0000_0000_0010_0000,
+//	       WRHIT = 16'b0000_0000_0100_0000,
+//	       WRMISS = 16'b0000_0000_1000_0000,
+//	       WREVICT = 16'b0000_0001_0000_0000;
+module   gen_ctrl(input [15:0] current_state,
+		  output OE, D_WR, BUS_WR, BUS_EN, TS_WR, R, D_MUX);
+   wire IDLE = current_state[0];
+   wire RD = current_state[1];
+   wire RDHIT = current_state[2];
+   wire   RDMISS = current_state[3];
+   wire RDEVICT = current_state[4];
+   wire WR = current_state[5];
+   wire WRHIT = current_state[6];
+   wire WRMISS = current_state[7];
+   wire WREVICT = current_state[8];
 
-module   gen_ctrl(input [7:0] current_state,
-		  output OE, WR, BUS_WR, BUS_EN, TS_WR, R);
-
+   or4$ oe_or(OE, IDLE, RDMISS, WRHIT, WRMISS);
+   or3$ WR_or(D_WR, RDMISS, WRHIT, WRMISS);
+   or2$ bus_wr_out(BUS_WR, RDEVICT, WREVICT);
+   or4$ bus_en_out(BUS_EN, RDMISS, RDEVICT, WRMISS, WREVICT);
+   or2$ ts_wr_out(TS_WR, RDHIT, WRHIT);
+   or2$ ready_out(R, RDHIT, WRHIT);
+   
+   
+   
+   
+   
+   
+   
 endmodule // gen_ctrl
 
 
-
+//we assume that the size is a power of 2
+//so 1, 2, 4, 8, or 16
 module  write_masker(output [15:0] DC_WR,
 		     input CACHE_WR,
-		     input [3:0] size);
+		     input [3:0] size,
+		     input [3:0] address);
+   wire 		[15:0]	 nowrite = 0;
+   wire [15:0] 			 allwrite = 16'hFFFF;
+   wire [15:0] 			 mask;
+   //mask will be 0001, 0003, 0007, 007F, or FFFF
+   assign mask[0] = 1;
+   or4$ i1(mask[1], size[1], size[2], size[3],1'b0);
+   or2$ i2(mask[2], size[2], size[3]);
+   assign mask[3] = mask[2];
+   assign mask[4] = size[3];
+   assign mask[5] = mask[4];
+   assign mask[6] = mask[4];
+   assign mask[7] = mask[4];
+   assign mask[15:8] = 8'b00000000;
+   wire [15:0] 			 shifted_mask;
+   shifter16bit(shifted_mask, mask, address);
 
+   
+   
+/* BAD INITIAL attempt   
+   wire [31:0] 			 decoder_out;
+   decoder5to32(decoder_out, {1'b0,address});
+   wire 	[15:0]		 spot = decoder_out[15:0];
+
+   
+   wire [15:0] 			 out2, out4, out8;
+ bad implementation
+   genvar i;
+   generate
+      for(i=3;i<7;i=i+1)
+	begin : shifter
+	   //Allowed since i is constant when the loop is unrolled
+	   or2$(out2[i], spot[i], spot[i-1]);
+	   or4$(out4[i], spot[i], spot[i-1], spot[i-2], spot[i-3]);
+	   
+	end
+
+      for(i=7;i<16;i=i+1)
+	begin : shifter
+	   //Allowed since i is constant when the loop is unrolled
+	   or2$(out2[i], spot[i], spot[i-1]);
+	   or4$(out4[i], spot[i], spot[i-1], spot[i-2], spot[i-3]);
+	   or1_6way(out8[i], out4[i], spot[i-4], spot[i-5], spot[i-6],spot[i-7],1'b0);
+	end
+   endgenerate*/
+
+
+   
 
 endmodule // write_masker
+
+module shifter16bit(output [15:0] shifted_mask,
+		    input [15:0] Din,
+		    input [3:0] amnt);
+   wire [15:0] 			array [15:0];
+   wire [15:0] 			mux_array[3:0];
+   wire [15:0] 			zero = 16'b0000000000000000;
+   
+genvar i;
+generate
+for(i=2;i<16;i=i+1)
+  begin : shifter
+  //Allowed since i is constant when the loop is unrolled
+  assign array[i] = {Din[15-i:0], zero[i-1:0]};
+  end
+    endgenerate
+   assign array[0] = Din;
+   assign array[1] = {Din[14:0],zero[0]};
+   
+   
+//muxes to select shifted value, first round of muxes
+mux4_16$ mux1 (mux_array[0],array[0],array[1],array[2],array[3],amnt[0],amnt[1]);
+mux4_16$ mux2 (mux_array[1],array[4],array[5],array[6],array[7],amnt[0],amnt[1]);
+mux4_16$ mux3 (mux_array[2],array[8],array[9],array[10],array[11],amnt[0],amnt[1]);
+mux4_16$ mux4 (mux_array[3],array[12],array[13],array[14],array[15],amnt[0],amnt[1]);
+
+//last round of muxes
+mux4_16$ mux5 (Dout,mux_array[0],mux_array[1],mux_array[2],mux_array[3],amnt[2],amnt[3]);
+   
+
+
+endmodule // shifter16bit
+
+
+
+
+module shiftleft(
+    output [127:0] Dout,
+    input [127:0] Din,
+    input [3:0] amnt
+
+);
+
+
+wire [127:0] array [15:0];
+wire [127:0] mux_array [3:0];
+   wire [127:0] zero = 0;
+   
+genvar i;
+generate
+for(i=1;i<16;i=i+1)
+  begin : shifter
+  //Allowed since i is constant when the loop is unrolled
+  assign array[i] = {Din[127-i*8:0], zero[127:127-i*8+1]};
+  end
+    endgenerate
+   assign array[0] = Din;
+   
+//muxes to select shifted value, first round of muxes
+mux4_128$ mux1 (mux_array[0],array[0],array[1],array[2],array[3],amnt[0],amnt[1]);
+mux4_128$ mux2 (mux_array[1],array[4],array[5],array[6],array[7],amnt[0],amnt[1]);
+mux4_128$ mux3 (mux_array[2],array[8],array[9],array[10],array[11],amnt[0],amnt[1]);
+mux4_128$ mux4 (mux_array[3],array[12],array[13],array[14],array[15],amnt[0],amnt[1]);
+
+//last round of muxes
+mux4_128$ mux5 (Dout,mux_array[0],mux_array[1],mux_array[2],mux_array[3],amnt[2],amnt[3]);
+	
+
+endmodule
+
+module shiftright(
+    output [127:0] Dout,
+    input [127:0] Din,
+    input [3:0] amnt
+);
+
+
+wire [127:0] array [15:0];
+wire [127:0] mux_array [3:0];
+   wire [127:0] zero = 0;
+   
+genvar i;
+generate
+for(i=1;i<16;i=i+1)
+  begin : shifter
+  //Allowed since i is constant when the loop is unrolled
+  assign array[i] = {zero[127:i*8], Din[127:127-i*8+1]};
+  end
+    endgenerate
+   assign array[0] = Din;
+   
+
+
+//muxes to select shifted value, first round of muxes
+mux4_128$ mux1 (mux_array[0],array[0],array[1],array[2],array[3],amnt[0],amnt[1]);
+mux4_128$ mux2 (mux_array[1],array[4],array[5],array[6],array[7],amnt[0],amnt[1]);
+mux4_128$ mux3 (mux_array[2],array[8],array[9],array[10],array[11],amnt[0],amnt[1]);
+mux4_128$ mux4 (mux_array[3],array[12],array[13],array[14],array[15],amnt[0],amnt[1]);
+
+//last round of muxes
+mux4_128$ mux5 (Dout,mux_array[0],mux_array[1],mux_array[2],mux_array[3],amnt[2],amnt[3]);
+	
+
+endmodule

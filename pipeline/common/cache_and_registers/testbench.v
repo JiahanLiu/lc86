@@ -90,6 +90,8 @@ module TOP;
         WE2=2'd1;
         WE3=2'd2;
 
+
+        #3
         SR1=3'd1;
         SR2=3'd4;
         SR3=3'd2;
