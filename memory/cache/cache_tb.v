@@ -113,6 +113,15 @@ module TOP;
         $readmemh("ram0.list", u_cache.data_u.data_line3.ram13.mem);
         $readmemh("ram0.list", u_cache.data_u.data_line3.ram14.mem);
         $readmemh("ram0.list", u_cache.data_u.data_line3.ram15.mem);
+
+        $readmemh("tag_ram0.list", u_cache.tagstore_u.u_tag_ram0.mem);
+        $readmemh("tag_ram0.list", u_cache.tagstore_u.u_tag_ram1.mem);
+        $readmemh("tag_ram0.list", u_cache.tagstore_u.u_tag_ram2.mem);
+        $readmemh("tag_ram0.list", u_cache.tagstore_u.u_tag_ram3.mem);
+
+        u_cache.tagstore_u.valid_store.Q = 32'h00FF;
+        u_cache.state.Q = 16'h0001;
+
     end
 
     initial begin

@@ -10,3 +10,4 @@
 ../../pipeline/common/basic_components/equality.v
 ../../pipeline/common/basic_components/decoder.v
 ./cache.v
+./cache_tb.v
