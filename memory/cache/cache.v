@@ -309,6 +309,8 @@ module  gen_ctrl(input [15:0] current_state,
    or4$ bus_en_out(BUS_EN, RDMISS, RDEVICT, WRMISS, WREVICT);
    or2$ ts_wr_out(TS_WR, RDHIT, WRHIT);
    or2$ ready_out(R, RDHIT, WRHIT);
+   or2$ dmux_out(D_MUX, RDMISS, WRMISS);
+   
    
 endmodule // gen_ctrl
 
