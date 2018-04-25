@@ -11,37 +11,46 @@ module main_memory (
 // 4 buffers for what?
 wire [127:0] BUF_ICACHE, BUF_DCACHE;
 wire [127:0] data_blk1, data_blk2, buf_out;
-assign OE = ADDR[14];
+wire [15:0] write_en_f, write_en1, write_en2, write_en3, write_en4, write_en_read;
+wire [15:0] write_en_blk1, write_en_blk2;
+wire [31:0] bit_lines;
+wire [4:0] row_address;
 
+assign row_address = ADDR[4:0];
+assign column_address = ADDR[14:5];
+
+// Size 00 |-> writing one byte
+assign write_en_read = 16'hFFFF;
+assign write_en1 = 16'hFFFE;
+assign write_en2 = 16'hFFFD;
+assign write_en3 = 16'hFFFC;
+assign write_en4 = 16'hFFFB;
+
+mux4_16$ mux1_WR (write_en_f, write_en1, write_en2, write_en3, write_en4, WRITE_SIZE);
 inv1$ inv1 (ADDR14_B, ADDR[14]);
 
-tristate16L$ tri1_buf1 (.enbar(ADDR[14]), .in(DATA_IN[15:0]), .out(data_blk2[15:0]));
-tristate16L$ tri1_buf2 (.enbar(ADDR[14]), .in(DATA_IN[31:16]), .out(data_blk2[31:16]));
-//tristate16L$ tri1_buf3 (.enbar(ADDR[14]), .in(DATA_IN[47:32]), .out(data_blk2[47:32]));
-//tristate16L$ tri1_buf4 (.enbar(ADDR[14]), .in(DATA_IN[63:48]), .out(data_blk2[63:48]));
-//tristate16L$ tri1_buf5 (.enbar(ADDR[14]), .in(DATA_IN[79:64]), .out(data_blk2[79:64]));
-//tristate16L$ tri1_buf6 (.enbar(ADDR[14]), .in(DATA_IN[95:80]), .out(data_blk2[95:80]));
-//tristate16L$ tri1_buf7 (.enbar(ADDR[14]), .in(DATA_IN[111:96]), .out(data_blk2[111:96]));
-//tristate16L$ tri1_buf8 (.enbar(ADDR[14]), .in(DATA_IN[127:112]), .out(data_blk2[127:112]));
+and2$ write_mask[15:0] (write_en_blk1, write_en_f, {16{ADDR14_B}};
+and2$ write_mask[15:0] (write_en_blk2, write_en_f, {16{ADDR[14]}};
 
-tristate16L$ tri2_buf1 (.enbar(ADDR14_B), .in(DATA_IN[15:0]), .out(data_blk1[15:0]));
-tristate16L$ tri2_buf2 (.enbar(ADDR14_B), .in(DATA_IN[31:16]), .out(data_blk1[31:16]));
-//tristate16L$ tri2_buf3 (.enbar(ADDR14_B), .in(DATA_IN[47:32]), .out(data_blk1[47:32]));
-//tristate16L$ tri2_buf4 (.enbar(ADDR14_B), .in(DATA_IN[63:48]), .out(data_blk1[63:48]));
-//tristate16L$ tri2_buf5 (.enbar(ADDR14_B), .in(DATA_IN[79:64]), .out(data_blk1[79:64]));
-//tristate16L$ tri2_buf6 (.enbar(ADDR14_B), .in(DATA_IN[95:80]), .out(data_blk1[95:80]));
-//tristate16L$ tri2_buf7 (.enbar(ADDR14_B), .in(DATA_IN[111:96]), .out(data_blk1[111:96]));
-//tristate16L$ tri2_buf8 (.enbar(ADDR14_B), .in(DATA_IN[127:112]), .out(data_blk1[127:112]));
+tristate16L$ tri1_buf1 (.enbar(ADDR[14]), .in(DATA_IN[15:0]), .out(data_blk1[15:0]));
+tristate16L$ tri1_buf2 (.enbar(ADDR[14]), .in(DATA_IN[31:16]), .out(data_blk1[31:16]));
 
-word_lines block1 (ADDR[13:7], data_blk1, OE, WR, CE);
-word_lines block2 (ADDR[13:7], data_blk2, OE, WR, CE);
+tristate16L$ tri2_buf1 (.enbar(ADDR14_B), .in(DATA_IN[15:0]), .out(data_blk2[15:0]));
+tristate16L$ tri2_buf2 (.enbar(ADDR14_B), .in(DATA_IN[31:16]), .out(data_blk2[31:16]));
+
+word_lines block1 (ADDR[13:7], data_blk1, 1'b0, write_en_blk1, 1'b0);
+word_lines block2 (ADDR[13:7], data_blk2, 1'b0, write_en_blk2, 1'b0);
 
 mux32_2way mux1 (buf_out[31:0], data_blk1[31:0], data_blk2[31:0], ADDR[14]);
 mux32_2way mux2 (buf_out[63:32], data_blk1[63:32], data_blk2[63:32], ADDR[14]);
 mux32_2way mux3 (buf_out[95:64], data_blk1[95:64], data_blk2[95:64], ADDR[14]);
 mux32_2way mux4 (buf_out[127:96], data_blk1[127:96], data_blk2[127:96], ADDR[14]);
 
-//reg32e$ 
+
+decoder5to32 u_column_decoder (bit_lines, row_address);
+decoder5to32 u_row_decoder1 (bit_lines, row_address);
+decoder5to32 u_row_decoder2 (bit_lines, row_address);
+
 
 endmodule
 
