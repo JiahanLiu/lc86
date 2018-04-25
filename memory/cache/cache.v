@@ -1,45 +1,20 @@
-module TOP;
-   reg clk, rst;
-
-`define half_cycle 50
-   initial 
-     begin
-	clk = 1'b0;
-	rst = 1'b0;
-     end
-   
-   always #(`half_cycle) clk = ~clk;
-
-   // Run simulation.  
-   initial #(`half_cycle*50*2) $finish;
-
-   // Dump all waveforms
-   initial
-      begin
-
-
-	 $vcdplusfile("lsu.dump.vpd");
-	 $vcdpluson(0, TOP); 
-      end // initial begin
-endmodule
-
 module cache( //interface with the processor
-	      input CLK, SET, RST,
-	      input [127:0] data_write,
-	      input RW,
-	      input enable,
-	      input [15:0] address,
-	      input [3:0] size,
-	      output [127:0] data_read,
-	      output ready,
+    input CLK, SET, RST,
+    input [127:0] data_write,
+    input RW,
+    input enable,
+    input [15:0] address,
+    input [3:0] size,
+    output [127:0] data_read,
+    output ready,
 
-	      output BUS_WR,
-	      output BUS_EN,
-	      output [15:0] BUS_ADDR,
-	      output [127:0] BUS_WRITE,
-	      input BUS_R,
-	      input [127:0] BUS_READ
-	      );
+    output BUS_WR,
+    output BUS_EN,
+    output [15:0] BUS_ADDR,
+    output [127:0] BUS_WRITE,
+    input BUS_R,
+    input [127:0] BUS_READ
+);
 
 
    //STATE MACHINE ENCODING 00000000
@@ -101,9 +76,6 @@ module cache( //interface with the processor
    //CHECKING FOR A HIT
    equalitycheck equalitycheck_u(HIT, tagstore_tag, address[15:9]);
    
-
-
-
 endmodule
 
 //each cacheline is 128 bits (16 cells)
@@ -113,78 +85,117 @@ module eight_cachelines_d (input [2:0] A,
 			   input OE,
 			   input [15:0] WR,
 			   output [127:0] DOUT);
-genvar i;
-generate
-   for(i=0;i<15;i=i+1)
-   begin : cachebyte
-   //Allowed since i is constant when the loop is unrolled
-         ram8b8w$ small_dline(A,//corresponds to bits [6:4] in phys address
-			  DIN[(i+1)*8-1:i*8],//which byte on the line?
-			  OE,
-			  WR[i],//each line can be writtern on its own
-			  DOUT[(i+1)*8-1:i*8]);//which byte on the line?
-   end
-endgenerate
+//genvar i;
+//generate
+//   for(i=0;i<15;i=i+1)
+//   begin : cachebyte
+//   //Allowed since i is constant when the loop is unrolled
+//         ram8b8w$ small_dline(A,//corresponds to bits [6:4] in phys address
+//			  DIN[(i+1)*8-1:i*8],//which byte on the line?
+//			  OE,
+//			  WR[i],//each line can be writtern on its own
+//			  DOUT[(i+1)*8-1:i*8]);//which byte on the line?
+//   end
+//endgenerate
+    ram8b8w$ ram0 (A, DIN[7:0], OE, WR[0], DOUT[7:0]);
+    ram8b8w$ ram1 (A, DIN[15:8], OE, WR[1], DOUT[15:8]);
+    ram8b8w$ ram2 (A, DIN[23:16], OE, WR[2], DOUT[23:16]);
+    ram8b8w$ ram3 (A, DIN[31:24], OE, WR[3], DOUT[31:24]);
+    ram8b8w$ ram4 (A, DIN[39:32], OE, WR[4], DOUT[39:32]);
+    ram8b8w$ ram5 (A, DIN[47:40], OE, WR[5], DOUT[47:40]);
+    ram8b8w$ ram6 (A, DIN[55:48], OE, WR[6], DOUT[55:48]);
+    ram8b8w$ ram7 (A, DIN[63:56], OE, WR[7], DOUT[63:56]);
+    ram8b8w$ ram8 (A, DIN[71:64], OE, WR[8], DOUT[71:64]);
+    ram8b8w$ ram9 (A, DIN[79:72], OE, WR[9], DOUT[79:72]);
+    ram8b8w$ ram10 (A, DIN[87:80], OE, WR[10], DOUT[87:80]);
+    ram8b8w$ ram11 (A, DIN[95:88], OE, WR[11], DOUT[95:88]);
+    ram8b8w$ ram12 (A, DIN[103:96], OE, WR[12], DOUT[103:96]);
+    ram8b8w$ ram13 (A, DIN[111:104], OE, WR[13], DOUT[111:104]);
+    ram8b8w$ ram14 (A, DIN[119:112], OE, WR[14], DOUT[119:112]);
+    ram8b8w$ ram15 (A, DIN[127:120], OE, WR[15], DOUT[127:120]);
 endmodule // eight_cachelines_d
 
 
 module full_cache_d (input [4:0] A, //bits 8 to 4 in the phys address
-		     input [127:0] DIN,//data to write to the cacheline
-		     input OE,
-		     input [15:0] WR,
-		     output [127:0] DOUT);
-   wire [127:0] 	    DOUT_ARRAY [3:0];
-   
-genvar i;
-generate
-   for(i=0;i<4;i=i+1)
-   begin : cache_datalines
-   //Allowed since i is constant when the loop is unrolled
-         eight_cachelines_d data_line(A[2:0],//corresponds to bits [6:4] in phys address
-			  DIN,//no modifications needed
-			  OE,
-			  WR,//this signal needs to be gated with a match
-			  DOUT_ARRAY[i]);//only one DOUT will be needed
-   end
-endgenerate
+    input [127:0] DIN,//data to write to the cacheline
+    input OE,
+    input [15:0] WR,
+    output [127:0] DOUT
+);
 
+    wire [127:0] DOUT_ARRAY [3:0];
+    wire [127:0] DOUT_ARRAY0, DOUT_ARRAY1, DOUT_ARRAY2, DOUT_ARRAY3;
 
-   //need to select between the four possible d_cache lines
-   mux4_128$ dout_mux (DOUT,DOUT_ARRAY[0],DOUT_ARRAY[1],DOUT_ARRAY[2],DOUT_ARRAY[3],A[3],A[4]);
+    // Assign because arrays are not visible in waveforms
+    assign DOUT_ARRAY0 = DOUT_ARRAY[0];
+    assign DOUT_ARRAY1 = DOUT_ARRAY[1];
+    assign DOUT_ARRAY2 = DOUT_ARRAY[2];
+    assign DOUT_ARRAY3 = DOUT_ARRAY[3];
+       
+    //genvar i;
+    //generate
+    //   for(i=0;i<4;i=i+1)
+    //   begin : cache_datalines
+    //   //Allowed since i is constant when the loop is unrolled
+    //         eight_cachelines_d data_line(A[2:0],//corresponds to bits [6:4] in phys address
+    //			  DIN,//no modifications needed
+    //			  OE,
+    //			  WR,//this signal needs to be gated with a match
+    //			  DOUT_ARRAY[i]);//only one DOUT will be needed
+    //   end
+    //endgenerate
 
+    eight_cachelines_d data_line0 (A[2:0], DIN, OE, WR, DOUT_ARRAY[0]);
+    eight_cachelines_d data_line1 (A[2:0], DIN, OE, WR, DOUT_ARRAY[1]);
+    eight_cachelines_d data_line2 (A[2:0], DIN, OE, WR, DOUT_ARRAY[2]);
+    eight_cachelines_d data_line3 (A[2:0], DIN, OE, WR, DOUT_ARRAY[3]);
 
-
+    //need to select between the four possible d_cache lines
+    mux4_128$ dout_mux (DOUT,DOUT_ARRAY[0],DOUT_ARRAY[1],DOUT_ARRAY[2],DOUT_ARRAY[3],A[3],A[4]);
 
 endmodule // full_cache_d
 
 module full_tagstore (input [4:0] A,
-		      input valid,
-		      input dirty,
-		      input [6:0] tag,
-		      input OE,
-		      input WR,
-		      input CLK, CLR, PRE,//used for the valid bits
-		      output [8:0] DOUT);
-   wire [7:0] 			   ram_outs [3:0];
-   
-genvar i;
-generate
-   for(i=0;i<4;i=i+1)
-   begin : tagstore
-   //Allowed since i is constant when the loop is unrolled
-               ram8b8w$ ram8(A[2:0],//corresponds to bits [6:4] in phys address
-			  {dirty,tag},
-			  OE,
-			  WR,//this needs to be gated
-			 ram_outs[i]);//output will be muxed 
-   end
-endgenerate
+    input valid,
+    input dirty,
+    input [6:0] tag,
+    input OE,
+    input WR,
+    input CLK, CLR, PRE,//used for the valid bits
+    output [8:0] DOUT
+);
 
-   mux4_8$ dout_mux (DOUT[7:0],ram_outs[0],ram_outs[1],ram_outs[2],ram_outs[3],A[3],A[4]);
+    wire [7:0] ram_outs [3:0];
+    wire [7:0] ram_outs0, ram_outs1, ram_outs2, ram_outs3;
+
+    assign ram_outs0 = ram_outs[0];
+    assign ram_outs1 = ram_outs[1];
+    assign ram_outs2 = ram_outs[2];
+    assign ram_outs3 = ram_outs[3];
+       
+    //genvar i;
+    //generate
+    //   for(i=0;i<4;i=i+1)
+    //   begin : tagstore
+    //   //Allowed since i is constant when the loop is unrolled
+    //               ram8b8w$ ram8(A[2:0],//corresponds to bits [6:4] in phys address
+    //			  {dirty,tag},
+    //			  OE,
+    //			  WR,//this needs to be gated
+    //			 ram_outs[i]);//output will be muxed 
+    //   end
+    //endgenerate
+
+    ram8b8w$ u_tag_ram0 (A[2:0], {dirty,tag}, OE, WR, ram_outs[0]);
+    ram8b8w$ u_tag_ram1 (A[2:0], {dirty,tag}, OE, WR, ram_outs[1]);
+    ram8b8w$ u_tag_ram2 (A[2:0], {dirty,tag}, OE, WR, ram_outs[2]);
+    ram8b8w$ u_tag_ram3 (A[2:0], {dirty,tag}, OE, WR, ram_outs[3]);
+
+    mux4_8$ dout_mux (DOUT[7:0],ram_outs[0],ram_outs[1],ram_outs[2],ram_outs[3],A[3],A[4]);
 
    //the valid bit is seperate for convenience
    wire [31:0] valid_in, valid_out, valid_mask;//the current state of the valid bits
-   decoder5to32(valid_mask, A);
+   decoder5to32 u_decoder5to32 (valid_mask, A);
    
    or32_2way masker (valid_in, valid_out, valid_mask);
    wire WR_bar;//WR is active low, but registers are active high
@@ -193,10 +204,9 @@ endgenerate
 
    //TODO: need a 32 bit logical or circuit
    assign DOUT[8] = 0;
-   
+       
    
 endmodule // full_tagstore
-
 
 
 module equalitycheck(
@@ -205,7 +215,7 @@ module equalitycheck(
 	input [6:0] B
 	);
 
-	equalitycheck7 equalitycheck7_u(HIT, A, B);
+	equalitycheck7 u_equalitycheck7 (HIT, A, B);
 
 endmodule // equalitycheck
 
@@ -257,7 +267,7 @@ module gen_n_state(
 	or2$ u_s2(next_state[2], s1_HIT, s3_BUSR);
 	or3$ u_s3(next_state[3], s1_HITnot_EVnot, s4_BUSR, s3_BUSRnot);
 	or2$ u_s4(next_state[4], s1_HITnot_EV, s4_BUSRnot);
-	and3$ u_s5(next_state[5], current_state[0], enable,RW);
+	and3$ u_s5(next_state[5], current_state[0], enable, RW);
 	or2$ u_s6(next_state[6], s5_HIT, s7_BUSR);
 	or3$ u_s7(next_state[7], s5_HITnot_EVnot, s7_BUSRnot, s8_BUSR);
 	or2$ u_s8(next_state[8], s5_HITnot_EV, s8_BUSRnot);	
@@ -275,7 +285,7 @@ endmodule // gen_n_state
 //	       WRHIT = 16'b0000_0000_0100_0000,
 //	       WRMISS = 16'b0000_0000_1000_0000,
 //	       WREVICT = 16'b0000_0001_0000_0000;
-module   gen_ctrl(input [15:0] current_state,
+module  gen_ctrl(input [15:0] current_state,
 		  output OE, D_WR, BUS_WR, BUS_EN, TS_WR, R, D_MUX);
    wire IDLE = current_state[0];
    wire RD = current_state[1];
@@ -293,12 +303,6 @@ module   gen_ctrl(input [15:0] current_state,
    or4$ bus_en_out(BUS_EN, RDMISS, RDEVICT, WRMISS, WREVICT);
    or2$ ts_wr_out(TS_WR, RDHIT, WRHIT);
    or2$ ready_out(R, RDHIT, WRHIT);
-   
-   
-   
-   
-   
-   
    
 endmodule // gen_ctrl
 
@@ -323,7 +327,7 @@ module  write_masker(output [15:0] DC_WR,
    assign mask[7] = mask[4];
    assign mask[15:8] = 8'b00000000;
    wire [15:0] 			 shifted_mask;
-   shifter16bit(shifted_mask, mask, address);
+   shifter16bit u_shifter16bit (shifted_mask, mask, address);
 
    
    
@@ -359,35 +363,52 @@ module  write_masker(output [15:0] DC_WR,
 
 endmodule // write_masker
 
-module shifter16bit(output [15:0] shifted_mask,
-		    input [15:0] Din,
-		    input [3:0] amnt);
-   wire [15:0] 			array [15:0];
-   wire [15:0] 			mux_array[3:0];
-   wire [15:0] 			zero = 16'b0000000000000000;
-   
-genvar i;
-generate
-for(i=2;i<16;i=i+1)
-  begin : shifter
-  //Allowed since i is constant when the loop is unrolled
-  assign array[i] = {Din[15-i:0], zero[i-1:0]};
-  end
-    endgenerate
-   assign array[0] = Din;
-   assign array[1] = {Din[14:0],zero[0]};
-   
-   
-//muxes to select shifted value, first round of muxes
-mux4_16$ mux1 (mux_array[0],array[0],array[1],array[2],array[3],amnt[0],amnt[1]);
-mux4_16$ mux2 (mux_array[1],array[4],array[5],array[6],array[7],amnt[0],amnt[1]);
-mux4_16$ mux3 (mux_array[2],array[8],array[9],array[10],array[11],amnt[0],amnt[1]);
-mux4_16$ mux4 (mux_array[3],array[12],array[13],array[14],array[15],amnt[0],amnt[1]);
+module shifter16bit(
+    output [15:0] shifted_mask,
+    input [15:0] Din,
+    input [3:0] amnt
+);
 
-//last round of muxes
-mux4_16$ mux5 (Dout,mux_array[0],mux_array[1],mux_array[2],mux_array[3],amnt[2],amnt[3]);
-   
+    wire [15:0] array [15:0];
+    wire [15:0] mux_array[3:0];
+    wire [15:0] zero = 16'b0000000000000000;
+       
+    //genvar i;
+    //generate
+    //for(i=2;i<16;i=i+1)
+    //  begin : shifter
+    //  //Allowed since i is constant when the loop is unrolled
+    //  assign array[i] = {Din[15-i:0], zero[i-1:0]};
+    //  end
+    //    endgenerate
 
+    assign array[2] = {Din[13:0], zero[1:0]};
+    assign array[3] = {Din[12:0], zero[2:0]};
+    assign array[4] = {Din[11:0], zero[3:0]};
+    assign array[5] = {Din[10:0], zero[4:0]};
+    assign array[6] = {Din[9:0], zero[5:0]};
+    assign array[7] = {Din[8:0], zero[6:0]};
+    assign array[8] = {Din[7:0], zero[7:0]};
+    assign array[9] = {Din[6:0], zero[8:0]};
+    assign array[10] = {Din[5:0], zero[9:0]};
+    assign array[11] = {Din[4:0], zero[10:0]};
+    assign array[12] = {Din[3:0], zero[11:0]};
+    assign array[13] = {Din[2:0], zero[12:0]};
+    assign array[14] = {Din[1:0], zero[13:0]};
+    assign array[15] = {Din[0], zero[14:0]};
+        
+    assign array[0] = Din;
+    assign array[1] = {Din[14:0],zero[0]};
+       
+    //muxes to select shifted value, first round of muxes
+    mux4_16$ mux1 (mux_array[0],array[0],array[1],array[2],array[3],amnt[0],amnt[1]);
+    mux4_16$ mux2 (mux_array[1],array[4],array[5],array[6],array[7],amnt[0],amnt[1]);
+    mux4_16$ mux3 (mux_array[2],array[8],array[9],array[10],array[11],amnt[0],amnt[1]);
+    mux4_16$ mux4 (mux_array[3],array[12],array[13],array[14],array[15],amnt[0],amnt[1]);
+
+    //last round of muxes
+    mux4_16$ mux5 (shifted_mask,mux_array[0],mux_array[1],mux_array[2],mux_array[3],amnt[2],amnt[3]);
+       
 
 endmodule // shifter16bit
 
