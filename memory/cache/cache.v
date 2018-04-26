@@ -78,13 +78,16 @@ module cache( //interface with the processor
 
    //CHECKING FOR A HIT
    wire 	     MATCH;
+   wire 	     INVALID = 1'b0;
    equalitycheck equalitycheck_u(MATCH, tagstore_tag, address[15:9]);
-   and2$ and_u(HIT, MATCH, tagstore_V);
-
+   mux2$ mux_hit(HIT, INVALID, MATCH, tagstore_V);
+   
    //CHECKING FOR AN EVICT
    wire 	     MATCH_INV;
    inv1$ MATCH_INVER(MATCH_INV, MATCH);
-   and2$ and_evict(evict, MATCH_INV, tagstore_V);
+   mux2$ mux_evict(evict, INVALID, MATCH_INV, tagstore_V);
+   
+   
    
 
 
