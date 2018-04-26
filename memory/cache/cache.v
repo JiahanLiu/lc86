@@ -62,16 +62,17 @@ module cache( //interface with the processor
 
 
    //ACCESSING THE TAGSTORE
-   wire 	     tagstore_WR; //needs to be generated
    wire 	     tagstore_V, tagstore_D;
    wire [6:0] 	     tagstore_tag;
    wire 	     valid = 1;//I don't see any situation to invalidate a cache line
+   wire 	     TS_WR_INV;
+   inv1$ TS_INVER(TS_WR_INV, TS_WR);
    full_tagstore tagstore_u (address[8:4],
 		      valid,
-		      RW,//the line is dirty if we are writing to the line
+			    RW ,//the line is dirty if we are writing to the line
 		      address[15:9],
 		      OE,
-		      tagstore_WR,
+		      TS_WR_INV,
 		      CLK, RST, SET,//used for the valid bits
 		      {tagstore_V, tagstore_D,tagstore_tag});
 
