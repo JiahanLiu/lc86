@@ -40,6 +40,22 @@ module and1_5way (
 
 endmodule
 
+
+
+module and1_6way (
+	output and_out,
+	input a, b, c, d, e, f
+	);
+
+	wire intermediate_3side, intermediate_2side;
+
+	and3$ u_and_intermediate3 (intermediate_3side, a, b, c);
+	and3$ u_and_intermedaite3 (intermediate_2side, d, e, f);
+
+	and2$ u_and_final (and_out, intermediate_3side, intermediate_2side);
+
+endmodule
+
 //-------------------------------------------------------------------------------------
 //
 // 					 			1-Bit 5-Input AND Gate
