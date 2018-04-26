@@ -76,7 +76,10 @@ module cache( //interface with the processor
 		      {tagstore_V, tagstore_D,tagstore_tag});
 
    //CHECKING FOR A HIT
-   equalitycheck equalitycheck_u(HIT, tagstore_tag, address[15:9]);
+   wire 	     MATCH;
+   equalitycheck equalitycheck_u(MATCH, tagstore_tag, address[15:9]);
+   and2$ and_u(HIT, MATCH, tagstore_V);
+   
 
 
    //DRIVING THE BUS WIRES
@@ -336,7 +339,15 @@ module  write_masker(output [15:0] DC_WR,
    assign mask[15:8] = 8'b00000000;
    wire [15:0] 			 shifted_mask;
    shifter16bit u_shifter16bit (shifted_mask, mask, address);
+   wire [15:0] 			 complete_mask;
+   wire 			 size_full;
+   and4$ and_u(size_full, size[3], size[2], size[1], size[0]);
+   mux2_16$ mux2_u(complete_mask, shifted_mask, allwrite, size_full);
+   wire [15:0] 			 DC_WR_REG;
+   mux2_16$ mux2_u2(DC_WR_REG, nowrite, complete_mask, CACHE_WR);
+   not16_1way not_u(DC_WR, DC_WR_REG);
 
+   
    
    
 /* BAD INITIAL attempt   
