@@ -1,7 +1,7 @@
 module bus_controller(//interface with bus
 		      input BUS_CLK,
 		      input RST, SET,
-		      input MY_ID,
+		      input [2:0] MY_ID,
 		      inout [31:0] D,
 		      inout [15:0] A,
 		      inout [2:0] MASTER,
@@ -13,16 +13,20 @@ module bus_controller(//interface with bus
 		      output BR,
 		      input BG,
 		      //interface with work unit
-		      input EN, //simple signal saying we have a request
-		      input M_WR
+		      input MOD_EN, //simple signal saying we have a request
+		      input MOD_WR,
+		      input [15:0] MOD_A,
+		      input [127:0] MOD_WRITE_DATA,
+		      output [127:0] MOD_READ_DATA,
+		      output MOD_R
 		      //needs to be modifed for each unit
 		      );
    //CURRENT STATE REG
    wire [7:0] 		    current_state, next_state;
-   dff8$(BUS_CLK, next_state, current_state, , RST, SET);
+   dff8$ state_reg(BUS_CLK, next_state, current_state, , RST, SET);
 
    //GENERATE NEXT STATE
-   ctrler_gen_n_state(next_state, current_state, EN, BG, MY_ID, DEST, DONE);
+   ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MOD_EN, BG, MY_ID, DEST, DONE);
 
 
    //GENERATE CTRL SIGNALS
@@ -62,11 +66,23 @@ endmodule // ctrler_gen_n_state
 
 
 module arbitrator(input BUS_CLK,
-		  input [2:0] BR,
-		  output [2:0] BG);
+		  input [5:0] BR,
+		  output [5:0] BG);
 
 
 
 endmodule // arbitrator
 
-		      
+
+
+module ioreg32$(input CLK,
+		input [31:0] D,
+		output [31:0] Q,
+		output [31:0] QBAR,
+		input CLR,
+		input PRE);
+   ioreg16$ low(CLK, D[15:0], Q[15:0], QBAR[15:0], CLR, PRE);
+   ioreg16$ high(CLK, D[31:16], Q[31:16], QBAR[31:16], CLR, PRE);
+endmodule // ioreg32
+
+   
