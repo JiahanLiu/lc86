@@ -206,3 +206,18 @@ module not32_1way (
 	endgenerate
 
 endmodule
+
+module not16_1way(
+	output [15:0] not_out, 
+	input [15:0] a
+	);
+
+	genvar i;
+	generate
+		for(i = 0; i < 16; i = i + 1)
+		begin : u_not
+			inv1$ u_not (not_out[i], a[i]);
+		end 
+	endgenerate
+
+endmodule
