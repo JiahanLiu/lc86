@@ -119,7 +119,7 @@ module TOP;
         $readmemh("tag_ram0.list", u_cache.tagstore_u.u_tag_ram2.mem);
         $readmemh("tag_ram0.list", u_cache.tagstore_u.u_tag_ram3.mem);
 
-        u_cache.tagstore_u.valid_store.Q = 32'h00FF;
+        u_cache.tagstore_u.valid_store.Q = 32'h0000;
         u_cache.state.Q = 16'h0001;
 
     end
@@ -128,6 +128,11 @@ module TOP;
         clk = 1'b0;
         pre = 1'b1;
         clr = 1'b1;
+        size = 3'b1;
+        enable = 1'b1;
+        BUS_R = 1'b0;
+
+//        forever #(half_cycle) clk = ~clk;
 
         // Cache tests:
         // One read
@@ -135,47 +140,53 @@ module TOP;
         // Write hit, write miss
         // Read hit, read miss
         
-        // Write
-        #(half_cycle-2)
-        enable = 1;
-        address = 16'h000A;
-        data_write = 16'h1234;
-        RW = 1;
-
         // Read
-        #(2*clk_cycle-2)
-        enable = 1;
         address = 16'h000A;
-        data_write = 16'h5634;
-        RW = 0;
-
-        //Write miss
-        #(2*clk_cycle-2)
-        enable = 1;
-        address = 16'h010A;
-        data_write = 16'h5634;
         RW = 1;
 
-        // Write hit
-        #(2*clk_cycle-2)
-        enable = 1;
-        address = 16'h010A;
-        data_write = 16'h5634;
-        RW = 1;
-        
-        // Read miss
-        #(2*clk_cycle-2)
-        enable = 1;
-        address = 16'h010B;
-        data_write = 16'h5634;
-        RW = 0;        
+        #(clk_cycle+half_cycle)
+        BUS_R = 1'b1;
+        BUS_READ = 127'h123412341234;
 
-        // Read hit
-        #(2*clk_cycle-2)
-        enable = 1;
-        address = 16'h010A;
-        data_write = 16'h5634;
+        #(2*clk_cycle)
+        BUS_R = 1'b0;
+
+        #(3*clk_cycle-3)
         RW = 0;
+
+//        #(half_cycle-2)
+//        enable = 1;
+//        data_write = 16'h1234;
+//        RW = 1;
+
+//        // Write
+//        #(2*clk_cycle-2)
+//        data_write = 16'h5634;
+//        RW = 1;
+
+//        //Write miss
+//        #(2*clk_cycle-2)
+//        address = 16'h010A;
+//        data_write = 16'h5634;
+//        RW = 1;
+//
+//        // Write hit
+//        #(2*clk_cycle-2)
+//        address = 16'h010A;
+//        data_write = 16'h5634;
+//        RW = 1;
+//        
+//        // Read miss
+//        #(2*clk_cycle-2)
+//        address = 16'h010B;
+//        data_write = 16'h5634;
+//        RW = 0;        
+//
+//        // Read hit
+//        #(2*clk_cycle-2)
+//        address = 16'h010A;
+//        data_write = 16'h5634;
+//        RW = 0;
     end
 
     always #(half_cycle) clk = ~clk;
