@@ -35,6 +35,22 @@ module equal_to_zero(
 
 endmodule // equal_to_zero
 
+module equalitycheck3(
+	output equal_true,
+	input [2:0] a,
+	input [2:0] b
+	);
+
+	wire [2:0] bit_equality;
+
+	xnor2$ eq_0(bit_equality[0], a[0], b[0]);
+	xnor2$ eq_1(bit_equality[1], a[1], b[1]);
+	xnor2$ eq_2(bit_equality[2], a[2], b[2]);
+
+	and3$ final_and(equal_true, bit_equality[0], bit_equality[1], bit_equality[2]);
+
+endmodule // equalitycheck7
+
 module equalitycheck7(
 	output equal_true,
 	input [6:0] a,
