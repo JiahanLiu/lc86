@@ -36,7 +36,12 @@
 ./decode/ucontrol_store.v
 ./decode/decode_stage1.v
 ./decode/decode_stage2.v
-./reg_dependency_check.v
+
+dependency_check/reg_scoreboard_check.v
+dependency_check/reg_scoreboard_generator.v
+dependency_check/all_scoreboard_generator.v
+dependency_check/reg_dependency_check.v
+
 ./segment_limit_check.v
 ./address_generation.v
 ./memory_stage.v
@@ -52,6 +57,8 @@
 ./execute_components/execute_components.v
 ./execute_components/mm_alu.v
 ./execute_components/shifter.v
+./writeback_components/writeback_components.v
 ./execute.v
+./writeback.v
 ./pipeline_fetch.v
 ./fetch_tb.v

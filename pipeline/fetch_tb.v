@@ -86,10 +86,11 @@ module TOP;
    PIPELINE u_pipeline(clk, clr, pre, IR);
 
     initial begin
-        clk = 0;
-        clr = 1;
+        clk = 1;
+        clr = 0;
         pre = 1;
         #6
+        clr = 1;
         forever #(half_cycle)  clk = ~clk;
     end
 
@@ -139,27 +140,48 @@ module TOP;
         u_pipeline.u_register_file.gpr.reg6_hh.Q = 32'hE000000;
         u_pipeline.u_register_file.gpr.reg7_hh.Q = 32'hF000000;
 
-        u_pipeline.u_fetch.IR_2.Q = 32'h0000000;
-        u_pipeline.u_fetch.u_FE_buf_3.low.Q = 64'h81773D090CDB1283;
-        u_pipeline.u_fetch.u_FE_buf_2.low.Q = 64'h85BC148878235B49;
-        u_pipeline.u_fetch.u_FE_buf_1.low.Q = 64'h81773D090CDB1283;
-        u_pipeline.u_fetch.u_FE_buf_0.low.Q = 64'h85BC148878235B49;
-        u_pipeline.u_fetch.u_FE_buf_3.high.Q = 64'h0F6FEB254B212F96;
-        u_pipeline.u_fetch.u_FE_buf_2.high.Q = 64'h7E6D39201F21D322;
-        u_pipeline.u_fetch.u_FE_buf_1.high.Q = 64'h0F6FEB254B212F96;
-        u_pipeline.u_fetch.u_FE_buf_0.high.Q = 64'h7E6D39201F21D322;
+//        u_pipeline.u_fetch.reg_read_ptr.Q = 32'h0000000;
+//        u_pipeline.u_fetch.u_FE_buf_3.low.Q = 64'h81773D090CDB1283;
+//        u_pipeline.u_fetch.u_FE_buf_2.low.Q = 64'h85BC148878235B49;
+//        u_pipeline.u_fetch.u_FE_buf_1.low.Q = 64'h81773D090CDB1283;
+//        u_pipeline.u_fetch.u_FE_buf_0.low.Q = 64'h85BC148878235B49;
+//        u_pipeline.u_fetch.u_FE_buf_3.high.Q = 64'h0F6FEB254B212F96;
+//        u_pipeline.u_fetch.u_FE_buf_2.high.Q = 64'h7E6D39201F21D322;
+//        u_pipeline.u_fetch.u_FE_buf_1.high.Q = 64'h0F6FEB254B212F96;
+//        u_pipeline.u_fetch.u_FE_buf_0.high.Q = 64'h7E6D39201F21D322;
 
      end 
 
      initial #100 $finish;
 
      always @(posedge clk) begin
-         $strobe ("at time %0d, IR = %h", $time, u_pipeline.u_fetch.IR);
+         $strobe ("at time %0d, IR = %h", $time, u_pipeline.u_fetch.CURRENT_IR);
          $strobe ("at time %0d, read_ptr = %h", $time, u_pipeline.u_fetch.read_ptr);
          $strobe ("at time %0d, instr_length_updt = %h", $time, u_pipeline.u_fetch.instr_length_updt);
          $strobe ("at time %0d, Opcode = %h", $time, u_pipeline.u_fetch.opcode);
 
     end
+
+//  TLB ENTRY        VPN        RPN        V     PRE   R/W   PCD
+`define TLB_ENTRY_0 {20'h00000, 20'h00000, 1'b1, 1'b1, 1'b0, 1'b0}
+`define TLB_ENTRY_1 {20'h02000, 20'h00002, 1'b1, 1'b1, 1'b1, 1'b0}
+`define TLB_ENTRY_2 {20'h04000, 20'h00005, 1'b1, 1'b1, 1'b0, 1'b0}
+`define TLB_ENTRY_3 {20'h0b000, 20'h00004, 1'b1, 1'b1, 1'b1, 1'b0}
+`define TLB_ENTRY_4 {20'h0c000, 20'h00007, 1'b1, 1'b1, 1'b1, 1'b0}
+`define TLB_ENTRY_5 {20'h0a000, 20'h00005, 1'b1, 1'b1, 1'b1, 1'b0}
+`define TLB_ENTRY_6 {20'h10000, 20'h10000, 1'b1, 1'b0, 1'b1, 1'b1}
+`define TLB_ENTRY_7 {20'h02001, 20'h2FFFF, 1'b1, 1'b0, 1'b1, 1'b1}
+   initial
+      begin
+         u_pipeline.u_fetch.u_ifu.itlb.ENTRY[0] = `TLB_ENTRY_0;
+         u_pipeline.u_fetch.u_ifu.itlb.ENTRY[1] = `TLB_ENTRY_1;
+         u_pipeline.u_fetch.u_ifu.itlb.ENTRY[2] = `TLB_ENTRY_2;
+         u_pipeline.u_fetch.u_ifu.itlb.ENTRY[3] = `TLB_ENTRY_3;
+         u_pipeline.u_fetch.u_ifu.itlb.ENTRY[4] = `TLB_ENTRY_4;
+         u_pipeline.u_fetch.u_ifu.itlb.ENTRY[5] = `TLB_ENTRY_5;
+         u_pipeline.u_fetch.u_ifu.itlb.ENTRY[6] = `TLB_ENTRY_6;
+         u_pipeline.u_fetch.u_ifu.itlb.ENTRY[7] = `TLB_ENTRY_7;
+      end
 
    initial begin
        $vcdplusfile("pipeline.dump.vpd");

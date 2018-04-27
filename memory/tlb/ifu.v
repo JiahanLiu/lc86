@@ -115,7 +115,9 @@ module ifu (
    output ICACHE_EN_OUT,
 
    output ICACHE_RD_STALL_OUT,
-   output [127:0] RD_DATA_OUT
+   output [127:0] RD_DATA_OUT,
+
+   output PAGE_FAULT_EXC_OUT
 );
 
    wire [31:0] la_rd_addr, add_rd_cl_out, add_rd_pg_out;
@@ -196,6 +198,8 @@ module ifu (
    inv1$ inv0 (rd_page_fault_exception_bar, rd_page_fault_exception);
    and2$ and_icache_en (ICACHE_EN_OUT, icache_en, rd_page_fault_exception_bar);
    and2$ and_stall (ICACHE_RD_STALL_OUT, icache_rd_stall, rd_page_fault_exception_bar);
+
+   assign PAGE_FAULT_EXC_OUT = rd_page_fault_exception;
 
 endmodule
 
