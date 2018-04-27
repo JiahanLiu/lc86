@@ -9,4 +9,5 @@
 ../../pipeline/common/basic_components/logic_gates.v
 ../../pipeline/common/basic_components/equality.v
 ../../pipeline/common/basic_components/decoder.v
+../../pipeline/common/functional_units/shift_components.v
 ./main_memory.v

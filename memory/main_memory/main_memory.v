@@ -1,65 +1,77 @@
 module main_memory (
     input CLK,
     input [14:0] ADDR,
-    input CE, WR,
+    input WR,
     input [1:0] WRITE_SIZE,
     input [1:0] SRC,
-    input [31:0] DATA_IN,
-    output [31:0] DATA_OUT
+    inout [31:0] DIO
 );
 
-// 4 buffers for what?
-wire [127:0] BUF_ICACHE, BUF_DCACHE;
-wire [127:0] data_blk1, data_blk2, buf_out;
-wire [15:0] write_en_f, write_en1, write_en2, write_en3, write_en4, write_en_read;
-wire [15:0] write_en_blk1, write_en_blk2;
+wire [255:0] DATA_BUF;
 wire [31:0] bit_lines;
-wire [4:0] row_address;
+wire [1023:0] word_lines, word_lines_b;
+wire [9:0] row_address;
+wire [4:0] column_address;
+wire [31:0] write_mask1, write_mask2, write_mask3, write_out, write_out_b, write_read_mask;
+wire [31:0] shift1, shift2, shift3;
+wire [7:0] OE, OE_BAR;
 
-assign row_address = ADDR[4:0];
-assign column_address = ADDR[14:5];
+assign column_address = ADDR[4:0];
+assign row_address = ADDR[14:5];
 
-// Size 00 |-> writing one byte
-assign write_en_read = 16'hFFFF;
-assign write_en1 = 16'hFFFE;
-assign write_en2 = 16'hFFFD;
-assign write_en3 = 16'hFFFC;
-assign write_en4 = 16'hFFFB;
+// Address decoder
+decoder5to32 u_column_decoder (bit_lines, column_address);
+decoder10to1024 u_row_decoder (word_lines, row_address);
 
-mux4_16$ mux1_WR (write_en_f, write_en1, write_en2, write_en3, write_en4, WRITE_SIZE);
-inv1$ inv1 (ADDR14_B, ADDR[14]);
+inv1$ inv_row [1023:0] (word_lines, word_lines_b);
 
-and2$ write_mask[15:0] (write_en_blk1, write_en_f, {16{ADDR14_B}};
-and2$ write_mask[15:0] (write_en_blk2, write_en_f, {16{ADDR[14]}};
+//if (read)
+//    WR = 31'hFFFF_FFFF;
+//else (write) begin
+//    if(size==0)
+//        WR = bit_lines;
+//    else if(size==1)
+//        WR = bit_lines | (bit_lines >> 1);
+//    else if(size==2)
+//        WR = bit_lines | (bit_lines >> 1) | (bit_lines >> 2);
+//    else if(size==3)
+//        WR = bit_lines | (bit_lines >> 1) | (bit_lines >> 2) | bit_lines >> 3);
+//end
 
-tristate16L$ tri1_buf1 (.enbar(ADDR[14]), .in(DATA_IN[15:0]), .out(data_blk1[15:0]));
-tristate16L$ tri1_buf2 (.enbar(ADDR[14]), .in(DATA_IN[31:16]), .out(data_blk1[31:16]));
+shift_arithmetic_left u_SAL1 (shift1, bit_lines, 32'h1);
+shift_arithmetic_left u_SAL2 (shift2, bit_lines, 32'h2);
+shift_arithmetic_left u_SAL3 (shift3, bit_lines, 32'h3);
 
-tristate16L$ tri2_buf1 (.enbar(ADDR14_B), .in(DATA_IN[15:0]), .out(data_blk2[15:0]));
-tristate16L$ tri2_buf2 (.enbar(ADDR14_B), .in(DATA_IN[31:16]), .out(data_blk2[31:16]));
+or2$ or1[31:0] (write_mask1, bit_lines, shift1);
+or3$ or2[31:0] (write_mask2, bit_lines, shift1, shift2);
+or4$ or3[31:0] (write_mask3, bit_lines, shift1, shift2, shift3);
 
-word_lines block1 (ADDR[13:7], data_blk1, 1'b0, write_en_blk1, 1'b0);
-word_lines block2 (ADDR[13:7], data_blk2, 1'b0, write_en_blk2, 1'b0);
+mux32_4way mux4_write (write_out, bit_lines, write_mask1, write_mask2, write_mask3, WRITE_SIZE);
+inv1$ inv1_wr[31:0] (write_out_b, write_out);
 
-mux32_2way mux1 (buf_out[31:0], data_blk1[31:0], data_blk2[31:0], ADDR[14]);
-mux32_2way mux2 (buf_out[63:32], data_blk1[63:32], data_blk2[63:32], ADDR[14]);
-mux32_2way mux3 (buf_out[95:64], data_blk1[95:64], data_blk2[95:64], ADDR[14]);
-mux32_2way mux4 (buf_out[127:96], data_blk1[127:96], data_blk2[127:96], ADDR[14]);
+// write is active low for sram
+mux32_2way mux2_write (write_read_mask, 32'hFFFF_FFFF, write_out_b, WR);
 
+// OE for the correct block
+decoder3_8$ u_decoder3to8 (ADDR[14:12], OE, OE_BAR);
 
-decoder5to32 u_column_decoder (bit_lines, row_address);
-decoder5to32 u_row_decoder1 (bit_lines, row_address);
-decoder5to32 u_row_decoder2 (bit_lines, row_address);
-
+word_lines128 blk_line0 (ADDR[11:5], DATA_BUF, OE_BAR[0], write_read_mask, 1'b0);
+word_lines128 blk_line1 (ADDR[11:5], DATA_BUF, OE_BAR[1], write_read_mask, 1'b0);
+word_lines128 blk_line2 (ADDR[11:5], DATA_BUF, OE_BAR[2], write_read_mask, 1'b0);
+word_lines128 blk_line3 (ADDR[11:5], DATA_BUF, OE_BAR[3], write_read_mask, 1'b0);
+word_lines128 blk_line4 (ADDR[11:5], DATA_BUF, OE_BAR[4], write_read_mask, 1'b0);
+word_lines128 blk_line5 (ADDR[11:5], DATA_BUF, OE_BAR[5], write_read_mask, 1'b0);
+word_lines128 blk_line6 (ADDR[11:5], DATA_BUF, OE_BAR[6], write_read_mask, 1'b0);
+word_lines128 blk_line7 (ADDR[11:5], DATA_BUF, OE_BAR[7], write_read_mask, 1'b0);
 
 endmodule
 
 
-module word_lines (
+module word_lines128 (
     input [6:0] A,
-    input [127:0] DIO,
-    input OE,
-    input [15:0] WR, 
+    input [255:0] DIO,
+    input  OE,
+    input [31:0] WR, 
     input CE
 );
 
@@ -79,5 +91,21 @@ sram128x8$ sram12 (A, DIO[103:96], OE, WR[12], CE);
 sram128x8$ sram13 (A, DIO[111:104], OE, WR[13], CE);
 sram128x8$ sram14 (A, DIO[119:112], OE, WR[14], CE);
 sram128x8$ sram15 (A, DIO[127:120], OE, WR[15], CE);
+sram128x8$ sram16 (A, DIO[135:128], OE, WR[16], CE);
+sram128x8$ sram17 (A, DIO[143:136], OE, WR[17], CE);
+sram128x8$ sram18 (A, DIO[151:144], OE, WR[18], CE);
+sram128x8$ sram19 (A, DIO[159:152], OE, WR[19], CE);
+sram128x8$ sram20 (A, DIO[167:160], OE, WR[20], CE);
+sram128x8$ sram21 (A, DIO[175:168], OE, WR[21], CE);
+sram128x8$ sram22 (A, DIO[183:176], OE, WR[22], CE);
+sram128x8$ sram23 (A, DIO[191:184], OE, WR[23], CE);
+sram128x8$ sram24 (A, DIO[199:192], OE, WR[24], CE);
+sram128x8$ sram25 (A, DIO[207:200], OE, WR[25], CE);
+sram128x8$ sram26 (A, DIO[215:208], OE, WR[26], CE);
+sram128x8$ sram27 (A, DIO[223:216], OE, WR[27], CE);
+sram128x8$ sram28 (A, DIO[231:224], OE, WR[28], CE);
+sram128x8$ sram29 (A, DIO[239:232], OE, WR[29], CE);
+sram128x8$ sram30 (A, DIO[247:240], OE, WR[30], CE);
+sram128x8$ sram31 (A, DIO[255:248], OE, WR[31], CE);
 
 endmodule
