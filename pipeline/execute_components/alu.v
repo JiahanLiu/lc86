@@ -34,6 +34,7 @@ module alu32 (
 	output [31:0] flags,
 	input [31:0] a, b,
 	input [2:0] op,
+	input [1:0] datasize,
 	input CF_dataforwarded,
 	input AF_dataforwarded
 	);
@@ -41,13 +42,13 @@ module alu32 (
 	wire [31:0] adder_result, or_result, not_result, daa_result, and_result, cld_result, cmp_result, std_result;
 	wire [31:0] adder_flags, or_flags, not_flags, daa_flags, and_flags, cld_flags, cmp_flags, std_flags;
 
-	alu_adder u_alu_adder (adder_result, adder_flags, a, b);
-	alu_or u_alu_or (or_result, or_flags, a, b);
+	alu_adder u_alu_adder (adder_result, adder_flags, a, b, datasize);
+	alu_or u_alu_or (or_result, or_flags, a, b, datasize);
 	alu_not u_alu_not (not_result, not_flags, a);
 	alu_daa u_alu_daa (daa_result, daa_flags, a, CF_dataforwarded, AF_dataforwarded);
-	alu_and u_alu_and (and_result, and_flags, a, b);
+	alu_and u_alu_and (and_result, and_flags, a, b, datasize);
 	alu_cld u_alu_cld (cld_result, cld_flags);
-	alu_cmp u_alu_cmp (cmp_result, cmp_flags, b, a); //inverted because of how Nelson gives me the data
+	alu_cmp u_alu_cmp (cmp_result, cmp_flags, b, a, datasize); //inverted because of how Nelson gives me the data
 	alu_std u_alu_std (std_result, std_flags);
 
 	mux32_8way out_selection(alu_out, adder_result, or_result, not_result, daa_result, and_result, cld_result, cmp_result, std_result, op[2:0]);
@@ -63,23 +64,24 @@ endmodule // alu
 //
 // Combinational Delay: 
 //
-module alu_adder (adder_result, flags, a, b);
+module alu_adder (adder_result, flags, a, b, datasize);
 	output [31:0] adder_result;
 	output [31:0] flags;
 	input [31:0] a, b;
+	input [1:0] datasize;
 
 	wire [31:0] adder_carry; 
 	adder32 u_adder32(adder_result, adder_carry, a, b);  
 
 	wire OF, DF, SF, ZF, AF, PF, CF; 
 
-	OF_logic u_OF_logic(OF, adder_result[31], a[31], b[31]);
+	OF_logic u_OF_logic(OF, adder_result, a, b, datasize);
 	assign DF = 0;
-	assign SF = adder_result[31];
-	ZF_logic u_ZF_logic(ZF, adder_result[31:0]);
+	SF_logic u_SF_logic(SF, adder_result, datasize);
+	ZF_logic u_ZF_logic(ZF, adder_result[31:0], datasize);
 	assign AF = adder_carry[3];
 	PF_logic u_PF_logic(PF, adder_result[7:0]);
-	assign CF = adder_carry[31];
+	CF_logic u_CF_logic(CF, adder_carry, datasize);
 
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
 
@@ -97,7 +99,8 @@ endmodule
 module alu_or (
 	output [31:0] or_result,
 	output [31:0] flags,
-	input [31:0] a, b
+	input [31:0] a, b,
+	input [1:0] datasize
 	);
 
 	or32_2way u_or32_2way(or_result, a, b);
@@ -106,8 +109,8 @@ module alu_or (
 
 	assign OF = 0;
 	assign DF = 0;
-	assign SF = or_result[31];
-	ZF_logic u_ZF_logic(ZF, or_result[31:0]);
+	SF_logic u_SF_logic(SF, or_result, datasize);
+	ZF_logic u_ZF_logic(ZF, or_result, datasize);
 	assign AF = 0;
 	PF_logic u_PF_logic(PF, or_result[7:0]);
 	assign CF = 0;
@@ -215,7 +218,8 @@ endmodule
 module alu_and (
 	output [31:0] and_result,
 	output [31:0] flags,
-	input [31:0] a, b
+	input [31:0] a, b,
+	input [1:0] datasize
 	);
 
 	and32_2way and32_2way (and_result, a, b);
@@ -224,8 +228,8 @@ module alu_and (
 
 	assign OF = 0;
 	assign DF = 0;
-	assign SF = and_result[31];
-	ZF_logic u_ZF_logic(ZF, and_result[31:0]);
+	SF_logic u_SF_logic(SF, and_result, datasize);
+	ZF_logic u_ZF_logic(ZF, and_result, datasize);
 	assign AF = 0;
 	PF_logic u_PF_logic(PF, and_result[7:0]);
 	assign CF = 0;
@@ -274,7 +278,8 @@ endmodule
 module alu_cmp (
 	output [31:0] cmp_result,
 	output [31:0] flags,
-	input [31:0] a, b
+	input [31:0] a, b,
+	input [1:0] datasize
 	);
 
 	wire [31:0] carry_out;
@@ -282,10 +287,10 @@ module alu_cmp (
 
 	wire OF, DF, SF, ZF, AF, PF, CF;  
 
-	OF_logic u_OF_logic(OF, cmp_result[31], a[31], b[31]);
+	OF_logic u_OF_logic(OF, cmp_result, a, b, datasize);
 	assign DF = 0;
-	assign SF = cmp_result[31];
-	ZF_logic u_ZF_logic(ZF, cmp_result[31:0]);
+	SF_logic u_SF_logic(SF, cmp_result, datasize);
+	ZF_logic u_ZF_logic(ZF, cmp_result, datasize);
 	assign AF = carry_out[3];
 	PF_logic u_PF_logic(PF, cmp_result[7:0]);
 	assign CF = carry_out[31];

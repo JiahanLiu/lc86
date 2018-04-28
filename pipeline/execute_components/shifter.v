@@ -22,7 +22,7 @@ module shifter32(
 	wire [31:0] left_flags, right_flags;
 
 	shift_arithmetic_left_w_flags u_SAL(left_result, left_flags, a, b, datasize);
-	shift_arithmetic_right_w_flags u_SAR(right_result, right_flags, a, b);
+	shift_arithmetic_right_w_flags u_SAR(right_result, right_flags, a, b, datasize);
 
 	mux32_2way mux_results(shift_result, left_result, right_result, EX_de_shift_dir_wb);
 	mux32_2way mux_flags(shift_flags, left_flags, right_flags, EX_de_shift_dir_wb);
@@ -52,10 +52,10 @@ module shift_arithmetic_left_w_flags(
 
 	shift_arithmetic_left_w_carry u_sal_carry(sal_result, carry_out, a, b, datasize);
 
-	OF_logic u_OF_logic(OF, sal_result[31], a[31], b[31]);
+	OF_logic u_OF_logic(OF, sal_result, a, b, datasize);
 	assign DF = 0; 
-	assign SF = sal_result[31];
-	ZF_logic u_ZF_logic(ZF, sal_result);
+	SF_logic u_SF_logic(SF, sal_result, datasize);
+	ZF_logic u_ZF_logic(ZF, sal_result, datasize);
 	assign AF = 0; //undefined
 	PF_logic u_PF_logic(PF, sal_result[7:0]);
 	assign CF = carry_out;
@@ -78,17 +78,18 @@ endmodule
 //
 module shift_arithmetic_right_w_flags(
 	output [31:0] sar_result, flags,
-	input [31:0] a, b
+	input [31:0] a, b,
+	input [1:0] datasize
 	);
 
 	wire carry_out;
 
 	shift_arithmetic_right_w_carry u_sar_carry(sar_result, carry_out, a, b);
 
-	OF_logic u_OF_logic(OF, sar_result[31], a[31], b[31]);
+	OF_logic u_OF_logic(OF, sar_result, a, b, datasize);
 	assign DF = 0; 
-	assign SF = sar_result[31];
-	ZF_logic u_ZF_logic(ZF, sar_result);
+	SF_logic u_SF_logic(SF, sar_result, datasize);
+	ZF_logic u_ZF_logic(ZF, sar_result, datasize);
 	assign AF = 0; //undefined
 	PF_logic u_PF_logic(PF, sar_result[7:0]);
 	assign CF = carry_out;
