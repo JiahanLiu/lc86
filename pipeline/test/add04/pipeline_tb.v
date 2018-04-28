@@ -464,6 +464,7 @@ module TOP;
         u_pipeline.u_register_file.segr_cs.Q = 32'h1A;
         u_pipeline.u_register_file.eflags.Q = 32'h01;
         u_pipeline.u_writeback.u_flags_wb.u_flags_register.Q = 32'h01;
+        u_pipeline.u_writeback.u_flags_wb.overwrite_ld_flags = 1'b0;
      end 
 
      initial begin
@@ -866,7 +867,7 @@ module TOP;
             #(clk_cycle-1);
             #1;    // Allow for setup time
             if(u_pipeline.EX_A != 32'h23) begin 
-              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_A, 23'h23);
+              $display("Error: EX_A is: %h, but needs to be: %h", u_pipeline.EX_A, 32'h23);
               error <= 1;
             end
 
@@ -894,7 +895,7 @@ module TOP;
             #(clk_cycle-1);
             #1;    // Allow for setup time
 
-            if(u_pipeline.WB_FLAGS != 32'h890) begin 
+            if(u_pipeline.WB_FLAGS != 32'h880) begin 
               $display("Error: WB_FLAGS is: %h, but needs to be: %h", u_pipeline.WB_FLAGS, 32'h890);
               error <= 1;
             end
@@ -946,7 +947,7 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_Flags != 32'h890) begin 
+            if(u_pipeline.WB_Final_Flags != 32'h880) begin 
               $display("Error: WB_Final_Flags is: %h, but needs to be: %h", u_pipeline.WB_Final_Flags, 32'h890);
               error <= 1;
             end
@@ -996,7 +997,7 @@ module TOP;
            //while (stall_signal == 1'b1) begin
            //     #clk_cycle
            //end
-
+        #5
         if(error == 0) begin 
           $display("****************** Test Passed! ******************");
         end else begin

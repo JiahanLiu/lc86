@@ -203,7 +203,7 @@ module flags_wb(
 	reg overwrite_ld_flags;
 
 	wire [31:0] prev_flags, calculated_flags, interrupt_flags, final_flags; 
-	wire [31:0] and_flags_top, and_flags_bottom, interrupt_flags;
+	wire [31:0] and_flags_top, and_flags_bottom;
 	
 	//get interrupt flags
 	and32_2way u_and_top(and_flags_top, WB_RESULT_A, 32'h00257FD5);

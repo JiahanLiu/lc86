@@ -465,6 +465,7 @@ module TOP;
         u_pipeline.u_register_file.segr_cs.Q = 32'h1A;
         u_pipeline.u_register_file.eflags.Q = 32'h01;
         u_pipeline.u_writeback.u_flags_wb.u_flags_register.Q = 32'h01; //internal flags register
+        u_pipeline.u_writeback.u_flags_wb.overwrite_ld_flags = 1'b0;
      end 
 
      initial begin
@@ -867,22 +868,22 @@ module TOP;
             #(clk_cycle-1);
             #1;    // Allow for setup time
             if(u_pipeline.EX_A != `default_mem_Value) begin 
-              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_A, `default_mem_Value);
+              $display("Error: EX_A is: %h, but needs to be: %h", u_pipeline.EX_A, `default_mem_Value);
               error <= 1;
             end
 
-            if(u_pipeline.EX_B != 8'h05) begin 
-              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, 8'h05);
+            if(u_pipeline.EX_B != 32'h0A020A02) begin 
+              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, 8'h0A020A02);
               error <= 1;
             end
 
-            if(u_pipeline.EX_ADDRESS != 32'hE060D05) begin 
-              $display("Error: EX_ADDRESS is: %h, but needs to be: %h", u_pipeline.EX_ADDRESS, 32'hE060D05);
+            if(u_pipeline.EX_ADDRESS != 32'h0f07_0d0f) begin 
+              $display("Error: EX_ADDRESS is: %h, but needs to be: %h", u_pipeline.EX_ADDRESS, 32'h0f07_0d0f);
               error <= 1;
             end
 
-            if(u_pipeline.WB_de_datasize_all_next != 2'b00) begin 
-              $display("Error: WB_de_datasize_all_next is: %h, but needs to be: %h", u_pipeline.WB_de_datasize_all_next, 3'b00);
+            if(u_pipeline.WB_de_datasize_all_next != 2'b10) begin 
+              $display("Error: WB_de_datasize_all_next is: %h, but needs to be: %h", u_pipeline.WB_de_datasize_all_next, 3'b10);
               error <= 1;
             end
 
@@ -894,12 +895,12 @@ module TOP;
 /*************************** WRITEBACK STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
             #1;    // Allow for setup time
-
+            /*
             if(u_pipeline.WB_FLAGS != 32'h000) begin 
               $display("Error: WB_FLAGS is: %h, but needs to be: %h", u_pipeline.WB_FLAGS, 32'h000);
               error <= 1;
             end
-
+            */
 /*************************** WRITEBACK STAGE OUTPUTS COMPARE ******************************/
 
             if(u_pipeline.WB_Final_Dcache_address != 32'hE060D05) begin 
@@ -927,8 +928,8 @@ module TOP;
               error <= 1;
             end
             
-            if(u_pipeline.WB_Final_datasize != 2'b00) begin 
-              $display("Error: WB_Final_datasize is: %h, but needs to be: %h", u_pipeline.WB_Final_datasize, 2'b00);
+            if(u_pipeline.WB_Final_datasize != 2'b10) begin 
+              $display("Error: WB_Final_datasize is: %h, but needs to be: %h", u_pipeline.WB_Final_datasize, 2'b10);
               error <= 1;
             end
 
@@ -946,12 +947,12 @@ module TOP;
               $display("Error: WB_Final_ld_cs is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_cs, 1'b0);
               error <= 1;
             end
-
+            /*
             if(u_pipeline.WB_Final_Flags != 32'h000) begin 
               $display("Error: WB_Final_Flags is: %h, but needs to be: %h", u_pipeline.WB_Final_Flags, 32'h890);
               error <= 1;
             end
-
+            */
             if(u_pipeline.WB_Final_ld_flags != 1'b1) begin 
               $display("Error: WB_Final_ld_flags is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_flags, 1'b1);
               error <= 1;
@@ -997,7 +998,7 @@ module TOP;
            //while (stall_signal == 1'b1) begin
            //     #clk_cycle
            //end
-
+        #5
         if(error == 0) begin 
           $display("****************** Test Passed! ******************");
         end else begin

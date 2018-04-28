@@ -165,6 +165,7 @@ module result_select_ex(
 	input CS_IS_CMPS_SECOND_UOP_ALL,
 	input CS_MUX_SP_POP_EX,
 	input CS_IS_ALU32_FLAGS_EX,
+	input CS_ALU_TO_B_EX,
 	input [31:0] shift_result,
 	input [31:0] EX_C,
 	input [31:0] EX_A,
@@ -176,22 +177,22 @@ module result_select_ex(
 	input [31:0] alu32_flags,
 	input [63:0] alu64_result
 	);
-
 	wire choose_a_as_b_signal, choose_b_as_a_signal;
-	wire [31:0] post_mux_c, post_mux_a, post_mux_b;
 
 	or2$ u_a_as_b(choose_a_as_b_signal, CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_XCHG_EX);
 	or2$ u_b_as_a(choose_b_as_a_signal, CS_IS_CMPXCHG_EX, CS_IS_XCHG_EX);
-
+	//WB_RESULT_A
+	wire [31:0] post_mux_c, post_mux_a, post_mux_b;
 	mux32_2way u_mux_c(post_mux_c, shift_result, EX_C, CS_IS_CMPXCHG_EX);
 	mux32_2way u_mux_a(post_mux_a, post_mux_c, EX_A, CS_PASS_A_EX);
 	mux32_2way u_mux_b(post_mux_b, post_mux_a, EX_B, choose_a_as_b_signal);
 	mux32_2way u_mux_resultA(WB_RESULT_A_next, post_mux_b, alu32_result, CS_IS_ALU32_EX);
-
-	mux32_2way u_mux_resultB(WB_RESULT_B_next, EX_B, EX_A, choose_b_as_a_signal);
-
+	//WB_RESULT_B
+	wire [31:0] post_stage1_b; 
+	mux32_2way u_mux_stage1B(post_stage1_b, EX_B, EX_A, choose_b_as_a_signal);
+	mux32_2way u_mux_resultB(WB_RESULT_B_next, post_stage1_b, alu32_result, CS_ALU_TO_B_EX);
+	//	//WB_RESULT_C
 	wire [31:0] post_stack_pointer;
-
 	mux32_2way u_mux_increment_size(post_stack_pointer, EX_C, stack_pointer_pop, CS_MUX_SP_POP_EX);
 	mux32_2way u_mux_resultC(WB_RESULT_C_next, post_stack_pointer, count_minus_one, CS_IS_CMPS_SECOND_UOP_ALL);
 
