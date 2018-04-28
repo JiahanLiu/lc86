@@ -191,7 +191,7 @@ endmodule // repne_halt_wb
 // Combinational Delay: 
 //
 module flags_wb(
-	output [31:0] current_flags,
+	output [31:0] final_out_flags,
 	input CLK, 
 	input v_cs_ld_flags_wb,
 	input CS_POP_FLAGS_WB,
@@ -200,37 +200,45 @@ module flags_wb(
 	input [31:0] WB_RESULT_A
 	);
 
-	wire [31:0] prev_flags, internal_current_flags, and_flags_top, and_flags_bottom, interrupt_flags, next_flags;
+	reg overwrite_ld_flags;
+
+	wire [31:0] prev_flags, calculated_flags, interrupt_flags, final_flags; 
+	wire [31:0] and_flags_top, and_flags_bottom, interrupt_flags;
+	
+	//get interrupt flags
 	and32_2way u_and_top(and_flags_top, WB_RESULT_A, 32'h00257FD5);
-	and32_2way u_and_bottom(and_flags_bottom, internal_current_flags, 32'h00A10000);
+	and32_2way u_and_bottom(and_flags_bottom, prev_flags, 32'h00A10000);
 	or32_2way u_or_flags(interrupt_flags, and_flags_top, and_flags_bottom);
-	mux32_2way u_next_flags(next_flags, internal_current_flags, interrupt_flags, CS_POP_FLAGS_WB);
 
-	assign current_flags = internal_current_flags; 
-
-	reg32e$ u_flags_register(.CLK(CLK), .Din(internal_current_flags), .Q(prev_flags), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(v_cs_ld_flags_wb));
-	//reg32e$ reg0_hh (.CLK(clk_n), .Din(write_data0_hh), .Q(reg0_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[0]) );
+	//store previous flags
+	reg32e$ u_flags_register(.CLK(CLK), .Din(final_flags), .Q(prev_flags), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(overwrite_ld_flags));
+	//reg32e$ u_flags_register(.CLK(CLK), .Din(internal_current_flags), .Q(prev_flags), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(v_cs_ld_flags_wb));
 	//module reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
 
-
+	//combine prev flags with alu flags depending on bits affected
 	genvar i;
 	generate
 		for(i = 12; i < 32; i = i + 1)
 		begin : assign_m
-			assign current_flags[i] = prev_flags[i]; 
+			assign calculated_flags[i] = prev_flags[i]; 
 		end 
 	endgenerate
-	assign internal_current_flags[9] = current_flags[9];
-	assign internal_current_flags[8] = current_flags[8];
-	assign internal_current_flags[5] = current_flags[5];
-	assign internal_current_flags[3] = current_flags[3];
-	assign internal_current_flags[1] = current_flags[1];
-	mux2$ u_mux_flag_6(internal_current_flags[11], prev_flags[11], WB_FLAGS[11], CS_FLAGS_AFFECTED_WB[6]);
-	mux2$ u_mux_flag_5(internal_current_flags[10], prev_flags[10], WB_FLAGS[10], CS_FLAGS_AFFECTED_WB[5]);
-	mux2$ u_mux_flag_4(internal_current_flags[7], prev_flags[7], WB_FLAGS[7], CS_FLAGS_AFFECTED_WB[4]);
-	mux2$ u_mux_flag_3(internal_current_flags[6], prev_flags[6], WB_FLAGS[6], CS_FLAGS_AFFECTED_WB[3]);
-	mux2$ u_mux_flag_2(internal_current_flags[4], prev_flags[4], WB_FLAGS[4], CS_FLAGS_AFFECTED_WB[2]);
-	mux2$ u_mux_flag_1(internal_current_flags[2], prev_flags[2], WB_FLAGS[2], CS_FLAGS_AFFECTED_WB[1]);
-	mux2$ u_mux_flag_0(internal_current_flags[0], prev_flags[0], WB_FLAGS[0], CS_FLAGS_AFFECTED_WB[0]);
+	assign calculated_flags[9] = prev_flags[9];
+	assign calculated_flags[8] = prev_flags[8];
+	assign calculated_flags[5] = prev_flags[5];
+	assign calculated_flags[3] = prev_flags[3];
+	assign calculated_flags[1] = prev_flags[1];
+	mux2$ u_mux_flag_6(calculated_flags[11], prev_flags[11], WB_FLAGS[11], CS_FLAGS_AFFECTED_WB[6]);
+	mux2$ u_mux_flag_5(calculated_flags[10], prev_flags[10], WB_FLAGS[10], CS_FLAGS_AFFECTED_WB[5]);
+	mux2$ u_mux_flag_4(calculated_flags[7], prev_flags[7], WB_FLAGS[7], CS_FLAGS_AFFECTED_WB[4]);
+	mux2$ u_mux_flag_3(calculated_flags[6], prev_flags[6], WB_FLAGS[6], CS_FLAGS_AFFECTED_WB[3]);
+	mux2$ u_mux_flag_2(calculated_flags[4], prev_flags[4], WB_FLAGS[4], CS_FLAGS_AFFECTED_WB[2]);
+	mux2$ u_mux_flag_1(calculated_flags[2], prev_flags[2], WB_FLAGS[2], CS_FLAGS_AFFECTED_WB[1]);
+	mux2$ u_mux_flag_0(calculated_flags[0], prev_flags[0], WB_FLAGS[0], CS_FLAGS_AFFECTED_WB[0]);
+
+	mux32_2way u_next_flags(final_flags, calculated_flags, interrupt_flags, CS_POP_FLAGS_WB);
+
+	//assign to output
+	assign final_out_flags = final_flags; 
 
 endmodule // Flags_WB
