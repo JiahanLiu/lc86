@@ -16,7 +16,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
     //signals from WB to Dependency Checks
     wire DEP_v_wb_ld_gpr1;
     wire DEP_v_wb_ld_gpr2;
-    wire DEP_v_wb_ld_gpr3;
+    wire DEP_v_wb_ld_gpr3;d
     wire DEP_v_wb_ld_seg;
     wire DEP_v_wb_ld_mm;
     wire DEP_v_wb_dcache_write;
