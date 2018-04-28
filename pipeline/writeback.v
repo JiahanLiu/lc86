@@ -78,8 +78,7 @@ module writeback (
    //repne_halt_wb
    wire ZF; 
    //flags_wb
-   wire [31:0] current_flags;
-   wire v_cs_ld_flags_wb; 
+   wire [31:0] final_out_flags; 
    //outputs
    wire [63:0] data1_64; //64 because dcache data-in port is 64 bits incase the input is mm 
    //stall
@@ -87,10 +86,10 @@ module writeback (
    operand_select_wb u_operand_select_wb(data1, WB_Final_EIP, WB_Final_CS, count, CLK, PRE, CLR,
       CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_CMPS_SECOND_UOP_ALL, CS_SAVE_NEIP_WB, CS_SAVE_NCS_WB,
       CS_PUSH_FLAGS_WB, CS_USE_TEMP_NEIP_WB, CS_USE_TEMP_NCS_WB, WB_RESULT_A, WB_RESULT_C, WB_NEIP,
-      WB_NCS, current_flags);
+      WB_NCS, final_out_flags);
 
    conditional_support_wb u_conditional_support_wb(wb_ld_eip, wb_ld_gpr2, CS_IS_JNBE_WB, 
-      CS_IS_JNE_WB, CS_LD_EIP_WB, current_flags, CS_IS_CMOVC_WB, WB_ex_ld_gpr2_wb);
+      CS_IS_JNE_WB, CS_LD_EIP_WB, final_out_flags, CS_IS_CMOVC_WB, WB_ex_ld_gpr2_wb);
 
    validate_signals_wb u_validate_signals_wb(v_wb_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3,
       v_cs_ld_seg, v_cs_ld_mm, v_ex_dcache_write, v_cs_ld_flags, v_wb_ld_eip, v_cs_ld_cs,
@@ -106,9 +105,9 @@ module writeback (
    assign DEP_v_wb_dcache_write = v_ex_dcache_write;
 
    repne_halt_wb u_repne_halt_wb(halt_all, repne_terminate_all, WB_V, CS_IS_HALT_WB, CS_IS_CMPS_SECOND_UOP_ALL,
-      WB_d2_repne_wb, current_flags, WB_RESULT_C);
+      WB_d2_repne_wb, final_out_flags, WB_RESULT_C);
 
-   flags_wb u_flags_wb(current_flags, CLK, v_cs_ld_flags_wb, CS_POP_FLAGS_WB, 
+   flags_wb u_flags_wb(final_out_flags, CLK, v_cs_ld_flags, CS_POP_FLAGS_WB, 
       CS_FLAGS_AFFECTED_WB, WB_FLAGS, WB_RESULT_A);
 
    //regfile32
@@ -132,7 +131,7 @@ module writeback (
    //CS register
    assign WB_Final_ld_cs = v_cs_ld_cs;
    //Flags register
-   assign WB_Final_Flags = current_flags;
+   assign WB_Final_Flags = final_out_flags;
    assign WB_Final_ld_flags = v_cs_ld_flags;
    //DCACHE outputs
    assign data1_64 = {{32{1'b0}}, data1};
@@ -146,7 +145,7 @@ module writeback (
    and2$ u_wb_stall(WB_stall, v_ex_dcache_write, In_write_ready_not);
 
    //dataforward
-   assign flags_dataforwarded = current_flags;
+   assign flags_dataforwarded = final_out_flags;
    assign count_dataforwarded = count;
 
 endmodule

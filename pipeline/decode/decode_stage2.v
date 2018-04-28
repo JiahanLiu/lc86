@@ -213,16 +213,16 @@ module decode_stage2 (
 
    mux2$
      mux_seg1_needed (.outb(D2_SEG1_NEEDED_AG), .in0(MOD_EQ_MEM), .in1(CS_SEG1_NEEDED_AG), .s0(CS_MUX_SEG1_NEEDED_AG)),
-     mux_mem_rd (.outb(D2_MEM_RD_ME), .in0(MOD_EQ_MEM), .in1(CS_MEM_RD_DE), .s0(CS_MUX_MEM_RD_DE));
-//     mux_mem_wr (.outb(D2_MEM_WR_ME), .in0(MOD_EQ_MEM), .in1(CS_DCACHE_WRITE_D2), .s0(CS_MUX_MEM_WR_DE)),
+     mux_mem_rd (.outb(D2_MEM_RD_ME), .in0(MOD_EQ_MEM), .in1(CS_MEM_RD_DE), .s0(CS_MUX_MEM_RD_DE)),
+     mux_mem_wr (.outb(D2_MEM_WR_ME), .in0(MOD_EQ_MEM), .in1(CS_DCACHE_WRITE_D2), .s0(CS_MUX_MEM_WR_DE));
 //     mux_ld_gpr (.outb(D2_LD_GPR1_WB), .in0(MOD_EQ_REG), .in1(CS_LD_GPR1_D2), .s0(CS_MUX_LD_GPR1_D2));
 
    wire nand_mod_reg_out, nand_mod_mem_out;
 
-   nand2$ nand_mod_reg (nand_mod_reg_out, MOD_EQ_REG, modrm_present);
+//   nand2$ nand_mod_reg (nand_mod_reg_out, MOD_EQ_REG, modrm_present);
    nand2$ nand_mod_mem (nand_mod_mem_out, MOD_EQ_MEM, modrm_present);
 
-   and2$ and_mem_wr (D2_MEM_WR_ME, CS_DCACHE_WRITE_D2, nand_mod_reg_out);
+//   and2$ and_mem_wr (D2_MEM_WR_ME, CS_DCACHE_WRITE_D2, nand_mod_reg_out);
    and2$ and_ld_gpr1 (D2_LD_GPR1_WB, CS_LD_GPR1_D2, nand_mod_mem_out);
 
    mux2_3

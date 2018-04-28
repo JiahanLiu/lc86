@@ -108,7 +108,7 @@ module execute (
   
   result_select_ex u_result_select_ex(WB_RESULT_A_next, WB_RESULT_B_next, WB_RESULT_C_next, WB_FLAGS_next, 
     WB_RESULT_MM_next, CS_IS_ALU32_EX, CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_XCHG_EX, CS_PASS_A_EX,
-    CS_IS_CMPXCHG_EX, CS_IS_CMPS_SECOND_UOP_ALL, CS_MUX_SP_POP_EX, CS_IS_ALU32_FLAGS_EX,
+    CS_IS_CMPXCHG_EX, CS_IS_CMPS_SECOND_UOP_ALL, CS_MUX_SP_POP_EX, CS_IS_ALU32_FLAGS_EX, CS_ALU_TO_B_EX, 
     shift_result, EX_C, EX_A, EX_B, alu32_result, stack_pointer_pop, count_minus_one, shift_flags,
     alu32_flags, alu64_result);
 
