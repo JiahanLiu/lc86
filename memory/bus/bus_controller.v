@@ -26,7 +26,7 @@ module bus_controller(//interface with bus
    dff8$ state_reg(BUS_CLK, next_state, current_state, , RST, SET);
 
    //GENERATE NEXT STATE
-   ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MOD_EN, BG, MY_ID, DEST, DONE);
+   ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MOD_EN, BG, ACK, RW, MY_ID, DEST, DONE);
 
 
    //GENERATE CTRL SIGNALS
@@ -39,6 +39,46 @@ module bus_controller(//interface with bus
 
    wire [31:0] 		    data_buffer_in, data_buffer_out;
    ioreg32$ data_buffer(BUS_CLK, data_buffer_in, data_buffer_out, , RST, SET);
+
+   //GENERATING DONE LOGIC AND DATA BUFFER LOGIC
+   //THE CACHES DON'T NEED TOO MUCH LOGIC FOR THIS
+   wire 		    DONE;
+   done_logic done_logic_u(DONE, current_size);
+
+   size_decrement size_decrement_u(next_size, amnt_decr, current_size, A);
+   
+   
+   //TRISTATE BUFFERS FOR THE BUS
+   wire [31:0] 		    D_TRI_IN;
+   wire 		    D_TRI_EN;
+   tristate_bus_driver32$(D_TRI_EN, D_TRI_IN, D);
+
+   wire [15:0] 		    A_TRI_IN;
+   wire 		    A_TRI_EN;
+   tristate_bus_driver16$(A_TRI_EN, A_TRI_IN, A);
+
+   wire [2:0] 		    DEST_TRI_IN, MASTER_TRI_IN;
+   wire 		    DEST_TRI_EN, MASTER_TRI_EN;
+   tristate_bus_driver1$(DEST_TRI_EN, DEST_TRI_IN[2], DEST[2]);
+   tristate_bus_driver1$(DEST_TRI_EN, DEST_TRI_IN[1], DEST[1]);
+   tristate_bus_driver1$(DEST_TRI_EN, DEST_TRI_IN[0], DEST[0]);
+   tristate_bus_driver1$(MASTER_TRI_EN, MASTER_TRI_IN[2], MASTER[2]);
+   tristate_bus_driver1$(MASTER_TRI_EN, MASTER_TRI_IN[1], MASTER[1]);
+   tristate_bus_driver1$(MASTER_TRI_EN, MASTER_TRI_IN[0], MASTER[0]);
+   
+
+   wire [11:0] 		    SIZE_TRI_IN;
+   wire 		    SIZE_TRI_EN;
+   tristate_bus_driver8$(SIZE_TRI_EN, SIZE_TRI_IN[11:4], SIZE[11:4]);
+   tristate_bus_driver1$(SIZE_TRI_EN, SIZE_TRI_IN[3], SIZE[3]);
+   tristate_bus_driver1$(SIZE_TRI_EN, SIZE_TRI_IN[2], SIZE[2]);
+   tristate_bus_driver1$(SIZE_TRI_EN, SIZE_TRI_IN[1], SIZE[1]);
+   tristate_bus_driver1$(SIZE_TRI_EN, SIZE_TRI_IN[0], SIZE[0]);
+   
+   wire 		    RW_TRI_IN, ACK_TRI_IN;
+   wire 		    RW_TRI_EN, ACK_TRI_EN;
+   tristate_bus_driver1$(RW_TRI_EN, RW_TRI_IN, RW);
+   tristate_bus_driver1$(ACK_TRI_EN, ACK_TRI_IN, ACK);
    
 
 endmodule // bus_controller
@@ -47,7 +87,7 @@ endmodule // bus_controller
 module ctrler_gen_n_state(
 	output [7:0] next_state,
 	input [7:0] current_state,
-	input EN, BG, ACK,
+	input EN, BG, ACK, RW,
 	input [2:0] MY_ID, DEST,
 	input DONE
 	);
@@ -91,9 +131,9 @@ module ctrler_gen_n_state(
 	and2$ u_s1_destus(s1_destus, current_state[1], dest_eq_us);
 
 	and2$ u_s4_RW(s4_RW, current_state[4], RW);
-	and2$ u_s1_destus(s1_destus, current_state[1], dest_eq_us);
+	and2$ u_s1_destus1(s1_destus, current_state[1], dest_eq_us);
 
-	and2$ u_s4_RW(s4_RW, current_state[4], RW);
+	and2$ u_s4_RW1(s4_RW, current_state[4], RW);
 	and2$ u_s5_DONEnot(s5_DONEnot, current_state[5], DONE_not);
 
 	or1_5way u_s0(next_state[0], s4_RWnot, s3_DONE, s2_ACK_RWnot, s0_ENnot, s5_Done);
@@ -127,4 +167,33 @@ module ioreg32$(input CLK,
    ioreg16$ high(CLK, D[31:16], Q[31:16], QBAR[31:16], CLR, PRE);
 endmodule // ioreg32
 
+module  tristate_bus_driver32$(enbar, in, out);
+
+   input enbar;
+   input [31:0] in;
+   output [31:0] out;
+
+   tristate_bus_driver16$ a(enbar, in[15:0], out[15:0]);
+   tristate_bus_driver16$ b(enbar, in[15:0], out[15:0]);
    
+
+endmodule // tristate_bus_driver16
+
+
+module done_logic(output DONE,
+		  input [11:0] next_size);
+   equal_to_zero done_checker(DONE, {20'h00000, next_size});
+
+
+endmodule // done_logic
+
+   
+
+module size_decrement(output [11:0] next_size,
+		      output [2:0] amnt_decr,
+		      input [11:0] current_size,
+		      input [15:0] A);
+
+
+
+endmodule // size_decrement
