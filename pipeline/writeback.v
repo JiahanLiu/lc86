@@ -46,6 +46,7 @@ module writeback (
    output WB_Final_ld_flags,
    output [63:0] WB_Final_Dcache_Data,
    output [31:0] WB_Final_Dcache_address,
+   output WB_Final_Dcache_Write,
 
    output DEP_v_wb_ld_gpr1,
    output DEP_v_wb_ld_gpr2,
@@ -138,6 +139,7 @@ module writeback (
    mux64_2way u_dache_data_in(WB_Final_Dcache_Data, data1_64, WB_RESULT_MM, CS_MM_MEM_WB);
    assign WB_Final_Dcache_Data = data1; 
    assign WB_Final_Dcache_Address = WB_ADDRESS; 
+   assign WB_Final_Dcache_Write = v_ex_dcache_write;
 
    //stall logic
    inv1$ u_not_write_ready(In_write_ready_not, In_write_ready);

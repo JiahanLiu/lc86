@@ -865,13 +865,13 @@ module TOP;
 /*************************** EXECUTE STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
             #1;    // Allow for setup time
-            if(u_pipeline.EX_A != 32'h23) begin 
+            if(u_pipeline.EX_A != 32'h0800_0823) begin 
               $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_A, 23'h23);
               error <= 1;
             end
 
-            if(u_pipeline.EX_B != imm[7:0]) begin 
-              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, imm[7:0]);
+            if(u_pipeline.EX_B != imm[31:0]) begin 
+              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, imm[31:0]);
               error <= 1;
             end
 
@@ -880,7 +880,7 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_de_datasize_all_next != 2'b00) begin 
+            if(u_pipeline.WB_de_datasize_all_next != 2'b10) begin 
               $display("Error: WB_de_datasize_all_next is: %h, but needs to be: %h", u_pipeline.WB_de_datasize_all_next, 3'b00);
               error <= 1;
             end
@@ -894,7 +894,7 @@ module TOP;
             #(clk_cycle-1);
             #1;    // Allow for setup time
 
-            if(u_pipeline.WB_FLAGS != 32'h890) begin 
+            if(u_pipeline.WB_FLAGS != 32'h010) begin 
               $display("Error: WB_FLAGS is: %h, but needs to be: %h", u_pipeline.WB_FLAGS, 32'h890);
               error <= 1;
             end
@@ -946,7 +946,7 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_Flags != 32'h890) begin 
+            if(u_pipeline.WB_Final_Flags != 32'h010) begin 
               $display("Error: WB_Final_Flags is: %h, but needs to be: %h", u_pipeline.WB_Final_Flags, 32'h890);
               error <= 1;
             end

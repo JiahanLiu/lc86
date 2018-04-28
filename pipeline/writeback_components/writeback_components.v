@@ -208,8 +208,10 @@ module flags_wb(
 
 	assign current_flags = internal_current_flags; 
 
-	reg32e$ flags_register (CLK, internal_current_flags, prev_flags, , 1'b1, 1'b1, v_cs_ld_flags_wb);
+	reg32e$ u_flags_register(.CLK(CLK), .Din(internal_current_flags), .Q(prev_flags), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(v_cs_ld_flags_wb));
+	//reg32e$ reg0_hh (.CLK(clk_n), .Din(write_data0_hh), .Q(reg0_hh_out), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(out1a[0]) );
 	//module reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
+
 
 	genvar i;
 	generate

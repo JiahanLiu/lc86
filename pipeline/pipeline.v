@@ -42,6 +42,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire  WB_Final_ld_flags;
     wire [63:0] WB_Final_Dcache_Data;
     wire [31:0] WB_Final_Dcache_address;
+    wire WB_Final_Dcache_Write; 
     //signals from d-cache needed by WB
     wire In_write_ready = 1'b1; //Steven 
     //WB outputs
@@ -1045,6 +1046,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
         WB_Final_ld_flags,
         WB_Final_Dcache_Data,
         WB_Final_Dcache_address,
+        WB_Final_Dcache_Write,
 
         DEP_v_wb_ld_gpr1,
         DEP_v_wb_ld_gpr2,
