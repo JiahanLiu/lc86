@@ -79,7 +79,7 @@ module writeback (
    wire ZF; 
    //flags_wb
    wire [31:0] current_flags;
-   wire v_cs_ld_flags_wb; 
+   wire v_cs_ld_flags; 
    //outputs
    wire [63:0] data1_64; //64 because dcache data-in port is 64 bits incase the input is mm 
    //stall
@@ -108,7 +108,7 @@ module writeback (
    repne_halt_wb u_repne_halt_wb(halt_all, repne_terminate_all, WB_V, CS_IS_HALT_WB, CS_IS_CMPS_SECOND_UOP_ALL,
       WB_d2_repne_wb, current_flags, WB_RESULT_C);
 
-   flags_wb u_flags_wb(current_flags, CLK, v_cs_ld_flags_wb, CS_POP_FLAGS_WB, 
+   flags_wb u_flags_wb(current_flags, CLK, v_cs_ld_flags, CS_POP_FLAGS_WB, 
       CS_FLAGS_AFFECTED_WB, WB_FLAGS, WB_RESULT_A);
 
    //regfile32

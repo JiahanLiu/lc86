@@ -1,6 +1,7 @@
 `timescale 1ns/1ps
 `define EOF = 32'hFFFF_FFFF
 `define NULL 0
+`define default_mem_Value 32'h12
 
 `define assert(signal, value) \
         if (signal !== value) begin \
@@ -463,7 +464,7 @@ module TOP;
         u_pipeline.u_register_file.eip.Q = 32'h01;
         u_pipeline.u_register_file.segr_cs.Q = 32'h1A;
         u_pipeline.u_register_file.eflags.Q = 32'h01;
-        u_pipeline.u_writeback.u_flags_wb.u_flags_register.Q = 32'h01;
+        u_pipeline.u_writeback.u_flags_wb.u_flags_register.Q = 32'h01; //internal flags register
      end 
 
      initial begin
@@ -865,18 +866,18 @@ module TOP;
 /*************************** EXECUTE STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
             #1;    // Allow for setup time
-            if(u_pipeline.EX_A != 32'h23) begin 
-              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_A, 23'h23);
+            if(u_pipeline.EX_A != `default_mem_Value) begin 
+              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_A, `default_mem_Value);
               error <= 1;
             end
 
-            if(u_pipeline.EX_B != imm[7:0]) begin 
-              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, imm[7:0]);
+            if(u_pipeline.EX_B != 8'h05) begin 
+              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, 8'h05);
               error <= 1;
             end
 
-            if(u_pipeline.EX_DR1 != 3'b000) begin 
-              $display("Error: EX_DR1 is: %h, but needs to be: %h", u_pipeline.EX_DR1, 3'b000);
+            if(u_pipeline.EX_ADDRESS != 32'hE060D05) begin 
+              $display("Error: EX_ADDRESS is: %h, but needs to be: %h", u_pipeline.EX_ADDRESS, 32'hE060D05);
               error <= 1;
             end
 
@@ -894,15 +895,15 @@ module TOP;
             #(clk_cycle-1);
             #1;    // Allow for setup time
 
-            if(u_pipeline.WB_FLAGS != 32'h890) begin 
-              $display("Error: WB_FLAGS is: %h, but needs to be: %h", u_pipeline.WB_FLAGS, 32'h890);
+            if(u_pipeline.WB_FLAGS != 32'h000) begin 
+              $display("Error: WB_FLAGS is: %h, but needs to be: %h", u_pipeline.WB_FLAGS, 32'h000);
               error <= 1;
             end
 
 /*************************** WRITEBACK STAGE OUTPUTS COMPARE ******************************/
 
-            if(u_pipeline.WB_Final_DR1 != 3'b000) begin 
-              $display("Error: WB_Final_DR1 is: %h, but needs to be: %h", u_pipeline.WB_Final_DR1, 3'b000);
+            if(u_pipeline.WB_Final_Dcache_address != 32'hE060D05) begin 
+              $display("Error: WB_Final_Dcache_address is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_address, 32'hE060D05);
               error <= 1;
             end
 
@@ -911,7 +912,7 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_ld_gpr1 != 1'b1) begin 
+            if(u_pipeline.WB_Final_ld_gpr1 != 1'b0) begin 
               $display("Error: WB_Final_ld_gpr1 is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_gpr1, 1'b1);
               error <= 1;
             end
@@ -946,7 +947,7 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_Flags != 32'h890) begin 
+            if(u_pipeline.WB_Final_Flags != 32'h000) begin 
               $display("Error: WB_Final_Flags is: %h, but needs to be: %h", u_pipeline.WB_Final_Flags, 32'h890);
               error <= 1;
             end
@@ -956,7 +957,7 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_Dcache_Write != 1'b0) begin 
+            if(u_pipeline.WB_Final_Dcache_Write != 1'b1) begin 
               $display("Error: WB_Final_Dcache_Write is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_Write, 1'b0);
               error <= 1;
             end
