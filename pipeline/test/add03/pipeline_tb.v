@@ -594,13 +594,13 @@ module TOP;
 /*************************** EXECUTE STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
             #1;    // Allow for setup time
-            if(u_pipeline.EX_A != 32'h0A020A02) begin 
-              $display("Error: EX_A is: %h, but needs to be: %h", u_pipeline.EX_A, 32'h0A020A02);
+            if(u_pipeline.EX_A != 32'h12) begin 
+              $display("Error: EX_A is: %h, but needs to be: %h", u_pipeline.EX_A, 32'h12);
               error <= 1;
             end
-          
-            if(u_pipeline.EX_B != 32'h12) begin 
-              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, 32'h12);
+            
+            if(u_pipeline.EX_B != 32'h0A020A02) begin 
+              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, 32'h0A020A02);
               error <= 1;
             end
           
@@ -614,8 +614,8 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.EX_d2_aluk_ex != 2'b00) begin 
-              $display("Error: EX_d2_aluk_ex is: %h, but needs to be: %h", u_pipeline.EX_d2_aluk_ex, 3'b00);
+            if(u_pipeline.EX_d2_aluk_ex != 3'b000) begin 
+              $display("Error: EX_d2_aluk_ex is: %h, but needs to be: %h", u_pipeline.EX_d2_aluk_ex, 3'b000);
               error <= 1;
             end
 
@@ -655,7 +655,7 @@ module TOP;
               error <= 1;
             end
             
-            if(u_pipeline.WB_Final_datasize != 2'b00) begin 
+            if(u_pipeline.WB_Final_datasize != 2'b10) begin 
               $display("Error: WB_Final_datasize is: %h, but needs to be: %h", u_pipeline.WB_Final_datasize, 2'b10);
               error <= 1;
             end

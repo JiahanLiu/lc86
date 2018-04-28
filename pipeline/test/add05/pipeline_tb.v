@@ -38,6 +38,7 @@ module TOP;
    integer j=14;
 
     reg [31:0] EIP_UPDATE;
+    reg NextV;
     // Internal reg/wires
     //signals from EX to Dependency Checks
 
@@ -613,8 +614,8 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.EX_d2_aluk_ex != 2'b00) begin 
-              $display("Error: EX_d2_aluk_ex is: %h, but needs to be: %h", u_pipeline.EX_d2_aluk_ex, 3'b00);
+            if(u_pipeline.EX_d2_aluk_ex != 3'b000) begin 
+              $display("Error: EX_d2_aluk_ex is: %h, but needs to be: %h", u_pipeline.EX_d2_aluk_ex, 3'b000);
               error <= 1;
             end
 
