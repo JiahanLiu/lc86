@@ -74,7 +74,8 @@ module writeback (
    wire wb_ld_eip, wb_ld_gpr2;
    //validate_signals_wb
    wire v_wb_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3, v_cs_ld_seg, v_cs_ld_mm, 
-      v_ex_dcache_write, v_cs_ld_flags, v_wb_ld_eip, v_cs_ld_cs;
+      v_ex_dcache_write, v_wb_ld_eip, v_cs_ld_cs;
+   wire v_cs_ld_flags = 0;
    //repne_halt_wb
    wire ZF; 
    //flags_wb

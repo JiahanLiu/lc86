@@ -867,17 +867,17 @@ module TOP;
             #(clk_cycle-1);
             #1;    // Allow for setup time
             if(u_pipeline.EX_A != `default_mem_Value) begin 
-              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_A, `default_mem_Value);
+              $display("Error: EX_A is: %h, but needs to be: %h", u_pipeline.EX_A, `default_mem_Value);
               error <= 1;
             end
 
-            if(u_pipeline.EX_B != 8'h05) begin 
-              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, 8'h05);
+            if(u_pipeline.EX_B != 8'h02) begin 
+              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, 8'h02);
               error <= 1;
             end
 
-            if(u_pipeline.EX_ADDRESS != 32'hE060D05) begin 
-              $display("Error: EX_ADDRESS is: %h, but needs to be: %h", u_pipeline.EX_ADDRESS, 32'hE060D05);
+            if(u_pipeline.EX_ADDRESS != 32'h0f07_0d0f) begin 
+              $display("Error: EX_ADDRESS is: %h, but needs to be: %h", u_pipeline.EX_ADDRESS, 32'h0f07_0d0f);
               error <= 1;
             end
 
@@ -902,8 +902,8 @@ module TOP;
 
 /*************************** WRITEBACK STAGE OUTPUTS COMPARE ******************************/
 
-            if(u_pipeline.WB_Final_Dcache_address != 32'hE060D05) begin 
-              $display("Error: WB_Final_Dcache_address is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_address, 32'hE060D05);
+            if(u_pipeline.WB_Final_Dcache_address != 32'h0f07_0d0f) begin 
+              $display("Error: WB_Final_Dcache_address is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_address, 32'h0f07_0d0f);
               error <= 1;
             end
 
