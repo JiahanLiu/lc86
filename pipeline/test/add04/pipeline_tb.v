@@ -11,6 +11,8 @@
 module TOP;
 //this module is used to debug the basic functionality of the simulator
 //the clk cycle used to drive the entire system
+   reg error = 0;
+
    reg clk, clr, pre;
    reg [127:0] IR;
    integer clk_cycle = 10;
@@ -81,18 +83,18 @@ module TOP;
     //*******REGISTER FILE*******//
     reg RST;
     reg [15:0] SEG_DIN;
-    reg [2:0] 	SEGID1, SEGID2, WRSEGID;
-    reg 	SEGWE;
+    reg [2:0]   SEGID1, SEGID2, WRSEGID;
+    reg   SEGWE;
     reg [63:0] MM_DIN;
-    reg [2:0] 	MMID1, MMID2, WRMMID;
-    reg 	MMWE;
+    reg [2:0]   MMID1, MMID2, WRMMID;
+    reg   MMWE;
     reg [31:0] GPR_DIN0, GPR_DIN1, GPR_DIN2;
-    reg [2:0] 	GPRID0, GPRID1, GPRID2, GPRID3,	WRGPR0, WRGPR1, WRGPR2;
-    reg [1:0] 	GPR_RE0, GPR_RE1, GPR_RE2, GPR_RE3, GPRWE0, GPRWE1, GPRWE2;
+    reg [2:0]   GPRID0, GPRID1, GPRID2, GPRID3, WRGPR0, WRGPR1, WRGPR2;
+    reg [1:0]   GPR_RE0, GPR_RE1, GPR_RE2, GPR_RE3, GPRWE0, GPRWE1, GPRWE2;
     reg WE0, WE1, WE2;     // WRITE ENABLE SIGNALS
     reg [15:0] CS_DIN;
     reg [31:0] EIP_DIN, EFLAGS_DIN;
-    reg 	LD_CS, LD_EIP, LD_EFLAGS;
+    reg   LD_CS, LD_EIP, LD_EFLAGS;
     reg  [15:0] SEGDOUT1, SEGDOUT2;
     reg  [63:0] MMDOUT1, MMDOUT2;
     reg  [31:0] GPRDOUT0, GPRDOUT1, GPRDOUT2, GPRDOUT3;
@@ -107,10 +109,10 @@ module TOP;
     //Cache file systems to be used by the system
     reg [127:0] IC_DOUT, DC_IN, DC_DOUT;
     reg [31:0] IC_PADDR, DC_PADDR;
-    reg IC_EN, DC_WE, IC_R, DC_R;	//IC_EN needs to be included
+    reg IC_EN, DC_WE, IC_R, DC_R; //IC_EN needs to be included
 
     //*******FETCH STAGE*******//
-    reg [31:0] FE_EIP_IN;	//this signal should be coming out of WB, does not need a latch
+    reg [31:0] FE_EIP_IN; //this signal should be coming out of WB, does not need a latch
     reg [31:0] FE_JMP_FP, FE_TRAP_FP;//not sure where these signals come from yet
     reg [1:0] FE_FP_MUX;//not sure where this signal comes from yet
     reg FE_LD_EIP;//update the EIP!
@@ -128,7 +130,7 @@ module TOP;
     reg [3:0] DE_INSTR_LENGTH_UPDT_IN; 
 
     //Latches between fetch and decode
-    reg [31:0] DE_V_OUT_T, DE_V_OUT_T_BAR, DE_OP_CS_OUT_T, DE_OP_CS_OUT_T_BAR, MOD_SIB_OUT, MOD_SIB_OUT_BAR;	//temp wires
+    reg [31:0] DE_V_OUT_T, DE_V_OUT_T_BAR, DE_OP_CS_OUT_T, DE_OP_CS_OUT_T_BAR, MOD_SIB_OUT, MOD_SIB_OUT_BAR;  //temp wires
     reg [127:0] IR_OUT, IR_BAR_OUT;
     reg DE_V_IN;
 
@@ -182,7 +184,7 @@ module TOP;
    reg [15:0] AG_PS_CS, AG_PS_CS_NC;
    
    reg [127:0] AG_PS_CONTROL_STORE;
-   reg [47:0] 	AG_PS_OFFSET;
+   reg [47:0]   AG_PS_OFFSET;
    
    reg [1:0] AG_PS_DATA_SIZE;
    reg AG_PS_D2_SR1_NEEDED_AG, AG_PS_D2_SEG1_NEEDED_AG, AG_PS_D2_MM1_NEEDED_AG;
@@ -289,50 +291,23 @@ module TOP;
     reg [2:0] EX_DR1, EX_DR2, EX_DR3;
     reg [31:0] EX_ADDRESS;
 
-    //Execute Outputs
-    reg WB_V_next;
-    reg [31:0] WB_NEIP_next; 
-    reg [15:0] WB_NCS_next;
-    reg [127:0] WB_CONTROL_STORE_next;
-    reg [1:0] WB_de_datasize_all_next;
-    reg WB_ex_ld_gpr1_wb_next;
-    reg WB_ex_ld_gpr2_wb_next; 
-    reg WB_ex_dcache_write_wb_next; 
-    reg WB_de_repne_wb_next; 
-    reg [31:0] WB_RESULT_A_next;
-    reg [31:0] WB_RESULT_B_next;
-    reg [31:0] WB_RESULT_C_next;
-    reg [31:0] WB_FLAGS_next;
-    reg [63:0] WB_RESULT_MM_next; 
-    reg [2:0] WB_DR1_next;
-    reg [2:0] WB_DR2_next;
-    reg [2:0] WB_DR3_next;
-    reg [31:0] WB_ADDRESS_next;   
-    reg WB_ld_latches;
-
     //register between EX and WB
-    reg [31:0] WB_V_out;
     reg WB_V; 
     reg [31:0] WB_NEIP;
-    reg [31:0] WB_NCS_out;
     reg [15:0] WB_NCS;
     reg [127:0] WB_CONTROL_STORE;
-    reg [31:0] WB_de_datasize_all_out; 
+
     reg [1:0] WB_de_datasize_all; 
-    reg [31:0] WB_ex_ld_gpr1_wb_out; 
     reg WB_ex_ld_gpr1_wb; 
-    reg [31:0] WB_ex_ld_gpr2_wb_out; 
     reg WB_ex_ld_gpr2_wb; 
-    reg [31:0] WB_ex_dcache_write_wb_out; 
     reg WB_ex_dcache_write_wb; 
-    reg [31:0] WB_de_repne_wb_out; 
     reg WB_de_repne_wb; 
+
     reg [31:0] WB_RESULT_A;
     reg [31:0] WB_RESULT_B;
     reg [31:0] WB_RESULT_C;
     reg [31:0] WB_FLAGS;
     reg [63:0] WB_RESULT_MM; 
-    reg [31:0] WB_DR1_out, WB_DR2_out, WB_DR3_out;
     reg [2:0] WB_DR1, WB_DR2, WB_DR3;
     reg [31:0] WB_ADDRESS; 
 
@@ -349,7 +324,7 @@ module TOP;
     end
 
     // Set the register values
-    // reg0 = 32'08000800
+    // reg0 = 32'08000823
     // reg1 = 32'09010901
     // reg2 = 32'0A020A02
     // reg3 = 32'0B030B03
@@ -358,7 +333,7 @@ module TOP;
     // reg6 = 32'0E060E06
     // reg7 = 32'0F070F07
     initial begin
-        u_pipeline.u_register_file.gpr.reg0_ll.Q = 32'h0;
+        u_pipeline.u_register_file.gpr.reg0_ll.Q = 32'h23;
         u_pipeline.u_register_file.gpr.reg1_ll.Q = 32'h1;
         u_pipeline.u_register_file.gpr.reg2_ll.Q = 32'h2;
         u_pipeline.u_register_file.gpr.reg3_ll.Q = 32'h3;
@@ -501,7 +476,7 @@ module TOP;
          @(posedge pre);
          #(half_cycle)
         char = $fgetc(file);
-        while (char != 32'hFFFFFFFF) begin
+        
            // Initializing the sizes every time to zero
            j = 15; 
            IR = 128'h0;
@@ -524,7 +499,7 @@ module TOP;
            retval = $fscanf(file, "%h %h", prefix1, opcode);
            char = $fgetc(file); // eats newline
 
-           $display ("Time: %0d, OPCODE: %h", $time, opcode);
+          // $display ("Time: %0d, OPCODE: %h", $time, opcode);
            
            if(prefix1 == 16'h66) begin
                prefix_present = 1;
@@ -592,7 +567,7 @@ module TOP;
                     //disp = {$random};
                     disp_size = 4;
                     disp = 32'h0A000000;
-                    IR[8*j +: 32] = disp;
+                    IR[8*j +: 32] = disp; 
                     disp_size_en=0;
 //                    $display ("Time: %0 DISP = %h", $time, disp);
                 end
@@ -617,7 +592,7 @@ module TOP;
 
             if(imm_size8) begin
                 imm[7:0] = {$random};
-                imm[7:0] = 31'h12;
+                imm[7:0] = 31'h75;
                 j=j-1;
                 imm_size = 1;
                 imm_size_en = 0;
@@ -625,7 +600,7 @@ module TOP;
 //                $display ("Time: %0d IMM = %h", $time, imm[7:0]);
             end else if(imm_size16) begin
                 imm[15:0] = {$random};
-                imm[15:0] = 31'h1234;
+                imm[15:0] = 31'h5462;
                 j=j-2;
                 imm_size = 2;
                 imm_size_en = 1;
@@ -633,7 +608,7 @@ module TOP;
 //                $display ("Time: %0d IMM = %h", $time, imm[15:0]);
             end else if(imm_size32) begin
                 imm = {$random};
-                imm = 31'h12345678;
+                imm = 31'h3930_3929;
                 j=j-4;
                 imm_size = 4;
                 imm_size_en = 2;
@@ -683,7 +658,7 @@ module TOP;
 
             instr_length = prefix_size + opcode_size + modrm_present + sib_present + disp_size + imm_size + offset_size;
 //            $display("%h, %h, %h, %h, %h, %h, %h", prefix_size, opcode_size,modrm_present,sib_present,disp_size,imm_size,offset_size);
-            $display("instr_length = %h", instr_length);
+            //$display("instr_length = %h", instr_length);
             @(posedge clk);
            #clk_cycle; 
            #1; // allow for "setup time"
@@ -693,7 +668,7 @@ module TOP;
                $display("time: %0d IR_OUT error: %h!!", $time, u_pipeline.IR_OUT);
 //               $stop;
            end else 
-               $display("time: %0d IR_OUT: %h", $time, u_pipeline.IR_OUT);
+               // $display("time: %0d IR_OUT: %h", $time, u_pipeline.IR_OUT);
 
            if(u_pipeline.DE_EIP_OUT !== u_pipeline.DE_EIP_IN) begin
                $display("time: %0d DE_EIP_OUT error!!: %h", $time, u_pipeline.DE_EIP_OUT);
@@ -881,19 +856,30 @@ module TOP;
             //if(opcode == 16'h4 || opcode==16'h5 || opcode==16'h81 || opcode==16'h83 || opcode==16'h01) begin
             //    result = ME_A_OUT + ME_B_OUT;
             //end
-
+            /*
         $display ("at time %0d, MEM_A = %h", $time, u_pipeline.u_memory_stage.A);
         $display ("at time %0d, MEM_b = %h", $time, u_pipeline.u_memory_stage.B);
+        */
 
 /*************************** EXECUTE STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
             #1;    // Allow for setup time
+            if(u_pipeline.EX_A != 32'h23) begin 
+              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_A, 23'h23);
+              error <= 1;
+            end
 
+            if(u_pipeline.EX_B != imm[7:0]) begin 
+              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, imm[7:0]);
+              error <= 1;
+            end
+            
 /*************************** WRITEBACK STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
             #1;    // Allow for setup time
 
         // WRITEBACK SIGNALS
+        /*
         $display ("at time %0d, WB_Final_DR1 = %h", $time, u_pipeline.u_writeback.WB_Final_DR1);
         $display ("at time %0d, WB_Final_DR2 = %h", $time, u_pipeline.u_writeback.WB_Final_DR2);
         $display ("at time %0d, WB_Final_DR3 = %h", $time, u_pipeline.u_writeback.WB_Final_DR3);
@@ -921,15 +907,18 @@ module TOP;
         $display ("at time %0d, wb_repne_terminate_all = %h", $time, u_pipeline.u_writeback.wb_repne_terminate_all);
         $display ("at time %0d, WB_stall = %h", $time, u_pipeline.u_writeback.WB_stall);
         $display ("at time %0d, Flags_forwarded = %h", $time, u_pipeline.u_writeback.flags_dataforwarded);
+        */
 /*********************************************************/
            // Ignore all stall cycles; do not compare them against trace cycles.
            //while (stall_signal == 1'b1) begin
            //     #clk_cycle
            //end
 
+        if(error == 0) begin 
+          $display("****************** Test Passed! ******************");
+        end else begin
+          $display("****************** Test Failed! ******************");
         end
-
-        $display("INSTRUCTIONS COMPLETED");
         $fclose(file);
         $finish;
      end

@@ -133,7 +133,7 @@ module functional_unit_ex(
 	assign CF_dataforwarded = flags_dataforwarded[0];
 	assign AF_dataforwarded = flags_dataforwarded[4];
 
- 	alu32 u_alu32(alu32_result, alu32_flags, EX_A, b, EX_d2_aluk_ex, CF_dataforwarded, AF_dataforwarded);
+ 	alu32 u_alu32(alu32_result, alu32_flags, EX_A, b, EX_d2_aluk_ex, EX_d2_datasize_all, CF_dataforwarded, AF_dataforwarded);
   	alu64 u_alu64(alu64_result, EX_MM_A, EX_MM_B, b, CS_ALUK_D2);
   	shifter32 u_shifter32(shift_result, shift_flags, EX_d2_aluk_ex[0], EX_A, EX_B, EX_d2_datasize_all);
  	adder32 u_count_minus_one(count_minus_one, ,count, 32'hffff_ffff);
