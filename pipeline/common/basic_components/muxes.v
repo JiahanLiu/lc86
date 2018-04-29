@@ -30,8 +30,8 @@ module mux1_8way(
 
 	wire low_result, high_result;
 
-	mux4$ u_mux_low(low_result, a, b, c, d, select[1], select[0]);	
-	mux4$ u_mux_high(high_result, e, f, g, h, select[1], select[0]);
+	mux4$ u_mux_low(low_result, a, b, c, d, select[0], select[1]);	
+	mux4$ u_mux_high(high_result, e, f, g, h, select[0], select[1]);
 
 	mux2$ u_mux_final(mux_out, low_result, high_result, select[2]); 
 
