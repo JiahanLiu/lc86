@@ -63,7 +63,7 @@ module TOP;
     // reg6 = 32'0E060E06
     // reg7 = 32'0F070F07
     initial begin
-        u_pipeline.u_register_file.gpr.reg0_ll.Q = 32'h23;
+        u_pipeline.u_register_file.gpr.reg0_ll.Q = 32'h12;
         u_pipeline.u_register_file.gpr.reg1_ll.Q = 32'h1;
         u_pipeline.u_register_file.gpr.reg2_ll.Q = 32'h2;
         u_pipeline.u_register_file.gpr.reg3_ll.Q = 32'h3;
@@ -608,8 +608,8 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.EX_B != 8'h23) begin 
-              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, 8'h23);
+            if(u_pipeline.EX_B != 8'h12) begin 
+              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, 8'h12);
               error <= 1;
             end
 
@@ -649,8 +649,8 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_data2 != u_pipeline.EX_B) begin 
-              $display("Error: WB_Final_data1 is: %h, but needs to be: %h", u_pipeline.WB_Final_data1, u_pipeline.EX_A | u_pipeline.EX_B);
+            if(u_pipeline.WB_Final_data1 != u_pipeline.EX_C) begin 
+              $display("Error: WB_Final_data1 is: %h, but needs to be: %h", u_pipeline.WB_Final_data2, u_pipeline.EX_C);
               error <= 1;
             end
 
@@ -659,8 +659,8 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_ld_gpr2 != 1'b1) begin 
-              $display("Error: WB_Final_ld_gpr2 is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_gpr2, 1'b0);
+            if(u_pipeline.WB_Final_ld_gpr2 != 1'b0) begin 
+              $display("Error: WB_Final_ld_gpr2 is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_gpr2, 1'b1);
               error <= 1;
             end
 
@@ -694,13 +694,13 @@ module TOP;
               error <= 1;
             end
             */
-            if(u_pipeline.WB_Final_ld_flags != 1'b0) begin 
+            if(u_pipeline.WB_Final_ld_flags != 1'b1) begin 
               $display("Error: WB_Final_ld_flags is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_flags, 1'b1);
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_Dcache_Write != 1'b0) begin 
-              $display("Error: WB_Final_Dcache_Write is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_Write, 1'b0);
+            if(u_pipeline.WB_Final_Dcache_Write != 1'b1) begin 
+              $display("Error: WB_Final_Dcache_Write is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_Write, 1'b1);
               error <= 1;
             end
 

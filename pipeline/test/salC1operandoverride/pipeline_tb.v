@@ -266,7 +266,7 @@ module TOP;
 
             if(modrm_present == 1'b1) begin 
                 //modrm = {$random};
-                modrm = 32'b10111101; //95
+                modrm = 32'b10100101; //95
                 j=j-1;
                 IR[8*j +: 8] = modrm;
 //                $display ("Time: %0d MODRM = %h", $time, modrm);
@@ -618,11 +618,6 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_de_datasize_all_next != 2'b00) begin 
-              $display("Error: WB_de_datasize_all_next is: %h, but needs to be: %h", u_pipeline.WB_de_datasize_all_next, 2'b00);
-              error <= 1;
-            end
-
             if(u_pipeline.EX_d2_aluk_ex != 3'b100) begin 
               $display("Error: EX_d2_aluk_ex is: %h, but needs to be: %h", u_pipeline.EX_d2_aluk_ex, 3'b100);
               error <= 1;
@@ -666,8 +661,8 @@ module TOP;
               error <= 1;
             end
             
-            if(u_pipeline.WB_Final_datasize != 2'b00) begin 
-              $display("Error: WB_Final_datasize is: %h, but needs to be: %h", u_pipeline.WB_Final_datasize, 2'b00);
+            if(u_pipeline.WB_Final_datasize != 2'b01) begin 
+              $display("Error: WB_Final_datasize is: %h, but needs to be: %h", u_pipeline.WB_Final_datasize, 2'b01);
               error <= 1;
             end
 

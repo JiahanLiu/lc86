@@ -688,8 +688,8 @@ module TOP;
               error <= 1;
             end
             
-            if(u_pipeline.WB_Final_Flags != 32'h55) begin 
-              $display("Error: WB_Final_Flags is: %h, but needs to be: %h", u_pipeline.WB_Final_Flags, 32'h55);
+            if(u_pipeline.WB_Final_Flags != 32'h15) begin 
+              $display("Error: WB_Final_Flags is: %h, but needs to be: %h", u_pipeline.WB_Final_Flags, 32'h15);
               error <= 1;
             end
             
