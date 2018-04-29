@@ -302,7 +302,7 @@ module alu_cmp (
 	ZF_logic u_ZF_logic(ZF, cmp_result, datasize);
 	assign AF = carry_out[3];
 	PF_logic u_PF_logic(PF, cmp_result[7:0]);
-	assign CF = carry_out[31];
+	CF_logic u_CF_logic(CF, carry_out[31], datasize);
 
 	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
 endmodule
