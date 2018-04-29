@@ -577,6 +577,13 @@ module TOP;
 ////              $stop;
 //            end
 
+/*************************** ADDRESS GENERATION 2 STAGE INPUTS COMPARE ******************************/
+            #(clk_cycle-1);
+            #1;    // Allow for setup time
+
+/*************************** MEM_DEP_CHECK STAGE INPUTS COMPARE ******************************/
+            #(clk_cycle-1);
+            #1;    // Allow for setup time  
 
 /*************************** MEMORY STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);

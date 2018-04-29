@@ -39,7 +39,6 @@ module TOP;
    integer j=14;
 
     reg [31:0] EIP_UPDATE;
-    reg NextV;
 
 
    PIPELINE u_pipeline(clk, clr, pre, IR);
@@ -551,13 +550,12 @@ module TOP;
             end
 
 
-/*************************** ADDRESS GENERATION STAGE INPUTS COMPARE ******************************/
+/*************************** ADDRESS GENERATION 1 STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
             #1;    // Allow for setup time
            
             // Valid Signal always 1 for now
             // Check for the valid signal
-            NextV = 1;
 
             if(u_pipeline.AG_PS_EIP !== EIP_UPDATE) begin
                 $display("time: %0d AG_PS_EIP error!! %h", $time, u_pipeline.AG_PS_EIP);
@@ -569,16 +567,18 @@ module TOP;
 //              $stop;
             end
 
-            if(u_pipeline.AG_PS_CONTROL_STORE !== u_pipeline.D2_CONTROL_STORE_OUT) begin
-                $display("time: %0d AG_PS_CONTROL_STORE error!! %h", $time, u_pipeline.AG_PS_CONTROL_STORE_OUT);
-//              $stop;
-            end
-
 //            if(u_pipeline.AG_PS_OFFSET !== offset_compare) begin
 //                $display("time: %0d AG_PS_OFFSET error!! %h", $time, u_pipeline.AG_PS_OFFSET);
 ////              $stop;
 //            end
 
+/*************************** ADDRESS GENERATION 2 STAGE INPUTS COMPARE ******************************/
+            #(clk_cycle-1);
+            #1;    // Allow for setup time
+
+/*************************** MEM_DEP_CHECK STAGE INPUTS COMPARE ******************************/
+            #(clk_cycle-1);
+            #1;    // Allow for setup time            
 
 /*************************** MEMORY STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
