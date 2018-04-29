@@ -16,7 +16,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
     //signals from WB to Dependency Checks
     wire DEP_v_wb_ld_gpr1;
     wire DEP_v_wb_ld_gpr2;
-    wire DEP_v_wb_ld_gpr3;d
+    wire DEP_v_wb_ld_gpr3;
     wire DEP_v_wb_ld_seg;
     wire DEP_v_wb_ld_mm;
     wire DEP_v_wb_dcache_write;
@@ -795,7 +795,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
     wire [31:0] EX_A_next = ME_A_OUT;
     wire [31:0] EX_B_next = ME_B_OUT;
-    wire [31:0] EX_C_next = 32'b00000000; //Nelson
+    wire [31:0] EX_C_next = ME_SP_XCHG_DATA_OUT; //Nelson
     wire [31:0] EX_A, EX_B, EX_C;
     reg32e$ u_EX_a_latch(CLK, EX_A_next, EX_A, ,CLR,PRE,EN);
     reg32e$ u_EX_b_latch(CLK, EX_B_next, EX_B, ,CLR,PRE,EN);
