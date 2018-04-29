@@ -490,6 +490,37 @@ module TOP;
         u_pipeline.u_register_file.eflags.Q = 32'h01;
      end 
 
+//  TLB ENTRY        VPN        RPN        V     PRE   R/W   PCD
+`define TLB_ENTRY_0 {20'h00000, 20'h00000, 1'b1, 1'b1, 1'b0, 1'b0}
+`define TLB_ENTRY_1 {20'h02000, 20'h00002, 1'b1, 1'b1, 1'b1, 1'b0}
+`define TLB_ENTRY_2 {20'h04000, 20'h00005, 1'b1, 1'b1, 1'b0, 1'b0}
+`define TLB_ENTRY_3 {20'h0b000, 20'h00004, 1'b1, 1'b1, 1'b1, 1'b0}
+`define TLB_ENTRY_4 {20'h0c000, 20'h00007, 1'b1, 1'b1, 1'b1, 1'b0}
+`define TLB_ENTRY_5 {20'h0a000, 20'h00005, 1'b1, 1'b1, 1'b1, 1'b0}
+`define TLB_ENTRY_6 {20'h10000, 20'h10000, 1'b1, 1'b0, 1'b1, 1'b1}
+`define TLB_ENTRY_7 {20'h02001, 20'h2FFFF, 1'b1, 1'b0, 1'b1, 1'b1}
+
+/*
+Virtual Page    Physical Page   Valid   Present R/W PCD
+20'h00000       20'h00000       1       1       0   0
+20'h02000       20'h00002       1       1       1   0
+20'h04000       20'h00005       1       1       1   0
+20'h0b000       20'h00004       1       1       1   0
+20'h0c000       20'h00007       1       1       1   0
+20'h0a000       20'h00005       1       1       1   0
+*/
+   initial
+      begin
+         u_pipeline.u_memory_stage1.u_lsu.dtlb.ENTRY[0] = `TLB_ENTRY_0;
+         u_pipeline.u_memory_stage1.u_lsu.dtlb.ENTRY[1] = `TLB_ENTRY_1;
+         u_pipeline.u_memory_stage1.u_lsu.dtlb.ENTRY[2] = `TLB_ENTRY_2;
+         u_pipeline.u_memory_stage1.u_lsu.dtlb.ENTRY[3] = `TLB_ENTRY_3;
+         u_pipeline.u_memory_stage1.u_lsu.dtlb.ENTRY[4] = `TLB_ENTRY_4;
+         u_pipeline.u_memory_stage1.u_lsu.dtlb.ENTRY[5] = `TLB_ENTRY_5;
+         u_pipeline.u_memory_stage1.u_lsu.dtlb.ENTRY[6] = `TLB_ENTRY_6;
+         u_pipeline.u_memory_stage1.u_lsu.dtlb.ENTRY[7] = `TLB_ENTRY_7;
+      end
+
      initial begin
          // file format
          // prefix1 prefix2 prefix3 opcode modrm sib disp imm offset

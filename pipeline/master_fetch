@@ -41,6 +41,7 @@ dependency_check/reg_scoreboard_check.v
 dependency_check/reg_scoreboard_generator.v
 dependency_check/all_scoreboard_generator.v
 dependency_check/reg_dependency_check.v
+dependency_check/mem_dependency_check.v
 
 ./segment_limit_check.v
 ./address_generation.v

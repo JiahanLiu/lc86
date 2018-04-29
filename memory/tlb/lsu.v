@@ -210,7 +210,7 @@ WR.OP2 = (DCACHE.R&!RD.OP1&!RD.OP2&!WR.OP2&WR.V&WR.ADDR1.V&WR.ADDR2.V) | (
 endmodule  
 
 module lsu (
-   input CLK, RST,
+   // input CLK, RST,
 
    // inputs from MEMORY Stage
    input V_MEM_RD,
@@ -222,21 +222,27 @@ module lsu (
    input [31:0] LA_WR_ADDR,
    input [1:0] LA_WR_SIZE,
 
-   input [63:0] WR_DATA,
+//   input [63:0] WR_DATA,
 
-   // inputs from DCACHE
-   input [127:0] DCACHE_RD_DATA,
-   input DCACHE_READY,
+   output RD_ADDR1_V_OUT,
+   output [31:0] RA_RD_ADDR1_OUT,
+   output [3:0] RA_RD_SIZE1_OUT,
 
-   output [31:0] DCACHE_ADDR_OUT,
-   output [3:0] DCACHE_SIZE_OUT,
-   output DCACHE_RW_OUT,
-   output DCACHE_EN_OUT,
+   output RD_ADDR2_V_OUT,
+   output [31:0] RA_RD_ADDR2_OUT,
+   output [3:0] RA_RD_SIZE2_OUT,
 
-   output [63:0] DCACHE_WR_DATA_OUT,
+   output WR_ADDR1_V_OUT,
+   output [31:0] RA_WR_ADDR1_OUT,
+   output [3:0] RA_WR_SIZE1_OUT,
 
-   output DCACHE_RD_STALL_OUT, DCACHE_WR_STALL_OUT,
-   output [63:0] RD_DATA_OUT
+   output WR_ADDR2_V_OUT,
+   output [31:0] RA_WR_ADDR2_OUT,
+   output [3:0] RA_WR_SIZE2_OUT,
+
+   output RD_PAGE_FAULT_EXC_OUT,
+   output WR_PAGE_FAULT_EXC_OUT,
+   output GPROT_EXC_OUT
 );
 
    wire [23:0] rd_addr1_entry, rd_addr2_entry,
@@ -254,11 +260,17 @@ module lsu (
    wire [31:0] add_rd_cl_out, add_rd_pg_out, mux_rd_addr2_out,
                add_wr_cl_out, add_wr_pg_out, mux_wr_addr2_out;
 
-   carry_lookahead32
-      add_rd_cl (add_rd_cl_out, , , , , {24'b0, LA_RD_ADDR[11:4]}, 32'b0, 1'b1, 1'b0),
-      add_rd_pg (add_rd_pg_out, , , , , {12'b0, LA_RD_ADDR[31:12]}, 32'b0, 1'b1, 1'b0),
-      add_wr_cl (add_wr_cl_out, , , , , {24'b0, LA_WR_ADDR[11:4]}, 32'b0, 1'b1, 1'b0),
-      add_wr_pg (add_wr_pg_out, , , , , {12'b0, LA_WR_ADDR[31:12]}, 32'b0, 1'b1, 1'b0);
+//   carry_lookahead32
+//      add_rd_cl (add_rd_cl_out, , , , , {24'b0, LA_RD_ADDR[11:4]}, 32'b0, 1'b1, 1'b0),
+//      add_rd_pg (add_rd_pg_out, , , , , {12'b0, LA_RD_ADDR[31:12]}, 32'b0, 1'b1, 1'b0),
+//      add_wr_cl (add_wr_cl_out, , , , , {24'b0, LA_WR_ADDR[11:4]}, 32'b0, 1'b1, 1'b0),
+//      add_wr_pg (add_wr_pg_out, , , , , {12'b0, LA_WR_ADDR[31:12]}, 32'b0, 1'b1, 1'b0);
+
+   adder32_w_carry_in 
+      add_rd_cl (add_rd_cl_out, , {24'b0, LA_RD_ADDR[11:4]}, 32'b0, 1'b1),
+      add_rd_pg (add_rd_pg_out, , {12'b0, LA_RD_ADDR[31:12]}, 32'b0, 1'b1),
+      add_wr_cl (add_wr_cl_out, , {24'b0, LA_WR_ADDR[11:4]}, 32'b0, 1'b1),
+      add_wr_pg (add_wr_pg_out, , {12'b0, LA_WR_ADDR[31:12]}, 32'b0, 1'b1);
 
    tlb dtlb (LA_RD_ADDR[31:12], add_rd_pg_out[19:0], LA_WR_ADDR[31:12], add_wr_pg_out[19:0],
              rd_addr1_entry, rd_addr2_entry, wr_addr1_entry, wr_addr2_entry,
@@ -329,9 +341,10 @@ module lsu (
    nand2$ nand1 (nand1_out, and2_out, xor1_out);
    assign rd_addr2_entry_v_bar = nand1_out;
 
-   wire and_rd_addr2_v_out;
+   wire and_rd_addr2_v_out, and_rd_addr2_v2_out;
    and3$ and_rd_addr2_v (and_rd_addr2_v_out, and2_out, xor1_out, rd_addr_cross_page); // INPUT to CONTROLLER
-   or2$ or_rd_addr2_v (rd_addr2_v, and_rd_addr2_v_out, rd_addr_cross_cl);
+   and3$ and_rd_addr2_v2 (and_rd_addr2_v2_out, and0_out, xor0_out, rd_addr_cross_cl);
+   or2$ or_rd_addr2_v (rd_addr2_v, and_rd_addr2_v_out, and_rd_addr2_v2_out);
 
    wire and_rd_addr1_fault_out, and_rd_addr2_fault_out;
 
@@ -360,10 +373,11 @@ module lsu (
    nand2$ nand3 (nand3_out, and6_out, xor3_out);
    assign wr_addr2_entry_v_bar = nand3_out;
 
-   wire and_wr_addr2_v_out;
+   wire and_wr_addr2_v_out, and_wr_addr2_v2_out;
    and2$ and_wr_addr2_rw (and_wr_addr2_rw_out, wr_addr2_entry[`PTE_RW], wr_addr_cross_page);
    and3$ and_wr_addr2_v (and_wr_addr2_v_out, and6_out, xor3_out, and_wr_addr2_rw_out); // INPUT to CONTROLLER
-   or2$ or_wr_addr2_v (wr_addr2_v, and_wr_addr2_v_out, wr_addr_cross_cl);
+   and2$ and_wr_addr2_v2 (and_wr_addr2_v2_out, wr_addr1_v, wr_addr_cross_cl);
+   or2$ or_wr_addr2_v (wr_addr2_v, and_wr_addr2_v_out, and_wr_addr2_v2_out);
 
    wire and_wr_addr1_fault_out, and_wr_addr2_fault_out, wr_addr1_entry_rw_bar, wr_addr2_entry_rw_bar;
    wire and_wr_addr1_gprot_out, and_wr_addr1_gprot2_out, and_wr_addr2_gprot_out, and_wr_addr2_gprot2_out;
@@ -396,15 +410,33 @@ module lsu (
       mux_rd_addr2 (mux_rd_addr2_out, {rd_addr1_entry[23:4], add_rd_cl_out[7:0], 4'b0}, {rd_addr2_entry[23:4], 12'b0}, rd_addr_cross_page),
       mux_wr_addr2 (mux_wr_addr2_out, {wr_addr1_entry[23:4], add_wr_cl_out[7:0], 4'b0}, {wr_addr2_entry[23:4], 12'b0}, wr_addr_cross_page);
 
-   wire dcache_en, dcache_rd_stall;
+   and2$ and_v_rd_addr1_v (RD_ADDR1_V_OUT, V_MEM_RD, rd_addr1_v);
+   assign RA_RD_ADDR1_OUT = {rd_addr1_entry[23:4], LA_RD_ADDR[11:0]};
+   assign RA_RD_SIZE1_OUT = mux_rd_cross_size_out;
+   and2$ and_v_rd_addr2_v (RD_ADDR2_V_OUT, V_MEM_RD, rd_addr2_v);
+   assign RA_RD_ADDR2_OUT = mux_rd_addr2_out;
+   assign RA_RD_SIZE2_OUT = rd_addr2_cross_size;
 
-   lsu_controller u_lsu_controller (CLK, RST, 1'b1, V_MEM_RD, {rd_addr1_entry[23:4], LA_RD_ADDR[11:0]}, mux_rd_cross_size_out, rd_addr1_v, mux_rd_addr2_out, rd_addr2_cross_size, rd_addr2_v, V_MEM_WR, {wr_addr1_entry[23:4], LA_WR_ADDR[11:0]}, mux_wr_cross_size_out, wr_addr1_v, mux_wr_addr2_out, wr_addr2_cross_size, wr_addr2_v, WR_DATA, DCACHE_RD_DATA, DCACHE_READY, DCACHE_ADDR_OUT, DCACHE_SIZE_OUT, DCACHE_RW_OUT, dcache_en, DCACHE_WR_DATA_OUT, dcache_rd_stall, DCACHE_WR_STALL_OUT, RD_DATA_OUT);
+   and2$ and_v_wr_addr1_v (WR_ADDR1_V_OUT, V_MEM_WR, wr_addr1_v);
+   assign RA_WR_ADDR1_OUT = {wr_addr1_entry[23:4], LA_WR_ADDR[11:0]};
+   assign RA_WR_SIZE1_OUT = mux_wr_cross_size_out;
+   and2$ and_v_wr_addr2_v (WR_ADDR2_V_OUT, V_MEM_WR, wr_addr2_v);
+   assign RA_WR_ADDR2_OUT = mux_wr_addr2_out;
+   assign RA_WR_SIZE2_OUT = wr_addr2_cross_size;
 
-   wire nor_exception_out;
+   assign RD_PAGE_FAULT_EXC_OUT = rd_page_fault_exception;
+   assign WR_PAGE_FAULT_EXC_OUT = wr_page_fault_exception;
+   assign GPROT_EXC_OUT = general_protection_exception;
 
-   nor3$ nor_exception (nor_exception_out, rd_page_fault_exception, wr_page_fault_exception, general_protection_exception);
-   and2$ and_dcache_en (DCACHE_EN_OUT, dcache_en, nor_exception_out);
-   and2$ and_rd_stall (DCACHE_RD_STALL_OUT, dcache_rd_stall, nor_exception_out);
+//   wire dcache_en, dcache_rd_stall;
+
+//   lsu_controller u_lsu_controller (CLK, RST, 1'b1, V_MEM_RD, {rd_addr1_entry[23:4], LA_RD_ADDR[11:0]}, mux_rd_cross_size_out, rd_addr1_v, mux_rd_addr2_out, rd_addr2_cross_size, rd_addr2_v, V_MEM_WR, {wr_addr1_entry[23:4], LA_WR_ADDR[11:0]}, mux_wr_cross_size_out, wr_addr1_v, mux_wr_addr2_out, wr_addr2_cross_size, wr_addr2_v, WR_DATA, DCACHE_RD_DATA, DCACHE_READY, DCACHE_ADDR_OUT, DCACHE_SIZE_OUT, DCACHE_RW_OUT, dcache_en, DCACHE_WR_DATA_OUT, dcache_rd_stall, DCACHE_WR_STALL_OUT, RD_DATA_OUT);
+
+//   wire nor_exception_out;
+
+//   nor3$ nor_exception (nor_exception_out, rd_page_fault_exception, wr_page_fault_exception, general_protection_exception);
+//   and2$ and_dcache_en (DCACHE_EN_OUT, dcache_en, nor_exception_out);
+//   and2$ and_rd_stall (DCACHE_RD_STALL_OUT, dcache_rd_stall, nor_exception_out);
 
 /* general protection exception: write a read only page
    page fault exception: page not in TLB OR page not present
