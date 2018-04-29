@@ -1,4 +1,45 @@
+// Initialized constants
+
 `define IDTR_VAL 32'h02000000
+`define IDT_NMI_INT_VECTOR 32'h02000010
+`define IDT_GEN_PROT_VECTOR 32'h02000068
+`define IDT_PAGE_FAULT_VECTOR 32'h02000070
+
+/*
+ES = 000
+CS = 001
+SS = 010 // no checking for SS
+DS = 011
+FS = 100
+GS  = 101
+*/
+     
+`define CS_LIMIT_REGISTER 20'h04fff
+`define DS_LIMIT_REGISTER 20'h011ff
+`define SS_LIMIT_REGISTER 20'h04000
+`define ES_LIMIT_REGISTER 20'h003ff
+`define FS_LIMIT_REGISTER 20'h003ff
+`define GS_LIMIT_REGISTER 20'h007ff
+
+/*
+Virtual Page    Physical Page   Valid   Present R/W PCD
+20'h00000       20'h00000       1       1       0   0
+20'h02000       20'h00002       1       1       1   0
+20'h04000       20'h00005       1       1       1   0
+20'h0b000       20'h00004       1       1       1   0
+20'h0c000       20'h00007       1       1       1   0
+20'h0a000       20'h00005       1       1       1   0
+*/
+
+//  TLB ENTRY        VPN        RPN        V     PRE   R/W   PCD
+`define TLB_ENTRY_0 {20'h00000, 20'h00000, 1'b1, 1'b1, 1'b0, 1'b0}
+`define TLB_ENTRY_1 {20'h02000, 20'h00002, 1'b1, 1'b1, 1'b1, 1'b0}
+`define TLB_ENTRY_2 {20'h04000, 20'h00005, 1'b1, 1'b1, 1'b0, 1'b0}
+`define TLB_ENTRY_3 {20'h0b000, 20'h00004, 1'b1, 1'b1, 1'b1, 1'b0}
+`define TLB_ENTRY_4 {20'h0c000, 20'h00007, 1'b1, 1'b1, 1'b1, 1'b0}
+`define TLB_ENTRY_5 {20'h0a000, 20'h00005, 1'b1, 1'b1, 1'b1, 1'b0}
+`define TLB_ENTRY_6 {20'h10000, 20'h10000, 1'b1, 1'b0, 1'b1, 1'b1}
+`define TLB_ENTRY_7 {20'h02001, 20'h2FFFF, 1'b1, 1'b0, 1'b1, 1'b1}
 
 module sar32 (out, in, cnt);
    input [31:0] in;
@@ -268,54 +309,6 @@ module mux2_4 (Y, IN0, IN1, S0);
 
 endmodule
 
-module mux4_4 (Y, IN0, IN1, IN2, IN3, S0, S1);
-   output [3:0] Y;
-
-   input [3:0] IN0, IN1, IN2, IN3;
-   input S0, S1;
-
-   wire [7:0] in0, in1, in2, in3;
-   wire [3:0] Y_NC;
-
-   assign in0[3:0] = IN0;
-   assign in1[3:0] = IN1;
-   assign in2[3:0] = IN2;
-   assign in3[3:0] = IN3;
-
-   mux4_8$ mux0 ({Y_NC, Y}, in0, in1, in2, in3, S0, S1);
-
-endmodule
-
-module mux8 (Y, IN0, IN1, IN2, IN3, IN4, IN5, IN6, IN7, S);
-   output Y;
-
-   input IN0, IN1, IN2, IN3, IN4, IN5, IN6, IN7;
-   input [2:0] S;
-
-   wire mux0_out, mux1_out;
-
-   mux4$ mux0 (mux0_out, IN0, IN1, IN2, IN3, S[0], S[1]);
-   mux4$ mux1 (mux1_out, IN4, IN5, IN6, IN7, S[0], S[1]);
-
-   mux2$ mux2 (Y, mux0_out, mux1_out, S[2]);
-
-endmodule
-
-module mux8_4 (Y, IN0, IN1, IN2, IN3, IN4, IN5, IN6, IN7, S);
-   output [3:0] Y;
-
-   input [3:0] IN0, IN1, IN2, IN3, IN4, IN5, IN6, IN7;
-   input [2:0] S;
-
-   wire [3:0] mux0_out, mux1_out;
-
-   mux4_4 mux0 (mux0_out, IN0, IN1, IN2, IN3, S[0], S[1]);
-   mux4_4 mux1 (mux1_out, IN4, IN5, IN6, IN7, S[0], S[1]);
-
-   mux2_4 mux2 (Y, mux0_out, mux1_out, S[2]);
-
-endmodule
-
 module mux2_32 (Y, IN0, IN1, S0);
    output [31:0] Y;
 
@@ -350,7 +343,37 @@ module mux2_128 (Y, IN0, IN1, S0);
       muxhi (Y[127:64], IN0[127:64], IN1[127:64], S0),
       muxlo (Y[63:0], IN0[63:0], IN1[63:0], S0);
 
-endmodule
+endmodule // mux2_128
+
+module mux4_4 (Y, IN0, IN1, IN2, IN3, S0, S1);
+   output [3:0] Y;
+
+   input [3:0] IN0, IN1, IN2, IN3;
+   input S0, S1;
+
+   wire [7:0] in0, in1, in2, in3;
+   wire [3:0] Y_NC;
+
+   assign in0[3:0] = IN0;
+   assign in1[3:0] = IN1;
+   assign in2[3:0] = IN2;
+   assign in3[3:0] = IN3;
+
+   mux4_8$ mux0 ({Y_NC, Y}, in0, in1, in2, in3, S0, S1);
+
+endmodule // mux4_4
+
+module mux4_32 (Y, IN0, IN1, IN2, IN3, S0, S1);
+   output [31:0] Y;
+
+   input [31:0] IN0, IN1, IN2, IN3;
+   input S0, S1;
+
+   mux4_16$
+      muxhi (Y[31:16], IN0[31:16], IN1[31:16], IN2[31:16], IN3[31:16], S0, S1),
+      muxlo (Y[15:0], IN0[15:0], IN1[15:0], IN2[15:0], IN3[15:0], S0, S1);
+
+endmodule // mux4_32
 
 module mux4_128 (Y, IN0, IN1, IN2, IN3, S0, S1);
    output [127:0] Y;
@@ -367,6 +390,36 @@ module mux4_128 (Y, IN0, IN1, IN2, IN3, S0, S1);
       mux5 (Y[47:32], IN0[47:32], IN1[47:32], IN2[47:32], IN3[47:32], S0, S1),
       mux6 (Y[31:16], IN0[31:16], IN1[31:16], IN2[31:16], IN3[31:16], S0, S1),
       mux7 (Y[15:0], IN0[15:0], IN1[15:0], IN2[15:0], IN3[15:0], S0, S1);
+
+endmodule // mux4_128
+
+module mux8 (Y, IN0, IN1, IN2, IN3, IN4, IN5, IN6, IN7, S);
+   output Y;
+
+   input IN0, IN1, IN2, IN3, IN4, IN5, IN6, IN7;
+   input [2:0] S;
+
+   wire mux0_out, mux1_out;
+
+   mux4$ mux0 (mux0_out, IN0, IN1, IN2, IN3, S[0], S[1]);
+   mux4$ mux1 (mux1_out, IN4, IN5, IN6, IN7, S[0], S[1]);
+
+   mux2$ mux2 (Y, mux0_out, mux1_out, S[2]);
+
+endmodule
+
+module mux8_4 (Y, IN0, IN1, IN2, IN3, IN4, IN5, IN6, IN7, S);
+   output [3:0] Y;
+
+   input [3:0] IN0, IN1, IN2, IN3, IN4, IN5, IN6, IN7;
+   input [2:0] S;
+
+   wire [3:0] mux0_out, mux1_out;
+
+   mux4_4 mux0 (mux0_out, IN0, IN1, IN2, IN3, S[0], S[1]);
+   mux4_4 mux1 (mux1_out, IN4, IN5, IN6, IN7, S[0], S[1]);
+
+   mux2_4 mux2 (Y, mux0_out, mux1_out, S[2]);
 
 endmodule
 

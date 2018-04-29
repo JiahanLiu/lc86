@@ -76,7 +76,6 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
    // register data to address generation
    wire [31:0] SR1_DATA, SR2_DATA, SR3_DATA, SIB_I_DATA;
-   wire [1:0] D2_DATA_SIZE_AG_OUT;
    assign SEG_DIN = WB_Final_data1[15:0];
    assign WRSEGID = WB_Final_DR1;
    assign SEGWE = WB_Final_ld_seg;
@@ -360,6 +359,9 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire [1:0] D2_DR1_SIZE_WB_OUT, D2_DR2_SIZE_WB_OUT;
    wire [1:0] D2_MEM_SIZE_WB_OUT;
 
+   wire D2_PAGE_FAULT_EXC_EXIST_OUT;
+   wire D2_NMI_INT_EN_OUT, D2_GEN_PROT_EXC_EN_OUT, D2_PAGE_FAULT_EXC_EN_OUT;
+   
     // Assigned 1 for now - placeholder
 
 //    wire [2:0] AG_DRID1, AG_DRID2;
@@ -411,7 +413,10 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
       D2_SIB_EN_AG, D2_DISP_EN_AG, D2_BASE_REG_EN_AG,
       D2_MUX_SEG_AG, D2_CMPXCHG_AG,
-      D2_SIB_S_AG
+      D2_SIB_S_AG,
+
+      D2_PAGE_FAULT_EXC_EXIST_OUT,
+      D2_NMI_INT_EN_OUT, D2_GEN_PROT_EXC_EN_OUT, D2_PAGE_FAULT_EXC_EN_OUT
    );
 
    wire [31:0] AG_PS_EIP;
@@ -420,7 +425,6 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire [127:0] AG_PS_CONTROL_STORE;
    wire [47:0] 	AG_PS_OFFSET;
    
-   wire [1:0] AG_PS_DATA_SIZE;
    wire AG_PS_D2_SR1_NEEDED_AG, AG_PS_D2_SEG1_NEEDED_AG, AG_PS_D2_MM1_NEEDED_AG;
 
    wire AG_PS_D2_MEM_RD_ME, AG_PS_D2_MEM_WR_ME;
@@ -439,8 +443,9 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire AG_PS_DE_MUX_SEG_AG, AG_PS_DE_CMPXCHG_AG;
    wire [1:0] AG_PS_DE_SIB_S_AG;
 
-   wire [3:0] DE_EXC_CODE_AG;
-
+   wire AG_PS_PAGE_FAULT_EXC_EXIST;
+   wire AG_PS_NMI_INT_EN, AG_PS_GEN_PROT_EXC_EN, AG_PS_PAGE_FAULT_EXC_EN;
+   
    // Signals to register file
    wire [2:0] AG_SR1_OUT, AG_SR2_OUT, AG_SR3_OUT, AG_SIB_I_OUT, AG_SEG1_OUT, AG_SEG2_OUT, AG_MM1_OUT, AG_MM2_OUT;
 
@@ -468,6 +473,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
    //===================================
 
    // Signals for next stage latches
+   wire [31:0] AG_EIP_OUT; // for CS segment check
    wire [31:0] AG_NEIP_OUT;
    wire [15:0] AG_NCS_OUT;
    wire [127:0] AG_CONTROL_STORE_OUT;
@@ -475,16 +481,19 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire [31:0] AG_A_OUT, AG_B_OUT;
    wire [63:0] AG_MM_A_OUT, AG_MM_B_OUT;
    wire [31:0] AG_SP_XCHG_DATA_OUT;
-   wire [31:0] AG_MEM_RD_ADDR_OUT, AG_MEM_WR_ADDR_OUT;
+   wire [31:0] AG_ADD_BASE_DISP_OUT, AG_ADD_SIB_SEG1_OUT;
+   wire [31:0] AG_SIB_SI_DATA_OUT;
+   wire [15:0] AG_SEG2_DATA_OUT;
+   wire [31:0] AG_INTERRUPT_ADDR_OUT;
    
    wire [2:0]  AG_D2_ALUK_EX_OUT;
    wire [2:0]  AG_DRID1_OUT, AG_DRID2_OUT;
 
    wire        AG_D2_MEM_RD_ME_OUT, AG_D2_MEM_WR_WB_OUT;
    wire        AG_D2_LD_GPR1_WB_OUT, AG_D2_LD_MM_WB_OUT;
-   wire        AG_DEP_STALL_OUT, AG_SEG_LIMIT_EXC_OUT;
-   wire [127:0] D2_CONTROL_STORE;
-   wire [127:0] AG_PS_CONTROL_STORE_OUT;
+   wire        AG_DEP_STALL_OUT;
+
+   wire        AG_PAGE_FAULT_EXC_EXIST_OUT;
    
    wire [31:0] D2_OUT1_AG_PS, D2_OUT2_AG_PS, AG_PS_IN1, AG_PS_IN2;
    wire [31:0] D2_CS_OUT32;
@@ -494,15 +503,15 @@ module PIPELINE(CLK, CLR, PRE, IR);
    assign D2_AG_V_OUT = 1'b1;
 
    wire LD_AG;
-   wire ME_PS_V_OUT_AG_IN, EX_PS_V_OUT_AG_IN;
+   wire AG2_PS_V_OUT_AG_IN, ME_PS_V_OUT_AG_IN, ME2_PS_V_OUT_AG_IN, EX_PS_V_OUT_AG_IN;
 
    wire [23:0] AG_GPR_SCOREBOARD_OUT;
    wire [7:0] AG_SEG_SCOREBOARD_OUT;
    wire [7:0] AG_MM_SCOREBOARD_OUT;
 
-   wire [23:0] ME_GPR_SCOREBOARD_OUT, ME2_GPR_SCOREBOARD_OUT, EX_GPR_SCOREBOARD_OUT;
-   wire [7:0] ME_SEG_SCOREBOARD_OUT, ME2_SEG_SCOREBOARD_OUT, EX_SEG_SCOREBOARD_OUT;
-   wire [7:0] ME_MM_SCOREBOARD_OUT, ME2_MM_SCOREBOARD_OUT, EX_MM_SCOREBOARD_OUT;
+   wire [23:0] AG2_GPR_SCOREBOARD_OUT, ME_GPR_SCOREBOARD_OUT, ME2_GPR_SCOREBOARD_OUT, EX_GPR_SCOREBOARD_OUT;
+   wire [7:0] AG2_SEG_SCOREBOARD_OUT, ME_SEG_SCOREBOARD_OUT, ME2_SEG_SCOREBOARD_OUT, EX_SEG_SCOREBOARD_OUT;
+   wire [7:0] AG2_MM_SCOREBOARD_OUT, ME_MM_SCOREBOARD_OUT, ME2_MM_SCOREBOARD_OUT, EX_MM_SCOREBOARD_OUT;
 
    // LD_AG = !REG_DEP_STALL && !MEM_DEP_STALL && !MEM_RD_STALL && !MEM_WR_STALL
    assign LD_AG = 1'b1;
@@ -517,8 +526,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
      u_reg_ag_ps_control_store1 (CLK, D2_CONTROL_STORE_OUT[63:0], AG_PS_CONTROL_STORE[63:0], , CLR, PRE, LD_AG);
 
    // [31:2]
-   assign D2_OUT1_AG_PS[31:1] = { D2_AG_V_OUT, 
-          D2_DATA_SIZE_AG_OUT, D2_SR1_NEEDED_AG_OUT, D2_SEG1_NEEDED_AG_OUT, D2_MM1_NEEDED_AG_OUT,
+   assign D2_OUT1_AG_PS[31:2] = { D2_AG_V_OUT, D2_PAGE_FAULT_EXC_EXIST_OUT,
+          D2_SR1_NEEDED_AG_OUT, D2_SEG1_NEEDED_AG_OUT, D2_MM1_NEEDED_AG_OUT,
           D2_MEM_RD_ME_OUT, D2_MEM_WR_ME_OUT, D2_ALUK_EX_OUT, D2_LD_GPR1_WB_OUT, D2_LD_MM_WB_OUT,
           D2_SR1_OUT, D2_SR2_OUT, D2_SR3_OUT, D2_SIB_I_OUT, D2_SEG1_OUT, D2_SEG2_OUT };
 
@@ -532,17 +541,18 @@ module PIPELINE(CLK, CLR, PRE, IR);
       u_reg_ag_ps_offset16 (CLK, {16'h0, D2_OFFSET_OUT[47:32]}, AG_PS_OFFSET_OUT[63:32], , CLR, PRE, LD_AG);
 
    assign AG_PS_OFFSET = AG_PS_OFFSET_OUT[47:0];
-   assign { AG_PS_V, AG_PS_DATA_SIZE, AG_PS_D2_SR1_NEEDED_AG, AG_PS_D2_SEG1_NEEDED_AG, AG_PS_D2_MM1_NEEDED_AG,
+   assign { AG_PS_V, AG_PS_PAGE_FAULT_EXC_EXIST, 
+            AG_PS_D2_SR1_NEEDED_AG, AG_PS_D2_SEG1_NEEDED_AG, AG_PS_D2_MM1_NEEDED_AG,
             AG_PS_D2_MEM_RD_ME, AG_PS_D2_MEM_WR_ME, AG_PS_D2_ALUK_EX, AG_PS_D2_LD_GPR1_WB, AG_PS_D2_LD_MM_WB,
-            AG_PS_SR1, AG_PS_SR2, AG_PS_SR3, AG_PS_SIB_I, AG_PS_SEG1, AG_PS_SEG2 } = AG_PS_IN1[31:1];
-
+            AG_PS_SR1, AG_PS_SR2, AG_PS_SR3, AG_PS_SIB_I, AG_PS_SEG1, AG_PS_SEG2 } = AG_PS_IN1[31:2];
 
    // [31:25]
-   assign D2_OUT2_AG_PS[31:15] = { D2_SIB_EN_AG, D2_DISP_EN_AG, D2_BASE_REG_EN_AG, D2_MUX_SEG_AG,
+   assign D2_OUT2_AG_PS[31:12] = { D2_SIB_EN_AG, D2_DISP_EN_AG, D2_BASE_REG_EN_AG, D2_MUX_SEG_AG,
                                    D2_CMPXCHG_AG, D2_SIB_S_AG,
                                    D2_SR1_SIZE_AG_OUT, D2_SR2_SIZE_AG_OUT,
                                    D2_DR1_SIZE_WB_OUT, D2_DR2_SIZE_WB_OUT,
-                                   D2_MEM_SIZE_WB_OUT };
+                                   D2_MEM_SIZE_WB_OUT,
+				   D2_NMI_INT_EN_OUT, D2_GEN_PROT_EXC_EN_OUT, D2_PAGE_FAULT_EXC_EN_OUT };
    reg32e$
       u_reg_ag_ps_in2 (CLK, D2_OUT2_AG_PS, AG_PS_IN2, , CLR, PRE, LD_AG);
 
@@ -550,12 +560,14 @@ module PIPELINE(CLK, CLR, PRE, IR);
             AG_PS_DE_MUX_SEG_AG, AG_PS_DE_CMPXCHG_AG, AG_PS_DE_SIB_S_AG,
             AG_PS_D2_SR1_SIZE_AG, AG_PS_D2_SR2_SIZE_AG,
             AG_PS_D2_DR1_SIZE_WB, AG_PS_D2_DR2_SIZE_WB,
-            AG_PS_D2_MEM_SIZE_WB } = AG_PS_IN2[31:15];
+            AG_PS_D2_MEM_SIZE_WB,
+	    AG_PS_NMI_INT_EN, AG_PS_GEN_PROT_EXC_EN, AG_PS_PAGE_FAULT_EXC_EN } = AG_PS_IN2[31:12];
 
-   address_generation u_address_generation (CLK, PRE, CLR, AG_PS_V,
+   agen_stage1 u_agen_stage1 (
+        CLK, CLR, PRE, AG_PS_V,
         // s from pipestage latches
         AG_PS_EIP, AG_PS_CS, AG_PS_CONTROL_STORE, AG_PS_OFFSET,
-        AG_PS_DATA_SIZE, AG_PS_D2_SR1_NEEDED_AG, AG_PS_D2_SEG1_NEEDED_AG, AG_PS_D2_MM1_NEEDED_AG,
+        AG_PS_D2_SR1_NEEDED_AG, AG_PS_D2_SEG1_NEEDED_AG, AG_PS_D2_MM1_NEEDED_AG,
         AG_PS_D2_MEM_RD_ME, AG_PS_D2_MEM_WR_ME,
         AG_PS_D2_ALUK_EX, AG_PS_D2_LD_GPR1_WB, AG_PS_D2_LD_MM_WB,
         AG_PS_SR1, AG_PS_SR2, AG_PS_SR3, AG_PS_SIB_I, AG_PS_SEG1, AG_PS_SEG2,
@@ -574,10 +586,13 @@ module PIPELINE(CLK, CLR, PRE, IR);
         SEG1_DATA, SEG2_DATA, MM1_DATA, MM2_DATA,
 
         // s from exception/interrupt logic
-        DE_EXC_CODE_AG,
+        AG_PS_NMI_INT_EN, AG_PS_GEN_PROT_EXC_EN, AG_PS_PAGE_FAULT_EXC_EN,
+	AG_PS_PAGE_FAULT_EXC_EXIST,
 
         // dependency check s
+        AG2_PS_V_OUT_AG_IN, AG2_GPR_SCOREBOARD_OUT, AG2_SEG_SCOREBOARD_OUT, AG2_MM_SCOREBOARD_OUT,
         ME_PS_V_OUT_AG_IN, ME_GPR_SCOREBOARD_OUT, ME_SEG_SCOREBOARD_OUT, ME_MM_SCOREBOARD_OUT,
+        ME2_PS_V_OUT_AG_IN, ME2_GPR_SCOREBOARD_OUT, ME2_SEG_SCOREBOARD_OUT, ME2_MM_SCOREBOARD_OUT,
         EX_PS_V_OUT_AG_IN, EX_GPR_SCOREBOARD_OUT, EX_SEG_SCOREBOARD_OUT, EX_MM_SCOREBOARD_OUT,
 //        1'b0, ME_GPR_SCOREBOARD_OUT, ME_SEG_SCOREBOARD_OUT, ME_MM_SCOREBOARD_OUT,
 //        1'b0, EX_GPR_SCOREBOARD_OUT, EX_SEG_SCOREBOARD_OUT, EX_MM_SCOREBOARD_OUT,
@@ -598,9 +613,12 @@ module PIPELINE(CLK, CLR, PRE, IR);
         AG_D2_MEM_SIZE_WB_OUT,
 
         // outputs to next stage
+	AG_EIP_OUT,
         AG_NEIP_OUT, AG_NCS_OUT, AG_CONTROL_STORE_OUT,
         AG_A_OUT, AG_B_OUT, AG_MM_A_OUT, AG_MM_B_OUT, AG_SP_XCHG_DATA_OUT,
-        AG_MEM_RD_ADDR_OUT, AG_MEM_WR_ADDR_OUT,
+        AG_ADD_BASE_DISP_OUT, AG_ADD_SIB_SEG1_OUT, AG_SIB_SI_DATA_OUT,
+	AG_SEG2_DATA_OUT, AG_INTERRUPT_ADDR_OUT,
+			      
         AG_D2_ALUK_EX_OUT, AG_DRID1_OUT, AG_DRID2_OUT,
         AG_D2_MEM_RD_ME_OUT, AG_D2_MEM_WR_WB_OUT,
         AG_D2_LD_GPR1_WB_OUT, AG_D2_LD_MM_WB_OUT,
@@ -610,8 +628,165 @@ module PIPELINE(CLK, CLR, PRE, IR);
         AG_MM_SCOREBOARD_OUT,
 
         // other outputs
-        AG_DEP_STALL_OUT, AG_SEG_LIMIT_EXC_OUT
+        AG_DEP_STALL_OUT, AG_PAGE_FAULT_EXC_EXIST_OUT
    );
+
+   // Signals to be saved in pipeline latches
+   wire [31:0] AG2_PS_EIP; // for segment limit check
+   wire [31:0] AG2_PS_NEIP; 
+   wire [15:0] AG2_PS_NCS_NC, AG2_PS_NCS;
+   wire [127:0] AG2_PS_CONTROL_STORE;
+
+   wire [31:0] AG2_PS_A, AG2_PS_B;
+   wire [63:0] AG2_PS_MM_A, AG2_PS_MM_B;
+   wire [31:0] AG2_PS_SP_XCHG_DATA;
+   wire [31:0] AG2_PS_ADD_BASE_DISP, AG2_PS_ADD_SIB_SEG1;
+   wire [31:0] AG2_PS_SIB_SI_DATA;
+   wire [15:0] AG2_PS_SEG2_DATA_NC, AG2_PS_SEG2_DATA;
+   wire [31:0] AG2_PS_INTERRUPT_ADDR;
+   wire [2:0] AG2_PS_SEG1;
+			   
+   wire [2:0] AG2_PS_D2_ALUK_EX;
+   wire [2:0] AG2_PS_DRID1, AG2_PS_DRID2;
+
+   wire AG2_PS_D2_MEM_RD_ME, AG2_PS_D2_MEM_WR_WB;
+   wire AG2_PS_D2_LD_GPR1_WB, AG2_PS_D2_LD_MM_WB;
+
+   wire [1:0] AG2_PS_D2_DR1_SIZE_WB, AG2_PS_D2_DR2_SIZE_WB;
+   wire [1:0] AG2_PS_D2_MEM_SIZE_WB;
+
+   // EXCEPTION/INTERRUPT STATUS
+   wire AG2_PS_PAGE_FAULT_EXC_EXIST;
+   // AG2 outputs		   
+   wire [1:0] AG2_D2_DR1_SIZE_WB_OUT, AG2_D2_DR2_SIZE_WB_OUT;
+   wire [1:0] AG2_D2_MEM_SIZE_WB_OUT;
+
+   // Signals for next stage latches
+   wire AG_AG2_V_OUT;
+   wire AG2_PS_V, LD_AG2;
+   
+   wire [31:0] AG2_NEIP_OUT; 
+   wire [15:0] AG2_NCS_OUT;
+   wire [127:0] AG2_CONTROL_STORE_OUT;
+
+   wire [31:0] AG2_A_OUT, AG2_B_OUT;
+   wire [63:0] AG2_MM_A_OUT, AG2_MM_B_OUT;
+   wire [31:0] AG2_SP_XCHG_DATA_OUT;
+   wire [31:0] AG2_MEM_RD_ADDR_OUT, AG2_MEM_WR_ADDR_OUT;
+
+   wire [2:0] AG2_D2_ALUK_EX_OUT;
+   wire [2:0] AG2_DRID1_OUT, AG2_DRID2_OUT;
+
+   wire AG2_D2_MEM_RD_ME_OUT, AG2_D2_MEM_WR_WB_OUT;
+   wire AG2_D2_LD_GPR1_WB_OUT, AG2_D2_LD_MM_WB_OUT;
+
+   // Other signals
+   wire AG2_SEG_LIMIT_EXC_EXIST_OUT, AG2_PS_PAGE_FAULT_EXC_EXIST_OUT;
+
+   // TODO AG2_V = !REG_DEP_STALL
+   wire ag_dep_stall_out_bar;
+
+   inv1$ inv_dep_stall (ag_dep_stall_out_bar, AG_DEP_STALL_OUT);
+   and2$ and_ag_me_v (AG_AG2_V_OUT, AG_PS_V, ag_dep_stall_out_bar); 
+   // assign AG_AG2_V_OUT = 1'b1;
+   // LD_AG2 = !MEM_DEP_STALL && !MEM_RD_STALL && !MEM_WR_STALL
+   assign LD_AG2 = 1'b1;
+
+   // FOR REG DEPENDENCY CHECKS
+   wire [63:0] ag2_ps_save_sb, AG2_PS_SCOREBOARDS;
+   assign ag2_ps_save_sb[63:26] = { AG_GPR_SCOREBOARD_OUT, AG_SEG_SCOREBOARD_OUT, AG_MM_SCOREBOARD_OUT };
+   assign { AG2_GPR_SCOREBOARD_OUT, AG2_SEG_SCOREBOARD_OUT, AG2_MM_SCOREBOARD_OUT } = AG2_PS_SCOREBOARDS[63:26];
+
+   reg64e$
+     u_reg_ag2_ps_sb (CLK, ag2_ps_save_sb, AG2_PS_SCOREBOARDS, , CLR, PRE, LD_AG2);
+   //==========================
+   
+   reg32e$
+      u_reg_ag2_ps_eip (CLK, AG_EIP_OUT, AG2_PS_EIP, , CLR, PRE, LD_AG2),
+      u_reg_ag2_ps_neip (CLK, AG_NEIP_OUT, AG2_PS_NEIP, , CLR, PRE, LD_AG2),
+      u_reg_ag2_ps_cs (CLK, {16'b0, AG_NCS_OUT}, {AG2_PS_NCS_NC, AG2_PS_NCS}, , CLR, PRE, LD_AG2);
+
+   reg64e$
+     u_reg_ag2_ps_control_store0 (CLK, AG_CONTROL_STORE_OUT[127:64], AG2_PS_CONTROL_STORE[127:64], , CLR, PRE, LD_AG2),
+     u_reg_ag2_ps_control_store1 (CLK, AG_CONTROL_STORE_OUT[63:0], AG2_PS_CONTROL_STORE[63:0], , CLR, PRE, LD_AG2);
+
+   reg32e$
+     u_reg_ag2_ps_a (CLK, AG_A_OUT, AG2_PS_A, , CLR, PRE, LD_AG2),
+     u_reg_ag2_ps_b (CLK, AG_B_OUT, AG2_PS_B, , CLR, PRE, LD_AG2);
+   reg64e$
+     u_reg_ag2_ps_mm_a (CLK, AG_MM_A_OUT, AG2_PS_MM_A, , CLR, PRE, LD_AG2),
+     u_reg_ag2_ps_mm_b (CLK, AG_MM_B_OUT, AG2_PS_MM_B, , CLR, PRE, LD_AG2);
+
+   reg32e$
+     u_reg_ag2_ps_sp_xchg_data (CLK, AG_SP_XCHG_DATA_OUT, AG2_PS_SP_XCHG_DATA, , CLR, PRE, LD_AG2),
+     u_reg_ag2_ps_add_base_disp (CLK, AG_ADD_BASE_DISP_OUT, AG2_PS_ADD_BASE_DISP, , CLR, PRE, LD_AG2),
+     u_reg_ag2_ps_add_sib_seg1 (CLK, AG_ADD_SIB_SEG1_OUT, AG2_PS_ADD_SIB_SEG1, , CLR, PRE, LD_AG2),
+     u_reg_ag2_ps_sib_si_data (CLK, AG_SIB_SI_DATA_OUT, AG2_PS_SIB_SI_DATA, , CLR, PRE, LD_AG2),
+     u_reg_ag2_ps_seg2_data (CLK, {16'b0, AG_SEG2_DATA_OUT}, {AG2_PS_SEG2_DATA_NC, AG2_PS_SEG2_DATA}, , CLR, PRE, LD_AG2),
+     u_reg_ag2_ps_int_addr (CLK, AG_INTERRUPT_ADDR_OUT, AG2_PS_INTERRUPT_ADDR, , CLR, PRE, LD_AG2);
+
+   wire [31:0] AG_OUT1_AG2_PS, AG2_PS_IN1;
+   assign AG_OUT1_AG2_PS[31:8] = { AG_AG2_V_OUT, AG_SEG1_OUT, AG_D2_ALUK_EX_OUT, AG_DRID1_OUT, AG_DRID2_OUT,
+                                AG_D2_MEM_RD_ME_OUT, AG_D2_MEM_WR_WB_OUT, AG_D2_LD_GPR1_WB_OUT,
+                                AG_D2_LD_MM_WB_OUT, AG_D2_DR1_SIZE_WB_OUT, AG_D2_DR2_SIZE_WB_OUT,
+                                AG_D2_MEM_SIZE_WB_OUT, AG_PAGE_FAULT_EXC_EXIST_OUT };
+   assign { AG2_PS_V, AG2_PS_SEG1, AG2_PS_D2_ALUK_EX, AG2_PS_DRID1, AG2_PS_DRID2,
+            AG2_PS_D2_MEM_RD_ME, AG2_PS_D2_MEM_WR_WB, AG2_PS_D2_LD_GPR1_WB,
+            AG2_PS_D2_LD_MM_WB, AG2_PS_D2_DR1_SIZE_WB, AG2_PS_D2_DR2_SIZE_WB,
+            AG2_PS_D2_MEM_SIZE_WB, AG2_PS_PAGE_FAULT_EXC_EXIST } = AG2_PS_IN1[31:8];
+   reg32e$ u_reg_ag2_ps_in1 (CLK, AG_OUT1_AG2_PS, AG2_PS_IN1, , CLR, PRE, LD_AG2);
+   
+   // agen_stage1 dependency check input
+   assign AG2_PS_V_OUT_AG_IN = AG2_PS_V;
+   //==================================
+   
+   agen_stage2 u_agen_stage2 (
+      CLK, CLR, PRE, AG2_PS_V,
+
+      AG2_PS_EIP, AG2_PS_NEIP, AG2_PS_NCS,
+      AG2_PS_CONTROL_STORE,
+
+      AG2_PS_A, AG2_PS_B,
+      AG2_PS_MM_A, AG2_PS_MM_B,
+      AG2_PS_SP_XCHG_DATA,
+      AG2_PS_ADD_BASE_DISP, AG2_PS_ADD_SIB_SEG1,
+      AG2_PS_SIB_SI_DATA, AG2_PS_SEG2_DATA,
+      AG2_PS_INTERRUPT_ADDR,
+      AG2_PS_SEG1,
+
+      AG2_PS_D2_ALUK_EX, AG2_PS_DRID1, AG2_PS_DRID2,
+
+      AG2_PS_D2_MEM_RD_ME, AG2_PS_D2_MEM_WR_WB,
+      AG2_PS_D2_LD_GPR1_WB, AG2_PS_D2_LD_MM_WB,
+
+      AG2_PS_D2_DR1_SIZE_WB, AG2_PS_D2_DR2_SIZE_WB,
+      AG2_PS_D2_MEM_SIZE_WB,
+
+      AG2_PS_PAGE_FAULT_EXC_EXIST,
+
+      // Signals for next stage latches
+      AG2_D2_DR1_SIZE_WB_OUT, AG2_D2_DR2_SIZE_WB_OUT,
+      AG2_D2_MEM_SIZE_WB_OUT,
+
+      AG2_NEIP_OUT, 
+      AG2_NCS_OUT,
+      AG2_CONTROL_STORE_OUT,
+
+      AG2_A_OUT, AG2_B_OUT,
+      AG2_MM_A_OUT, AG2_MM_B_OUT,
+      AG2_SP_XCHG_DATA_OUT,
+      AG2_MEM_RD_ADDR_OUT, AG2_MEM_WR_ADDR_OUT,
+
+      AG2_D2_ALUK_EX_OUT,
+      AG2_DRID1_OUT, AG2_DRID2_OUT,
+
+      AG2_D2_MEM_RD_ME_OUT, AG2_D2_MEM_WR_WB_OUT,
+      AG2_D2_LD_GPR1_WB_OUT, AG2_D2_LD_MM_WB_OUT,
+
+      // Other signals
+      AG2_SEG_LIMIT_EXC_EXIST_OUT, AG2_PAGE_FAULT_EXC_EXIST_OUT
+   );
+    
    wire ME_PS_V;
    wire [31:0] ME_PS_NEIP;
    wire [15:0] ME_PS_NCS, ME_PS_NCS_NC;
@@ -640,54 +815,51 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
    wire ME_PAGE_FAULT_EXC_OUT, ME_GPROT_EXC_OUT, ME_MEM_DEP_STALL_OUT;
    
-   wire [31:0] AG_OUT1_ME_PS, ME_PS_IN1;
+   wire [31:0] AG2_OUT1_ME_PS, ME_PS_IN1;
 
-   wire LD_ME, AG_ME_V_OUT;
-   wire ag_dep_stall_out_bar;
-
-   inv1$ inv_dep_stall (ag_dep_stall_out_bar, AG_DEP_STALL_OUT);
-   and2$ and_ag_me_v (AG_ME_V_OUT, AG_PS_V, ag_dep_stall_out_bar);
+   wire LD_ME, AG2_ME_V_OUT;
 
    // LD_ME = !ME_MEM_DEP_STALL_OUT && !ME2_STALL && !WB_STALL
-   // TODO
+   // TODO ME_V = AG2_V
    assign LD_ME = 1'b1;
-
+   assign AG2_ME_V_OUT = AG2_PS_V;
+   
    wire [63:0] me_ps_save_sb, ME_PS_SCOREBOARDS;
-   assign me_ps_save_sb[63:26] = { AG_GPR_SCOREBOARD_OUT, AG_SEG_SCOREBOARD_OUT, AG_MM_SCOREBOARD_OUT };
+   assign me_ps_save_sb[63:26] = { AG2_GPR_SCOREBOARD_OUT, AG2_SEG_SCOREBOARD_OUT, AG2_MM_SCOREBOARD_OUT };
    assign { ME_GPR_SCOREBOARD_OUT, ME_SEG_SCOREBOARD_OUT, ME_MM_SCOREBOARD_OUT } = ME_PS_SCOREBOARDS[63:26];
 
    reg64e$
      u_reg_me_ps_sb (CLK, me_ps_save_sb, ME_PS_SCOREBOARDS, , CLR, PRE, LD_ME);
 
    reg32e$
-     u_reg_me_ps_neip (CLK, AG_NEIP_OUT, ME_PS_NEIP, , CLR, PRE, LD_ME),
-     u_reg_me_ps_cs (CLK, {16'b0, AG_NCS_OUT}, {ME_PS_NCS_NC, ME_PS_NCS}, , CLR, PRE, LD_ME);
+     u_reg_me_ps_neip (CLK, AG2_NEIP_OUT, ME_PS_NEIP, , CLR, PRE, LD_ME),
+     u_reg_me_ps_cs (CLK, {16'b0, AG2_NCS_OUT}, {ME_PS_NCS_NC, ME_PS_NCS}, , CLR, PRE, LD_ME);
 
    reg64e$
-     u_reg_me_ps_control_store0 (CLK, AG_CONTROL_STORE_OUT[127:64], ME_PS_CONTROL_STORE[127:64], , CLR, PRE, LD_ME),
-     u_reg_me_ps_control_store1 (CLK, AG_CONTROL_STORE_OUT[63:0], ME_PS_CONTROL_STORE[63:0], , CLR, PRE, LD_ME);
+     u_reg_me_ps_control_store0 (CLK, AG2_CONTROL_STORE_OUT[127:64], ME_PS_CONTROL_STORE[127:64], , CLR, PRE, LD_ME),
+     u_reg_me_ps_control_store1 (CLK, AG2_CONTROL_STORE_OUT[63:0], ME_PS_CONTROL_STORE[63:0], , CLR, PRE, LD_ME);
 
    reg32e$
-     u_reg_me_ps_a (CLK, AG_A_OUT, ME_PS_A, , CLR, PRE, LD_ME),
-     u_reg_me_ps_b (CLK, AG_B_OUT, ME_PS_B, , CLR, PRE, LD_ME);
+     u_reg_me_ps_a (CLK, AG2_A_OUT, ME_PS_A, , CLR, PRE, LD_ME),
+     u_reg_me_ps_b (CLK, AG2_B_OUT, ME_PS_B, , CLR, PRE, LD_ME);
 
    reg64e$
-     u_reg_me_ps_mm_a (CLK, AG_MM_A_OUT, ME_PS_MM_A, , CLR, PRE, LD_ME),
-     u_reg_me_ps_mm_b (CLK, AG_MM_B_OUT, ME_PS_MM_B, , CLR, PRE, LD_ME);
+     u_reg_me_ps_mm_a (CLK, AG2_MM_A_OUT, ME_PS_MM_A, , CLR, PRE, LD_ME),
+     u_reg_me_ps_mm_b (CLK, AG2_MM_B_OUT, ME_PS_MM_B, , CLR, PRE, LD_ME);
 
    reg32e$
-     u_reg_me_ps_sp_xchg_data (CLK, AG_SP_XCHG_DATA_OUT, ME_PS_SP_XCHG_DATA, , CLR, PRE, LD_ME),
-     u_reg_me_mem_rd_addr (CLK, AG_MEM_RD_ADDR_OUT, ME_PS_MEM_RD_ADDR, , CLR, PRE, LD_ME),
-     u_reg_me_mem_wr_addr (CLK, AG_MEM_WR_ADDR_OUT, ME_PS_MEM_WR_ADDR, , CLR, PRE, LD_ME);
+     u_reg_me_ps_sp_xchg_data (CLK, AG2_SP_XCHG_DATA_OUT, ME_PS_SP_XCHG_DATA, , CLR, PRE, LD_ME),
+     u_reg_me_mem_rd_addr (CLK, AG2_MEM_RD_ADDR_OUT, ME_PS_MEM_RD_ADDR, , CLR, PRE, LD_ME),
+     u_reg_me_mem_wr_addr (CLK, AG2_MEM_WR_ADDR_OUT, ME_PS_MEM_WR_ADDR, , CLR, PRE, LD_ME);
 
-   assign AG_OUT1_ME_PS[31:12] = { AG_ME_V_OUT,
-          AG_D2_ALUK_EX_OUT, AG_DRID1_OUT, AG_DRID2_OUT, AG_D2_MEM_RD_ME_OUT, AG_D2_MEM_WR_WB_OUT,
-	  AG_D2_LD_GPR1_WB_OUT, AG_D2_LD_MM_WB_OUT,
-          AG_D2_DR1_SIZE_WB_OUT, AG_D2_DR2_SIZE_WB_OUT,
-          AG_D2_MEM_SIZE_WB_OUT }; 
+   assign AG2_OUT1_ME_PS[31:12] = { AG2_ME_V_OUT,
+          AG2_D2_ALUK_EX_OUT, AG2_DRID1_OUT, AG2_DRID2_OUT, AG2_D2_MEM_RD_ME_OUT, AG2_D2_MEM_WR_WB_OUT,
+	  AG2_D2_LD_GPR1_WB_OUT, AG2_D2_LD_MM_WB_OUT,
+          AG2_D2_DR1_SIZE_WB_OUT, AG2_D2_DR2_SIZE_WB_OUT,
+          AG2_D2_MEM_SIZE_WB_OUT }; 
 
    reg32e$
-     u_reg_me_ps_in1 (CLK, AG_OUT1_ME_PS, ME_PS_IN1, , CLR, PRE, LD_ME);
+     u_reg_me_ps_in1 (CLK, AG2_OUT1_ME_PS, ME_PS_IN1, , CLR, PRE, LD_ME);
 
    assign { ME_PS_V,
             ME_PS_D2_ALUK_EX, ME_PS_DRID1, ME_PS_DRID2, ME_PS_D2_MEM_RD_ME, ME_PS_D2_MEM_WR_WB,
@@ -695,6 +867,10 @@ module PIPELINE(CLK, CLR, PRE, IR);
             ME_PS_D2_DR1_SIZE_WB, ME_PS_D2_DR2_SIZE_WB,
             ME_PS_D2_MEM_SIZE_WB } = ME_PS_IN1[31:12];
 
+   // agen_stage1 dependency check input
+   assign ME_PS_V_OUT_AG_IN = ME_PS_V;
+   //==================================
+   
    wire ME2_V_ME_IN, ME2_WR_ADDR1_V_ME_IN, ME2_WR_ADDR2_V_ME_IN,
 	EX_V_ME_IN, EX_WR_ADDR1_V_ME_IN, EX_WR_ADDR2_V_ME_IN;
    wire [31:0] ME2_WR_ADDR1_ME_IN, ME2_WR_ADDR2_ME_IN,
@@ -878,6 +1054,10 @@ module PIPELINE(CLK, CLR, PRE, IR);
             ME2_PS_D2_DR1_SIZE_WB, ME2_PS_D2_DR2_SIZE_WB,
             ME2_PS_D2_MEM_SIZE_WB } = ME2_PS_IN1[31:12];
 
+   // agen_stage1 dependency check inputs
+   assign ME2_PS_V_OUT_AG_IN = ME2_PS_V;
+   //===================================
+   
     //******************************************************************************//
     //*
     //*                                MEMORY STAGE

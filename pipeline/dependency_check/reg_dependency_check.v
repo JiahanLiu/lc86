@@ -6,10 +6,20 @@ module reg_dependency_check (
    input SR1_NEEDED, SR2_NEEDED, SR3_NEEDED, SIB_I_NEEDED, 
    input SEG1_NEEDED, SEG2_NEEDED, MM1_NEEDED, MM2_NEEDED,
 
+   input AG2_V,
+   input [23:0] AG2_GPR_SCOREBOARD,
+   input [7:0] AG2_SEG_SCOREBOARD,
+   input [7:0] AG2_MM_SCOREBOARD,
+		    
    input ME_V,
    input [23:0] ME_GPR_SCOREBOARD,
    input [7:0] ME_SEG_SCOREBOARD,
    input [7:0] ME_MM_SCOREBOARD,
+
+   input ME2_V,
+   input [23:0] ME2_GPR_SCOREBOARD,
+   input [7:0] ME2_SEG_SCOREBOARD,
+   input [7:0] ME2_MM_SCOREBOARD,
 
    input EX_V,
    input [23:0] EX_GPR_SCOREBOARD,
@@ -19,27 +29,37 @@ module reg_dependency_check (
    output DEP_STALL
 );
 
-   wire [23:0] and0_out, and3_out;
-   wire [7:0] and1_out, and2_out, and4_out, and5_out;
+   wire [23:0] and0_out, and3_out, and6_out, and9_out;
+   wire [7:0] and1_out, and2_out, and4_out, and5_out, and8_out, and11_out;
 
    wire [23:0] or0_out;
    wire [7:0] or1_out, or2_out;
    wire or3_out, or4_out, or5_out, or6_out;
 
    and2$
-      and0 [23:0] (and0_out, ME_V, ME_GPR_SCOREBOARD),
-      and1 [7:0] (and1_out, ME_V, ME_SEG_SCOREBOARD),
-      and2 [7:0] (and2_out, ME_V, ME_MM_SCOREBOARD);
+      and0 [23:0] (and0_out, AG2_V, AG2_GPR_SCOREBOARD),
+      and1 [7:0] (and1_out, AG2_V, AG2_SEG_SCOREBOARD),
+      and2 [7:0] (and2_out, AG2_V, AG2_MM_SCOREBOARD);
+   
+   and2$
+      and3 [23:0] (and3_out, ME_V, ME_GPR_SCOREBOARD),
+      and4 [7:0] (and4_out, ME_V, ME_SEG_SCOREBOARD),
+      and5 [7:0] (and5_out, ME_V, ME_MM_SCOREBOARD);
+   
+   and2$
+      and6 [23:0] (and6_out, ME2_V, ME2_GPR_SCOREBOARD),
+      and7 [7:0] (and7_out, ME2_V, ME2_SEG_SCOREBOARD),
+      and8 [7:0] (and8_out, ME2_V, ME2_MM_SCOREBOARD);
 
    and2$
-      and3 [23:0] (and3_out, EX_V, EX_GPR_SCOREBOARD),
-      and4 [7:0] (and4_out, EX_V, EX_SEG_SCOREBOARD),
-      and5 [7:0] (and5_out, EX_V, EX_MM_SCOREBOARD);
+      and9 [23:0] (and9_out, EX_V, EX_GPR_SCOREBOARD),
+      and10 [7:0] (and10_out, EX_V, EX_SEG_SCOREBOARD),
+      and11 [7:0] (and11_out, EX_V, EX_MM_SCOREBOARD);
 
-   or2$
-      or0 [23:0] (or0_out, and0_out, and3_out),
-      or1 [7:0] (or1_out, and1_out, and4_out),
-      or2 [7:0] (or2_out, and2_out, and5_out);
+   or4$
+      or0 [23:0] (or0_out, and0_out, and3_out, and6_out, and9_out),
+      or1 [7:0] (or1_out, and1_out, and4_out, and7_out, and10_out),
+      or2 [7:0] (or2_out, and2_out, and5_out, and8_out, and11_out);
 
    wire [23:0] gpr_scoreboard;
    wire [7:0] seg_scoreboard, mm_scoreboard;

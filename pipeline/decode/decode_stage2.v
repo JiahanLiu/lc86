@@ -39,7 +39,10 @@ module decode_stage2 (
 
    output DE_SIB_EN_AG, DE_DISP_EN_AG, DE_BASE_REG_EN_AG,
    output DE_MUX_SEG_AG, DE_CMPXCHG_AG,
-   output [1:0] DE_SIB_S_AG
+   output [1:0] DE_SIB_S_AG,
+
+   output PAGE_FAULT_EXC_EXIST_OUT,
+   output NMI_INT_EN_OUT, GEN_PROT_EXC_EN_OUT, PAGE_FAULT_EXC_EN_OUT
 );
 `include "./control_store/control_store_wires.v"
 `include "./control_store/control_store_signals.v"
@@ -254,5 +257,11 @@ module decode_stage2 (
    // Increment the EIP with proper length
    adder32_w_carry_in add_rel (EIP_OUT, , EIP, {28'b0, instr_length_updt}, 1'b0);
 
+   // check exception address with incremented EIP
+   assign PAGE_FAULT_EXC_EXIST_OUT = 1'b0;
+   assign NMI_INT_EN_OUT = 1'b0;
+   assign GEN_PROT_EXC_EN_OUT = 1'b0;;
+   assign PAGE_FAULT_EXC_EN_OUT = 1'b0;
+   
 endmodule
 
