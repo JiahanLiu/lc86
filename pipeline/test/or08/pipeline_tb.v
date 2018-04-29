@@ -692,6 +692,7 @@ module TOP;
               error <= 1;
             end
 
+        #5    
         if(error == 0) begin 
           $display("****************** Test Passed! ******************");
         end else begin

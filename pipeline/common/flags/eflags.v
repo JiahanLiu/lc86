@@ -198,13 +198,16 @@ module ZF_logic_daa (
 	input [7:0] adder_result
 	);
 
+	wire ZF_n; 
 	//ZF
 	wire ZF_7_4, ZF_3_0; 
 
 	or4$ u_or_zf_7_4(ZF_7_4, adder_result[7], adder_result[6], adder_result[5], adder_result[4]);
 	or4$ u_or_zf_3_0(ZF_3_0, adder_result[3], adder_result[2], adder_result[1], adder_result[0]);
 
-	or2$ u_or_zf_31_0(ZF, ZF_7_4, ZF_3_0);
+	or2$ u_or_zf_31_0(ZF_n, ZF_7_4, ZF_3_0);
+
+	inv1$ u_final_ZF(ZF, ZF_n);
 
 endmodule
 

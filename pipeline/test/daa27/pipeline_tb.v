@@ -55,7 +55,7 @@ module TOP;
     end
 
     // Set the register values
-    // reg0 = 32'08000823
+    // reg0 = 32'080008AE
     // reg1 = 32'09010901
     // reg2 = 32'0A020A02
     // reg3 = 32'0B030B03
@@ -64,7 +64,7 @@ module TOP;
     // reg6 = 32'0E060E06
     // reg7 = 32'0F070F07
     initial begin
-        u_pipeline.u_register_file.gpr.reg0_ll.Q = 32'h23;
+        u_pipeline.u_register_file.gpr.reg0_ll.Q = 32'hAE;
         u_pipeline.u_register_file.gpr.reg1_ll.Q = 32'h1;
         u_pipeline.u_register_file.gpr.reg2_ll.Q = 32'h2;
         u_pipeline.u_register_file.gpr.reg3_ll.Q = 32'h3;
@@ -597,7 +597,7 @@ module TOP;
 /*************************** EXECUTE STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
             #1;    // Allow for setup time
-            if(u_pipeline.EX_A != `default_mem_Value) begin 
+            if(u_pipeline.EX_A != 32'hAE) begin 
               $display("Error: EX_A is: %h, but needs to be: %h", u_pipeline.EX_A, `default_mem_Value);
               error <= 1;
             end
@@ -607,18 +607,20 @@ module TOP;
               error <= 1;
             end
             */
+            /*
             if(u_pipeline.EX_ADDRESS != 32'h0f07_0d0f) begin 
               $display("Error: EX_ADDRESS is: %h, but needs to be: %h", u_pipeline.EX_ADDRESS, 32'h0f07_0d0f);
               error <= 1;
             end
+            */
 
             if(u_pipeline.WB_de_datasize_all_next != 2'b00) begin 
               $display("Error: WB_de_datasize_all_next is: %h, but needs to be: %h", u_pipeline.WB_de_datasize_all_next, 2'b00);
               error <= 1;
             end
 
-            if(u_pipeline.EX_d2_aluk_ex != 3'b010) begin 
-              $display("Error: EX_d2_aluk_ex is: %h, but needs to be: %h", u_pipeline.EX_d2_aluk_ex, 3'b001);
+            if(u_pipeline.EX_d2_aluk_ex != 3'b011) begin 
+              $display("Error: EX_d2_aluk_ex is: %h, but needs to be: %h", u_pipeline.EX_d2_aluk_ex, 3'b011);
               error <= 1;
             end
 
@@ -643,7 +645,8 @@ module TOP;
               error <= 1;
             end
             */
-            if(u_pipeline.WB_Final_ld_gpr1 != 1'b0) begin 
+
+            if(u_pipeline.WB_Final_ld_gpr1 != 1'b1) begin 
               $display("Error: WB_Final_ld_gpr1 is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_gpr1, 1'b1);
               error <= 1;
             end
@@ -678,21 +681,22 @@ module TOP;
               error <= 1;
             end
             
-            if(u_pipeline.WB_Final_Flags != `default_e_flags) begin 
-              $display("Error: WB_Final_Flags is: %h, but needs to be: %h", u_pipeline.WB_Final_Flags, `default_e_flags);
+            if(u_pipeline.WB_Final_Flags != 32'h55) begin 
+              $display("Error: WB_Final_Flags is: %h, but needs to be: %h", u_pipeline.WB_Final_Flags, 32'h55);
               error <= 1;
             end
             
-            if(u_pipeline.WB_Final_ld_flags != 1'b0) begin 
-              $display("Error: WB_Final_ld_flags is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_flags, 1'b0);
+            if(u_pipeline.WB_Final_ld_flags != 1'b1) begin 
+              $display("Error: WB_Final_ld_flags is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_flags, 1'b1);
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_Dcache_Write != 1'b1) begin 
+            if(u_pipeline.WB_Final_Dcache_Write != 1'b0) begin 
               $display("Error: WB_Final_Dcache_Write is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_Write, 1'b0);
               error <= 1;
             end
 
+        #5
         if(error == 0) begin 
           $display("****************** Test Passed! ******************");
         end else begin

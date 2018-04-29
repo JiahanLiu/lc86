@@ -169,6 +169,11 @@ module alu_daa (
 	wire high_needs_daa0, high_needs_daa1, high_needs_daa; 
 	wire [31:0] low_sum, high_sum, AL_part1, AL_part2, low_carry;
 	wire carry_low; 
+	//flag logic
+	wire AF_part2;
+	wire CF_or; 
+	wire CF_part1, CF_part2; 
+	wire OF, DF, SF, ZF, AF, PF, CF; 
 
 	//needs daa low
 	or2$ u_or_low(low_or, a[2], a[1]);
@@ -191,16 +196,11 @@ module alu_daa (
 	adder32 u_add_high(high_sum, ,AL_part1, 32'h00000060); 
 	mux32_2way u_mux_sum_high(AL_part2, AL_part1, high_sum, high_needs_daa);
 
-	wire CF_or; 
-	wire CF_part1, CF_part2; 
 	or2$ u_or_cf(CF_or, CF_dataforwarded, carry_low);
 	mux2$ u_mux_CF_low(CF_part1, CF_dataforwarded, CF_or, low_needs_daa);
 	mux2$ u_mux_CF_high(CF_part2, 1'b0, 1'b1, high_needs_daa);
 
-	wire AF_part2;
-	mux2$ u_mux_AF(AF_part2, 1'b0, 1'b1, low_needs_daa);	
-
-	wire OF, DF, SF, ZF, AF, PF, CF;  
+	mux2$ u_mux_AF(AF_part2, 1'b0, 1'b1, low_needs_daa);	 
 
     assign daa_result[31:8] = 24'b0;
     assign daa_result[7:0] = AL_part2; 
