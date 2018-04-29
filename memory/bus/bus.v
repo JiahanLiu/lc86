@@ -40,6 +40,7 @@ module bus();
 			  );
 
    arbitrator arb_u(BUS_CLK,
+		    RST, SET,
 		    BR,
 		    BG);
 		    
