@@ -94,7 +94,7 @@ endmodule
 module OF_logic_shift_left (
 	output OF,
 	input [31:0] a,  
-	input [1:0] datasize,
+	input [1:0] datasize
 	);
 
 	wire OF_size_32, OF_size_16, OF_size_8; 
@@ -103,7 +103,7 @@ module OF_logic_shift_left (
 	xor2$ u_OF_size_16(OF_size_16, a[15], a[14]);
 	xor2$ u_OF_size_8(OF_size_8, a[7], a[6]);
 
-	mux3$ u_final_mux(OF, OF_size_8, OF_size_16, OF_size_32);
+	mux3$ u_final_mux(OF, OF_size_8, OF_size_16, OF_size_32, datasize[0], datasize[1]);
 
 endmodule
 

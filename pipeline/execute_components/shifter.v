@@ -86,7 +86,7 @@ module shift_arithmetic_right_w_flags(
 
 	wire carry_out;
 
-	shift_arithmetic_right_w_carry u_sar_carry(sar_result, carry_out, a, b);
+	shift_arithmetic_right_w_carry u_sar_carry(sar_result, carry_out, a, b, datasize);
 
 	assign OF = 0;
 	assign DF = 0; 

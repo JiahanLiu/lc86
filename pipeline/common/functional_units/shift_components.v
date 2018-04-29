@@ -40,13 +40,13 @@ module shift_arithmetic_left_w_carry(
 	
 	wire [31:0] post_shift_1, post_shift_2, post_shift_4, post_shift_8, post_shift_16;
 	wire [31:0] post_mux_1, post_mux_2, post_mux_4, post_mux_8;
-	wire [4:0] leftover;
+	wire CF_size_32, CF_size_16, CF_size_8;  
 
-	SAL32_by_1 u_sal32_by_1(post_shift_1, leftover[0], a, datasize);
-	SAL32_by_2 u_sal32_by_2(post_shift_2, leftover[1], post_mux_1, datasize);
-	SAL32_by_4 u_sal32_by_4(post_shift_4, leftover[2], post_mux_2, datasize);
-	SAL32_by_8 u_sal32_by_8(post_shift_8, leftover[3], post_mux_4, datasize);
-	SAL32_by_16 u_sal32_by_16(post_shift_16, leftover[4], post_mux_8, datasize);
+	SAL32_by_1 u_sal32_by_1(post_shift_1, a, datasize);
+	SAL32_by_2 u_sal32_by_2(post_shift_2, post_mux_1, datasize);
+	SAL32_by_4 u_sal32_by_4(post_shift_4, post_mux_2, datasize);
+	SAL32_by_8 u_sal32_by_8(post_shift_8, post_mux_4, datasize);
+	SAL32_by_16 u_sal32_by_16(post_shift_16, post_mux_8, datasize);
 
 	mux32_2way u_mux_1(post_mux_1, a, post_shift_1, b[0]);
 	mux32_2way u_mux_2(post_mux_2, post_mux_1, post_shift_2, b[1]);
@@ -54,7 +54,11 @@ module shift_arithmetic_left_w_carry(
 	mux32_2way u_mux_8(post_mux_8, post_mux_4, post_shift_8, b[3]);
 	mux32_2way u_mux_16(sal_result, post_mux_8, post_shift_16, b[4]);
 
-	calculate_carry_out u_calculate_carry_out(carry_out, b[4:0], leftover);
+	CF_flag_shift_left u_CF_flag_shift_left32(CF_size_32, a, b[4:0]); 
+	CF_flag_shift_left u_CF_flag_shift_left16(CF_size_16, {a[15:0], {16{1'b0}}}, b[4:0]); 
+	CF_flag_shift_left u_CF_flag_shift_left8(CF_size_8, {a[7:0], {24{1'b0}}}, b[4:0]); 
+
+	mux3$ u_mux_CF(carry_out, CF_size_8, CF_size_16, CF_size_32, datasize[0], datasize[1]);
 
 endmodule
 //-------------------------------------------------------------------------------------
@@ -69,18 +73,19 @@ endmodule
 module shift_arithmetic_right_w_carry(
 	output [31:0] sar_result,
 	output carry_out, 
-	input [31:0] a, b
+	input [31:0] a, b, 
+	input [1:0] datasize
 	);
 	
 	wire [31:0] post_shift_1, post_shift_2, post_shift_4, post_shift_8, post_shift_16;
 	wire [31:0] post_mux_1, post_mux_2, post_mux_4, post_mux_8;
-	wire [4:0] leftover;
+	wire CF_size_32, CF_size_16, CF_size_8;  
 
-	SAR32_by_1 u_sar32_by_1(post_shift_1, leftover[0], a);
-	SAR32_by_2 u_sar32_by_2(post_shift_2, leftover[1], post_mux_1);
-	SAR32_by_4 u_sar32_by_4(post_shift_4, leftover[2], post_mux_2);
-	SAR32_by_8 u_sar32_by_8(post_shift_8, leftover[3], post_mux_4);
-	SAR32_by_16 u_sar32_by_16(post_shift_16, leftover[4], post_mux_8);
+	SAR32_by_1 u_sar32_by_1(post_shift_1, a);
+	SAR32_by_2 u_sar32_by_2(post_shift_2, post_mux_1);
+	SAR32_by_4 u_sar32_by_4(post_shift_4, post_mux_2);
+	SAR32_by_8 u_sar32_by_8(post_shift_8, post_mux_4);
+	SAR32_by_16 u_sar32_by_16(post_shift_16, post_mux_8);
 
 	mux32_2way u_mux_1(post_mux_1, a, post_shift_1, b[0]);
 	mux32_2way u_mux_2(post_mux_2, post_mux_1, post_shift_2, b[1]);
@@ -88,7 +93,11 @@ module shift_arithmetic_right_w_carry(
 	mux32_2way u_mux_8(post_mux_8, post_mux_4, post_shift_8, b[3]);
 	mux32_2way u_mux_16(sar_result, post_mux_8, post_shift_16, b[4]);
 
-	calculate_carry_out u_calculate_carry_out(carry_out, b[4:0], leftover);
+	CF_flag_shift_right u_CF_flag_shift_right32(CF_size_32, a, b[4:0]); 
+	CF_flag_shift_right u_CF_flag_shift_right16(CF_size_16, {a[15:0], {16{1'b0}}}, b[4:0]); 
+	CF_flag_shift_right u_CF_flag_shift_right8(CF_size_8, {a[7:0], {24{1'b0}}}, b[4:0]); 
+
+	mux3$ u_mux_CF(carry_out, CF_size_8, CF_size_16, CF_size_32, datasize[0], datasize[1]);
 	
 endmodule
 //-------------------------------------------------------------------------------------
@@ -107,13 +116,12 @@ module shift_arithmetic_left(
 	
 	wire [31:0] post_shift_1, post_shift_2, post_shift_4, post_shift_8, post_shift_16;
 	wire [31:0] post_mux_1, post_mux_2, post_mux_4, post_mux_8;
-	wire [4:0] leftover; //hanging wires since carry not needed
 
-	SAL32_by_1 u_sar32_by_1(post_shift_1, leftover[0], a, 2'b00);
-	SAL32_by_2 u_sar32_by_2(post_shift_2, leftover[1], post_mux_1, 2'b00);
-	SAL32_by_4 u_sar32_by_4(post_shift_4, leftover[2], post_mux_2, 2'b00);
-	SAL32_by_8 u_sar32_by_8(post_shift_8, leftover[3], post_mux_4, 2'b00);
-	SAL32_by_16 u_sar32_by_16(post_shift_16, leftover[4], post_mux_8, 2'b00);
+	SAL32_by_1 u_sar32_by_1(post_shift_1,  a, 2'b00);
+	SAL32_by_2 u_sar32_by_2(post_shift_2, post_mux_1, 2'b00);
+	SAL32_by_4 u_sar32_by_4(post_shift_4, post_mux_2, 2'b00);
+	SAL32_by_8 u_sar32_by_8(post_shift_8, post_mux_4, 2'b00);
+	SAL32_by_16 u_sar32_by_16(post_shift_16, post_mux_8, 2'b00);
 
 	mux32_2way u_mux_1(post_mux_1, a, post_shift_1, b[0]);
 	mux32_2way u_mux_2(post_mux_2, post_mux_1, post_shift_2, b[1]);
@@ -139,13 +147,12 @@ module shift_arithmetic_right(
 	
 	wire [31:0] post_shift_1, post_shift_2, post_shift_4, post_shift_8, post_shift_16;
 	wire [31:0] post_mux_1, post_mux_2, post_mux_4, post_mux_8;
-	wire [4:0] leftover; //hanging wires since carry not needed
 
-	SAR32_by_1 u_sar32_by_1(post_shift_1, leftover[0], a);
-	SAR32_by_2 u_sar32_by_2(post_shift_2, leftover[1], post_mux_1);
-	SAR32_by_4 u_sar32_by_4(post_shift_4, leftover[2], post_mux_2);
-	SAR32_by_8 u_sar32_by_8(post_shift_8, leftover[3], post_mux_4);
-	SAR32_by_16 u_sar32_by_16(post_shift_16, leftover[4], post_mux_8);
+	SAR32_by_1 u_sar32_by_1(post_shift_1, a);
+	SAR32_by_2 u_sar32_by_2(post_shift_2, post_mux_1);
+	SAR32_by_4 u_sar32_by_4(post_shift_4, post_mux_2);
+	SAR32_by_8 u_sar32_by_8(post_shift_8, post_mux_4);
+	SAR32_by_16 u_sar32_by_16(post_shift_16, post_mux_8);
 
 	mux32_2way u_mux_1(post_mux_1, a, post_shift_1, b[0]);
 	mux32_2way u_mux_2(post_mux_2, post_mux_1, post_shift_2, b[1]);
@@ -163,29 +170,6 @@ endmodule
 //
 // Combinational Delay: 
 //
-module calculate_carry_out (
-	output carry_out,    
-	input [4:0] count_operand, 	
-	input [4:0] leftover
-	);
-
-	wire enbar, pencoder_valid;
-	wire [7:0] pencoder_input;
-	wire [2:0] pencoder_output;
-
-	assign enbar = 1'b0; 
-	assign pencoder_input [7:5] = 3'b000;
-	assign pencoder_input [4:0] = count_operand;
-
-	pencoder8_3v$ u_pencoder(enbar, pencoder_input, pencoder_output, pencoder_valid);
-	
-	wire carry_that_exist;
-
-	mux1_8way u_leftover_mux(carry_that_exist, leftover[0], leftover[1], leftover[2], 
-		leftover[3], leftover[4], 1'b0, 1'b0, 1'b0, pencoder_output);
-	
-	mux2$ u_final_mux(carry_out, 1'b0, carry_that_exist, pencoder_valid);
-endmodule
 
 //-------------------------------------------------------------------------------------
 //
@@ -198,13 +182,11 @@ endmodule
 //
 module SAR32_by_1 (
 	output [31:0] out, 
-	output leftover,  
 	input [31:0] in
 	);
 
 	assign out [31] = in[31];
 	assign out [30:0] = in[31:1];
-	assign leftover = in[0];
 
 endmodule
 
@@ -218,14 +200,12 @@ endmodule
 // Combinational Delay: 
 //
 module SAR32_by_2 (
-	output [31:0] out, 
-	output leftover,  
+	output [31:0] out,  
 	input [31:0] in
 	);
 
 	assign out[31:30] = {2{in[31]}};
 	assign out [29:0] = in[31:2];
-	assign leftover = in[1];
 
 endmodule
 
@@ -240,13 +220,11 @@ endmodule
 //
 module SAR32_by_4 (
 	output [31:0] out, 
-	output leftover,  
 	input [31:0] in
 	);
 
 	assign out[31:28] = {4{in[31]}};
 	assign out [27:0] = in[31:4];
-	assign leftover = in[3];
 
 endmodule
 
@@ -261,13 +239,11 @@ endmodule
 //
 module SAR32_by_8 (
 	output [31:0] out, 
-	output leftover,  
 	input [31:0] in
 	);
 
 	assign out[31:24] = {8{in[31]}};
 	assign out [23:0] = in[31:8];
-	assign leftover = in[7];
 
 endmodule
 
@@ -281,14 +257,12 @@ endmodule
 // Combinational Delay: 
 //
 module SAR32_by_16 (
-	output [31:0] out, 
-	output leftover,  
+	output [31:0] out,  
 	input [31:0] in
 	);
 
 	assign out[31:16] = {16{in[31]}};
 	assign out [15:0] = in[31:16];
-	assign leftover = in[15];
 
 endmodule
 
@@ -303,19 +277,12 @@ endmodule
 //
 module SAL32_by_1 (
 	output [31:0] out, 
-	output leftover,  
 	input [31:0] in,
 	input [1:0] datasize
 	);
-	
-	wire leftover8, leftover16, leftover32; 
 
 	assign out [0] = 1'b0;
 	assign out [31:1] = in[30:0];
-	assign leftover32 = in[31];
-	assign leftover16 = in[15];
-	assign leftover8 = in[7];
-	mux3$ u_mux_leftover(leftover, leftover8, leftover16, leftover32, datasize[0], datasize[1]); 
 endmodule
 
 //-------------------------------------------------------------------------------------
@@ -329,19 +296,12 @@ endmodule
 //
 module SAL32_by_2 (
 	output [31:0] out, 
-	output leftover,  
 	input [31:0] in,
 	input [1:0] datasize
 	);
 
-	wire leftover8, leftover16, leftover32; 
-
 	assign out[1:0] = 2'b00;
 	assign out [31:2] = in[29:0];
-	assign leftover32 = in[30];
-	assign leftover16 = in[14];
-	assign leftover8 = in[6];
-	mux3$ u_mux_leftover(leftover, leftover8, leftover16, leftover32, datasize[0], datasize[1]);
 
 endmodule
 
@@ -356,20 +316,12 @@ endmodule
 //
 module SAL32_by_4 (
 	output [31:0] out, 
-	output leftover,  
 	input [31:0] in,
 	input [1:0] datasize
 	);
 
-	wire leftover8, leftover16, leftover32;  
-
 	assign out[3:0] = 4'h0;
 	assign out [31:4] = in[27:0];
-	assign leftover32 = in[28];
-	assign leftover16 = in[12];
-	assign leftover8 = in[4];
-	mux3$ u_mux_leftover(leftover, leftover8, leftover16, leftover32, datasize[0], datasize[1]);
-
 endmodule
 
 //-------------------------------------------------------------------------------------
@@ -383,20 +335,13 @@ endmodule
 //
 module SAL32_by_8 (
 	output [31:0] out, 
-	output leftover,  
 	input [31:0] in,
 	input [1:0] datasize
 	);
 
-	wire leftover8, leftover16, leftover32;  
 
 	assign out[7:0] = 8'h00;
 	assign out [31:8] = in[23:0];
-	assign leftover32 = in[24];
-	assign leftover16 = in[16];
-	assign leftover8 = in[0]; 
-
-	mux3$ u_mux_leftover(leftover, leftover8, leftover16, leftover32, datasize[0], datasize[1]);
 
 endmodule
 
@@ -410,21 +355,64 @@ endmodule
 // Combinational Delay: 
 //
 module SAL32_by_16 (
-	output [31:0] out, 
-	output leftover,  
+	output [31:0] out,  
 	input [31:0] in,
 	input [1:0] datasize
 	);
 
-	wire leftover8, leftover16, leftover32;  
-
 	assign out[15:0] = 16'h0000;
 	assign out [31:16] = in[15:0];
-	assign leftover32 = in[16];
-	assign leftover16 = in[0];
-	assign leftover8 = in[0]; //behavior undefined cite intel specs.
-
-	mux3$ u_mux_leftover(leftover, leftover8, leftover16, leftover32, datasize[0], datasize[1]);
 
 endmodule
 
+//-------------------------------------------------------------------------------------
+//
+// 					 		    1-bit Mux with 32 inputs
+//
+//-------------------------------------------------------------------------------------
+// Functionality: 1-bit Mux with 32 inputs
+//
+// Combinational Delay: 
+//
+module CF_flag_shift_right(
+	output CF,
+	input [31:0] a,
+	input [4:0] select
+	);
+
+	wire result0, result1, result2, result3;
+
+	mux1_8way u_mux1_8way0(result0, a[0], a[0], a[1], a[2], a[3], a[4], a[5], a[6], select[2:0]);
+	mux1_8way u_mux1_8way1(result1, a[7], a[8], a[9], a[10], a[11], a[12], a[13], a[14], select[2:0]);
+	mux1_8way u_mux1_8way2(result2, a[15], a[16], a[17], a[18], a[19], a[20], a[21], a[22], select[2:0]);
+	mux1_8way u_mux1_8way3(result3, a[23], a[24], a[25], a[26], a[27], a[28], a[29], a[30], select[2:0]);
+
+	mux4$ u_mux_final(CF, result0, result1, result2, result3, select[4], select[3]);	
+
+endmodule
+
+//-------------------------------------------------------------------------------------
+//
+// 					 		    1-bit Mux with 32 inputs
+//
+//-------------------------------------------------------------------------------------
+// Functionality: 1-bit Mux with 32 inputs
+//
+// Combinational Delay: 
+//
+module CF_flag_shift_left(
+	output CF,
+	input [31:0] a,
+	input [4:0] select
+	);
+
+	wire result0, result1, result2, result3;
+
+	mux1_8way u_mux1_8way0(result0, a[31], a[31], a[30], a[29], a[28], a[27], a[26], a[25], select[2:0]);
+	mux1_8way u_mux1_8way1(result1, a[24], a[23], a[22], a[21], a[20], a[19], a[18], a[17], select[2:0]);
+	mux1_8way u_mux1_8way2(result2, a[16], a[15], a[14], a[13], a[12], a[11], a[10], a[9], select[2:0]);
+	mux1_8way u_mux1_8way3(result3, a[8], a[7], a[6], a[5], a[4], a[3], a[2], a[1], select[2:0]);
+
+	mux4$ u_mux_final(CF, result0, result1, result2, result3, select[4], select[3]);	
+
+endmodule

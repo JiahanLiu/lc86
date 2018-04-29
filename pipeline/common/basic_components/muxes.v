@@ -39,58 +39,6 @@ endmodule
 
 //-------------------------------------------------------------------------------------
 //
-// 					 		    1-bit Mux with 32 inputs
-//
-//-------------------------------------------------------------------------------------
-// Functionality: 1-bit Mux with 32 inputs
-//
-// Combinational Delay: 
-//
-module mux1_32way(
-	output mux_out,
-	input [31:0] a
-	input [4:0] select
-	);
-
-	wire result0, result1, result2, result3;
-
-	mux1_8way u_mux1_8way0(result0, a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], select[2:0]);
-	mux1_8way u_mux1_8way1(result1, a[8], a[9], a[10], a[11], a[12], a[13], a[14], a[15], select[2:0]);
-	mux1_8way u_mux1_8way2(result2, a[16], a[17], a[18], a[19], a[20], a[21], a[22], a[23], select[2:0]);
-	mux1_8way u_mux1_8way3(result3, a[24], a[25], a[26], a[27], a[28], a[29], a[30], a[31], select[2:0]);
-
-	mux4$ u_mux_final(mux_out, result0, result1, result2, result3, select[4], select[3]);	
-
-endmodule
-
-//-------------------------------------------------------------------------------------
-//
-// 					 		    1-bit Mux with 32 inputs
-//
-//-------------------------------------------------------------------------------------
-// Functionality: 1-bit Mux with 32 inputs
-//
-// Combinational Delay: 
-//
-module mux1_32way_inverted(
-	output mux_out,
-	input [31:0] a
-	input [4:0] select
-	);
-
-	wire result0, result1, result2, result3;
-
-	mux1_8way u_mux1_8way0(result0, a[31], a[30], a[29], a[28], a[27], a[26], a[25], a[24], select[2:0]);
-	mux1_8way u_mux1_8way1(result1, a[23], a[22], a[21], a[20], a[19], a[18], a[17], a[16], select[2:0]);
-	mux1_8way u_mux1_8way2(result2, a[15], a[14], a[13], a[12], a[11], a[10], a[9], a[8], select[2:0]);
-	mux1_8way u_mux1_8way3(result3, a[7], a[6], a[5], a[4], a[3], a[2], a[1], a[0], select[2:0]);
-
-	mux4$ u_mux_final(mux_out, result0, result1, result2, result3, select[4], select[3]);	
-
-endmodule
-
-//-------------------------------------------------------------------------------------
-//
 // 					 		    16-bit Mux with 2 inputs
 //
 //-------------------------------------------------------------------------------------
