@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 `define EOF = 32'hFFFF_FFFF
 `define NULL 0
-`define default_mem_Value 8'hFE
+`define default_mem_Value 16'h07
 //assign DCACHE_DATA = 63'hFE; 
 
 `define assert(signal, value) \
@@ -266,7 +266,7 @@ module TOP;
 
             if(modrm_present == 1'b1) begin 
                 //modrm = {$random};
-                modrm = 32'b10100101; //95
+                modrm = 32'b10111101; //95
                 j=j-1;
                 IR[8*j +: 8] = modrm;
 //                $display ("Time: %0d MODRM = %h", $time, modrm);
@@ -324,7 +324,7 @@ module TOP;
 
             if(imm_size8) begin
                 imm[7:0] = {$random};
-                imm[7:0] = 31'h07;
+                imm[7:0] = 8'h01;
                 j=j-1;
                 imm_size = 1;
                 imm_size_en = 0;
@@ -332,7 +332,7 @@ module TOP;
 //                $display ("Time: %0d IMM = %h", $time, imm[7:0]);
             end else if(imm_size16) begin
                 imm[15:0] = {$random};
-                imm[15:0] = 31'h5462;
+                imm[15:0] = 16'h0001;
                 j=j-2;
                 imm_size = 2;
                 imm_size_en = 1;
@@ -601,8 +601,8 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.EX_B != 8'h07) begin 
-              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, 8'h07);
+            if(u_pipeline.EX_B != 16'h01) begin 
+              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, 16'h01);
               error <= 1;
             end
 

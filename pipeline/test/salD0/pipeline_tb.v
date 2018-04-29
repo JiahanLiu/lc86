@@ -2,7 +2,6 @@
 `define EOF = 32'hFFFF_FFFF
 `define NULL 0
 `define default_mem_Value 8'hFE
-//assign DCACHE_DATA = 63'hFE; 
 
 `define assert(signal, value) \
         if (signal !== value) begin \
@@ -637,12 +636,10 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_data1 != 32'b0) begin 
-              $display("Error: WB_Final_data1 is: %h, but needs to be: %h", u_pipeline.WB_Final_data1, 32'b0);
+            if(u_pipeline.WB_Final_data1 != (u_pipeline.EX_A | u_pipeline.EX_B)) begin 
+              $display("Error: WB_Final_data1 is: %h, but needs to be: %h", u_pipeline.WB_Final_data1, u_pipeline.EX_A | u_pipeline.EX_B);
               error <= 1;
             end
-
-            //assign DCACHE_DATA = 63'hFE; 
 
             if(u_pipeline.WB_Final_ld_gpr1 != 1'b0) begin 
               $display("Error: WB_Final_ld_gpr1 is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_gpr1, 1'b1);

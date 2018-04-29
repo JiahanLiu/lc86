@@ -94,8 +94,8 @@ module shift_arithmetic_right_w_carry(
 	mux32_2way u_mux_16(sar_result, post_mux_8, post_shift_16, b[4]);
 
 	CF_flag_shift_right u_CF_flag_shift_right32(CF_size_32, a, b[4:0]); 
-	CF_flag_shift_right u_CF_flag_shift_right16(CF_size_16, {a[15:0], {16{1'b0}}}, b[4:0]); 
-	CF_flag_shift_right u_CF_flag_shift_right8(CF_size_8, {a[7:0], {24{1'b0}}}, b[4:0]); 
+	CF_flag_shift_right u_CF_flag_shift_right16(CF_size_16, a, b[4:0]); 
+	CF_flag_shift_right u_CF_flag_shift_right8(CF_size_8, a, b[4:0]); 
 
 	mux3$ u_mux_CF(carry_out, CF_size_8, CF_size_16, CF_size_32, datasize[0], datasize[1]);
 	
