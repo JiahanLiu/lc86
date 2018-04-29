@@ -570,7 +570,7 @@ module TOP;
             end
 
             if(u_pipeline.AG_PS_CONTROL_STORE !== u_pipeline.D2_CONTROL_STORE_OUT) begin
-                $display("time: %0d AG_PS_CONTROL_STORE error!! %h", $time, u_pipeline.AG_PS_CONTROL_STORE_OUT);
+                $display("time: %0d AG_PS_CONTROL_STORE error!! %h", $time, u_pipeline.AG_PS_CONTROL_STORE);
 //              $stop;
             end
 
