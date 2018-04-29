@@ -310,6 +310,38 @@ assert property (@(posedge clk)
 endmodule
 
 
+module shifter32_props (
+    input clk,
+   	input [31:0] shift_result,
+	input [31:0] shift_flags,
+	input EX_de_shift_dir_wb,
+	input [31:0] a,
+	input [31:0] b,
+	input [1:0] datasize,
+    input reset
+);
+
+logic signed [31:0] s_a = a <<< b;
+logic signed [31:0] s2_a = $signed(a) >>> b;
+
+assume property (@(posedge clk) b<32);
+assert property (@(posedge clk) EX_de_shift_dir_wb |-> shift_result == s2_a);
+assert property (@(posedge clk) !EX_de_shift_dir_wb |-> shift_result == s_a);
+
+endmodule 
+
+bind execute shifter32_props wrp_shifter32 (
+    .clk(CLK),
+    .reset(CLR),
+	.shift_result(u_functional_unit_ex.u_shifter32.shift_result),
+	.shift_flags(u_functional_unit_ex.u_shifter32.shift_flags),
+	.EX_de_shift_dir_wb(u_functional_unit_ex.u_shifter32.EX_de_shift_dir_wb),
+	.a(u_functional_unit_ex.u_shifter32.a),
+	.b(u_functional_unit_ex.u_shifter32.b),
+	.datasize(u_functional_unit_ex.u_shifter32.datasize)
+);
+
+
 //bind execute adder32_props wrp_adder32 (
 //    .clk(CLK),
 //    .reset(CLR),
@@ -333,23 +365,23 @@ endmodule
 bind execute alu32_props wrp_alu32 (
     .clk(CLK),
     .reset(CLR),
-    .a(u_alu32.a),
-    .b(u_alu32.b),
-    .flags(u_alu32.flags),
-    .CF_forward(u_alu32.CF_dataforwarded),
-    .AF_forward(u_alu32.AF_dataforwarded),
-    .alu_out(u_alu32.alu_out),
-    .op(u_alu32.op)
+    .a(u_functional_unit_ex.u_alu32.a),
+    .b(u_functional_unit_ex.u_alu32.b),
+    .flags(u_functional_unit_ex.u_alu32.flags),
+    .CF_forward(u_functional_unit_ex.u_alu32.CF_dataforwarded),
+    .AF_forward(u_functional_unit_ex.u_alu32.AF_dataforwarded),
+    .alu_out(u_functional_unit_ex.u_alu32.alu_out),
+    .op(u_functional_unit_ex.u_alu32.op)
 );
 
 bind execute alu64_props wrp_alu64 (
-    .clk(CLK),
-    .reset(CLR),
-    .a(u_alu64.MM_A),
-    .b(u_alu64.MM_B),
-    .alu_out(u_alu64.alu64_results),
-    .imm(u_alu64.imm),
-    .op(u_alu64.operation_select)
+    .clk(u_functional_unit_ex.CLK),
+    .reset(u_functional_unit_ex.CLR),
+    .a(u_functional_unit_ex.u_alu64.MM_A),
+    .b(u_functional_unit_ex.u_alu64.MM_B),
+    .alu_out(u_functional_unit_ex.u_alu64.alu64_results),
+    .imm(u_functional_unit_ex.u_alu64.imm),
+    .op(u_functional_unit_ex.u_alu64.operation_select)
 );
 
 //bind execute execute_props wrp_alu32 (
