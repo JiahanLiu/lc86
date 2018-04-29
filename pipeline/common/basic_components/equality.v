@@ -3,7 +3,7 @@
 // 					 		     = 0?
 //
 //-------------------------------------------------------------------------------------
-// Functionality: Checks for equal to 0
+// Functionality: boolean = 1 if equal to 0. 
 //
 // Combinational Delay: 
 //

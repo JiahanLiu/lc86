@@ -15,17 +15,24 @@ module shifter32(
 	input EX_de_shift_dir_wb,
 	input [31:0] a,
 	input [31:0] b,
-	input [1:0] datasize
+	input [1:0] datasize, 
+	input [31:0] flags_dataforwarded
 	);
 
 	wire [31:0] left_result, right_result;
 	wire [31:0] left_flags, right_flags;
+	wire [31:0] calculated_flags; 
+	wire b_eq_0; 
 
 	shift_arithmetic_left_w_flags u_SAL(left_result, left_flags, a, b, datasize);
 	shift_arithmetic_right_w_flags u_SAR(right_result, right_flags, a, b, datasize);
 
 	mux32_2way mux_results(shift_result, left_result, right_result, EX_de_shift_dir_wb);
 	mux32_2way mux_flags(shift_flags, left_flags, right_flags, EX_de_shift_dir_wb);
+
+	equal_to_zero u_equal_to_zeroB(b_eq_0, b);
+	mux32_2way u_mux_final_flags(shift_flags, calculated_flags, flags_dataforwarded, b_eq_0);	
+
 endmodule // shifter32	
 
 //-------------------------------------------------------------------------------------
@@ -60,7 +67,7 @@ module shift_arithmetic_left_w_flags(
 	PF_logic u_PF_logic(PF, sal_result[7:0]);
 	assign CF = carry_out;
 
-	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
+	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);
 
 endmodule
 
