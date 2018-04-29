@@ -18,6 +18,7 @@ module decode_stage2 (
    input [1:0] offset_size,
    input [2:0] segID,
    input [7:0] modrm, sib,
+   input [7:0] decode_address,
 
    output [31:0] EIP_OUT, 
    output [15:0] CS_OUT,
@@ -99,8 +100,11 @@ module decode_stage2 (
 //           control_address = opcode[4:0];
 //   end
 
-    ucontrol_store u_ucontrol_store2 (.opcode(opcode[7:0]), .opcode_size(opcode_size), .control_signal(CONTROL_STORE[63:0]));
-    ucontrol_store u_ucontrol_store1 (.opcode(opcode[7:0]), .opcode_size(opcode_size), .control_signal(CONTROL_STORE[127:64]));
+    // Mux for choosing the control address, the sel signal needs to be
+    // generated -TODO
+    // mux4_8$ mux1_cntrl_addr (control_store_address, decode_address, interrupt_address, next_micro_op_address, sel0, sel1);
+    ucontrol_store u_ucontrol_store2 (.opcode(decode_address), .opcode_size(opcode_size), .control_signal(CONTROL_STORE[63:0]));
+    ucontrol_store u_ucontrol_store1 (.opcode(decode_address), .opcode_size(opcode_size), .control_signal(CONTROL_STORE[127:64]));
 
     inv1$ inv1 (mod7_b, modrm[7]);
     inv1$ inv2 (mod6_b, modrm[6]);

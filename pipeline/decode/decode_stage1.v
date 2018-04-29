@@ -16,7 +16,8 @@ module decode_stage1 (
     output [1:0] offset_size,
     output [2:0] segID,
     output [7:0] modrm, sib,
-    output [2:0] modrm_sel
+    output [2:0] modrm_sel,
+    output [7:0] control_store_address
 //    output [31:0] sum,
 //    input cin,
 //    input [31:0] a, b,
@@ -39,6 +40,9 @@ wire [1:0] segID_sel;
 // Opcode length decoder
 wire [2:0] opcode_sel;
 wire [7:0] out1m, out2m;
+wire eq_FF, eq_0F70;
+wire AGB1, BGA1, AGB2, BGA2;
+wire [7:0] FF_out;
 
 assign IR_OUT = IR;
 
@@ -124,7 +128,6 @@ offset_detector u_offset_detector (.opcode(opcode), .operand_override(operand_ov
 );
 
 
-
 instruction_length_decoder u_instruction_length_decoder (.prefix_present(prefix_present),
     .prefix_size(prefix_size), .opcode_size(opcode_size), .modrm_present(modrm_present),
     .sib_present(sib_present), .offset_present(offset_present), .offset_size(offset_size), 
@@ -133,5 +136,14 @@ instruction_length_decoder u_instruction_length_decoder (.prefix_present(prefix_
 );
 
 assign imm_size = imm_size_in;
+
+mag_comp8$ comp1 (opcode[7:0], 8'hFF, AGB1, BGA1);
+nor2$ nand1 (eq_FF, AGB1, BGA1);
+
+mag_comp8$ comp2 (opcode[7:0], 8'h70, AGB2, BGA2);
+nor2$ nand2 (eq_0F70, AGB2, BGA2);
+
+mux4_8$ mux1 (FF_out, 8'h18, 8'h19, 8'h1A, 8'h1B, modrm[4], modrm[5]);
+mux4_8$ mux2 (control_store_address, opcode[7:0], 8'h03, FF_out, , eq_0F70, eq_FF);
 
 endmodule

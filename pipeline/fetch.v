@@ -41,7 +41,8 @@ module fetch (
    output [1:0] offset_size,
    output [2:0] segID,
    output [7:0] modrm, sib,
-   output [2:0] modrm_sel
+   output [2:0] modrm_sel,
+   output [7:0] control_store_address
 );
 
    //The four buffers for the fetch unit
@@ -455,7 +456,9 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
 				  offset_size,
 				  segID,
 				  modrm, sib,
-				  modrm_sel);
+				  modrm_sel,
+                  control_store_address
+    );
 
 endmodule
 
