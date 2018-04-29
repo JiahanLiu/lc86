@@ -52,13 +52,15 @@ module shift_arithmetic_left_w_flags(
 
 	shift_arithmetic_left_w_carry u_sal_carry(sal_result, carry_out, a, b, datasize);
 
-	OF_logic u_OF_logic(OF, sal_result, a, b, datasize);
+	OF_logic_shift_left u_OF_logic_shift_left(OF, a, datasize);
 	assign DF = 0; 
 	SF_logic u_SF_logic(SF, sal_result, datasize);
 	ZF_logic u_ZF_logic(ZF, sal_result, datasize);
 	assign AF = 0; //undefined
 	PF_logic u_PF_logic(PF, sal_result[7:0]);
 	assign CF = carry_out;
+
+	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
 
 endmodule
 
@@ -86,12 +88,14 @@ module shift_arithmetic_right_w_flags(
 
 	shift_arithmetic_right_w_carry u_sar_carry(sar_result, carry_out, a, b);
 
-	OF_logic u_OF_logic(OF, sar_result, a, b, datasize);
+	assign OF = 0;
 	assign DF = 0; 
 	SF_logic u_SF_logic(SF, sar_result, datasize);
 	ZF_logic u_ZF_logic(ZF, sar_result, datasize);
 	assign AF = 0; //undefined
 	PF_logic u_PF_logic(PF, sar_result[7:0]);
 	assign CF = carry_out;
+
+	assign_flags u_assign_flags(flags[31:0], OF, DF, SF, ZF, AF, PF, CF);	
 
 endmodule

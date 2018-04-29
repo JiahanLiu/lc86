@@ -84,6 +84,31 @@ endmodule
 
 //-------------------------------------------------------------------------------------
 //
+// 					 				OF_logic_shift_left
+//
+//-------------------------------------------------------------------------------------
+// Functionality: Overflow Flag for shift left
+//
+// Combinational Delay: 
+//
+module OF_logic_shift_left (
+	output OF,
+	input [31:0] a,  
+	input [1:0] datasize,
+	);
+
+	wire OF_size_32, OF_size_16, OF_size_8; 
+
+	xor2$ u_OF_size_32(OF_size_32, a[31], a[30]);
+	xor2$ u_OF_size_16(OF_size_16, a[15], a[14]);
+	xor2$ u_OF_size_8(OF_size_8, a[7], a[6]);
+
+	mux3$ u_final_mux(OF, OF_size_8, OF_size_16, OF_size_32);
+
+endmodule
+
+//-------------------------------------------------------------------------------------
+//
 // 					 				PF_Logic
 //
 //-------------------------------------------------------------------------------------

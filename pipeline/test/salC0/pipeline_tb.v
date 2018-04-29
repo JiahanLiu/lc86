@@ -189,7 +189,6 @@ module TOP;
         u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[6] = 8'h6;
         u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[7] = 8'h7;
 
-
         u_pipeline.u_register_file.eip.Q = 32'h01;
         u_pipeline.u_register_file.segr_cs.Q = 32'h1A;
         u_pipeline.u_register_file.eflags.Q = 32'h01;
@@ -266,7 +265,7 @@ module TOP;
 
             if(modrm_present == 1'b1) begin 
                 //modrm = {$random};
-                modrm = 32'b10010101; //95
+                modrm = 32'b10100101; //95
                 j=j-1;
                 IR[8*j +: 8] = modrm;
 //                $display ("Time: %0d MODRM = %h", $time, modrm);
