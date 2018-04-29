@@ -13,7 +13,7 @@
 // SAR32_by_1                       - SAR 1x w/carry                 
 // SAR32_by_2                       - SAR 2x w/carry                 
 // SAR32_by_4                       - SAR 4x w/carry                 
-// SAR32_by_8                       - SAR 8x w/carry                 
+// SAR32_by_8                       - SAR 8x w/carry       	          
 // SAR32_by_16                      - SAR 16x w/carry                
 // SAL32_by_1                       - SAL 1x w/carry                 
 // SAL32_by_2                       - SAL 2x w/carry                 
