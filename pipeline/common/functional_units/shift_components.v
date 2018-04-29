@@ -387,7 +387,7 @@ module CF_flag_shift_right(
 	mux1_8way u_mux1_8way2(result2, a[15], a[16], a[17], a[18], a[19], a[20], a[21], a[22], select[2:0]);
 	mux1_8way u_mux1_8way3(result3, a[23], a[24], a[25], a[26], a[27], a[28], a[29], a[30], select[2:0]);
 
-	mux4$ u_mux_final(CF, result0, result1, result2, result3, select[4], select[3]);	
+	mux4$ u_mux_final(CF, result0, result1, result2, result3, select[3], select[4]);	
 
 endmodule
 
