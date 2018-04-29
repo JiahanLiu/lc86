@@ -165,16 +165,25 @@ module alu_daa (
 	input AF_dataforwarded
 	);
 
-	wire low_or, high_or, low_and, high_and, low_needs_daa, high_needs_daa; 
+	wire low_or, high_or0, high_or1, low_and, high_and0, high_and1, low_needs_daa;
+	wire high_needs_daa0, high_needs_daa1, high_needs_daa; 
 	wire [31:0] low_sum, high_sum, AL_part1, AL_part2, low_carry;
 	wire carry_low; 
 
+	//needs daa low
 	or2$ u_or_low(low_or, a[2], a[1]);
 	and2$ u_and_low(low_and, a[3], low_or);
-	or2$ u_or_high(high_or, AL_part1[6], AL_part1[5]);
-	and2$ u_and_high(high_and, AL_part1[7], high_or); 
 	or2$ u_or_low_needs_daa(low_needs_daa, low_and, AF_dataforwarded); 
-	or2$ u_or_high_needs_daa(high_needs_daa, high_and, CF_dataforwarded); 
+	//needs daa high 0
+	or2$ u_or_high0(high_or0, AL_part1[6], AL_part1[5]);
+	and2$ u_and_high0(high_and0, AL_part1[7], high_or0); 
+	or2$ u_or_high_needs_daa0(high_needs_daa0, high_and0, CF_dataforwarded); 
+	//needs daa high 1
+	or2$ u_or_high1(high_or1, a[6], a[5]);
+	and2$ u_and_high1(high_and1, a[7], high_or1); 
+	or2$ u_or_high_needs_daa1(high_needs_daa1, high_and1, CF_dataforwarded); 
+	//final daa high
+	or2$ u_high_needs_daa_final(high_needs_daa, high_needs_daa0, high_needs_daa1);
 
 	adder32 u_add_low(low_sum, low_carry, a, 32'h00000006);
 	mux32_2way u_mux_sum_low(AL_part1, a, low_sum, low_needs_daa);
