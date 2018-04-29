@@ -623,7 +623,7 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_de_datasize_all_next != 2'b00) begin 
+            if(u_pipeline.WB_de_datasize_all_next != 2'b10) begin 
               $display("Error: WB_de_datasize_all_next is: %h, but needs to be: %h", u_pipeline.WB_de_datasize_all_next, 2'b00);
               error <= 1;
             end
@@ -694,7 +694,7 @@ module TOP;
               error <= 1;
             end
             */
-            if(u_pipeline.WB_Final_ld_flags != 1'b0) begin 
+            if(u_pipeline.WB_Final_ld_flags != 1'b1) begin 
               $display("Error: WB_Final_ld_flags is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_flags, 1'b1);
               error <= 1;
             end
