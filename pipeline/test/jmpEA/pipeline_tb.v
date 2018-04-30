@@ -606,8 +606,13 @@ module TOP;
             #(clk_cycle-1);
             #1;    // Allow for setup time
 
-            if(u_pipeline.EX_NEIP !==(32'h1 + instr_length +  offset[31:0])) begin 
-              $display("Error: EX_NEIP is: %h, but needs to be: %h", u_pipeline.EX_NEIP, 32'h1 + instr_length + offset[31:0]);
+            if(u_pipeline.EX_NEIP !== offset[31:0]) begin 
+              $display("Error: EX_NEIP is: %h, but needs to be: %h", u_pipeline.EX_NEIP, offset[31:0]);
+              error <= 1;
+            end
+
+            if(u_pipeline.EX_NCS !== offset[47:31]) begin 
+              $display("Error: EX_NCS is: %h, but needs to be: %h", u_pipeline.EX_NCS, offset[47:31]);
               error <= 1;
             end
               
@@ -714,8 +719,13 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_EIP !== (32'h1 + instr_length + offset[31:0])) begin 
-              $display("Error: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_EIP, 32'h1 + instr_length + offset[31:0]);
+            if(u_pipeline.WB_Final_EIP !== offset[31:0]) begin 
+              $display("Error: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_EIP, offset[31:0]);
+              error <= 1;
+            end
+
+            if(u_pipeline.WB_Final_CS !== offset[47:32]) begin 
+              $display("Error: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_CS, offset[47:32]);
               error <= 1;
             end
             //$display("Force Display: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_EIP, 32'h1 + instr_length + offset[7:0]);
