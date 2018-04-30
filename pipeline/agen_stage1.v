@@ -131,7 +131,7 @@ module agen_stage1 (
    assign EIP_OUT = EIP; // for segment limit check
    
    // Generate next EIP value
-   mux2_32 mux_rel (mux_rel_out, 32'b0, DISP32, CS_MUX_EIP_JMP_REL_AG);
+   mux2_32 mux_rel (mux_rel_out, 32'b0, OFFSET[31:0], CS_MUX_EIP_JMP_REL_AG);
    adder32_w_carry_in add_rel (add_rel_out, , EIP, mux_rel_out, 1'b0);
    mux2_32 mux_eip (NEIP_OUT, add_rel_out, OFFSET[31:0], CS_MUX_NEXT_EIP_AG);
 
