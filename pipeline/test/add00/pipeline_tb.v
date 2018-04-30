@@ -688,9 +688,11 @@ module TOP;
             end
 
             if(u_pipeline.WB_Final_Dcache_Write !== 1'b1) begin 
-              $display("Error: WB_Final_Dcache_Write is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_Write, 1'b0);
+              $display("Error: WB_Final_Dcache_Write is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_Write, 1'b1);
               error <= 1;
             end
+            $display("Force: WB_Final_Dcache_Write is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_Write, 1'b1);
+              
 
         #5
         if(error == 0) begin 

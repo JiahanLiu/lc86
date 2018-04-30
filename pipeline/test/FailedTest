@@ -1,0 +1,16 @@
+cmpxchg0fb1 - wrong datasize starting from D2
+
+//Instructions Passed for all opcode
+Add
+Or
+cld
+daa
+not
+and
+add
+std
+xchg
+cmpxchg
+hlt
+
+

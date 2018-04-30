@@ -619,7 +619,7 @@ module TOP;
             end
 
             if(u_pipeline.EX_ADDRESS !== 32'h0f07_0d0f) begin 
-              $display("Error: EX_ADDRESS is: %h, but needs to be: %h", u_pipeline.EX_ADDRESS, 32'h0f07_0d0f);
+              $display("Error:   EX_ADDRESS is: %h, but needs to be: %h", u_pipeline.EX_ADDRESS, 32'h0f07_0d0f);
               error <= 1;
             end
            

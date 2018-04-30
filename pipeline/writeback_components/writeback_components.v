@@ -148,8 +148,8 @@ endmodule // validate_signals_wb
 // Combinational Delay: 
 //
 module repne_halt_wb(
-	output halt_all,
-	output repne_terminate_all,
+	output wb_halt_all,
+	output wb_repne_terminate_all,
 	input WB_V,
 	input CS_IS_HALT_WB,
 	input CS_IS_CMPS_SECOND_UOP_ALL,
