@@ -206,7 +206,7 @@ module alu_daa (
     assign daa_result[7:0] = AL_part2; 
 	assign OF = 0;
 	assign DF = 0;
-	assign SF = 0; //bcd is unsigned, vol1, page 80
+	assign SF = daa_result[7]; //bcd is unsigned, vol1, page 80
 	ZF_logic_daa u_ZF_logic_daa(ZF, daa_result[7:0]);
 	assign AF = AF_part2;
 	PF_logic u_PF_logic(PF, daa_result[7:0]);

@@ -45,7 +45,7 @@ module writeback (
    output [31:0] WB_Final_Flags,
    output WB_Final_ld_flags,
    output [63:0] WB_Final_Dcache_Data,
-   output [31:0] WB_Final_Dcache_address,
+   output [31:0] WB_Final_Dcache_Address,
    output WB_Final_Dcache_Write,
 
    output DEP_v_wb_ld_gpr1,

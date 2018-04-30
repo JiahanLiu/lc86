@@ -6,7 +6,7 @@
 
 `define assert(signal, value) \
         if (signal !== value) begin \
-            $display("ASSERTION FAILED in %m: signal != value"); \
+            $display("ASSERTION FAILED in %m: signal !== value"); \
             $finish; \
         end
 
@@ -604,29 +604,29 @@ module TOP;
 /*************************** EXECUTE STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
             #1;    // Allow for setup time
-            if(u_pipeline.EX_A != 32'hAE) begin 
+            if(u_pipeline.EX_A !== 32'hAE) begin 
               $display("Error: EX_A is: %h, but needs to be: %h", u_pipeline.EX_A, `default_mem_Value);
               error <= 1;
             end
             /*
-            if(u_pipeline.EX_B != 8'h02) begin 
+            if(u_pipeline.EX_B !== 8'h02) begin 
               $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, 8'h02);
               error <= 1;
             end
             */
             /*
-            if(u_pipeline.EX_ADDRESS != 32'h0f07_0d0f) begin 
+            if(u_pipeline.EX_ADDRESS !== 32'h0f07_0d0f) begin 
               $display("Error: EX_ADDRESS is: %h, but needs to be: %h", u_pipeline.EX_ADDRESS, 32'h0f07_0d0f);
               error <= 1;
             end
             */
 
-            if(u_pipeline.WB_de_datasize_all_next != 2'b00) begin 
+            if(u_pipeline.WB_de_datasize_all_next !== 2'b00) begin 
               $display("Error: WB_de_datasize_all_next is: %h, but needs to be: %h", u_pipeline.WB_de_datasize_all_next, 2'b00);
               error <= 1;
             end
 
-            if(u_pipeline.EX_d2_aluk_ex != 3'b011) begin 
+            if(u_pipeline.EX_d2_aluk_ex !== 3'b011) begin 
               $display("Error: EX_d2_aluk_ex is: %h, but needs to be: %h", u_pipeline.EX_d2_aluk_ex, 3'b011);
               error <= 1;
             end
@@ -635,70 +635,70 @@ module TOP;
             #(clk_cycle-1);
             #1;    // Allow for setup time
             /*
-            if(u_pipeline.WB_FLAGS != 32'h004) begin 
+            if(u_pipeline.WB_FLAGS !== 32'h004) begin 
               $display("Error: WB_FLAGS is: %h, but needs to be: %h", u_pipeline.WB_FLAGS, 32'h004);
               error <= 1;
             end
             */
 /*************************** WRITEBACK STAGE OUTPUTS COMPARE ******************************/
 
-            if(u_pipeline.WB_Final_Dcache_address != 32'h0f07_0d0f) begin 
+            if(u_pipeline.WB_Final_Dcache_address !== 32'h0f07_0d0f) begin 
               $display("Error: WB_Final_Dcache_address is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_address, 32'h0f07_0d0f);
               error <= 1;
             end
             /*
-            if(u_pipeline.WB_Final_data1 != (!u_pipeline.EX_A)) begin 
+            if(u_pipeline.WB_Final_data1 !== (!u_pipeline.EX_A)) begin 
               $display("Error: WB_Final_data1 is: %h, but needs to be: %h", u_pipeline.WB_Final_data1, (!u_pipeline.EX_A));
               error <= 1;
             end
             */
 
-            if(u_pipeline.WB_Final_ld_gpr1 != 1'b1) begin 
+            if(u_pipeline.WB_Final_ld_gpr1 !== 1'b1) begin 
               $display("Error: WB_Final_ld_gpr1 is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_gpr1, 1'b1);
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_ld_gpr2 != 1'b0) begin 
+            if(u_pipeline.WB_Final_ld_gpr2 !== 1'b0) begin 
               $display("Error: WB_Final_ld_gpr2 is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_gpr2, 1'b0);
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_ld_gpr3 != 1'b0) begin 
+            if(u_pipeline.WB_Final_ld_gpr3 !== 1'b0) begin 
               $display("Error: WB_Final_ld_gpr3 is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_gpr3, 1'b0);
               error <= 1;
             end
             
-            if(u_pipeline.WB_Final_datasize != 2'b00) begin 
+            if(u_pipeline.WB_Final_datasize !== 2'b00) begin 
               $display("Error: WB_Final_datasize is: %h, but needs to be: %h", u_pipeline.WB_Final_datasize, 2'b00);
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_ld_mm != 1'b0) begin 
+            if(u_pipeline.WB_Final_ld_mm !== 1'b0) begin 
               $display("Error: WB_Final_ld_mm is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_mm, 1'b0);
               error <= 1;
             end
 
-           if(u_pipeline.WB_Final_ld_eip != 1'b1) begin 
+           if(u_pipeline.WB_Final_ld_eip !== 1'b1) begin 
               $display("Error: WB_Final_ld_eip is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_eip, 1'b1);
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_ld_cs != 1'b0) begin 
+            if(u_pipeline.WB_Final_ld_cs !== 1'b0) begin 
               $display("Error: WB_Final_ld_cs is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_cs, 1'b0);
               error <= 1;
             end
             
-            if(u_pipeline.WB_Final_Flags != 32'h15) begin 
+            if(u_pipeline.WB_Final_Flags !== 32'h15) begin 
               $display("Error: WB_Final_Flags is: %h, but needs to be: %h", u_pipeline.WB_Final_Flags, 32'h15);
               error <= 1;
             end
             
-            if(u_pipeline.WB_Final_ld_flags != 1'b1) begin 
+            if(u_pipeline.WB_Final_ld_flags !== 1'b1) begin 
               $display("Error: WB_Final_ld_flags is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_flags, 1'b1);
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_Dcache_Write != 1'b0) begin 
+            if(u_pipeline.WB_Final_Dcache_Write !== 1'b0) begin 
               $display("Error: WB_Final_Dcache_Write is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_Write, 1'b0);
               error <= 1;
             end
