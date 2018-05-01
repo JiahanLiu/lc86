@@ -45,10 +45,10 @@ module TOP;
 
    initial begin
         clk = 0;
-        clr = 1;
-        pre = 0;
-        repeat(2) #clk_cycle //wait 2 clock cycles
+        clr = 0;
         pre = 1;
+        repeat(2) #clk_cycle //wait 2 clock cycles
+        clr = 1;
         forever #(half_cycle)  clk = ~clk;
     end
 
@@ -204,7 +204,7 @@ module TOP;
              $stop;
          end
 
-         @(posedge pre);
+         @(posedge clr);
          #(half_cycle)
         char = $fgetc(file);
         

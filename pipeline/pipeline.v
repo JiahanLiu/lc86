@@ -1079,7 +1079,7 @@ wire AG_REPNE_WB;
     //*
     //*******************************************************************************//
 
-   memory_stage u_memory_stage (
+   memory_stage2 u_memory_stage2 (
         CLK, CLR, PRE, ME2_PS_V,
 
         ME2_PS_NEIP,
@@ -1233,7 +1233,7 @@ wire AG_REPNE_WB;
 
     wire [31:0] EX_A_next = ME2_A_OUT;
     wire [31:0] EX_B_next = ME2_B_OUT;
-    wire [31:0] EX_C_next = ME2_SP_XCHG_DATA_OUT; //Nelson
+    wire [31:0] EX_C_next = ME2_SP_XCHG_DATA_OUT;
     wire [31:0] EX_A, EX_B, EX_C;
     reg32e$ u_EX_a_latch(CLK, EX_A_next, EX_A, ,CLR,PRE,LD_EX);
     reg32e$ u_EX_b_latch(CLK, EX_B_next, EX_B, ,CLR,PRE,LD_EX);

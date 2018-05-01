@@ -47,10 +47,10 @@
 ../../agen_stage1.v
 ../../agen_stage2.v
 ../../memory_stage1.v
-../../memory_stage.v
+../../memory_stage2.v
 //Execute and WB
 ../../common/basic_components/equality.v
-../../common/basic_components/logic_gates.v
+../../common/basic	_components/logic_gates.v
 ../../common/basic_components/muxes.v
 ../../common/flags/eflags.v
 ../../common/functional_units/adder.v

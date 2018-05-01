@@ -46,10 +46,10 @@ module TOP;
 
    initial begin
         clk = 0;
-        clr = 1;
-        pre = 0;
-        repeat(2) #clk_cycle //wait 2 clock cycles
+        clr = 0;
         pre = 1;
+        repeat(2) #clk_cycle //wait 2 clock cycles
+        clr = 1;
         forever #(half_cycle)  clk = ~clk;
     end
 
@@ -205,7 +205,7 @@ module TOP;
              $stop;
          end
 
-         @(posedge pre);
+         @(posedge clr);
          #(half_cycle)
         char = $fgetc(file);
         
@@ -266,7 +266,7 @@ module TOP;
 
             if(modrm_present == 1'b1) begin 
                 //modrm = {$random};
-                modrm = 32'b10010101; //95
+                modrm = 32'b10100101; //95
                 j=j-1;
                 IR[8*j +: 8] = modrm;
 //                $display ("Time: %0d MODRM = %h", $time, modrm);

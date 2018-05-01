@@ -1,3 +1,4 @@
+
 /home/projects/courses/spring_16/ee382n-16785/lib/time -v
 /home/projects/courses/spring_16/ee382n-16785/lib/lib1
 /home/projects/courses/spring_16/ee382n-16785/lib/lib2
@@ -47,7 +48,7 @@
 ../../agen_stage1.v
 ../../agen_stage2.v
 ../../memory_stage1.v
-../../memory_stage.v
+../../memory_stage2.v
 //Execute and WB
 ../../common/basic_components/equality.v
 ../../common/basic_components/logic_gates.v

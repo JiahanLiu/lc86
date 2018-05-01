@@ -903,8 +903,8 @@ Virtual Page    Physical Page   Valid   Present R/W PCD
             //    result = ME_A_OUT + ME_B_OUT;
             //end
 
-        $display ("at time %0d, MEM_A = %h", $time, u_pipeline.u_memory_stage.A);
-        $display ("at time %0d, MEM_b = %h", $time, u_pipeline.u_memory_stage.B);
+        $display ("at time %0d, MEM_A = %h", $time, u_pipeline.u_memory_stage2.A);
+        $display ("at time %0d, MEM_b = %h", $time, u_pipeline.u_memory_stage2.B);
 
 /*************************** EXECUTE STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
@@ -931,7 +931,7 @@ Virtual Page    Physical Page   Valid   Present R/W PCD
         $display ("at time %0d, WB_Final_EIP  = %h", $time, u_pipeline.u_writeback.WB_Final_EIP);
         $display ("at time %0d, WB_Final_ld_eip  = %h", $time, u_pipeline.u_writeback.WB_Final_ld_eip);
         $display ("at time %0d, WB_Final_Dcache_Data = %h", $time, u_pipeline.u_writeback.WB_Final_Dcache_Data);
-        $display ("at time %0d, WB_Final_Dcache_address = %h", $time, u_pipeline.u_writeback.WB_Final_Dcache_address);
+        $display ("at time %0d, WB_Final_Dcache_address = %h", $time, u_pipeline.u_writeback.WB_Final_Dcache_Address);
         $display ("at time %0d, DEP_v_wb_ld_gpr1 = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_gpr1);
         $display ("at time %0d, DEP_v_wb_ld_gpr2 = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_gpr2);
         $display ("at time %0d, DEP_v_wb_ld_gpr3 = %h", $time, u_pipeline.u_writeback.DEP_v_wb_ld_gpr3);

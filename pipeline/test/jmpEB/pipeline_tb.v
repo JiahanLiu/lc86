@@ -46,10 +46,10 @@ module TOP;
 
    initial begin
         clk = 0;
-        clr = 1;
-        pre = 0;
-        repeat(2) #clk_cycle //wait 2 clock cycles
+        clr = 0;
         pre = 1;
+        repeat(2) #clk_cycle //wait 2 clock cycles
+        clr = 1;
         forever #(half_cycle)  clk = ~clk;
     end
 
@@ -205,7 +205,7 @@ module TOP;
              $stop;
          end
 
-         @(posedge pre);
+         @(posedge clr);
          #(half_cycle)
         char = $fgetc(file);
         
@@ -606,8 +606,8 @@ module TOP;
             #(clk_cycle-1);
             #1;    // Allow for setup time
 
-            if(u_pipeline.EX_NEIP !==(32'h1 + instr_length +  offset[31:0])) begin 
-              $display("Error: EX_NEIP is: %h, but needs to be: %h", u_pipeline.EX_NEIP, 32'h1 + instr_length + offset[31:0]);
+            if(u_pipeline.EX_NEIP !==(32'h1 + instr_length +  offset[7:0])) begin 
+              $display("Error: EX_NEIP is: %h, but needs to be: %h", u_pipeline.EX_NEIP, 32'h1 + instr_length + offset[7:0]);
               error <= 1;
             end
               
@@ -714,8 +714,8 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_EIP !== (32'h1 + instr_length + offset[31:0])) begin 
-              $display("Error: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_EIP, 32'h1 + instr_length + offset[31:0]);
+            if(u_pipeline.WB_Final_EIP !== (32'h1 + instr_length + offset[7:0])) begin 
+              $display("Error: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_EIP, 32'h1 + instr_length + offset[7:0]);
               error <= 1;
             end
             //$display("Force Display: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_EIP, 32'h1 + instr_length + offset[7:0]);
