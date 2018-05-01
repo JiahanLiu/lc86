@@ -1079,7 +1079,7 @@ wire AG_REPNE_WB;
     //*
     //*******************************************************************************//
 
-   memory_stage u_memory_stage (
+   memory_stage2 u_memory_stage2 (
         CLK, CLR, PRE, ME2_PS_V,
 
         ME2_PS_NEIP,

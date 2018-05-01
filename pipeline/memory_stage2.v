@@ -1,4 +1,4 @@
-module memory_stage (
+module memory_stage2 (
    input CLK, RST, SET, V,
 
    input [31:0] NEIP,
