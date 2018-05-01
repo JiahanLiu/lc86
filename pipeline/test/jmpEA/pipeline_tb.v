@@ -374,15 +374,15 @@ module TOP;
 //                $display ("Time: %0d OFFSET = %h", $time, offset[15:0]);
             end else if(offset_size32) begin
                 offset = {$random};
-                offset[31:0] = 8'h2345_32A7;
+                offset[31:0] = 32'h1212_1212;
                 j=j-4;
                 offset_size = 4;
                 offset_size_en = 2;
                 IR[8*j +: 32] = offset;
 //                $display ("Time: %0d OFFSET = %h", $time, offset[31:0]);
             end else if(offset_size48) begin
-                offset[31:0] = {$random};
-                offset[47:32] = {$random};
+                offset[31:0] = 32'h12345678;
+                offset[47:32] = 16'h1234;
                 j=j-6;
                 offset_size = 6;
                 offset_size_en = 3;
@@ -606,12 +606,12 @@ module TOP;
             #(clk_cycle-1);
             #1;    // Allow for setup time
 
-            if(u_pipeline.EX_NEIP !== offset[31:0]) begin 
+            if(u_pipeline.EX_NEIP !== {offset[23:16], offset[31:24], offset[39:32], offset[47:40]}) begin 
               $display("Error: EX_NEIP is: %h, but needs to be: %h", u_pipeline.EX_NEIP, offset[31:0]);
               error <= 1;
             end
 
-            if(u_pipeline.EX_NCS !== offset[47:31]) begin 
+            if(u_pipeline.EX_NCS !== {offset[7:0], offset[15:8]}) begin 
               $display("Error: EX_NCS is: %h, but needs to be: %h", u_pipeline.EX_NCS, offset[47:31]);
               error <= 1;
             end
@@ -694,7 +694,7 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_ld_cs !==1'b0) begin 
+            if(u_pipeline.WB_Final_ld_cs !==1'b1) begin 
               $display("Error: WB_Final_ld_cs is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_cs, 1'b0);
               error <= 1;
             end
@@ -719,12 +719,12 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_EIP !== offset[31:0]) begin 
+            if(u_pipeline.WB_Final_EIP !== {offset[23:16], offset[31:24], offset[39:32], offset[47:40]}) begin 
               $display("Error: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_EIP, offset[31:0]);
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_CS !== offset[47:32]) begin 
+            if(u_pipeline.WB_Final_CS !== {offset[7:0], offset[15:8]}) begin 
               $display("Error: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_CS, offset[47:32]);
               error <= 1;
             end
