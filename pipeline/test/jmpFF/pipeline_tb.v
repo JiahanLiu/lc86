@@ -266,7 +266,7 @@ module TOP;
 
             if(modrm_present == 1'b1) begin 
                 //modrm = {$random};
-                modrm = 32'b10010101; //95
+                modrm = 32'b10100101; //95
                 j=j-1;
                 IR[8*j +: 8] = modrm;
 //                $display ("Time: %0d MODRM = %h", $time, modrm);

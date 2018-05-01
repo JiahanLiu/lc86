@@ -605,12 +605,11 @@ module TOP;
             #(clk_cycle-1);
             #1;    // Allow for setup time
 
-            if(u_pipeline.EX_NEIP !==(32'h1 + instr_length +  offset[7:0])) begin 
-              $display("Error: EX_NEIP is: %h, but needs to be: %h", u_pipeline.EX_NEIP, 32'h1 + instr_length + offset[7:0]);
+            if(u_pipeline.EX_NEIP !==(32'h1 + instr_length +  {offset[7:0], offset[15:8], offset[23:16], offset[31:24]})) begin 
+              $display("Error: EX_NEIP is: %h, but needs to be: %h", u_pipeline.EX_NEIP, 32'h1 + instr_length +  {offset[7:0], offset[15:8], offset[23:16], offset[31:24]});
               error <= 1;
             end
-            $display("Error: Apruv look at eip reg is: %h, but needs to be: %h", u_pipeline.u_register_file.eip.Q , 32'h1);
-
+            
             /*
             if(u_pipeline.EX_A !==`default_mem_Value) begin 
               $display("Error: EX_A is: %h, but needs to be: %h", u_pipeline.EX_A, `default_mem_Value);
@@ -714,8 +713,8 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_EIP !== (32'h1 + instr_length + offset[7:0])) begin 
-              $display("Error: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_EIP, 32'h1 + instr_length + offset[7:0]);
+            if(u_pipeline.WB_Final_EIP !== (32'h1 + instr_length +  {offset[7:0], offset[15:8], offset[23:16], offset[31:24]})) begin 
+              $display("Error: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_EIP, 32'h1 + instr_length +  {offset[7:0], offset[15:8], offset[23:16], offset[31:24]});
               error <= 1;
             end
             //$display("Force Display: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_EIP, 32'h1 + instr_length + offset[7:0]);
