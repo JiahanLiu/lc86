@@ -9,5 +9,7 @@
 ../../pipeline/common/basic_components/logic_gates.v
 ../../pipeline/common/basic_components/equality.v
 ../../pipeline/common/basic_components/decoder.v
+../../pipeline/common.v
 ./cache.v
 ./cache_tb.v
+

@@ -49,9 +49,9 @@ module cache( //interface with the processor
 
    wire [127:0]      data_write_shifted, data_read_shifted, dcache_input;
    shiftleft leftshifter_u(data_write_shifted, data_write, address[3:0]);
-   mux4_128$ data_sel(dcache_input, data_write_shifted, data_write_shifted, BUS_READ, BUS_READ, d_mux, d_mux);
+   mux4_128 data_sel(dcache_input, data_write_shifted, data_write_shifted, BUS_READ, BUS_READ, d_mux, d_mux);
    wire [15:0] 	     dcache_wrmask_input;
-   mux2_16$ mask_sel(dcache_wrmask_input, DC_WR, 16'hFFFF, d_mux);
+   mux2_16$ mask_sel(dcache_wrmask_input, DC_WR, 16'h0000, d_mux);
       //accessing the datacache
    full_cache_d data_u (address[8:4], //bits 8 to 4 in the phys address
 		     dcache_input,
@@ -71,8 +71,8 @@ module cache( //interface with the processor
 		      valid,
 			    RW ,//the line is dirty if we are writing to the line
 		      address[15:9],
-		      OE,
-		      TS_WR_INV,
+			     TS_WR,//if we are not writing to TAG store, then read
+			     TS_WR_INV,
 		      CLK, RST, SET,//used for the valid bits
 		      {tagstore_V, tagstore_D,tagstore_tag});
 
@@ -169,7 +169,7 @@ module full_cache_d (input [4:0] A, //bits 8 to 4 in the phys address
     eight_cachelines_d data_line3 (A[2:0], DIN, OE, WR, DOUT_ARRAY[3]);
 
     //need to select between the four possible d_cache lines
-    mux4_128$ dout_mux (DOUT,DOUT_ARRAY[0],DOUT_ARRAY[1],DOUT_ARRAY[2],DOUT_ARRAY[3],A[3],A[4]);
+    mux4_128 dout_mux (DOUT,DOUT_ARRAY[0],DOUT_ARRAY[1],DOUT_ARRAY[2],DOUT_ARRAY[3],A[3],A[4]);
 
 endmodule // full_cache_d
 
@@ -247,7 +247,8 @@ module gen_n_state(
 	input BUS_R,
 	input EV
 	);
-	
+   assign next_state[15:8] = 8'b0000_0000;
+   
 	wire enable_not, RW_not, HIT_not, BUS_R_not, EV_not;
 
 	inv1$ u_not_enable_en(enable_not, enable);	
@@ -315,7 +316,8 @@ module  gen_ctrl(input [15:0] current_state,
    wire WRMISS = current_state[7];
    wire WREVICT = current_state[8];
 
-   or4$ oe_or(OE, IDLE, RDMISS, WRHIT, WRMISS);
+   nor3$(OE, RDHIT, WREVICT, RDEVICT);
+ 
    or3$ WR_or(D_WR, RDMISS, WRHIT, WRMISS);
    or2$ bus_wr_out(BUS_WR, RDEVICT, WREVICT);
    or4$ bus_en_out(BUS_EN, RDMISS, RDEVICT, WRMISS, WREVICT);
@@ -453,7 +455,7 @@ module shiftleft(
 
 wire [127:0] array [15:0];
 wire [127:0] mux_array [3:0];
-   wire [127:0] zero = 0;
+   wire [127:0] zero = 127'h0000_0000_0000_0000;
    
 genvar i;
 generate
@@ -466,13 +468,13 @@ for(i=1;i<16;i=i+1)
    assign array[0] = Din;
    
 //muxes to select shifted value, first round of muxes
-mux4_128$ mux1 (mux_array[0],array[0],array[1],array[2],array[3],amnt[0],amnt[1]);
-mux4_128$ mux2 (mux_array[1],array[4],array[5],array[6],array[7],amnt[0],amnt[1]);
-mux4_128$ mux3 (mux_array[2],array[8],array[9],array[10],array[11],amnt[0],amnt[1]);
-mux4_128$ mux4 (mux_array[3],array[12],array[13],array[14],array[15],amnt[0],amnt[1]);
+mux4_128 mux1 (mux_array[0],array[0],array[1],array[2],array[3],amnt[0],amnt[1]);
+mux4_128 mux2 (mux_array[1],array[4],array[5],array[6],array[7],amnt[0],amnt[1]);
+mux4_128 mux3 (mux_array[2],array[8],array[9],array[10],array[11],amnt[0],amnt[1]);
+mux4_128 mux4 (mux_array[3],array[12],array[13],array[14],array[15],amnt[0],amnt[1]);
 
 //last round of muxes
-mux4_128$ mux5 (Dout,mux_array[0],mux_array[1],mux_array[2],mux_array[3],amnt[2],amnt[3]);
+mux4_128 mux5 (Dout,mux_array[0],mux_array[1],mux_array[2],mux_array[3],amnt[2],amnt[3]);
 	
 
 endmodule

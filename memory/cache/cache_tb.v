@@ -141,8 +141,10 @@ module TOP;
         // Read hit, read miss
         
         // Read
+       data_write=16'h1234;
+       
         address = 16'h000A;
-        RW = 1;
+        RW = 0;
 
         #(clk_cycle+half_cycle)
         BUS_R = 1'b1;
@@ -152,7 +154,7 @@ module TOP;
         BUS_R = 1'b0;
 
         #(3*clk_cycle-3)
-        RW = 0;
+        RW = 1;
 
 //        #(half_cycle-2)
 //        enable = 1;
