@@ -24,6 +24,7 @@ module agen_stage2 (
 
    input [1:0] D2_DR1_SIZE_WB, D2_DR2_SIZE_WB,
    input [1:0] D2_MEM_SIZE_WB,
+   input D2_REPNE_WB,
 
    // EXCEPTION/INTERRUPT STATUS
    input PAGE_FAULT_EXC_EXIST,
@@ -48,7 +49,7 @@ module agen_stage2 (
    output D2_LD_GPR1_WB_OUT, D2_LD_MM_WB_OUT,
 
    // Other signals
-   output SEG_LIMIT_EXC_EXIST_OUT, PAGE_FAULT_EXC_EXIST_OUT
+   output SEG_LIMIT_EXC_EXIST_OUT, PAGE_FAULT_EXC_EXIST_OUT, AG_REPNE_WB
 );
 //`include "ag_control_store.v"
 `include "./control_store/control_store_wires.v"
@@ -66,6 +67,8 @@ module agen_stage2 (
    assign B_OUT = B;
    assign MM_A_OUT = MM_A;
    assign MM_B_OUT = MM_B;
+
+   assign AG_REPNE_WB = D2_REPNE_WB;
 
    assign SP_XCHG_DATA_OUT = SP_XCHG_DATA;
 

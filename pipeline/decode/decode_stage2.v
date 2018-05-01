@@ -43,7 +43,8 @@ module decode_stage2 (
    output [1:0] DE_SIB_S_AG,
 
    output PAGE_FAULT_EXC_EXIST_OUT,
-   output NMI_INT_EN_OUT, GEN_PROT_EXC_EN_OUT, PAGE_FAULT_EXC_EN_OUT
+   output NMI_INT_EN_OUT, GEN_PROT_EXC_EN_OUT, PAGE_FAULT_EXC_EN_OUT,
+   output D2_REPNE_WB
 );
 `include "./control_store/control_store_wires.v"
 `include "./control_store/control_store_signals.v"
@@ -61,6 +62,7 @@ module decode_stage2 (
    wire out1o, out2o, offset_ovr, ss_override;
    wire [2:0] segID_mux1;
 
+   assign D2_REPNE_WB = repeat_prefix;
 
    assign CS_OUT = CS;
    and4$ and1o (out1o, opcode[7], opcode[6], opcode[5], op4_b);

@@ -7,6 +7,7 @@ module agen_stage1 (
    input [127:0] CONTROL_STORE,
 
    input [47:0] OFFSET,
+   input D2_REPNE_WB,
 			   
    input D2_SR1_NEEDED_AG, D2_SEG1_NEEDED_AG, D2_MM1_NEEDED_AG,
 
@@ -89,7 +90,7 @@ module agen_stage1 (
    output [7:0] MM_SCOREBOARD_OUT,
 
    // Other signals
-   output DEP_STALL_OUT, PAGE_FAULT_EXC_EXIST_OUT
+   output DEP_STALL_OUT, PAGE_FAULT_EXC_EXIST_OUT, AG1_REPNE_WB
 );
 //`include "ag_control_store.v"
 `include "./control_store/control_store_wires.v"
@@ -105,6 +106,7 @@ module agen_stage1 (
 
 //   wire [31:0] shf_exc_code_out, add_idt_base_out;
 
+    assign AG1_REPNE_WB = D2_REPNE_WB;
    assign SR1_OUT = SR1;
    assign SR2_OUT = SR2;
    assign SR3_OUT = SR3;
