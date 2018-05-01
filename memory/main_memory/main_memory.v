@@ -3,9 +3,10 @@ module main_memory (
     input CLR, PRE,
     input [14:0] ADDR,
     input WR, BUS_R, EN,
-    input [1:0] WRITE_SIZE,
-    input [1:0] SRC,
-    inout [31:0] DIO
+    input [2:0] WRITE_SIZE,
+    input [2:0] SRC,
+    input [127:0] BUS_READ,
+    output [127:0] BUS_OUT
 );
 
 wire [255:0] DATA_BUF, BUF_OUT;
@@ -13,11 +14,12 @@ wire [31:0] bit_lines;
 wire [1023:0] word_lines, word_lines_b;
 wire [9:0] row_address;
 wire [4:0] column_address;
-wire [31:0] write_mask1, write_mask2, write_mask3, write_out, write_out_b, write_read_mask;
+wire [31:0] write_mask1, write_mask2, write_mask3, write_out, write_out_b, write_read_mask, write_out_final;
 wire [31:0] shift1, shift2, shift3;
 wire [7:0] OE, OE_BAR;
 wire en1_b;
 wire [31:0] ROW_BUF_D;
+wire [3:0] shift_amt;
 
 assign column_address = ADDR[4:0];
 assign row_address = ADDR[14:5];
@@ -32,29 +34,32 @@ inv1$ inv_row [1023:0] (word_lines, word_lines_b);
 //if (read)
 //    WR = 31'hFFFF_FFFF;
 //else (write) begin
-//    if(size==0)
+//    if(size==1)
 //        WR = bit_lines;
-//    else if(size==1)
-//        WR = bit_lines | (bit_lines >> 1);
 //    else if(size==2)
-//        WR = bit_lines | (bit_lines >> 1) | (bit_lines >> 2);
+//        WR = bit_lines | (bit_lines >> 1);
 //    else if(size==3)
+//        WR = bit_lines | (bit_lines >> 1) | (bit_lines >> 2);
+//    else if(size==4)
 //        WR = bit_lines | (bit_lines >> 1) | (bit_lines >> 2) | bit_lines >> 3);
 //end
 
-shift_arithmetic_left u_SAL1 (shift1, bit_lines, 32'h1);
-shift_arithmetic_left u_SAL2 (shift2, bit_lines, 32'h2);
-shift_arithmetic_left u_SAL3 (shift3, bit_lines, 32'h3);
+shift_arithmetic_left u_SAL1 (shift1, bit_lines, 32'h2);
+shift_arithmetic_left u_SAL2 (shift2, bit_lines, 32'h3);
+shift_arithmetic_left u_SAL3 (shift3, bit_lines, 32'h4);
 
 or2$ or1[31:0] (write_mask1, bit_lines, shift1);
 or3$ or2[31:0] (write_mask2, bit_lines, shift1, shift2);
 or4$ or3[31:0] (write_mask3, bit_lines, shift1, shift2, shift3);
 
-mux32_4way mux4_write (write_out, bit_lines, write_mask1, write_mask2, write_mask3, WRITE_SIZE);
-inv1$ inv1_wr[31:0] (write_out_b, write_out);
+mux32_4way mux4_write (write_out, write_mask3, bit_lines, write_mask1, write_mask2, WRITE_SIZE[1:0]);
+
+or3$ or_all (write_all, WRITE_SIZE[0], WRITE_SIZE[1], WRITE_SIZE[2]);
+mux32_2way mux2_write (write_out_final, write_out, 32'hFFFF_FFFF, write_all);
+inv1$ inv1_wr[31:0] (write_out_b, write_out_final);
 
 // write is active low for sram
-mux32_2way mux2_write (write_read_mask, 32'hFFFF_FFFF, write_out_b, WR);
+mux32_2way mux3_write (write_read_mask, 32'hFFFF_FFFF, write_out_b, WR);
 
 // OE for the correct block
 decoder3_8$ u_decoder3to8 (ADDR[14:12], OE, OE_BAR);
@@ -69,25 +74,27 @@ word_lines128 blk_line6 (ADDR[11:5], DATA_BUF, OE_BAR[6], write_read_mask, 1'b0)
 word_lines128 blk_line7 (ADDR[11:5], DATA_BUF, OE_BAR[7], write_read_mask, 1'b0);
 
 
-// Connect DIO to buffer for read
-// in is buffer out and out is DATA_BUF
-inv1$ inv_tri_en (en1_b, WR);
-tristate16L$ buf0 (en1_b, BUF_OUT[15:0], DATA_BUF[15:0]);
-tristate16L$ buf1 (en1_b, BUF_OUT[31:16], DATA_BUF[31:16]);
-tristate16L$ buf2 (en1_b, BUF_OUT[47:32], DATA_BUF[47:32]);
-tristate16L$ buf3 (en1_b, BUF_OUT[63:48], DATA_BUF[63:48]);
-tristate16L$ buf4 (en1_b, BUF_OUT[79:64], DATA_BUF[79:64]);
-tristate16L$ buf5 (en1_b, BUF_OUT[95:80], DATA_BUF[95:80]);
-tristate16L$ buf6 (en1_b, BUF_OUT[111:96], DATA_BUF[111:96]);
-tristate16L$ buf7 (en1_b, BUF_OUT[127:112], DATA_BUF[127:112]);
-tristate16L$ buf8 (en1_b, BUF_OUT[143:128], DATA_BUF[143:128]);
-tristate16L$ buf9 (en1_b, BUF_OUT[159:144], DATA_BUF[159:144]);
-tristate16L$ buf10 (en1_b, BUF_OUT[175:160], DATA_BUF[175:160]);
-tristate16L$ buf11 (en1_b, BUF_OUT[191:176], DATA_BUF[191:176]);
-tristate16L$ buf12 (en1_b, BUF_OUT[207:192], DATA_BUF[207:192]);
-tristate16L$ buf13 (en1_b, BUF_OUT[223:208], DATA_BUF[223:208]);
-tristate16L$ buf14 (en1_b, BUF_OUT[239:224], DATA_BUF[239:224]);
-tristate16L$ buf15 (en1_b, BUF_OUT[255:240], DATA_BUF[255:240]);
+//Shift amt
+
+
+// section_sel is column_address[4]
+buffer_io icache_buf (BUS_READ, DATA_BUF, WR, CLK, CLR, PRE, column_address[4], shift_amt, BUS_OUT);
+buffer_io dcache_buf (BUS_READ, DATA_BUF, WR, CLK, CLR, PRE, column_address[4], shift_amt, BUS_OUT);
+buffer_io iobuf (BUS_READ, DATA_BUF, WR, CLK, CLR, PRE, column_address[4], shift_amt, BUS_OUT);
+
+endmodule
+
+
+
+module buffer_io (
+    input [127:0] bus_read,
+    inout [255:0] ram_out,
+    input WR, CLK,
+    input CLR, PRE,
+    input section_sel,
+    input [3:0] shift_amount,
+    output [127:0] BUS_OUT
+);
 
 // Connect DIO to buffer for write
 // Bus is connected to the low 31 bits of the buffer
@@ -95,27 +102,99 @@ tristate16L$ buf15 (en1_b, BUF_OUT[255:240], DATA_BUF[255:240]);
 // While reading from memory, fill all 256 bits of buffer
 // column_address[5] will determine whether to read from low 128 or high 128
 
-mux32_2way mux1 (ROW_BUF_D, DATA_BUF[31:0], DIO, WR);
+wire [255:0] Q_OUT, DIN;
+wire [255:0] BUF_OUT;
 
-ioreg16$ ioreg0 (CLK, ROW_BUF_D[15:0], BUF_OUT[15:0], , CLR, PRE);
-ioreg16$ ioreg1 (CLK, DATA_BUF[31:16], BUF_OUT[31:16], , CLR, PRE);
-ioreg16$ ioreg2 (CLK, DATA_BUF[47:32], BUF_OUT[47:32], , CLR, PRE);
-ioreg16$ ioreg3 (CLK, DATA_BUF[63:48], BUF_OUT[63:48], , CLR, PRE);
-ioreg16$ ioreg4 (CLK, DATA_BUF[79:64], BUF_OUT[79:64], , CLR, PRE);
-ioreg16$ ioreg5 (CLK, DATA_BUF[95:80], BUF_OUT[95:80], , CLR, PRE);
-ioreg16$ ioreg6 (CLK, DATA_BUF[111:96], BUF_OUT[111:96], , CLR, PRE);
-ioreg16$ ioreg7 (CLK, DATA_BUF[127:112], BUF_OUT[127:112], , CLR, PRE);
-ioreg16$ ioreg8 (CLK, DATA_BUF[143:128], BUF_OUT[143:128], , CLR, PRE);
-ioreg16$ ioreg9 (CLK, DATA_BUF[159:144], BUF_OUT[159:144], , CLR, PRE);
-ioreg16$ ioreg10 (CLK, DATA_BUF[175:160], BUF_OUT[175:160], , CLR, PRE);
-ioreg16$ ioreg11 (CLK, DATA_BUF[191:176], BUF_OUT[191:176], , CLR, PRE);
-ioreg16$ ioreg12 (CLK, DATA_BUF[207:192], BUF_OUT[207:192], , CLR, PRE);
-ioreg16$ ioreg13 (CLK, DATA_BUF[223:208], BUF_OUT[223:208], , CLR, PRE);
-ioreg16$ ioreg14 (CLK, DATA_BUF[239:224], BUF_OUT[239:224], , CLR, PRE);
-ioreg16$ ioreg15 (CLK, DATA_BUF[255:240], BUF_OUT[255:240], , CLR, PRE);
+mux2_128 mux_out (BUS_OUT, Q_OUT[127:0], Q_OUT[255:128], section_sel);
+
+mux2_128 mux_in1 (DIN[127:0], ram_out[127:0], bus_read[127:0], WR);
+mux2_128 mux_in2 (DIN[255:128], ram_out[255:128], bus_read[127:0], WR);
+// Low 128
+ioreg16$ ioreg0 (CLK, DIN[15:0], Q_OUT[15:0], , CLR, PRE);
+ioreg16$ ioreg1 (CLK, DIN[31:16], Q_OUT[31:16], , CLR, PRE);
+ioreg16$ ioreg2 (CLK, DIN[47:32], Q_OUT[47:32], , CLR, PRE);
+ioreg16$ ioreg3 (CLK, DIN[63:48], Q_OUT[63:48], , CLR, PRE);
+ioreg16$ ioreg4 (CLK, DIN[79:64], Q_OUT[79:64], , CLR, PRE);
+ioreg16$ ioreg5 (CLK, DIN[95:80], Q_OUT[95:80], , CLR, PRE);
+ioreg16$ ioreg6 (CLK, DIN[111:96], Q_OUT[111:96], , CLR, PRE);
+ioreg16$ ioreg7 (CLK, DIN[127:112], Q_OUT[127:112], , CLR, PRE);
+
+// High 128
+ioreg16$ ioreg8 (CLK, DIN[143:128], Q_OUT[143:128], , CLR, PRE);
+ioreg16$ ioreg9 (CLK, DIN[159:144], Q_OUT[159:144], , CLR, PRE);
+ioreg16$ ioreg10 (CLK, DIN[175:160], Q_OUT[175:160], , CLR, PRE);
+ioreg16$ ioreg11 (CLK, DIN[191:176], Q_OUT[191:176], , CLR, PRE);
+ioreg16$ ioreg12 (CLK, DIN[207:192], Q_OUT[207:192], , CLR, PRE);
+ioreg16$ ioreg13 (CLK, DIN[223:208], Q_OUT[223:208], , CLR, PRE);
+ioreg16$ ioreg14 (CLK, DIN[239:224], Q_OUT[239:224], , CLR, PRE);
+ioreg16$ ioreg15 (CLK, DIN[255:240], Q_OUT[255:240], , CLR, PRE);
+
+shiftleft u_shifterleft1 (BUF_OUT[127:0], Q_OUT[127:0], shift_amount);
+shiftleft u_shifterleft2 (BUF_OUT[255:128], Q_OUT[255:128], shift_amount);
+
+// Connect DIO to buffer for read
+// in is buffer out and out is DATA_BUF
+inv1$ inv_tri_en (en1_b, WR);
+
+// Low 128
+tristate16L$ buf0 (en1_b, BUF_OUT[15:0], ram_out[15:0]);
+tristate16L$ buf1 (en1_b, BUF_OUT[31:16], ram_out[31:16]);
+tristate16L$ buf2 (en1_b, BUF_OUT[47:32], ram_out[47:32]);
+tristate16L$ buf3 (en1_b, BUF_OUT[63:48], ram_out[63:48]);
+tristate16L$ buf4 (en1_b, BUF_OUT[79:64], ram_out[79:64]);
+tristate16L$ buf5 (en1_b, BUF_OUT[95:80], ram_out[95:80]);
+tristate16L$ buf6 (en1_b, BUF_OUT[111:96], ram_out[111:96]);
+tristate16L$ buf7 (en1_b, BUF_OUT[127:112], ram_out[127:112]);
+
+// High 128
+tristate16L$ buf8 (en1_b, BUF_OUT[143:128], ram_out[143:128]);
+tristate16L$ buf9 (en1_b, BUF_OUT[159:144], ram_out[159:144]);
+tristate16L$ buf10 (en1_b, BUF_OUT[175:160], ram_out[175:160]);
+tristate16L$ buf11 (en1_b, BUF_OUT[191:176], ram_out[191:176]);
+tristate16L$ buf12 (en1_b, BUF_OUT[207:192], ram_out[207:192]);
+tristate16L$ buf13 (en1_b, BUF_OUT[223:208], ram_out[223:208]);
+tristate16L$ buf14 (en1_b, BUF_OUT[239:224], ram_out[239:224]);
+tristate16L$ buf15 (en1_b, BUF_OUT[255:240], ram_out[255:240]);
+
+
+endmodule 
+
+
+
+
+module shiftleft(
+    output [127:0] Dout,
+    input [127:0] Din,
+    input [3:0] amnt
+
+);
+
+
+wire [127:0] array [15:0];
+wire [127:0] mux_array [3:0];
+   wire [127:0] zero = 127'h0000_0000_0000_0000;
+   
+genvar i;
+generate
+for(i=1;i<16;i=i+1)
+  begin : shifter
+  //Allowed since i is constant when the loop is unrolled
+  assign array[i] = {Din[127-i*8:0], zero[127:127-i*8+1]};
+  end
+    endgenerate
+   assign array[0] = Din;
+   
+//muxes to select shifted value, first round of muxes
+mux4_128 mux1 (mux_array[0],array[0],array[1],array[2],array[3],amnt[0],amnt[1]);
+mux4_128 mux2 (mux_array[1],array[4],array[5],array[6],array[7],amnt[0],amnt[1]);
+mux4_128 mux3 (mux_array[2],array[8],array[9],array[10],array[11],amnt[0],amnt[1]);
+mux4_128 mux4 (mux_array[3],array[12],array[13],array[14],array[15],amnt[0],amnt[1]);
+
+//last round of muxes
+mux4_128 mux5 (Dout,mux_array[0],mux_array[1],mux_array[2],mux_array[3],amnt[2],amnt[3]);
+	
 
 endmodule
-
 
 
 module word_lines128 (
