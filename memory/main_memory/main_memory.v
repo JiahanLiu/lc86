@@ -1,13 +1,14 @@
 module main_memory (
     input CLK,
+    input CLR, PRE,
     input [14:0] ADDR,
-    input WR,
+    input WR, BUS_R, EN,
     input [1:0] WRITE_SIZE,
     input [1:0] SRC,
     inout [31:0] DIO
 );
 
-wire [255:0] DATA_BUF;
+wire [255:0] DATA_BUF, BUF_OUT;
 wire [31:0] bit_lines;
 wire [1023:0] word_lines, word_lines_b;
 wire [9:0] row_address;
@@ -15,6 +16,8 @@ wire [4:0] column_address;
 wire [31:0] write_mask1, write_mask2, write_mask3, write_out, write_out_b, write_read_mask;
 wire [31:0] shift1, shift2, shift3;
 wire [7:0] OE, OE_BAR;
+wire en1_b;
+wire [31:0] ROW_BUF_D;
 
 assign column_address = ADDR[4:0];
 assign row_address = ADDR[14:5];
@@ -25,6 +28,7 @@ decoder10to1024 u_row_decoder (word_lines, row_address);
 
 inv1$ inv_row [1023:0] (word_lines, word_lines_b);
 
+// Read-write mask logic
 //if (read)
 //    WR = 31'hFFFF_FFFF;
 //else (write) begin
@@ -64,7 +68,54 @@ word_lines128 blk_line5 (ADDR[11:5], DATA_BUF, OE_BAR[5], write_read_mask, 1'b0)
 word_lines128 blk_line6 (ADDR[11:5], DATA_BUF, OE_BAR[6], write_read_mask, 1'b0);
 word_lines128 blk_line7 (ADDR[11:5], DATA_BUF, OE_BAR[7], write_read_mask, 1'b0);
 
+
+// Connect DIO to buffer for read
+// in is buffer out and out is DATA_BUF
+inv1$ inv_tri_en (en1_b, WR);
+tristate16L$ buf0 (en1_b, BUF_OUT[15:0], DATA_BUF[15:0]);
+tristate16L$ buf1 (en1_b, BUF_OUT[31:16], DATA_BUF[31:16]);
+tristate16L$ buf2 (en1_b, BUF_OUT[47:32], DATA_BUF[47:32]);
+tristate16L$ buf3 (en1_b, BUF_OUT[63:48], DATA_BUF[63:48]);
+tristate16L$ buf4 (en1_b, BUF_OUT[79:64], DATA_BUF[79:64]);
+tristate16L$ buf5 (en1_b, BUF_OUT[95:80], DATA_BUF[95:80]);
+tristate16L$ buf6 (en1_b, BUF_OUT[111:96], DATA_BUF[111:96]);
+tristate16L$ buf7 (en1_b, BUF_OUT[127:112], DATA_BUF[127:112]);
+tristate16L$ buf8 (en1_b, BUF_OUT[143:128], DATA_BUF[143:128]);
+tristate16L$ buf9 (en1_b, BUF_OUT[159:144], DATA_BUF[159:144]);
+tristate16L$ buf10 (en1_b, BUF_OUT[175:160], DATA_BUF[175:160]);
+tristate16L$ buf11 (en1_b, BUF_OUT[191:176], DATA_BUF[191:176]);
+tristate16L$ buf12 (en1_b, BUF_OUT[207:192], DATA_BUF[207:192]);
+tristate16L$ buf13 (en1_b, BUF_OUT[223:208], DATA_BUF[223:208]);
+tristate16L$ buf14 (en1_b, BUF_OUT[239:224], DATA_BUF[239:224]);
+tristate16L$ buf15 (en1_b, BUF_OUT[255:240], DATA_BUF[255:240]);
+
+// Connect DIO to buffer for write
+// Bus is connected to the low 31 bits of the buffer
+// While writing to the memory, always read from low 31 bits of buffer
+// While reading from memory, fill all 256 bits of buffer
+// column_address[5] will determine whether to read from low 128 or high 128
+
+mux32_2way mux1 (ROW_BUF_D, DATA_BUF[31:0], DIO, WR);
+
+ioreg16$ ioreg0 (CLK, ROW_BUF_D[15:0], BUF_OUT[15:0], , CLR, PRE);
+ioreg16$ ioreg1 (CLK, DATA_BUF[31:16], BUF_OUT[31:16], , CLR, PRE);
+ioreg16$ ioreg2 (CLK, DATA_BUF[47:32], BUF_OUT[47:32], , CLR, PRE);
+ioreg16$ ioreg3 (CLK, DATA_BUF[63:48], BUF_OUT[63:48], , CLR, PRE);
+ioreg16$ ioreg4 (CLK, DATA_BUF[79:64], BUF_OUT[79:64], , CLR, PRE);
+ioreg16$ ioreg5 (CLK, DATA_BUF[95:80], BUF_OUT[95:80], , CLR, PRE);
+ioreg16$ ioreg6 (CLK, DATA_BUF[111:96], BUF_OUT[111:96], , CLR, PRE);
+ioreg16$ ioreg7 (CLK, DATA_BUF[127:112], BUF_OUT[127:112], , CLR, PRE);
+ioreg16$ ioreg8 (CLK, DATA_BUF[143:128], BUF_OUT[143:128], , CLR, PRE);
+ioreg16$ ioreg9 (CLK, DATA_BUF[159:144], BUF_OUT[159:144], , CLR, PRE);
+ioreg16$ ioreg10 (CLK, DATA_BUF[175:160], BUF_OUT[175:160], , CLR, PRE);
+ioreg16$ ioreg11 (CLK, DATA_BUF[191:176], BUF_OUT[191:176], , CLR, PRE);
+ioreg16$ ioreg12 (CLK, DATA_BUF[207:192], BUF_OUT[207:192], , CLR, PRE);
+ioreg16$ ioreg13 (CLK, DATA_BUF[223:208], BUF_OUT[223:208], , CLR, PRE);
+ioreg16$ ioreg14 (CLK, DATA_BUF[239:224], BUF_OUT[239:224], , CLR, PRE);
+ioreg16$ ioreg15 (CLK, DATA_BUF[255:240], BUF_OUT[255:240], , CLR, PRE);
+
 endmodule
+
 
 
 module word_lines128 (
