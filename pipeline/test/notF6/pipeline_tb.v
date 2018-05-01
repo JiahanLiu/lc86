@@ -206,7 +206,7 @@ module TOP;
              $stop;
          end
 
-         @(posedge pre);
+         @(posedge clr);
          #(half_cycle)
         char = $fgetc(file);
         
