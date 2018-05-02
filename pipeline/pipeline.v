@@ -1310,7 +1310,6 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
         EX_DR1, 
         EX_DR2,
-        EX_DR3,
         EX_ADDRESS,
 
         WB_stall, 

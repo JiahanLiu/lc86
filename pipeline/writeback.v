@@ -21,7 +21,6 @@ module writeback (
 
    input [2:0] WB_DR1,
    input [2:0] WB_DR2,
-   input [2:0] WB_DR3,
    input [31:0] WB_ADDRESS,
 
    input In_write_ready, 
@@ -90,7 +89,7 @@ module writeback (
       CS_PUSH_FLAGS_WB, CS_USE_TEMP_NEIP_WB, mux_not_taken_eip, CS_USE_TEMP_NCS_WB, WB_RESULT_A, WB_RESULT_C, WB_NEIP,
       WB_NEIP_NOT_TAKEN, WB_NCS, final_out_flags);
 
-   conditional_support_wb(mux_not_taken_eip, wb_ld_gpr2, CS_IS_JNBE_WB,  CS_IS_JNE_WB, final_out_flags, 
+   conditional_support_wb u_conditional_support_wb(mux_not_taken_eip, wb_ld_gpr2, CS_IS_JNBE_WB,  CS_IS_JNE_WB, final_out_flags, 
        CS_IS_CMOVC_WB, WB_ex_ld_gpr2_wb);
 
    validate_signals_wb u_validate_signals_wb(v_wb_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3,
