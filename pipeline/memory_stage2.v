@@ -43,7 +43,7 @@ module memory_stage2 (
 `include "./control_store/control_store_wires.v"
 `include "./control_store/control_store_signals.v"
 
-   wire [31:0] mux_imm_out;
+   wire [15:0] mux_imm_out;
    wire [63:0] buf_mem_out;
 
    bufferH64$ buf_mem [63:0] (buf_mem_out, DCACHE_DATA);
@@ -135,14 +135,19 @@ module memory_stage2 (
       mux_a (A_OUT, A, mux_mem_out, D2_MEM_RD_ME),
       mux_b (B_OUT, B, A, CS_MUX_B_ME);
 
-   mux2_64
-      mux_mm_a [63:0] (MM_A_OUT, MM_A, DCACHE_DATA, D2_MEM_RD_ME);
+   wire nor_mm_a_out, and_mm_a_out;
+   // if it's a call (any) or IDT LOAD, don't overwrite MM_A (already contains EIP/CS data
+   nor2$ nor_mm_a (nor_mm_a_out, CS_JMP_STALL_DE, and3_out);
+   and2$ and_mm_a (and_mm_a_out, D2_MEM_RD_ME, nor_mm_a_out);
+
+   mux2_64 mux_mm_a (MM_A_OUT, MM_A, DCACHE_DATA, and_mm_a_out);
 
    assign MM_B_OUT = MM_B;
 
-   mux2_32 mux_imm (mux_imm_out, 32'b0, B, CS_MUX_IMM_ADD_ME);
+   // only for RET imm16 (always unsigned)
+   mux2_16$ mux_imm (mux_imm_out, 16'b0, B[15:0], CS_MUX_IMM_ADD_ME);
    adder32_w_carry_in
-      add_xchg (SP_XCHG_DATA_OUT, , mux_imm_out, SP_XCHG_DATA, 1'b0);
+      add_xchg (SP_XCHG_DATA_OUT, , {16'b0, mux_imm_out}, SP_XCHG_DATA, 1'b0);
 
    assign MEM_RD_ADDR_OUT = MEM_RD_ADDR; // TODO: implement TLB lookup
    assign MEM_WR_ADDR_OUT = MEM_WR_ADDR;
