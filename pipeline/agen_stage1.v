@@ -149,7 +149,35 @@ module agen_stage1 (
    mux2_32
       mux_b (B_OUT, SR2_DATA, IMM32, CS_MUX_B_AG);
 
-   assign MM_A_OUT = MM1_DATA;
+// CALL push EIP or EIP and CS, 16 v 32 v 48
+// interrupt taken
+// MM_A_OUT[63:48] = MM_A[63:48] or 16'b0 if FAR_CALL/INT/64-bits
+// [47:32] = MM_A[47:32] or CS if FAR_CALL/INT/64-bits
+// [31:16] = MM_A[31:16] or CS if FAR_CALL/32-bits or EIP[31:16] if FAR_CALL/INT/64-bits, near-call 32-bits
+// [15:0] = MM_A[15:0] or EIP[15:0] if call
+
+   wire or_ints_out;
+   wire [1:0] d2_mem_size_wb_bar;
+   wire and0_out, and1_out, or0_out, or1_out;
+   wire [15:0] mux_mm_a_hh_out, mux_mm_a_hl_out, mux_mm_a_lh_out, mux_mm_a_ll_out;
+   wire [15:0] mux_mm_cs_out;
+
+   inv1$ inv0 [1:0] (d2_mem_size_wb_bar, D2_MEM_SIZE_WB);
+   or3$ or_ints (or_ints_out, NMI_INT_EN, GEN_PROT_EXC_EN, PAGE_FAULT_EXC_EN);
+   and3$ and0 (and0_out, CS_IS_FAR_CALL_D2, D2_MEM_SIZE_WB[1], D2_MEM_SIZE_WB[0]);
+   and3$ and1 (and1_out, CS_IS_FAR_CALL_D2, D2_MEM_SIZE_WB[1], d2_mem_size_wb_bar[0]);
+   or2$ or0 (or0_out, or_ints_out, and0_out);
+   or3$ or1 (or1_out, CS_IS_FAR_CALL_D2, CS_JMP_STALL_DE, or_ints_out); // CS_JMP_STALL_DE set for JMP or CALL
+
+   mux2_16$ mux_mm_a_hh (mux_mm_a_hh_out, MM1_DATA[63:48], 16'b0, or0_out);
+   mux2_16$ mux_mm_a_hl (mux_mm_a_hl_out, MM1_DATA[47:32], CS, or0_out);
+
+   mux2_16$ mux_mm_cs (mux_mm_cs_out, EIP[31:16], CS, and1_out);
+   mux2_16$ mux_mm_a_lh (mux_mm_a_lh_out, MM1_DATA[31:16], mux_mm_cs_out, or1_out);
+
+   mux2_16$ mux_mm_a_ll (mux_mm_a_ll_out, MM1_DATA[15:0], EIP[15:0], or1_out);
+
+   assign MM_A_OUT = {mux_mm_a_hh_out, mux_mm_a_hl_out, mux_mm_a_lh_out, mux_mm_a_ll_out};
    assign MM_B_OUT = MM2_DATA;
 
    // Generate SR1 address

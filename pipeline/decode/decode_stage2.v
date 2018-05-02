@@ -209,9 +209,11 @@ module decode_stage2 (
      mux_sr2_size (.Y(mux_sr2_size_out), .IN0(mux0_out), .IN1(CS_SR2_SIZE_D2), .S0(CS_MUX_SR2_SIZE_D2));
    assign D2_SR2_SIZE_AG_OUT = mux_sr2_size_out;
 
+   wire or0_out;
+   or2$ or0 (or0_out, CS_IS_FAR_CALL_D2, CS_IS_FAR_RET_M2);
    mux2_2
      mux_op_ovr_mem (.Y(mux_op_ovr_mem_out), .IN0(2'b11), .IN1(2'b10), .S0(OPERAND_OVERRIDE_EN)),
-     mux_mem_size (.Y(mux_mem_size_out), .IN0(mux0_out), .IN1(mux_op_ovr_mem_out), .S0(CS_IS_FAR_CALL_D2));
+     mux_mem_size (.Y(mux_mem_size_out), .IN0(mux0_out), .IN1(mux_op_ovr_mem_out), .S0(or0_out));
    assign D2_MEM_SIZE_WB_OUT = mux_mem_size_out;
 
    mux2_2
