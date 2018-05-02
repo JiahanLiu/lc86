@@ -35,6 +35,7 @@ module writeback (
    output WB_Final_ld_gpr2,
    output WB_Final_ld_gpr3,
    output [1:0] WB_Final_datasize,
+   output [1:0] WB_Final_DR3_datasize,
    output WB_Final_ld_seg, 
    output [63:0] WB_Final_MM_Data,
    output WB_Final_ld_mm, 
@@ -147,5 +148,7 @@ module writeback (
    //dataforward
    assign flags_dataforwarded = final_out_flags;
    assign count_dataforwarded = count;
+
+   assign WB_Final_DR3_datasize = 2'b10; 
 
 endmodule

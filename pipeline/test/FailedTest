@@ -1,4 +1,6 @@
-cmpxchg0fb1 - wrong datasize starting from D2
+salD0 - shift by 1
+jmp - FF04 - Eip is not connected to memory, nelson will patch
+inc - EX_A, EX_B both come in wrong
 
 //Instructions Passed for all opcode
 Add
