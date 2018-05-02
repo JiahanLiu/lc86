@@ -700,8 +700,8 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_ld_seg !== 1'b1) begin 
-              $display("Error: WB_Final_ld_seg is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_seg, 1'b1);
+            if(u_pipeline.WB_Final_ld_seg !== 1'b0) begin 
+              $display("Error: WB_Final_ld_seg is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_seg, 1'b0);
               error <= 1;
             end
 

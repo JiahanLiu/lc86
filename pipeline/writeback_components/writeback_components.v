@@ -89,7 +89,7 @@ module conditional_support_wb(
 
 	and2$ u_and_jne(jne_not_taken, ZF, CS_IS_JNE_WB);
 	or2$ u_or_cf_zf(cf_or_zf, CF, ZF);
-	and$ u_and_jnbe(jnbe_not_taken, cf_or_zf, CS_IS_JNBE_WB);
+	and2$ u_and_jnbe(jnbe_not_taken, cf_or_zf, CS_IS_JNBE_WB);
 
 	or2$ u_or_final_not_taken_(mux_not_taken_eip, jne_not_taken, jnbe_not_taken); 
 
