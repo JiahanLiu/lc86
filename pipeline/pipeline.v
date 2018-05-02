@@ -801,7 +801,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
    );
     
    wire ME_PS_V;
-   wire [31:0] ME_PS_NEIP;
+   wire [31:0] ME_PS_NEIP, ME_PS_NEIP_NOT_TAKEN;
    wire [15:0] ME_PS_NCS, ME_PS_NCS_NC;
    wire [127:0] ME_PS_CONTROL_STORE;
 
@@ -846,6 +846,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
      u_reg_me_ps_sb (CLK, me_ps_save_sb, ME_PS_SCOREBOARDS, , CLR, PRE, LD_ME);
 
    reg32e$
+     u_reg_me_ps_neip_not_taken (CLK, AG2_PS_EIP, ME_PS_NEIP_NOT_TAKEN, , CLR, PRE, LD_ME),
      u_reg_me_ps_neip (CLK, AG2_NEIP_OUT, ME_PS_NEIP, , CLR, PRE, LD_ME),
      u_reg_me_ps_cs (CLK, {16'b0, AG2_NCS_OUT}, {ME_PS_NCS_NC, ME_PS_NCS}, , CLR, PRE, LD_ME);
 
@@ -924,7 +925,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
    );
 			  
    wire ME2_PS_V;
-   wire [31:0] ME2_PS_NEIP;
+   wire [31:0] ME2_PS_NEIP, ME2_PS_NEIP_NOT_TAKEN;
    wire [15:0] ME2_PS_NCS, ME2_PS_NCS_NC;
    wire [127:0] ME2_PS_CONTROL_STORE;
 
@@ -1034,6 +1035,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
    //==================================================================================//
    
    reg32e$
+     u_reg_me2_ps_neip_not_taken (CLK, ME_PS_NEIP_NOT_TAKEN, ME2_PS_NEIP_NOT_TAKEN, , CLR, PRE, LD_ME2),
      u_reg_me2_ps_neip (CLK, ME_PS_NEIP, ME2_PS_NEIP, , CLR, PRE, LD_ME2),
      u_reg_me2_ps_cs (CLK, {16'b0, ME_PS_NCS}, {ME2_PS_NCS_NC, ME2_PS_NCS}, , CLR, PRE, LD_ME2);
 
@@ -1182,8 +1184,9 @@ module PIPELINE(CLK, CLR, PRE, IR);
     assign EX_PS_V_OUT_AG_IN = EX_V;
 
     wire [31:0] EX_NEIP_next = ME2_NEIP_OUT;
-    wire [31:0] EX_NEIP;
+    wire [31:0] EX_NEIP, EX_NEIP_NOT_TAKEN;
     reg32e$ u_EX_neip_latch(CLK, EX_NEIP_next, EX_NEIP, ,CLR,PRE,LD_EX);
+    reg32e$ u_EX_neip_not_taken (CLK, ME2_PS_NEIP_NOT_TAKEN, EX_NEIP_NOT_TAKEN, , CLR, PRE, LD_EX);
 
     wire [15:0] EX_NCS_next = ME2_NCS_OUT;
     wire [31:0] EX_NCS_out; 
@@ -1391,8 +1394,9 @@ module PIPELINE(CLK, CLR, PRE, IR);
     reg32e$ u_WB_v_latch(CLK, {{31{1'b0}}, WB_V_next}, WB_V_out, ,CLR,PRE,LD_WB); 
     assign WB_V = WB_V_out[0]; 
 
-    wire [31:0] WB_NEIP;
+    wire [31:0] WB_NEIP, WB_NEIP_NOT_TAKEN;
     reg32e$ u_WB_neip_latch(CLK, WB_NEIP_next, WB_NEIP, ,CLR,PRE,LD_WB);
+    reg32e$ u_WB_neip_not_taken (CLK, EX_NEIP_NOT_TAKEN, WB_NEIP_NOT_TAKEN, ,CLR,PRE,LD_WB);
 
     wire [31:0] WB_NCS_out;
     wire [15:0] WB_NCS;
@@ -1467,6 +1471,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
         CLK, PRE, CLR, //not uesd SET/RST
 
         WB_V,
+        WB_NEIP_NOT_TAKEN,
         WB_NEIP,
         WB_NCS,
         WB_CONTROL_STORE,

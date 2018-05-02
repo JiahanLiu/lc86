@@ -2,6 +2,7 @@ module writeback (
    input CLK, PRE, CLR, //not used SET/RST
 
    input WB_V,
+   input [31:0] WB_NEIP_NOT_TAKEN,
    input [31:0] WB_NEIP,
    input [15:0] WB_NCS,
    input [127:0] CONTROL_STORE,
