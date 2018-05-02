@@ -1107,7 +1107,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
         ME2_PS_D2_MEM_RD_ME, ME2_PS_D2_MEM_WR_WB, ME2_PS_D2_LD_GPR1_WB, ME2_PS_D2_LD_MM_WB,
 
-        LSU_OUT_RD_DATA,
+        DCACHE_DATA, //debug only
+        //LSU_OUT_RD_DATA,
         DCACHE_READY,
 
         // output

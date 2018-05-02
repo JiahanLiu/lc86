@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 `define EOF = 32'hFFFF_FFFF
 `define NULL 0
-`define default_mem_Value 16'h07
+`define default_mem_Value 16'h12
 //assign DCACHE_DATA = 63'hFE; 
 
 `define assert(signal, value) \
@@ -324,7 +324,7 @@ module TOP;
 
             if(imm_size8) begin
                 imm[7:0] = {$random};
-                imm[7:0] = 8'h01;
+                imm[7:0] = 8'h02;
                 j=j-1;
                 imm_size = 1;
                 imm_size_en = 0;
@@ -332,7 +332,7 @@ module TOP;
 //                $display ("Time: %0d IMM = %h", $time, imm[7:0]);
             end else if(imm_size16) begin
                 imm[15:0] = {$random};
-                imm[15:0] = 16'h0001;
+                imm[15:0] = 16'h0005;
                 j=j-2;
                 imm_size = 2;
                 imm_size_en = 1;
@@ -340,7 +340,7 @@ module TOP;
 //                $display ("Time: %0d IMM = %h", $time, imm[15:0]);
             end else if(imm_size32) begin
                 imm = {$random};
-                imm = 31'h3930_3929;
+                imm = 32'h0000_00006;
                 j=j-4;
                 imm_size = 4;
                 imm_size_en = 2;
@@ -608,8 +608,8 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.EX_B !== 16'h01) begin 
-              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, 16'h01);
+            if(u_pipeline.EX_B !== 16'h02) begin 
+              $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_B, 16'h02);
               error <= 1;
             end
 
@@ -639,12 +639,10 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_data1 !== 32'b0) begin 
-              $display("Error: WB_Final_data1 is: %h, but needs to be: %h", u_pipeline.WB_Final_data1, 32'b0);
+            if(u_pipeline.WB_Final_data1 !== u_pipeline.EX_A << u_pipeline.EX_B) begin 
+              $display("Error: WB_Final_data1 is: %h, but needs to be: %h", u_pipeline.WB_Final_data1, u_pipeline.EX_A << u_pipeline.EX_B);
               error <= 1;
             end
-
-            //assign DCACHE_DATA = 63'hFE; 
 
             if(u_pipeline.WB_Final_ld_gpr1 !== 1'b0) begin 
               $display("Error: WB_Final_ld_gpr1 is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_gpr1, 1'b1);
