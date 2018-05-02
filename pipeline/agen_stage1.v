@@ -101,12 +101,9 @@ module agen_stage1 (
    wire [31:0] shf_sib_idx_out, mux_sib_si_out, add_sib_seg1_out;
    wire [15:0] mux_seg1_out;
 
-   wire [3:0] mux_push_size_out;
-   wire [31:0] mux_push_add_out, add_sp_out;
-
 //   wire [31:0] shf_exc_code_out, add_idt_base_out;
 
-    assign AG1_REPNE_WB = D2_REPNE_WB;
+   assign AG1_REPNE_WB = D2_REPNE_WB;
    assign SR1_OUT = SR1;
    assign SR2_OUT = SR2;
    assign SR3_OUT = SR3;
@@ -197,17 +194,30 @@ module agen_stage1 (
    assign SIB_SI_DATA_OUT = mux_sib_si_out;
 
    assign SEG2_DATA_OUT = SEG2_DATA;
-   
+
+   wire [3:0] mux_push_size_out, mux_pop_size_out;
+   wire [31:0] mux_sp_add_size_out, Qprev_pop_size;
+   wire [31:0] mux_push_add_out, add_sp_out;
+   wire [31:0] mux_temp_sp_out;
+   wire [31:0] Qtemp_sp;
+
    // Generate SR2 address (for stack accesses)
+//   adder32_w_carry_in add_seg2 (add_seg2_out, , {SEG2_DATA, 16'b0}, add_sp_out, 1'b0);
 //   mux2$
 //     mux_push_size [1:0] (mux_push_size_out, 2'b10, 2'b00, DATA_SIZE[1]); // select to add -2 or -4 on data size
 // -2 = 1110; -4 = 1100; -8 = 1000
    mux4_4 mux_push_size (mux_push_size_out, , 4'b1110, 4'b1100, 4'b1000, D2_MEM_SIZE_WB[0], D2_MEM_SIZE_WB[1]);
-   mux2_32 mux_push_add (mux_push_add_out, 32'b0, {28'b1, mux_push_size_out}, CS_MUX_SP_PUSH_AG);
-   adder32_w_carry_in add_sp (add_sp_out, , SR2_DATA, mux_push_add_out, 1'b0);
-//   adder32_w_carry_in add_seg2 (add_seg2_out, , {SEG2_DATA, 16'b0}, add_sp_out, 1'b0);
+   mux4_4 mux_pop_size (mux_pop_size_out, , 4'b0010, 4'b0100, 4'b1000, D2_MEM_SIZE_WB[0], D2_MEM_SIZE_WB[1]);
+   mux2_32 mux_sp_add_size (mux_sp_add_size_out, {28'b1, mux_push_size_out}, Qprev_pop_size, CS_MUX_SP_ADD_SIZE_AG); // 0 for push, 1 for pop (multiple only)
+
+   mux2_32 mux_push_add (mux_push_add_out, 32'b0, mux_sp_add_size_out, CS_MUX_SP_PUSH_AG); // set when wanting to add to stack pointer for multi-access
+   mux2_32 mux_temp_sp (mux_temp_sp_out, SR2_DATA, Qtemp_sp, CS_MUX_TEMP_SP_AG);
+   adder32_w_carry_in add_sp (add_sp_out, , mux_temp_sp_out, mux_push_add_out, 1'b0);
    mux2_32 mux_sp_xchg (SP_XCHG_DATA_OUT, add_sp_out, SR3_DATA, CS_IS_CMPXCHG_EX);
-   
+
+   reg32e$ reg_sp (CLK, add_sp_out, Qtemp_sp, , RST, SET, 1'b1);
+   reg32e$ reg_sp_size (CLK, {28'b0, mux_pop_size_out}, Qprev_pop_size, , RST, SET, 1'b1);
+
    // Generate IDTR + offset address (for IDT entry reads)
 //   sal32 shf_exc_code (shf_exc_code_out, {28'b0, DE_EXC_CODE_AG}, 5'b00011);
 //   adder32_w_carry_in add_idt_base (add_idt_base_out, , `IDTR_VAL, shf_exc_code_out, 1'b0);
