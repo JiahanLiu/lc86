@@ -73,10 +73,14 @@ module TOP;
         MOD_EN = 1'b0;
         MOD_A = 16'h0B;
         clk = 1'b0;
-        u_bus_cntrl.state_reg.Q = 16'h0001;
-
+       
+       rst = 1'b0;
+       set = 1'b1;
+       
 
         #(half_cycle)
+        u_bus_cntrl.state_reg.Q = 16'h0001;
+        rst = 1'b1;
         MY_ID = 3'd5;
         wr_size = 1'b0;
         wr_d = 1'b1;
@@ -87,11 +91,20 @@ module TOP;
         wr_ack = 1'b0;
         size = 3'd4;
         dest = 3'd5;
-        rw = 1'b0;
+        rw = 1'b1;
         din = 32'h1234_1234;
-        addr = 16'hA;
+        addr = 16'hA000;
       //  ack_v = 1'b0;
         master = 3'd3;
+
+       #(half_cycle-2)
+        wr_size = 1'b1;
+        size = 3'd4;
+
+       # (3*clk_cycle)
+        din = 32'hAAAA_AAAA;
+       # (clk_cycle)
+        din = 32'hBBBB_BBBB;
 
 //        #(half_cycle-2)
 //        wr_size = 1'b0;
@@ -101,11 +114,7 @@ module TOP;
 //        wr_dest = 1'b0;
 //        wr_RW = 1'b0;
 //        wr_ack = 1'b0;
-
-
-        #(half_cycle-2)
-        wr_size = 1'b1;
-        size = 3'd4;
+      
 
         #(2*clk_cycle)
         BG = 1'b1;

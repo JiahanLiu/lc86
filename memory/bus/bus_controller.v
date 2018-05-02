@@ -32,6 +32,9 @@ module bus_controller(//interface with bus
 		  ST_WR = 8'b0000_1000,
 		  SLV = 8'b0001_0000,
 		  ST_RD = 8'b0010_0000;
+   wire 		    BUS_CLK_DEL;
+   assign #(0.5) BUS_CLK_DEL = BUS_CLK;
+   
    
 		  
 
@@ -48,13 +51,17 @@ module bus_controller(//interface with bus
    wire [15:0] 		    current_size, current_size_in, next_size;
    wire 		    SIZE_DEC;
    //Need to mux this register between the decremented value or 16
-   mux2_16$ mux_size_u(current_size_in, 16'h0010, next_size, SIZE_DEC);
-   ioreg16$ size_reg(BUS_CLK, current_size , next_size, , RST, SET);
+   mux2_16$ mux_size_u(current_size_in, 16'h0010, next_size, SIZE_DECR);
+   ioreg16$ size_reg(BUS_CLK, current_size_in, current_size, , RST, SET);
 
    wire [127:0] 		    data_buffer_in, data_buffer_out;
    //Need to mux each of these packets from the bus
    wire [3:0]			    SIZE_SELECT;
-   decoder2_4$ size_decode(current_size[3:2], SIZE_SELECT, );
+   //as size goes done, we want the address to go up
+   wire [2:0] 			    next_size_bar;
+   inv1$ siz_bar_u_0(next_size_bar[0], next_size[2]);
+   inv1$ siz_bar_u_1(next_size_bar[1], next_size[3]);
+   decoder2_4$ size_decode(next_size_bar, SIZE_SELECT, );
    wire [3:0] 			    RD_BUS;
    and2$ rd_0(RD_BUS[0], SIZE_SELECT[0], RD_BUS_CTRL);
    and2$ rd_1(RD_BUS[1], SIZE_SELECT[1], RD_BUS_CTRL);
@@ -150,7 +157,7 @@ module ctrler_gen_n_state(
 	and2$ u_s4_RWnot(s4_RWnot, current_state[4], RW_not);
 	and2$ u_s3_DONE(s3_DONE, current_state[3], DONE);
 	and3$ u_s2_ACK_RWnot(s2_ACK_RWnot, current_state[2], ACK, RW_not);
-	and2$ u_s0_ENnot(s0_ENnot, current_state[0], EN_not);
+	and3$ u_s0_ENnot(s0_ENnot, current_state[0], EN_not, dest_eq_us_not);
 	and2$ u_s5_Done(s5_Done, current_state[5], DONE);
 
 	and3$ u_s0_EN_destusnot(s0_EN_destusnot, current_state[0], EN, dest_eq_us_not);
@@ -177,13 +184,16 @@ module ctrler_gen_n_state(
 	or2$ u_s3(next_state[3], s2_ACK_RW, s3_DONEnot);
 	or2$ u_s4(next_state[4], s0_destus, s1_destus);
 	or2$ u_s5(next_state[5], s4_RW, s5_DONEnot);
+   assign next_state[6] = 0;
+   assign next_state[7] = 0;
+   
 
 
 endmodule // ctrler_gen_n_state
 
 
 module gen_ctrl_bus(input[7:0] current_state,
-		    output CTRL_TRI_EN, D_TRI_EN, ACK_TRI_EN, BR_EN, SIZE_DECR, RD_BUS);
+		    output CTRL_TRI_ENBAR, D_TRI_ENBAR, ACK_TRI_ENBAR, BR_EN, SIZE_DECR, RD_BUS);
    wire IDLE  = current_state[0];
    wire BR = current_state[1];
    wire MSTR = current_state[2];
@@ -196,6 +206,9 @@ module gen_ctrl_bus(input[7:0] current_state,
    or3$ BR_u(BR_EN, BR, MSTR, WR);
    or2$ DECR_u(SIZE_DECR, WR, RD);
    assign RD_BUS = RD;
+   inv1$ CTRL_IN(CTRL_TRI_ENBAR, CTRL_TRI_EN);
+   inv1$ D_Inv(D_TRI_ENBAR, D_TRI_EN);
+   inv1$ ACK_INV(ACK_TRI_ENBAR, ACK_TRI_EN);
    
 endmodule // gen_ctrl_bus
 
@@ -293,7 +306,7 @@ module size_decrement(output [11:0] next_size,
    wire 			   OFFSET = A[1:0];
    wire 			   SIZE_OFFSET = current_size[1:0];
    wire 			   done_temp;
-   equal_to_zero done_t_checker(DONE, {22'h000000, current_size[11:2]});
+   equal_to_zero done_t_checker(DONE, {22'h000000, next_size[11:2]});
    assign amnt_decr = 3'b100;//always remove 4 bytes from the access
    assign next_size = current_size - amnt_decr;
    
