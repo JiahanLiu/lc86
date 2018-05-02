@@ -23,7 +23,6 @@ module execute (
 
     input [2:0] EX_DR1, 
     input [2:0] EX_DR2,
-    input [2:0] EX_DR3,
     input [31:0] EX_ADDRESS,
 
     input WB_stall, 
@@ -51,7 +50,6 @@ module execute (
 
     output [2:0] WB_DR1_next,
     output [2:0] WB_DR2_next,
-    output [2:0] WB_DR3_next,
     output [31:0] WB_ADDRESS_next,   
 
     output DEP_v_ex_ld_gpr1,
@@ -115,7 +113,6 @@ module execute (
 
   assign WB_DR1_next = EX_DR1;
   assign WB_DR2_next = EX_DR2;
-  assign WB_DR3_next = EX_DR3; 
   assign WB_ADDRESS_next = EX_ADDRESS;
 
   validate_signal_ex u_validate_signal_ex(v_ex_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3, 

@@ -89,13 +89,13 @@ module conditional_support_wb(
 
 	and2$ u_and_jne(jne_not_taken, ZF, CS_IS_JNE_WB);
 	or2$ u_or_cf_zf(cf_or_zf, CF, ZF);
-	mux2$ u_and_jnbe(jnbe_not_taken, cf_or_zf, CS_IS_JNBE_WB);
+	and$ u_and_jnbe(jnbe_not_taken, cf_or_zf, CS_IS_JNBE_WB);
 
-	or2$ u_not_taken_mux(mux_not_taken_eip, jne_not_taken, jnbe_not_taken); 
+	or2$ u_or_final_not_taken_(mux_not_taken_eip, jne_not_taken, jnbe_not_taken); 
 
 	//cmovc
 
-	mux2$ mux_cmovc(wb_ld_gpr2, WB_ex_ld_gpr2_wb, cf_not);
+	mux2$ mux_cmovc(wb_ld_gpr2, WB_ex_ld_gpr2_wb, cf_not, CS_IS_CMOVC_WB);
 
 
 endmodule // conditional_support_wb

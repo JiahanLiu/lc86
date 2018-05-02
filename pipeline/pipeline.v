@@ -1338,7 +1338,6 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
         WB_DR1_next,
         WB_DR2_next,
-        WB_DR3_next,
         WB_ADDRESS_next,   
 
         DEP_v_ex_ld_gpr1,
@@ -1483,7 +1482,6 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
         WB_DR1,
         WB_DR2,
-        WB_DR3,
         WB_ADDRESS,
 
         In_write_ready, 

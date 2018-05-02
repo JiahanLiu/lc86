@@ -264,7 +264,7 @@ module agen_stage1 (
 
    all_scoreboard_generator u_all_scoreboard_generator (
       V,
-      DRID1_OUT, DRID2_OUT, CS_DR3_D2,
+      DRID1_OUT, DRID2_OUT, CS_DR3_WB,
       D2_DR1_SIZE_WB, D2_DR2_SIZE_WB, 2'b10,
       D2_LD_GPR1_WB, CS_LD_GPR2_EX, CS_LD_GPR3_WB,
       CS_LD_SEG_WB, CS_LD_CS_WB,
