@@ -76,6 +76,7 @@ module agen_stage1 (
    output [31:0] SP_XCHG_DATA_OUT,
    output [31:0] ADD_BASE_DISP_OUT, ADD_SIB_SEG1_OUT,
    output [31:0] SIB_SI_DATA_OUT,
+   output [15:0] SEG1_DATA_OUT,
    output [15:0] SEG2_DATA_OUT,
    output [31:0] INTERRUPT_ADDR_OUT,
 		    
@@ -193,6 +194,7 @@ module agen_stage1 (
    assign ADD_SIB_SEG1_OUT = add_sib_seg1_out;
    assign SIB_SI_DATA_OUT = mux_sib_si_out;
 
+   assign SEG1_DATA_OUT = SEG1_DATA;
    assign SEG2_DATA_OUT = SEG2_DATA;
 
    wire [3:0] mux_push_size_out, mux_pop_size_out;
