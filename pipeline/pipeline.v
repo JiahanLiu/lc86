@@ -1245,16 +1245,12 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
     wire [2:0] EX_DR1_next = ME2_DRID1_OUT;
     wire [2:0] EX_DR2_next = ME2_DRID2_OUT;
-    // TODO - What is it assigned from? //Jiahan
-    wire [2:0] EX_DR3_next;
-    wire [31:0] EX_DR1_out, EX_DR2_out, EX_DR3_out;
-    wire [2:0] EX_DR1, EX_DR2, EX_DR3;
+    wire [31:0] EX_DR1_out, EX_DR2_out;
+    wire [2:0] EX_DR1, EX_DR2;
     reg32e$ u_EX_dr1_latch(CLK, {29'b0, EX_DR1_next}, EX_DR1_out, ,CLR,PRE,LD_EX);
     reg32e$ u_EX_dr2_latch(CLK, {29'b0, EX_DR2_next}, EX_DR2_out, ,CLR,PRE,LD_EX);
-    reg32e$ u_EX_dr3_latch(CLK, {29'b0, EX_DR3_next}, EX_DR3_out, ,CLR,PRE,LD_EX);
     assign EX_DR1 = EX_DR1_out[2:0]; 
     assign EX_DR2 = EX_DR2_out[2:0]; 
-    assign EX_DR3 = EX_DR3_out[2:0]; 
 
     wire [31:0] EX_ADDRESS_next = ME2_MEM_WR_ADDR_OUT;
     wire [31:0] EX_ADDRESS;
@@ -1449,14 +1445,11 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
     wire [31:0] WB_DR1_out; 
     wire [31:0] WB_DR2_out;
-    wire [31:0] WB_DR3_out;
-    wire [2:0] WB_DR1, WB_DR2, WB_DR3;
+    wire [2:0] WB_DR1, WB_DR2;
     reg32e$ u_WB_DR1_latch(CLK, {29'b0, WB_DR1_next}, WB_DR1_out, ,CLR,PRE,LD_WB);
     reg32e$ u_WB_DR2_latch(CLK, {29'b0, WB_DR2_next}, WB_DR2_out, ,CLR,PRE,LD_WB);
-    reg32e$ u_WB_DR3_latch(CLK, {29'b0, WB_DR3_next}, WB_DR3_out, ,CLR,PRE,LD_WB);
     assign WB_DR1 = WB_DR1_next[2:0];
     assign WB_DR2 = WB_DR2_next[2:0];
-    assign WB_DR3 = WB_DR3_next[2:0];
 
     wire [31:0] WB_ADDRESS; 
     reg32e$ u_WB_ADDRESS_latch(CLK, WB_ADDRESS_next, WB_ADDRESS, ,CLR,PRE,LD_WB);

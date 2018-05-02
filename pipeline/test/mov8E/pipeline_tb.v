@@ -687,6 +687,11 @@ module TOP;
               $display("Error: WB_Final_ld_cs is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_cs, 1'b0);
               error <= 1;
             end
+
+            if(u_pipeline.WB_Final_ld_seg !== 1'b1) begin 
+              $display("Error: WB_Final_ld_seg is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_seg, 1'b1);
+              error <= 1;
+            end
             /*
             if(u_pipeline.WB_Final_Flags !== 32'h004) begin 
               $display("Error: WB_Final_Flags is: %h, but needs to be: %h", u_pipeline.WB_Final_Flags, 32'h004);
@@ -698,8 +703,8 @@ module TOP;
               error <= 1;
             end
 
-            if(u_pipeline.WB_Final_Dcache_Write !== 1'b1) begin 
-              $display("Error: WB_Final_Dcache_Write is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_Write, 1'b1);
+            if(u_pipeline.WB_Final_Dcache_Write !== 1'b0) begin 
+              $display("Error: WB_Final_Dcache_Write is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_Write, 1'b0);
               error <= 1;
             end
 

@@ -21,10 +21,12 @@ module operand_select_wb(
 	input CS_SAVE_NCS_WB,
 	input CS_PUSH_FLAGS_WB,
 	input CS_USE_TEMP_NEIP_WB,
+	input mux_not_taken_eip,
 	input CS_USE_TEMP_NCS_WB,
 	input [31:0] WB_RESULT_A,
 	input [31:0] WB_RESULT_C,
 	input [31:0] WB_NEIP,
+	input [31:0] WB_NEIP_NOT_TAKEN,
 	input [15:0] WB_NCS,
 	input [31:0] current_flags
 	);
@@ -45,7 +47,9 @@ module operand_select_wb(
 	mux32_2way u_mux1_data1_pre(post_mux1_data1, WB_RESULT_A, current_flags, CS_PUSH_FLAGS_WB);
 	mux32_2way u_mux1_data1_final(data1, post_mux1_data1, cmps_first_pointer, CS_IS_CMPS_SECOND_UOP_ALL);
 
-	mux32_2way u_mux_neip(WB_Final_EIP, WB_NEIP, temp_neip, CS_USE_TEMP_NEIP_WB);
+	wire [31:0] post_stage1_eip; 
+	mux32_2way u_mux_stage1_eip(post_stage1_eip, WB_NEIP, temp_neip, CS_USE_TEMP_NEIP_WB);
+	mux32_2way u_mux_neip(WB_Final_EIP, post_stage1_eip, WB_NEIP_NOT_TAKEN, mux_not_taken_eip);
 
 	mux16_2way u_mux_ncs(WB_Final_CS, WB_NCS, temp_ncs, CS_USE_TEMP_NCS_WB);
 
@@ -61,11 +65,10 @@ endmodule // operand_select_wb
 // Combinational Delay: 
 //
 module conditional_support_wb(
-	output wb_ld_eip,
+	output mux_not_taken_eip,
 	output wb_ld_gpr2, 
 	input CS_IS_JNBE_WB,
 	input CS_IS_JNE_WB,
-	input CS_LD_EIP_WB,
 	input [31:0] current_flags,
 	input CS_IS_CMOVC_WB,
 	input WB_ex_ld_gpr2_wb
@@ -75,17 +78,26 @@ module conditional_support_wb(
 	assign CF = current_flags[0];
 	assign ZF = current_flags[6];
 
-	wire cf_not, zf_not, cf_zf_equal_zero;
-	wire post_jne_ld_eip; 
-
+	wire cf_not;
 	inv1$ not_cf(cf_not, CF);
-	inv1$ not_zf(zf_not, ZF);
 
-	mux2$ u_mux_jne(post_jne_ld_eip, CS_LD_EIP_WB, zf_not, CS_IS_JNE_WB);
-	and2$ u_cf_zf_zero(cf_zf_equal_zero, cf_not, zf_not);
-	mux2$ u_mux_jnbe(wb_ld_eip, post_jne_ld_eip, cf_zf_equal_zero, CS_IS_JNBE_WB);
+	//jcc
 
-	mux2$ u_mux_ld_gpr1(wb_ld_gpr2, WB_ex_ld_gpr2_wb, CF, CS_IS_CMOVC_WB); 
+	wire cf_or_zf;
+	wire jnbe_not_taken;
+	wire jne_not_taken; 
+
+	and2$ u_and_jne(jne_not_taken, ZF, CS_IS_JNE_WB);
+	or2$ u_or_cf_zf(cf_or_zf, CF, ZF);
+	mux2$ u_and_jnbe(jnbe_not_taken, cf_or_zf, CS_IS_JNBE_WB);
+
+	or2$ u_not_taken_mux(mux_not_taken_eip, jne_not_taken, jnbe_not_taken); 
+
+	//cmovc
+
+	mux2$ mux_cmovc(wb_ld_gpr2, WB_ex_ld_gpr2_wb, cf_not);
+
+
 endmodule // conditional_support_wb
 
 //-------------------------------------------------------------------------------------
@@ -105,7 +117,7 @@ module validate_signals_wb(
 	output v_cs_ld_mm,
 	output v_ex_dcache_write,
 	output v_cs_ld_flags,
-	output v_wb_ld_eip, 
+	output v_cs_ld_eip, 
 	output v_cs_ld_cs,
 	input WB_V,
 	input wb_ld_gpr1,
@@ -115,7 +127,7 @@ module validate_signals_wb(
 	input CS_LD_MM_WB,
 	input WB_ex_dcache_write_wb,
 	input CS_LD_FLAGS_WB,
-	input wb_ld_eip,
+	input cs_ld_eip,
 	input CS_LD_CS_WB,
 	input CS_IS_CMPS_SECOND_UOP_ALL,
 	input WB_d2_repne_wb,
@@ -132,8 +144,8 @@ module validate_signals_wb(
 
 	wire regular_ld_eip, repne_second_uop_cmps;
 	or2$ u_second_uop_of_repne(repne_second_uop_cmps, CS_IS_CMPS_SECOND_UOP_ALL, WB_d2_repne_wb);
-	and2$ u_and_regular_eip(regular_ld_eip, WB_V, wb_ld_eip);
-	mux2$ u_and_final_eip(v_wb_ld_eip, regular_ld_eip, wb_repne_terminate_all, repne_second_uop_cmps);
+	and2$ u_and_regular_eip(regular_ld_eip, WB_V, cs_ld_eip);
+	mux2$ u_and_final_eip(v_cs_ld_eip, regular_ld_eip, wb_repne_terminate_all, repne_second_uop_cmps);
 	and2$ u_and_cs(v_cs_ld_cs, WB_V, CS_LD_CS_WB);
 
 endmodule // validate_signals_wb

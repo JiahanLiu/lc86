@@ -73,10 +73,10 @@ module writeback (
    //operand_select_wb
    wire [31:0] data1, count; 
    //conditional_support_wb
-   wire wb_ld_eip, wb_ld_gpr2;
+   wire mux_not_taken_eip, wb_ld_gpr2;
    //validate_signals_wb
    wire v_wb_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3, v_cs_ld_seg, v_cs_ld_mm, 
-      v_ex_dcache_write, v_cs_ld_flags, v_wb_ld_eip, v_cs_ld_cs;
+      v_ex_dcache_write, v_cs_ld_flags, v_cs_ld_eip, v_cs_ld_cs;
    //repne_halt_wb
    wire ZF; 
    //flags_wb
@@ -87,14 +87,14 @@ module writeback (
    wire In_write_ready_not;
    operand_select_wb u_operand_select_wb(data1, WB_Final_EIP, WB_Final_CS, count, CLK, PRE, CLR,
       CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_CMPS_SECOND_UOP_ALL, CS_SAVE_NEIP_WB, CS_SAVE_NCS_WB,
-      CS_PUSH_FLAGS_WB, CS_USE_TEMP_NEIP_WB, CS_USE_TEMP_NCS_WB, WB_RESULT_A, WB_RESULT_C, WB_NEIP,
-      WB_NCS, final_out_flags);
+      CS_PUSH_FLAGS_WB, CS_USE_TEMP_NEIP_WB, mux_not_taken_eip, CS_USE_TEMP_NCS_WB, WB_RESULT_A, WB_RESULT_C, WB_NEIP,
+      WB_NEIP_NOT_TAKEN, WB_NCS, final_out_flags);
 
-   conditional_support_wb u_conditional_support_wb(wb_ld_eip, wb_ld_gpr2, CS_IS_JNBE_WB, 
-      CS_IS_JNE_WB, CS_LD_EIP_WB, final_out_flags, CS_IS_CMOVC_WB, WB_ex_ld_gpr2_wb);
+   conditional_support_wb(mux_not_taken_eip, wb_ld_gpr2, CS_IS_JNBE_WB,  CS_IS_JNE_WB, current_flags, 
+       CS_IS_CMOVC_WB, WB_ex_ld_gpr2_wb);
 
    validate_signals_wb u_validate_signals_wb(v_wb_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3,
-      v_cs_ld_seg, v_cs_ld_mm, v_ex_dcache_write, v_cs_ld_flags, v_wb_ld_eip, v_cs_ld_cs,
+      v_cs_ld_seg, v_cs_ld_mm, v_ex_dcache_write, v_cs_ld_flags, v_cs_ld_eip, v_cs_ld_cs,
       WB_V, WB_ex_ld_gpr1_wb, wb_ld_gpr2, CS_LD_GPR3_WB, CS_LD_SEG_WB, CS_LD_MM_WB, 
       WB_ex_dcache_write_wb, CS_LD_FLAGS_WB, wb_ld_eip,CS_LD_CS_WB,CS_IS_CMPS_SECOND_UOP_ALL,
       WB_d2_repne_wb, wb_repne_terminate_all);
@@ -115,7 +115,7 @@ module writeback (
    //regfile32
    assign WB_Final_DR1 = WB_DR1;
    assign WB_Final_DR2 = WB_DR2;
-   assign WB_Final_DR3 = WB_DR3; 
+   assign WB_Final_DR3 = CS_DR3_WB; 
    assign WB_Final_data1 = data1;
    assign WB_Final_data2 = WB_RESULT_B;
    assign WB_Final_data3 = WB_RESULT_C;
@@ -129,7 +129,7 @@ module writeback (
    assign WB_Final_MM_Data = WB_RESULT_MM; 
    assign WB_Final_ld_mm = v_cs_ld_mm; 
    //EIP register
-   assign WB_Final_ld_eip = v_wb_ld_eip;
+   assign WB_Final_ld_eip = v_cs_ld_eip;
    //CS register
    assign WB_Final_ld_cs = v_cs_ld_cs;
    //Flags register

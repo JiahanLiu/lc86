@@ -602,8 +602,8 @@ module TOP;
               error <= 1;
             end
             */
-            if(u_pipeline.EX_A !== 16'h22) begin 
-              $display("Error: EX_A is: %h, but needs to be: %h", u_pipeline.EX_A, 16'h22);
+            if(u_pipeline.EX_A !== 16'h0202) begin 
+              $display("Error: EX_A is: %h, but needs to be: %h", u_pipeline.EX_A, 16'h0202);
               error <= 1;
             end
             /*
@@ -688,12 +688,19 @@ module TOP;
               $display("Error: WB_Final_ld_cs is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_cs, 1'b0);
               error <= 1;
             end
+
+            if(u_pipeline.WB_Final_ld_seg !== 1'b0) begin 
+              $display("Error: WB_Final_ld_seg is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_seg, 1'b0);
+              error <= 1;
+            end
+
             /*
             if(u_pipeline.WB_Final_Flags !== 32'h004) begin 
               $display("Error: WB_Final_Flags is: %h, but needs to be: %h", u_pipeline.WB_Final_Flags, 32'h004);
               error <= 1;
             end
             */
+            
             if(u_pipeline.WB_Final_ld_flags !== 1'b0) begin 
               $display("Error: WB_Final_ld_flags is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_flags, 1'b0);
               error <= 1;
