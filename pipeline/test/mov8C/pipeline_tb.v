@@ -634,24 +634,25 @@ module TOP;
             end
             */
 /*************************** WRITEBACK STAGE OUTPUTS COMPARE ******************************/
-            /*
+            
             if(u_pipeline.WB_Final_Dcache_address !== 32'h0f07_0d0f) begin 
               $display("Error: WB_Final_Dcache_address is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_address, 32'h0f07_0d0f);
               error <= 1;
             end
-            */
-
             
-            if(u_pipeline.WB_Final_DR2 !== 3'b010) begin 
-              $display("Error: WB_Final_DR2 is: %h, but needs to be: %h", u_pipeline.WB_Final_DR2, 3'b010);
+
+            /*
+            if(u_pipeline.WB_Final_DR1 !== 3'b010) begin 
+              $display("Error: WB_Final_DR1 is: %h, but needs to be: %h", u_pipeline.WB_Final_DR1, 3'b010);
               error <= 1;
             end
+            */
             
-
             if(u_pipeline.WB_Final_data1 !== u_pipeline.EX_A) begin 
               $display("Error: WB_Final_data1 is: %h, but needs to be: %h", u_pipeline.WB_Final_data2, u_pipeline.EX_A);
               error <= 1;
             end
+            
 
             if(u_pipeline.WB_Final_ld_gpr1 !== 1'b0) begin 
               $display("Error: WB_Final_ld_gpr1 is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_gpr1, 1'b0);
