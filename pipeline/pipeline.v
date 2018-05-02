@@ -812,7 +812,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire [31:0] ME_PS_MEM_RD_ADDR, ME_PS_MEM_WR_ADDR;
    wire [1:0] ME_PS_D2_DR1_SIZE_WB, ME_PS_D2_DR2_SIZE_WB;
    wire [1:0] ME_PS_D2_MEM_SIZE_WB;
-    wire ME_PS_D2_REPNE_WB;
+   wire ME_PS_D2_REPNE_WB;
 
    wire [2:0] ME_PS_D2_ALUK_EX;
    wire [2:0] ME_PS_DRID1, ME_PS_DRID2;
@@ -958,7 +958,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire [31:0] ME2_MEM_RD_ADDR_OUT, ME2_MEM_WR_ADDR_OUT;
    wire [1:0] ME2_D2_DR1_SIZE_WB_OUT, ME2_D2_DR2_SIZE_WB_OUT;
    wire [1:0] ME2_D2_MEM_SIZE_WB_OUT;
-   wire [1:0] ME2_PS_D2_REPNE_WB;
+   wire ME2_PS_D2_REPNE_WB;
 
    wire [2:0] ME2_D2_ALUK_EX_OUT;
    wire [2:0] ME2_DRID1_OUT, ME2_DRID2_OUT;
@@ -1155,10 +1155,11 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire EX_PS_WR_ADDR1_V, EX_PS_WR_ADDR2_V;
    wire [3:0] EX_PS_RA_WR_SIZE1, EX_PS_RA_WR_SIZE2;
    wire EX_PS_PAGE_FAULT_EXC, EX_PS_GPROT_EXC;
+   wire EX_PS_REPNE_WB;
    assign ex_ps_save_mem[31:19] = {ME2_PS_WR_ADDR1_V, ME2_PS_RA_WR_SIZE1, ME2_PS_WR_ADDR2_V, ME2_PS_RA_WR_SIZE2,
-                                   ME2_PS_PAGE_FAULT_EXC, ME2_PS_GPROT_EXC, ME1_PS_REPNE_WB};
+                                   ME2_PS_PAGE_FAULT_EXC, ME2_PS_GPROT_EXC, ME2_PS_D2_REPNE_WB};
    assign {EX_PS_WR_ADDR1_V, EX_PS_RA_WR_SIZE1, EX_PS_WR_ADDR2_V, EX_PS_RA_WR_SIZE2,
-           EX_PS_PAGE_FAULT_EXC, EX_PS_GPROT_EXC, ME2_PS_REPNE_WB} = EX_PS_SAVE_MEM[31:19];
+           EX_PS_PAGE_FAULT_EXC, EX_PS_GPROT_EXC, EX_PS_REPNE_WB} = EX_PS_SAVE_MEM[31:19];
    
    reg32e$ u_reg_ex_ps_save_mem (CLK, ex_ps_save_mem, EX_PS_SAVE_MEM, , CLR, PRE, LD_EX);
 
