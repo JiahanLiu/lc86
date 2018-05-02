@@ -13,7 +13,6 @@ module execute (
     input EX_d2_ld_gpr1_ex,
     input EX_d2_dcache_write_ex,  
     input EX_d2_repne_wb, 
-    input [1:0] EX_d2_pop_size,
 
     //execute results
     input [31:0] EX_A, 
@@ -104,7 +103,7 @@ module execute (
 
   functional_unit_ex u_functional_unit_ex(alu32_result, alu32_flags, alu64_result, shift_result,
     shift_flags, count_minus_one, stack_pointer_pop, EX_d2_aluk_ex, EX_d2_datasize_all, 
-    EX_d2_pop_size, EX_A, EX_B, b, EX_C, count, flags_dataforwarded, CS_ALUK_D2, EX_MM_A, EX_MM_B);
+    EX_A, EX_B, b, EX_C, count, flags_dataforwarded, CS_ALUK_D2, EX_MM_A, EX_MM_B);
   
   result_select_ex u_result_select_ex(WB_RESULT_A_next, WB_RESULT_B_next, WB_RESULT_C_next, WB_FLAGS_next, 
     WB_RESULT_MM_next, CS_IS_ALU32_EX, CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_XCHG_EX, CS_PASS_A_EX,

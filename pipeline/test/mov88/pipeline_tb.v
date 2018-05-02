@@ -616,21 +616,21 @@ module TOP;
               $display("Error: WB_de_datasize_all_next is: %h, but needs to be: %h", u_pipeline.WB_de_datasize_all_next, 2'b00);
               error <= 1;
             end
-
+            /*
             if(u_pipeline.EX_d2_aluk_ex !== 3'b000) begin 
               $display("Error: EX_d2_aluk_ex is: %h, but needs to be: %h", u_pipeline.EX_d2_aluk_ex, 3'b000);
               error <= 1;
             end
-
+            */
 /*************************** WRITEBACK STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
             #1;    // Allow for setup time
-
+            /*
             if(u_pipeline.WB_FLAGS !== 32'h004) begin 
               $display("Error: WB_FLAGS is: %h, but needs to be: %h", u_pipeline.WB_FLAGS, 32'h004);
               error <= 1;
             end
-
+            */
 /*************************** WRITEBACK STAGE OUTPUTS COMPARE ******************************/
 
             if(u_pipeline.WB_Final_Dcache_address !== 32'h0f07_0d0f) begin 
@@ -644,7 +644,7 @@ module TOP;
             end
 
             if(u_pipeline.WB_Final_ld_gpr1 !== 1'b0) begin 
-              $display("Error: WB_Final_ld_gpr1 is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_gpr1, 1'b1);
+              $display("Error: WB_Final_ld_gpr1 is: %h, but needs to be: %h", u_pipeline.WB_Final_ld_gpr1, 1'b0);
               error <= 1;
             end
 

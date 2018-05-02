@@ -1225,12 +1225,6 @@ module PIPELINE(CLK, CLR, PRE, IR);
     reg32e$ u_EX_d2_repne_wb_latch(CLK, {31'b0, EX_d2_repne_wb_next}, EX_d2_repne_wb_out, ,CLR,PRE,LD_EX);
     assign EX_d2_repne_wb = EX_d2_repne_wb_out[0]; 
 
-    wire [1:0] EX_d2_pop_size_next = 2'b00; //Nelson
-    wire [31:0] EX_d2_pop_size_out;
-    wire [1:0] EX_d2_pop_size;
-    reg32e$ u_EX_d2_pop_size_latch(CLK, {30'b0, EX_d2_pop_size_next}, EX_d2_pop_size_out, ,CLR,PRE,LD_EX);
-    assign EX_d2_pop_size = EX_d2_pop_size_out[1:0];
-
     wire [31:0] EX_A_next = ME2_A_OUT;
     wire [31:0] EX_B_next = ME2_B_OUT;
     wire [31:0] EX_C_next = ME2_SP_XCHG_DATA_OUT;
@@ -1306,7 +1300,6 @@ module PIPELINE(CLK, CLR, PRE, IR);
         EX_d2_ld_gpr1_ex,
         EX_d2_dcache_write_ex, 
         EX_d2_repne_wb, 
-        EX_d2_pop_size,
 
         //execute results
         EX_A, 
