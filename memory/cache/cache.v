@@ -185,6 +185,9 @@ module full_tagstore (input [4:0] A,
 
     wire [7:0] ram_outs [3:0];
     wire [7:0] ram_outs0, ram_outs1, ram_outs2, ram_outs3;
+    wire out1r, out2r, out3r, out4r, out5r, out6r, out7r, out8r;
+    wire out9r, out10r, out11r;
+    wire [31:0] s_valid;
 
     assign ram_outs0 = ram_outs[0];
     assign ram_outs1 = ram_outs[1];
@@ -220,8 +223,24 @@ module full_tagstore (input [4:0] A,
    inv1$ WR_INV(WR_bar, WR);
    reg32e$ valid_store(CLK, valid_in, valid_out, , CLR, PRE,WR_bar);
 
-   
-   assign DOUT[8] = 0;
+   // modified for assigning valid signal - Apurv
+   and2$ and_v[31:0] (s_valid, valid_out, valid_mask);
+   or4$ or1 (out1r, s_valid[0], s_valid[1], s_valid[2], s_valid[3]);
+   or4$ or2 (out2r, s_valid[4], s_valid[5], s_valid[6], s_valid[7]);
+   or4$ or3 (out3r, s_valid[8], s_valid[9], s_valid[10], s_valid[11]);
+   or4$ or4 (out4r, s_valid[12], s_valid[13], s_valid[14], s_valid[15]);
+   or4$ or5 (out5r, s_valid[16], s_valid[17], s_valid[18], s_valid[19]);
+   or4$ or6 (out6r, s_valid[20], s_valid[21], s_valid[22], s_valid[23]);
+   or4$ or7 (out7r, s_valid[24], s_valid[25], s_valid[26], s_valid[27]);
+   or4$ or8 (out8r, s_valid[28], s_valid[29], s_valid[30], s_valid[31]);
+   or4$ or9 (out9r, out1r, out2r, out3r, out4r);
+   or4$ or10 (out10r, out5r, out6r, out7r, out8r);
+   or2$ or11 (out11r, out9r, out10r);
+
+   assign DOUT[8] = out11r;
+   // assign DOUT[8] = 0;
+   // Apurv 
+
        
    
 endmodule // full_tagstore
