@@ -105,7 +105,7 @@ module memory_stage2 (
    wire [2:0] neip_sel;
    wire [15:0] mux_neip_high_out, mux_neip_low_out;
 
-   pencoder8_3v$ pencoder_neip (1'b0, {4'b0, or0_out, and3_out, and4_out, or1_out}, neip_sel, );
+   pencoder8_3v$ pencoder_neip (1'b0, {4'b0, or1_out, and4_out, and3_out, or0_out}, neip_sel, );
    mux4_16$ mux_neip_high (mux_neip_high_out, buf_mem_out[31:16], buf_mem_out[63:48], A[31:16], 16'b0, neip_sel[0], neip_sel[1]);
 
    mux2_16$ mux_neip_low (mux_neip_low_out, buf_mem_out[15:0], A[15:0], and4_out);
