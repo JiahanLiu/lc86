@@ -2,6 +2,10 @@
 `define EOF = 32'hFFFF_FFFF
 `define NULL 0
 `define default_mem_Value 32'h12
+`define default_mem_Value64 64'h1234_5678_90AB_CDEF
+`define default_mem_Value32 32'h90AB_CDEF
+`define default_mem_Value16 16'hCDEF
+`define default_mem_Value8 8'hEF
 
 `define assert(signal, value) \
         if (signal !== value) begin \

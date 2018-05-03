@@ -48,8 +48,6 @@ module memory_stage2 (
 
    bufferH64$ buf_mem [63:0] (buf_mem_out, DCACHE_DATA);
 
-   // PLACEHOLDER FOR DEBUG - TODO
-   //assign DCACHE_DATA = 63'h12; 
 
 // for near return
 // if data size is 32, EIP = MEM[31:0] --also JMP r/m, CALL r/m
