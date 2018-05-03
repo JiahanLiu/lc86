@@ -149,24 +149,23 @@ module full_cache_d (input [4:0] A, //bits 8 to 4 in the phys address
     assign DOUT_ARRAY1 = DOUT_ARRAY[1];
     assign DOUT_ARRAY2 = DOUT_ARRAY[2];
     assign DOUT_ARRAY3 = DOUT_ARRAY[3];
-       
-    //genvar i;
-    //generate
-    //   for(i=0;i<4;i=i+1)
-    //   begin : cache_datalines
-    //   //Allowed since i is constant when the loop is unrolled
-    //         eight_cachelines_d data_line(A[2:0],//corresponds to bits [6:4] in phys address
-    //			  DIN,//no modifications needed
-    //			  OE,
-    //			  WR,//this signal needs to be gated with a match
-    //			  DOUT_ARRAY[i]);//only one DOUT will be needed
-    //   end
-    //endgenerate
 
-    eight_cachelines_d data_line0 (A[2:0], DIN, OE, WR, DOUT_ARRAY[0]);
-    eight_cachelines_d data_line1 (A[2:0], DIN, OE, WR, DOUT_ARRAY[1]);
-    eight_cachelines_d data_line2 (A[2:0], DIN, OE, WR, DOUT_ARRAY[2]);
-    eight_cachelines_d data_line3 (A[2:0], DIN, OE, WR, DOUT_ARRAY[3]);
+   //decoding the address
+   wire [3:0] 	a_dec, a_dec_inv;
+   decoder2_4$ A_dec(A[4:3], a_dec, );
+   inv1$ a_dec_inv_u[3:0](a_dec_inv, a_dec);
+   wire [15:0] 	wr0,wr1,wr2,wr3;
+   or2$ wr_mask0[15:0](wr0, WR, a_dec_inv[0]);
+   or2$ wr_mask1[15:0](wr1, WR, a_dec_inv[1]);
+   or2$ wr_mask2[15:0](wr2, WR, a_dec_inv[2]);
+   or2$ wr_mask3[15:0](wr3, WR, a_dec_inv[3]);
+   
+
+   
+    eight_cachelines_d data_line0 (A[2:0], DIN, OE, wr0, DOUT_ARRAY[0]);
+    eight_cachelines_d data_line1 (A[2:0], DIN, OE, wr1, DOUT_ARRAY[1]);
+    eight_cachelines_d data_line2 (A[2:0], DIN, OE, wr2, DOUT_ARRAY[2]);
+    eight_cachelines_d data_line3 (A[2:0], DIN, OE, wr3, DOUT_ARRAY[3]);
 
     //need to select between the four possible d_cache lines
     mux4_128 dout_mux (DOUT,DOUT_ARRAY[0],DOUT_ARRAY[1],DOUT_ARRAY[2],DOUT_ARRAY[3],A[3],A[4]);
@@ -193,24 +192,17 @@ module full_tagstore (input [4:0] A,
     assign ram_outs1 = ram_outs[1];
     assign ram_outs2 = ram_outs[2];
     assign ram_outs3 = ram_outs[3];
-       
-    //genvar i;
-    //generate
-    //   for(i=0;i<4;i=i+1)
-    //   begin : tagstore
-    //   //Allowed since i is constant when the loop is unrolled
-    //               ram8b8w$ ram8(A[2:0],//corresponds to bits [6:4] in phys address
-    //			  {dirty,tag},
-    //			  OE,
-    //			  WR,//this needs to be gated
-    //			 ram_outs[i]);//output will be muxed 
-    //   end
-    //endgenerate
 
-    ram8b8w$ u_tag_ram0 (A[2:0], {dirty,tag}, OE, WR, ram_outs[0]);
-    ram8b8w$ u_tag_ram1 (A[2:0], {dirty,tag}, OE, WR, ram_outs[1]);
-    ram8b8w$ u_tag_ram2 (A[2:0], {dirty,tag}, OE, WR, ram_outs[2]);
-    ram8b8w$ u_tag_ram3 (A[2:0], {dirty,tag}, OE, WR, ram_outs[3]);
+   //decoder for the rams
+   wire [3:0] 	a_dec, a_dec_inv, a_wr_dec;
+   decoder2_4$ A_dec(A[4:3], a_dec, );
+   inv1$ a_dec_inv_u[3:0](a_dec_inv, a_dec);
+   or2$ write_gen[3:0](a_wr_dec, a_dec_inv, WR);
+      
+    ram8b8w$ u_tag_ram0 (A[2:0], {dirty,tag}, OE, a_wr_dec[0], ram_outs[0]);
+    ram8b8w$ u_tag_ram1 (A[2:0], {dirty,tag}, OE, a_wr_dec[1], ram_outs[1]);
+    ram8b8w$ u_tag_ram2 (A[2:0], {dirty,tag}, OE, a_wr_dec[2], ram_outs[2]);
+    ram8b8w$ u_tag_ram3 (A[2:0], {dirty,tag}, OE, a_wr_dec[3], ram_outs[3]);
 
     mux4_8$ dout_mux (DOUT[7:0],ram_outs[0],ram_outs[1],ram_outs[2],ram_outs[3],A[3],A[4]);
 
@@ -335,7 +327,7 @@ module  gen_ctrl(input [15:0] current_state,
    wire WRMISS = current_state[7];
    wire WREVICT = current_state[8];
 
-   nor3$(OE, RDHIT, WREVICT, RDEVICT);
+   nor3$ OE_ctrl(OE, RDHIT, WREVICT, RDEVICT);
  
    or3$ WR_or(D_WR, RDMISS, WRHIT, WRMISS);
    or2$ bus_wr_out(BUS_WR, RDEVICT, WREVICT);
