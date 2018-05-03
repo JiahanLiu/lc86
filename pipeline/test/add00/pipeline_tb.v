@@ -1,7 +1,10 @@
 `timescale 1ns/1ps
 `define EOF = 32'hFFFF_FFFF
 `define NULL 0
-`define default_mem_Value 32'h12
+`define default_mem_Value64 64'h1234_5678_90AB_CDEF
+`define default_mem_Value32 32'h90AB_CDEF
+`define default_mem_Value16 16'hCDEF
+`define default_mem_Value8 8'hEF
 
 `define assert(signal, value) \
         if (signal !== value) begin \
@@ -194,6 +197,8 @@ module TOP;
         u_pipeline.u_register_file.eflags.Q = 32'h01;
         u_pipeline.u_writeback.u_flags_wb.u_flags_register.Q = 32'h01; //internal flags register
         u_pipeline.u_writeback.u_flags_wb.overwrite_ld_flags = 1'b0;
+        u_pipeline.debug_memory = `default_mem_Value64;
+        
      end 
 
      initial begin

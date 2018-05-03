@@ -1088,6 +1088,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
     //*
     //*******************************************************************************//
 
+    reg [63:0] debug_memory; 
+
    memory_stage2 u_memory_stage2 (
         CLK, CLR, PRE, ME2_PS_V,
 
@@ -1108,7 +1110,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
         ME2_PS_D2_MEM_RD_ME, ME2_PS_D2_MEM_WR_WB, ME2_PS_D2_LD_GPR1_WB, ME2_PS_D2_LD_MM_WB,
 
-        DCACHE_DATA, //debug only
+        debug_memory, //debug only
         //LSU_OUT_RD_DATA,
         DCACHE_READY,
 
