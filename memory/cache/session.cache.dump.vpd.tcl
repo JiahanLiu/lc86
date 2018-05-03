@@ -1,18 +1,18 @@
 # Begin_DVE_Session_Save_Info
 # DVE full session
-# Saved on Thu Apr 26 16:06:14 2018
+# Saved on Thu May 3 00:19:39 2018
 # Designs open: 1
 #   V1: cache.dump.vpd
 # Toplevel windows open: 2
 # 	TopLevel.1
 # 	TopLevel.2
-#   Source.1: TOP.u_cache.gen_ctrl_u
-#   Wave.1: 43 signals
-#   Group count = 7
-#   Group Cache top signal count = 10
+#   Source.1: TOP.u_cache.tagstore_u
+#   Wave.1: 49 signals
+#   Group count = 8
+#   Group Cache top signal count = 12
 #   Group Cache State DFF signal count = 3
 #   Group Tagstore signal count = 6
-#   Group Gen_cntrl signal count = 8
+#   Group Gen_cntrl signal count = 9
 #   Group write_mask signal count = 4
 #   Group gen_n_state signal count = 7
 #   Group Data_u signal count = 5
@@ -74,7 +74,7 @@ if {![gui_exist_window -window TopLevel.1]} {
 } else { 
     set TopLevel.1 TopLevel.1
 }
-gui_show_window -window ${TopLevel.1} -show_state normal -rect {{237 159} {1478 996}}
+gui_show_window -window ${TopLevel.1} -show_state normal -rect {{237 191} {1477 1027}}
 
 # ToolBar settings
 gui_set_toolbar_attributes -toolbar {TimeOperations} -dock_state top
@@ -115,28 +115,28 @@ gui_hide_toolbar -toolbar {Testbench}
 # End ToolBar settings
 
 # Docked window settings
-set HSPane.1 [gui_create_window -type HSPane -parent ${TopLevel.1} -dock_state left -dock_on_new_line true -dock_extent 267]
+set HSPane.1 [gui_create_window -type HSPane -parent ${TopLevel.1} -dock_state left -dock_on_new_line true -dock_extent 266]
 catch { set Hier.1 [gui_share_window -id ${HSPane.1} -type Hier] }
-gui_set_window_pref_key -window ${HSPane.1} -key dock_width -value_type integer -value 267
+gui_set_window_pref_key -window ${HSPane.1} -key dock_width -value_type integer -value 266
 gui_set_window_pref_key -window ${HSPane.1} -key dock_height -value_type integer -value -1
 gui_set_window_pref_key -window ${HSPane.1} -key dock_offset -value_type integer -value 0
-gui_update_layout -id ${HSPane.1} {{left 0} {top 0} {width 266} {height 551} {dock_state left} {dock_on_new_line true} {child_hier_colhier 208} {child_hier_coltype 52} {child_hier_colpd 0} {child_hier_col1 0} {child_hier_col2 1} {child_hier_col3 -1}}
-set DLPane.1 [gui_create_window -type DLPane -parent ${TopLevel.1} -dock_state left -dock_on_new_line true -dock_extent 322]
+gui_update_layout -id ${HSPane.1} {{left 0} {top 0} {width 265} {height 551} {dock_state left} {dock_on_new_line true} {child_hier_colhier 208} {child_hier_coltype 52} {child_hier_colpd 0} {child_hier_col1 0} {child_hier_col2 1} {child_hier_col3 -1}}
+set DLPane.1 [gui_create_window -type DLPane -parent ${TopLevel.1} -dock_state left -dock_on_new_line true -dock_extent 321]
 catch { set Data.1 [gui_share_window -id ${DLPane.1} -type Data] }
-gui_set_window_pref_key -window ${DLPane.1} -key dock_width -value_type integer -value 322
+gui_set_window_pref_key -window ${DLPane.1} -key dock_width -value_type integer -value 321
 gui_set_window_pref_key -window ${DLPane.1} -key dock_height -value_type integer -value 555
 gui_set_window_pref_key -window ${DLPane.1} -key dock_offset -value_type integer -value 0
-gui_update_layout -id ${DLPane.1} {{left 0} {top 0} {width 321} {height 551} {dock_state left} {dock_on_new_line true} {child_data_colvariable 182} {child_data_colvalue 100} {child_data_coltype 56} {child_data_col1 0} {child_data_col2 1} {child_data_col3 2}}
-set Console.1 [gui_create_window -type Console -parent ${TopLevel.1} -dock_state bottom -dock_on_new_line true -dock_extent 176]
+gui_update_layout -id ${DLPane.1} {{left 0} {top 0} {width 320} {height 551} {dock_state left} {dock_on_new_line true} {child_data_colvariable 182} {child_data_colvalue 100} {child_data_coltype 56} {child_data_col1 0} {child_data_col2 1} {child_data_col3 2}}
+set Console.1 [gui_create_window -type Console -parent ${TopLevel.1} -dock_state bottom -dock_on_new_line true -dock_extent 179]
 gui_set_window_pref_key -window ${Console.1} -key dock_width -value_type integer -value -1
-gui_set_window_pref_key -window ${Console.1} -key dock_height -value_type integer -value 176
+gui_set_window_pref_key -window ${Console.1} -key dock_height -value_type integer -value 179
 gui_set_window_pref_key -window ${Console.1} -key dock_offset -value_type integer -value 0
-gui_update_layout -id ${Console.1} {{left 0} {top 0} {width 295} {height 179} {dock_state bottom} {dock_on_new_line true}}
-set DriverLoad.1 [gui_create_window -type DriverLoad -parent ${TopLevel.1} -dock_state bottom -dock_on_new_line false -dock_extent 180]
+gui_update_layout -id ${Console.1} {{left 0} {top 0} {width 295} {height 178} {dock_state bottom} {dock_on_new_line true}}
+set DriverLoad.1 [gui_create_window -type DriverLoad -parent ${TopLevel.1} -dock_state bottom -dock_on_new_line false -dock_extent 179]
 gui_set_window_pref_key -window ${DriverLoad.1} -key dock_width -value_type integer -value 150
-gui_set_window_pref_key -window ${DriverLoad.1} -key dock_height -value_type integer -value 180
+gui_set_window_pref_key -window ${DriverLoad.1} -key dock_height -value_type integer -value 179
 gui_set_window_pref_key -window ${DriverLoad.1} -key dock_offset -value_type integer -value 0
-gui_update_layout -id ${DriverLoad.1} {{left 0} {top 0} {width 945} {height 179} {dock_state bottom} {dock_on_new_line false}}
+gui_update_layout -id ${DriverLoad.1} {{left 0} {top 0} {width 944} {height 178} {dock_state bottom} {dock_on_new_line false}}
 #### Start - Readjusting docked view's offset / size
 set dockAreaList { top left right bottom }
 foreach dockArea $dockAreaList {
@@ -173,7 +173,7 @@ if {![gui_exist_window -window TopLevel.2]} {
 } else { 
     set TopLevel.2 TopLevel.2
 }
-gui_show_window -window ${TopLevel.2} -show_state normal -rect {{697 131} {1919 808}}
+gui_show_window -window ${TopLevel.2} -show_state normal -rect {{583 244} {1804 920}}
 
 # ToolBar settings
 gui_set_toolbar_attributes -toolbar {TimeOperations} -dock_state top
@@ -221,7 +221,7 @@ gui_sync_global -id ${TopLevel.2} -option true
 # MDI window settings
 set Wave.1 [gui_create_window -type {Wave}  -parent ${TopLevel.2}]
 gui_show_window -window ${Wave.1} -show_state maximized
-gui_update_layout -id ${Wave.1} {{show_state maximized} {dock_state undocked} {dock_on_new_line false} {child_wave_left 354} {child_wave_right 863} {child_wave_colname 108} {child_wave_colvalue 242} {child_wave_col1 0} {child_wave_col2 1}}
+gui_update_layout -id ${Wave.1} {{show_state maximized} {dock_state undocked} {dock_on_new_line false} {child_wave_left 354} {child_wave_right 862} {child_wave_colname 106} {child_wave_colvalue 244} {child_wave_col1 0} {child_wave_col2 1}}
 
 # End MDI window settings
 
@@ -263,52 +263,62 @@ gui_set_time_units 1ps
 gui_load_child_values {TOP.u_cache.gen_n_state_u}
 gui_load_child_values {TOP.u_cache}
 gui_load_child_values {TOP.u_cache.write_masker_u}
+gui_load_child_values {TOP.u_cache.equalitycheck_u}
+gui_load_child_values {TOP.u_cache.gen_ctrl_u}
 gui_load_child_values {TOP.u_cache.tagstore_u}
 gui_load_child_values {TOP.u_cache.data_u}
 gui_load_child_values {TOP.u_cache.state}
+gui_load_child_values {TOP}
 
 
-set _session_group_18 {Cache top}
-gui_sg_create "$_session_group_18"
-set {Cache top} "$_session_group_18"
-
-gui_sg_addsignal -group "$_session_group_18" { TOP.u_cache.CLK TOP.u_cache.SET TOP.u_cache.RST TOP.u_cache.data_write TOP.u_cache.RW TOP.u_cache.enable TOP.u_cache.address TOP.u_cache.size TOP.u_cache.data_read TOP.u_cache.ready }
-
-set _session_group_19 {Cache State DFF}
-gui_sg_create "$_session_group_19"
-set {Cache State DFF} "$_session_group_19"
-
-gui_sg_addsignal -group "$_session_group_19" { TOP.u_cache.state.Q TOP.u_cache.state.CLK TOP.u_cache.state.D }
-
-set _session_group_20 Tagstore
-gui_sg_create "$_session_group_20"
-set Tagstore "$_session_group_20"
-
-gui_sg_addsignal -group "$_session_group_20" { TOP.u_cache.tagstore_u.A TOP.u_cache.tagstore_u.valid TOP.u_cache.tagstore_u.dirty TOP.u_cache.tagstore_u.tag TOP.u_cache.tagstore_u.OE TOP.u_cache.tagstore_u.WR }
-
-set _session_group_21 Gen_cntrl
-gui_sg_create "$_session_group_21"
-set Gen_cntrl "$_session_group_21"
-
-gui_sg_addsignal -group "$_session_group_21" { TOP.u_cache.gen_ctrl_u.current_state TOP.u_cache.gen_ctrl_u.OE TOP.u_cache.gen_ctrl_u.D_WR TOP.u_cache.gen_ctrl_u.BUS_WR TOP.u_cache.gen_ctrl_u.BUS_EN TOP.u_cache.gen_ctrl_u.TS_WR TOP.u_cache.gen_ctrl_u.R TOP.u_cache.gen_ctrl_u.D_MUX }
-
-set _session_group_22 write_mask
-gui_sg_create "$_session_group_22"
-set write_mask "$_session_group_22"
-
-gui_sg_addsignal -group "$_session_group_22" { TOP.u_cache.write_masker_u.DC_WR TOP.u_cache.write_masker_u.CACHE_WR TOP.u_cache.write_masker_u.size TOP.u_cache.write_masker_u.address }
-
-set _session_group_23 gen_n_state
-gui_sg_create "$_session_group_23"
-set gen_n_state "$_session_group_23"
-
-gui_sg_addsignal -group "$_session_group_23" { TOP.u_cache.gen_n_state_u.next_state TOP.u_cache.gen_n_state_u.current_state TOP.u_cache.gen_n_state_u.enable TOP.u_cache.gen_n_state_u.RW TOP.u_cache.gen_n_state_u.HIT TOP.u_cache.gen_n_state_u.BUS_R TOP.u_cache.gen_n_state_u.EV }
-
-set _session_group_24 Data_u
+set _session_group_24 {Cache top}
 gui_sg_create "$_session_group_24"
-set Data_u "$_session_group_24"
+set {Cache top} "$_session_group_24"
 
-gui_sg_addsignal -group "$_session_group_24" { TOP.u_cache.data_u.A TOP.u_cache.data_u.DIN TOP.u_cache.data_u.OE TOP.u_cache.data_u.WR TOP.u_cache.data_u.DOUT }
+gui_sg_addsignal -group "$_session_group_24" { TOP.u_cache.CLK TOP.u_cache.SET TOP.u_cache.RST TOP.u_cache.data_write TOP.u_cache.RW TOP.u_cache.enable TOP.u_cache.address TOP.u_cache.size TOP.u_cache.data_read TOP.u_cache.ready TOP.cache_line TOP.tag }
+
+set _session_group_25 {Cache State DFF}
+gui_sg_create "$_session_group_25"
+set {Cache State DFF} "$_session_group_25"
+
+gui_sg_addsignal -group "$_session_group_25" { TOP.u_cache.state.Q TOP.u_cache.state.CLK TOP.u_cache.state.D }
+
+set _session_group_26 Tagstore
+gui_sg_create "$_session_group_26"
+set Tagstore "$_session_group_26"
+
+gui_sg_addsignal -group "$_session_group_26" { TOP.u_cache.tagstore_u.A TOP.u_cache.tagstore_u.valid TOP.u_cache.tagstore_u.dirty TOP.u_cache.tagstore_u.tag TOP.u_cache.tagstore_u.OE TOP.u_cache.tagstore_u.WR }
+
+set _session_group_27 Gen_cntrl
+gui_sg_create "$_session_group_27"
+set Gen_cntrl "$_session_group_27"
+
+gui_sg_addsignal -group "$_session_group_27" { TOP.u_cache.gen_ctrl_u.current_state TOP.u_cache.gen_ctrl_u.OE TOP.u_cache.gen_ctrl_u.D_WR TOP.u_cache.gen_ctrl_u.BUS_WR TOP.u_cache.gen_ctrl_u.BUS_EN TOP.u_cache.gen_ctrl_u.TS_WR TOP.u_cache.gen_ctrl_u.R TOP.u_cache.gen_ctrl_u.D_MUX }
+
+set _session_group_28 $_session_group_27|
+append _session_group_28 equalitycheck_u
+gui_sg_create "$_session_group_28"
+set Gen_cntrl|equalitycheck_u "$_session_group_28"
+
+gui_sg_addsignal -group "$_session_group_28" { TOP.u_cache.equalitycheck_u.HIT TOP.u_cache.equalitycheck_u.A TOP.u_cache.equalitycheck_u.B TOP.u_cache.tagstore_u.out11r }
+
+set _session_group_29 write_mask
+gui_sg_create "$_session_group_29"
+set write_mask "$_session_group_29"
+
+gui_sg_addsignal -group "$_session_group_29" { TOP.u_cache.write_masker_u.DC_WR TOP.u_cache.write_masker_u.CACHE_WR TOP.u_cache.write_masker_u.size TOP.u_cache.write_masker_u.address }
+
+set _session_group_30 gen_n_state
+gui_sg_create "$_session_group_30"
+set gen_n_state "$_session_group_30"
+
+gui_sg_addsignal -group "$_session_group_30" { TOP.u_cache.gen_n_state_u.next_state TOP.u_cache.gen_n_state_u.current_state TOP.u_cache.gen_n_state_u.enable TOP.u_cache.gen_n_state_u.RW TOP.u_cache.gen_n_state_u.HIT TOP.u_cache.gen_n_state_u.BUS_R TOP.u_cache.gen_n_state_u.EV }
+
+set _session_group_31 Data_u
+gui_sg_create "$_session_group_31"
+set Data_u "$_session_group_31"
+
+gui_sg_addsignal -group "$_session_group_31" { TOP.u_cache.data_u.A TOP.u_cache.data_u.DIN TOP.u_cache.data_u.OE TOP.u_cache.data_u.WR TOP.u_cache.data_u.DOUT }
 
 # Global: Highlighting
 
@@ -318,7 +328,7 @@ gui_change_stack_mode -mode list
 # Post database loading setting...
 
 # Restore C1 time
-gui_set_time -C1_only 147000
+gui_set_time -C1_only 736342
 
 
 
@@ -343,28 +353,30 @@ gui_list_set_filter -id ${Hier.1} -list { {Package 1} {All 0} {Process 1} {VirtP
 gui_list_set_filter -id ${Hier.1} -text {*}
 gui_hier_list_init -id ${Hier.1}
 gui_change_design -id ${Hier.1} -design V1
-catch {gui_list_expand -id ${Hier.1} TOP}
-catch {gui_list_expand -id ${Hier.1} TOP.u_cache}
-catch {gui_list_select -id ${Hier.1} {TOP.u_cache.data_u}}
+catch {gui_list_select -id ${Hier.1} {TOP}}
 gui_view_scroll -id ${Hier.1} -vertical -set 0
 gui_view_scroll -id ${Hier.1} -horizontal -set 0
 
 # Data 'Data.1'
 gui_list_set_filter -id ${Data.1} -list { {Buffer 1} {Input 1} {Others 1} {Linkage 1} {Output 1} {LowPower 1} {Parameter 1} {All 1} {Aggregate 1} {LibBaseMember 1} {Event 1} {Assertion 1} {Constant 1} {Interface 1} {BaseMembers 1} {Signal 1} {$unit 1} {Inout 1} {Variable 1} }
 gui_list_set_filter -id ${Data.1} -text {*}
-gui_list_show_data -id ${Data.1} {TOP.u_cache.data_u}
+gui_list_show_data -id ${Data.1} {TOP}
 gui_show_window -window ${Data.1}
-catch { gui_list_select -id ${Data.1} {TOP.u_cache.data_u.A TOP.u_cache.data_u.DIN TOP.u_cache.data_u.OE TOP.u_cache.data_u.WR TOP.u_cache.data_u.DOUT }}
-gui_view_scroll -id ${Data.1} -vertical -set 0
+catch { gui_list_select -id ${Data.1} {TOP.tag }}
+gui_view_scroll -id ${Data.1} -vertical -set 380
 gui_view_scroll -id ${Data.1} -horizontal -set 0
 gui_view_scroll -id ${Hier.1} -vertical -set 0
 gui_view_scroll -id ${Hier.1} -horizontal -set 0
 
+# DriverLoad 'DriverLoad.1'
+gui_get_drivers -session -id ${DriverLoad.1} -signal TOP.u_cache.gen_ctrl_u.BUS_EN -time 150820 -starttime 235765
+gui_get_drivers -session -id ${DriverLoad.1} -signal TOP.u_cache.tagstore_u.dirty -time 712320 -starttime 715320
+
 # Source 'Source.1'
 gui_src_value_annotate -id ${Source.1} -switch false
 gui_set_env TOGGLE::VALUEANNOTATE 0
-gui_open_source -id ${Source.1}  -replace -active TOP.u_cache.gen_ctrl_u cache.v
-gui_view_scroll -id ${Source.1} -vertical -set 1440
+gui_open_source -id ${Source.1}  -replace -active TOP.u_cache.tagstore_u cache.v
+gui_view_scroll -id ${Source.1} -vertical -set 972
 gui_src_set_reusable -id ${Source.1}
 
 # View 'Wave.1'
@@ -375,16 +387,18 @@ set origWaveHeight [gui_get_pref_value -category Wave -key waveRowHeight]
 gui_list_set_height -id Wave -height 25
 set origGroupCreationState [gui_list_create_group_when_add -wave]
 gui_list_create_group_when_add -wave -disable
-gui_marker_create -id ${Wave.1} C2 144000
+gui_marker_create -id ${Wave.1} C2 168820
 gui_marker_set_ref -id ${Wave.1}  C1
-gui_wv_zoom_timerange -id ${Wave.1} 0 528385
+gui_wv_zoom_timerange -id ${Wave.1} 498812 811312
 gui_list_add_group -id ${Wave.1} -after {New Group} {{Cache top}}
 gui_list_add_group -id ${Wave.1} -after {New Group} {{Cache State DFF}}
 gui_list_add_group -id ${Wave.1} -after {New Group} {Tagstore}
 gui_list_add_group -id ${Wave.1} -after {New Group} {Gen_cntrl}
+gui_list_add_group -id ${Wave.1}  -after Gen_cntrl {Gen_cntrl|equalitycheck_u}
 gui_list_add_group -id ${Wave.1} -after {New Group} {write_mask}
 gui_list_add_group -id ${Wave.1} -after {New Group} {gen_n_state}
 gui_list_add_group -id ${Wave.1} -after {New Group} {Data_u}
+gui_list_select -id ${Wave.1} {TOP.u_cache.tagstore_u.out11r }
 gui_seek_criteria -id ${Wave.1} {Any Edge}
 
 
@@ -400,14 +414,11 @@ if { $groupExD } {
 }
 gui_list_set_filter -id ${Wave.1} -list { {Buffer 1} {Input 1} {Others 1} {Linkage 1} {Output 1} {Parameter 1} {All 1} {Aggregate 1} {LibBaseMember 1} {Event 1} {Assertion 1} {Constant 1} {Interface 1} {BaseMembers 1} {Signal 1} {$unit 1} {Inout 1} {Variable 1} }
 gui_list_set_filter -id ${Wave.1} -text {*}
-gui_list_set_insertion_bar  -id ${Wave.1} -group Data_u  -item {TOP.u_cache.data_u.DOUT[127:0]} -position below
+gui_list_set_insertion_bar  -id ${Wave.1} -group {Cache top}  -item {TOP.tag[6:0]} -position below
 
-gui_marker_move -id ${Wave.1} {C1} 147000
-gui_view_scroll -id ${Wave.1} -vertical -set 820
+gui_marker_move -id ${Wave.1} {C1} 736342
+gui_view_scroll -id ${Wave.1} -vertical -set 375
 gui_show_grid -id ${Wave.1} -enable false
-
-# DriverLoad 'DriverLoad.1'
-gui_get_drivers -session -id ${DriverLoad.1} -signal TOP.u_cache.gen_ctrl_u.BUS_EN -time 150820 -starttime 235765
 # Restore toplevel window zorder
 # The toplevel window could be closed if it has no view/pane
 if {[gui_exist_window -window ${TopLevel.1}]} {
