@@ -52,7 +52,18 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire WB_stall;
     //Dataforwarded, currently for daa
     wire [31:0] flags_dataforwarded, count_dataforwarded;
-   
+
+   wire WB_EXC_V_OUT;
+   wire WB_FLUSH_PIPELINE_BAR;
+   wire INTERRUPT_SIGNAL; // TODO where does it come from
+ 
+   wire WB_GEN_PROT_EXC_EXIST_V, WB_PAGE_FAULT_EXC_EXIST_V;
+
+   // Dependency check outputs from stages
+   wire AG_DEP_STALL_OUT;
+   wire ME_MEM_DEP_STALL_OUT;
+   //==================================
+ 
 //*******REGISTER FILE*******//
    wire RST;
    wire [15:0] SEG_DIN;
@@ -171,7 +182,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire 	 LSU_OUT_DCACHE_EN;
    wire [63:0] 	 LSU_OUT_DCACHE_WR_DATA_IN;
 
-   wire 	 LSU_OUT_RD_STALL, LSU_OUT_WR_STALL;
+   wire 	 LSU_OUT_RD_STALL, LSU_OUT_WR_STALL, LSU_OUT_WR_STALL_BAR;
    wire [63:0] 	 LSU_OUT_RD_DATA;
    
    wire WB_V_LSU_IN;
@@ -192,6 +203,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
    wire v_mem_rd_lsu_in;
    and2$ and_v_mem_rd_lsu_in (v_mem_rd_lsu_in, ME2_V_LSU_IN, ME2_MEM_RD_LSU_IN);
+
+   inv1$ inv_lsu_wr_stall (LSU_OUT_WR_STALL_BAR, LSU_OUT_WR_STALL);
 
 //   lsu_controller u_lsu_controller (CLK, RST, 1'b1, V_MEM_RD, {rd_addr1_entry[23:4], LA_RD_ADDR[11:0]}, mux_rd_cross_size_out, rd_addr1_v, mux_rd_addr2_out, rd_addr2_cross_size, rd_addr2_v, V_MEM_WR, {wr_addr1_entry[23:4], LA_WR_ADDR[11:0]}, mux_wr_cross_size_out, wr_addr1_v, mux_wr_addr2_out, wr_addr2_cross_size, wr_addr2_v, WR_DATA, DCACHE_RD_DATA, DCACHE_READY, DCACHE_ADDR_OUT, DCACHE_SIZE_OUT, DCACHE_RW_OUT, dcache_en, DCACHE_WR_DATA_OUT, dcache_rd_stall, DCACHE_WR_STALL_OUT, RD_DATA_OUT);
    
@@ -226,7 +239,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire [3:0] DE_IMM_SEL_IN;
     wire [7:0] DE_MODRM_IN, DE_SIB_IN;
     wire [15:0] DE_OPCODE_IN;
-    // Placeholder for now
+    // Placeholder for now TODO: add selection for EIP when
+    // interrupt/exceptions exist
     wire [15:0] DE_CS_IN = 16'h1A;
     wire [31:0] DE_EIP_IN = 32'h01;
     wire [31:0] DE_EIP_OUT, DE_EIP_OUT_BAR;
@@ -276,10 +290,16 @@ module PIPELINE(CLK, CLR, PRE, IR);
     //    IR_OUT,
     //); 
 
+    wire INT_EXIST_DE_IN;
+    or2$ or_de_exc_v (INT_EXIST_DE_IN, WB_EXC_V_OUT, INTERRUPT_SIGNAL);
+
     decode_stage1 u_decode_stage1 (
         CLK, PRE, CLR,
-        IR, 1'b0,
+        IR,
+        // interrupt enable inputs
+        INT_EXIST_DE_IN,
 
+        // outputs
         IR_IN,
         DE_INSTR_LENGTH_UPDT_IN,
         DE_OPCODE_IN,
@@ -299,28 +319,38 @@ module PIPELINE(CLK, CLR, PRE, IR);
         DE_CONTROL_STORE_ADDRESS_IN
     );
 
+   wire DE_V_IN, LD_D2;
+   wire AG_STALL_OUT_LD_D2_IN;
+   wire D2_UOP_STALL_OUT, D2_UOP_STALL_OUT_BAR;
+   assign DE_V_IN = 1'b1;
+   // DE_V_IN = !FETCH_STALL && !D2_EXC_EN_OUT && !AG_EXC_EN_OUT &&
+   // !AG2_EXC_EN_OUT && ! ME_EXC_EN_OUT && !ME2_EXC_EN_OUT  && !EX_EXC_EN_OUT
+   // TODO LD_D2 = !REG_DEP_STALL && ! MEM_DEP_STALL && !MEM_RD_STALL && !MEM_WR_STALL && !UOP_STALL
+   // wire LD_D2 = 1'b1;
+   inv1$ inv_uop_stall (D2_UOP_STALL_OUT_BAR, D2_UOP_STALL_OUT);
+   and2$ and_ld_d2_stall (LD_D2, AG_STALL_OUT_LD_D2_IN, D2_UOP_STALL_OUT_BAR);
 
    // Latches between fetch and decode
    wire [31:0] DE_V_OUT_T, DE_V_OUT_T_BAR, DE_OP_CS_OUT_T, DE_OP_CS_OUT_T_BAR, MOD_SIB_OUT, MOD_SIB_OUT_BAR;	//temp wires
    wire [127:0] IR_OUT, IR_BAR_OUT;
-   wire DE_V_IN;
-   reg32e$ MOD_SIB(CLK, {16'b0, DE_MODRM_IN, DE_SIB_IN}, MOD_SIB_OUT, MOD_SIB_OUT_BAR, CLR, PRE, EN);
-   reg32e$ IR_3(CLK, IR_IN[127:96], IR_OUT[127:96], IR_BAR_OUT[127:96], CLR, PRE, EN);
-   reg32e$ IR_2(CLK, IR_IN[95:64], IR_OUT[95:64], IR_BAR_OUT[95:64], CLR, PRE, EN);
-   reg32e$ IR_1(CLK, IR_IN[63:32], IR_OUT[63:32], IR_BAR_OUT[63:32], CLR, PRE, EN);
-   reg32e$ IR_0(CLK, IR_IN[31:0], IR_OUT[31:0], IR_BAR_OUT[31:0], CLR, PRE, EN);
-   reg32e$ DE_EIP(CLK, DE_EIP_IN, DE_EIP_OUT, DE_EIP_OUT_BAR, CLR, PRE, EN);
+   reg32e$ MOD_SIB(CLK, {16'b0, DE_MODRM_IN, DE_SIB_IN}, MOD_SIB_OUT, MOD_SIB_OUT_BAR, CLR, PRE, LD_D2);
+   reg32e$ IR_3(CLK, IR_IN[127:96], IR_OUT[127:96], IR_BAR_OUT[127:96], CLR, PRE, LD_D2);
+   reg32e$ IR_2(CLK, IR_IN[95:64], IR_OUT[95:64], IR_BAR_OUT[95:64], CLR, PRE, LD_D2);
+   reg32e$ IR_1(CLK, IR_IN[63:32], IR_OUT[63:32], IR_BAR_OUT[63:32], CLR, PRE, LD_D2);
+   reg32e$ IR_0(CLK, IR_IN[31:0], IR_OUT[31:0], IR_BAR_OUT[31:0], CLR, PRE, LD_D2);
+   reg32e$ DE_EIP(CLK, DE_EIP_IN, DE_EIP_OUT, DE_EIP_OUT_BAR, CLR, PRE, LD_D2);
    reg32e$ DE_V(CLK, {1'b0, DE_DISP_PRES_IN, DE_DISP_SIZE_IN, DE_OFFSET_PRES_IN, DE_OP_SIZE_IN, DE_PRE_PRES_IN, 
                 DE_SEG_OVR_IN, DE_OP_OVR_IN, DE_RE_PRE_IN, DE_MODRM_PRES_IN, DE_IMM_PRES_IN, DE_SIB_PRES_IN, 
                 DE_IMM_SEL_IN, DE_DISP_SEL_IN, DE_SEGID_IN, DE_MODRM_SEL_IN, DE_IMM_SIZE_IN, DE_OFFSET_SIZE_IN, 
-                DE_PRE_SIZE_IN, DE_V_IN}, DE_V_OUT_T, DE_V_OUT_T_BAR, CLR, PRE, EN);	//used for various values 
+                DE_PRE_SIZE_IN, DE_V_IN}, DE_V_OUT_T, DE_V_OUT_T_BAR, CLR, PRE, LD_D2);	//used for various values 
 
-   reg32e$ DE_OP_CS(CLK, {DE_OPCODE_IN, DE_CS_IN}, DE_OP_CS_OUT_T, DE_OP_CS_OUT_T_BAR, CLR, PRE, EN); 
-   reg32e$ INSTR_LENGTH (CLK, {28'b0, DE_INSTR_LENGTH_UPDT_IN}, DE_INSTR_LENGTH_UPDT_OUT_T, ,CLR, PRE, EN);
-   reg32e$ DE_CNTRL_ADDR (CLK, {24'b0, DE_CONTROL_STORE_ADDRESS_IN}, DE_CONTROL_STORE_ADDRESS_OUT, , CLR, PRE, EN);
+   reg32e$ DE_OP_CS(CLK, {DE_OPCODE_IN, DE_CS_IN}, DE_OP_CS_OUT_T, DE_OP_CS_OUT_T_BAR, CLR, PRE, LD_D2); 
+   reg32e$ INSTR_LENGTH (CLK, {28'b0, DE_INSTR_LENGTH_UPDT_IN}, DE_INSTR_LENGTH_UPDT_OUT_T, ,CLR, PRE, LD_D2);
+   reg32e$ DE_CNTRL_ADDR (CLK, {24'b0, DE_CONTROL_STORE_ADDRESS_IN}, DE_CONTROL_STORE_ADDRESS_OUT, , CLR, PRE, LD_D2);
 
+ 
    assign DE_CONTROL_STORE_ADDRESS = DE_CONTROL_STORE_ADDRESS_OUT[7:0];
-   wire DE_V_OUT = DE_V_OUT_T[0];
+   wire D2_V = DE_V_OUT_T[0];
    wire [1:0] DE_PRE_SIZE_OUT = DE_V_OUT_T[2:1];
    wire [1:0] DE_OFFSET_SIZE_OUT = DE_V_OUT_T[4:3];
    wire [1:0] DE_IMM_SIZE_OUT = DE_V_OUT_T[6:5];
@@ -369,8 +399,13 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire D2_PAGE_FAULT_EXC_EXIST_OUT;
    wire D2_NMI_INT_EN_OUT, D2_GEN_PROT_EXC_EN_OUT, D2_PAGE_FAULT_EXC_EN_OUT;
    wire D2_REPNE_WB_OUT;
-   
-    // Assigned 1 for now - placeholder
+
+   // save interrupt status
+   wire [31:0] D2_PS_SAVE_INT_STATUS;
+   reg32e$ d2_save_int_status (CLK, {29'b0, INTERRUPT_SIGNAL, WB_GEN_PROT_EXC_EXIST_V, WB_PAGE_FAULT_EXC_EXIST_V}, D2_PS_SAVE_INT_STATUS, , CLR, PRE, LD_D2);
+
+   wire D2_PS_NMI_INT_EN, D2_PS_GEN_PROT_EXC_EN, D2_PS_PAGE_FAULT_EXC_EN;
+   assign {D2_PS_NMI_INT_EN, D2_PS_GEN_PROT_EXC_EN, D2_PS_PAGE_FAULT_EXC_EN} = D2_PS_SAVE_INT_STATUS[2:0];
 
 //    wire [2:0] AG_DRID1, AG_DRID2;
 //    wire V_AG_LD_GPR1, V_AG_LD_GPR2, V_AG_LD_SEG, V_AG_LD_CSEG, V_AG_LD_MM;
@@ -381,7 +416,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
    
 //*******DECODE STAGE 2*******//
    decode_stage2 u_decode_stage2(
-      CLK, PRE, CLR, 1'b1,
+      CLK, PRE, CLR,
+      D2_V,
       IR_OUT, 
       DE_EIP_OUT,
       DE_CS_OUT,
@@ -400,7 +436,9 @@ module PIPELINE(CLK, CLR, PRE, IR);
       DE_OFFSET_SIZE_OUT,
       DE_SEGID_OUT,
       DE_MODRM_OUT, DE_SIB_OUT,
-      DE_CONTROL_STORE_ADDRESS, 1'b0, 1'b0, 1'b0,
+      DE_CONTROL_STORE_ADDRESS,
+
+      D2_PS_NMI_INT_EN, D2_PS_GEN_PROT_EXC_EN, D2_PS_PAGE_FAULT_EXC_EN,
 
       D2_EIP_OUT, 
       D2_CS_OUT,
@@ -426,7 +464,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
       D2_PAGE_FAULT_EXC_EXIST_OUT,
       D2_NMI_INT_EN_OUT, D2_GEN_PROT_EXC_EN_OUT, D2_PAGE_FAULT_EXC_EN_OUT,
-      D2_REPNE_WB_OUT, 
+      D2_REPNE_WB_OUT, D2_UOP_STALL_OUT
    );
 
    wire [31:0] AG_PS_EIP;
@@ -504,7 +542,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
    wire        AG_D2_MEM_RD_ME_OUT, AG_D2_MEM_WR_WB_OUT;
    wire        AG_D2_LD_GPR1_WB_OUT, AG_D2_LD_MM_WB_OUT;
-   wire        AG_DEP_STALL_OUT;
+   //wire        AG_DEP_STALL_OUT;
 
    wire        AG_PAGE_FAULT_EXC_EXIST_OUT;
    
@@ -513,7 +551,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
    wire D2_AG_V_OUT, AG_PS_V;
    // TODO AG_V = D2_V
-   assign D2_AG_V_OUT = 1'b1;
+   and2$ and_ag_v (D2_AG_V_OUT, D2_V, WB_FLUSH_PIPELINE_BAR);
+   // assign D2_AG_V_OUT = 1'b1;
 
    wire LD_AG;
    wire AG2_PS_V_OUT_AG_IN, ME_PS_V_OUT_AG_IN, ME2_PS_V_OUT_AG_IN, EX_PS_V_OUT_AG_IN;
@@ -527,8 +566,9 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire [7:0] AG2_MM_SCOREBOARD_OUT, ME_MM_SCOREBOARD_OUT, ME2_MM_SCOREBOARD_OUT, EX_MM_SCOREBOARD_OUT;
 
    // LD_AG = !REG_DEP_STALL && !MEM_DEP_STALL && !MEM_RD_STALL && !MEM_WR_STALL
-   assign LD_AG = 1'b1;
-   //nor2$ nor_ld_ag (LD_AG, AG_DEP_STALL_OUT, 1'b0);
+   // assign LD_AG = 1'b1;
+   nor4$ nor_ld_ag (LD_AG, AG_DEP_STALL_OUT, ME_MEM_DEP_STALL_OUT, LSU_OUT_RD_STALL, LSU_OUT_WR_STALL);
+   assign AG_STALL_OUT_LD_D2_IN = LD_AG;
 
    reg32e$
       u_reg_ag_ps_eip (CLK, D2_EIP_OUT, AG_PS_EIP, , CLR, PRE, LD_AG),
@@ -700,13 +740,20 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire AG2_SEG_LIMIT_EXC_EXIST_OUT, AG2_PS_PAGE_FAULT_EXC_EXIST_OUT;
 
    // TODO AG2_V = !REG_DEP_STALL
-   wire ag_dep_stall_out_bar;
+   wire ag_dep_stall_out_bar, and_flush_ag2_v_out;
 
    inv1$ inv_dep_stall (ag_dep_stall_out_bar, AG_DEP_STALL_OUT);
-   and2$ and_ag_me_v (AG_AG2_V_OUT, AG_PS_V, ag_dep_stall_out_bar); 
+
+//   nor4$ nor_me_v (nor_me_v_out, WB_EXC_V_OUT, wb_repne_terminate_all, INTERRUPT_SIGNAL);
+   and2$ and_flush_ag2_v (and_flush_ag2_v_out, WB_FLUSH_PIPELINE_BAR, ag_dep_stall_out_bar);
+   and2$ and_ag2_v (AG_AG2_V_OUT, AG_PS_V, and_flush_ag2_v_out);
+
+   wire ME_STALL_OUT_LD_AG2_IN;
+//   and2$ and_ag2_v (AG_AG2_V_OUT, AG_PS_V, ag_dep_stall_out_bar); 
    // assign AG_AG2_V_OUT = 1'b1;
    // LD_AG2 = !MEM_DEP_STALL && !MEM_RD_STALL && !MEM_WR_STALL
-   assign LD_AG2 = 1'b1;
+   // assign LD_AG2 = 1'b1;
+   assign LD_AG2 = ME_STALL_OUT_LD_AG2_IN; 
 
    // FOR REG DEPENDENCY CHECKS
    wire [63:0] ag2_ps_save_sb, AG2_PS_SCOREBOARDS;
@@ -834,17 +881,22 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire [31:0] ME_RA_RD_ADDR1_OUT, ME_RA_RD_ADDR2_OUT, ME_RA_WR_ADDR1_OUT, ME_RA_WR_ADDR2_OUT;
    wire [3:0]  ME_RA_RD_SIZE1_OUT, ME_RA_RD_SIZE2_OUT, ME_RA_WR_SIZE1_OUT, ME_RA_WR_SIZE2_OUT;
 
-   wire ME_PAGE_FAULT_EXC_OUT, ME_GPROT_EXC_OUT, ME_MEM_DEP_STALL_OUT;
+   wire ME_PAGE_FAULT_EXC_OUT, ME_GPROT_EXC_OUT; //ME_MEM_DEP_STALL_OUT;
    
    wire [31:0] AG2_OUT1_ME_PS, ME_PS_IN1;
 
    wire LD_ME, AG2_ME_V_OUT;
 
+//   nor4$ nor_me_v (nor_me_v_out, WB_EXC_V_OUT, wb_repne_terminate_all, INTERRUPT_SIGNAL);
+   and2$ and_me_v (AG2_ME_V_OUT, AG2_PS_V, WB_FLUSH_PIPELINE_BAR);
+   // assign AG2_ME_V_OUT = AG2_ME_V_OUT;
+
    // LD_ME = !ME_MEM_DEP_STALL_OUT && !ME2_STALL && !WB_STALL
    // TODO ME_V = AG2_V
-   assign LD_ME = 1'b1;
-   assign AG2_ME_V_OUT = AG2_PS_V;
-   
+   // assign LD_ME = 1'b1;
+   nor3$ nor_ld_me (LD_ME, LSU_OUT_RD_STALL, LSU_OUT_WR_STALL, ME_MEM_DEP_STALL_OUT);
+   assign ME_STALL_OUT_LD_AG2_IN = LD_ME;
+
    wire [63:0] me_ps_save_sb, ME_PS_SCOREBOARDS;
    assign me_ps_save_sb[63:26] = { AG2_GPR_SCOREBOARD_OUT, AG2_SEG_SCOREBOARD_OUT, AG2_MM_SCOREBOARD_OUT };
    assign { ME_GPR_SCOREBOARD_OUT, ME_SEG_SCOREBOARD_OUT, ME_MM_SCOREBOARD_OUT } = ME_PS_SCOREBOARDS[63:26];
@@ -976,14 +1028,17 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire [31:0] ME_OUT1_ME2_PS, ME2_PS_IN1;
 
    wire LD_ME2, ME_ME2_V_OUT;
-   wire me_mem_dep_stall_out_bar;
+   wire nor_me2_v_out;
+//   wire me_mem_dep_stall_out_bar;
 
-   inv1$ inv_me2_dep_stall (me_mem_dep_stall_out_bar, ME_MEM_DEP_STALL_OUT);
-   and2$ and_me_me2_v (ME_ME2_V_OUT, ME_PS_V, me_mem_dep_stall_out_bar);
+   nor4$ nor_me2_v (nor_me2_v_out, WB_EXC_V_OUT, wb_repne_terminate_all, INTERRUPT_SIGNAL, ME_MEM_DEP_STALL_OUT);
+//   inv1$ inv_me2_dep_stall (me_mem_dep_stall_out_bar, ME_MEM_DEP_STALL_OUT);
+   and2$ and_me_me2_v (ME_ME2_V_OUT, ME_PS_V, nor_me2_v_out);
 
    // LD_ME2 = !ME2_STALL && !WB_STALL
    // TODO
-   assign LD_ME2 = 1'b1;
+   //assign LD_ME2 = 1'b1;
+   nor2$ nor_ld_me2 (LD_ME2, LSU_OUT_RD_STALL, LSU_OUT_WR_STALL);
 
    //= FOR DEPENDENCY CHECKS =======//
    wire [63:0] me2_ps_save_sb, ME2_PS_SCOREBOARDS;
@@ -1145,7 +1200,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
    // FOR DEPENDENCY CHECKS Nelson added
    // LD_EX = !MEM_WR_STALL
    wire LD_EX;
-   assign LD_EX = 1'b1;
+   //assign LD_EX = 1'b1;
+   assign LD_EX = LSU_OUT_WR_STALL_BAR;
 
    wire [63:0] ex_ps_save_sb, EX_PS_SCOREBOARDS;
    assign ex_ps_save_sb[63:26] = { ME2_GPR_SCOREBOARD_OUT, ME2_SEG_SCOREBOARD_OUT, ME2_MM_SCOREBOARD_OUT };
@@ -1180,13 +1236,23 @@ module PIPELINE(CLK, CLR, PRE, IR);
    assign EX_WR_ADDR2_V_ME_IN = EX_PS_WR_ADDR2_V;
    assign EX_WR_ADDR2_ME_IN = EX_PS_RA_WR_ADDR2;
    assign EX_WR_SIZE2_ME_IN = EX_PS_RA_WR_SIZE2;
+
+   wire EX_V_next; // TODO
+   wire [31:0] EX_V_out; 
+
+   wire nor_ex_v_out;
+   nor4$ nor_ex_v (nor_ex_v_out, WB_EXC_V_OUT, wb_repne_terminate_all, INTERRUPT_SIGNAL, LSU_OUT_RD_STALL);
+   and2$ and_ex_v (EX_V_next, ME2_PS_V, nor_ex_v_out);
+   reg32e$ u_EX_v_latch(CLK, {{31{1'b0}}, EX_V_next}, EX_V_out, ,CLR,PRE,LD_EX); 
+   assign EX_V = EX_V_out[0]; 
+    
    //=============================
    
    // EX_V_next = ME2_PS_V && !MEM_RD_STALL
-    wire EX_V_next = 1'b1; // TODO
-    wire [31:0] EX_V_out; 
-    reg32e$ u_EX_v_latch(CLK, {{31{1'b0}}, EX_V_next}, EX_V_out, ,CLR,PRE,LD_EX); 
-    assign EX_V = EX_V_out[0]; 
+//    wire EX_V_next = 1'b1; // TODO
+//    wire [31:0] EX_V_out; 
+//    reg32e$ u_EX_v_latch(CLK, {{31{1'b0}}, EX_V_next}, EX_V_out, ,CLR,PRE,LD_EX); 
+//    assign EX_V = EX_V_out[0]; 
 
     // reg dependency checks
     assign EX_PS_V_OUT_AG_IN = EX_V;
@@ -1360,8 +1426,9 @@ module PIPELINE(CLK, CLR, PRE, IR);
    // ADDRESSES FOR WRITING BACK TO MEMORY -- Nelson added
    // TODO: LD_WB = !MEM_WR_STALL
    wire LD_WB;
-   assign LD_WB = 1'b1;
-   
+   //assign LD_WB = 1'b1;
+   assign LD_WB = LSU_OUT_WR_STALL_BAR;
+
    wire [63:0] wb_ps_save_wr_ra, WB_PS_WR_RA;
    wire [31:0] WB_PS_RA_WR_ADDR1, WB_PS_RA_WR_ADDR2;
    
@@ -1373,12 +1440,15 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire [31:0] wb_ps_save_mem, WB_PS_SAVE_MEM;
    wire WB_PS_WR_ADDR1_V, WB_PS_WR_ADDR2_V;
    wire [3:0] WB_PS_RA_WR_SIZE1, WB_PS_RA_WR_SIZE2;
-   wire WB_PS_PAGE_FAULT_WBC, WB_PS_GPROT_WBC;
+   wire WB_PS_PAGE_FAULT_EXC, WB_PS_GPROT_EXC;
    assign wb_ps_save_mem[31:20] = {EX_PS_WR_ADDR1_V, EX_PS_RA_WR_SIZE1, EX_PS_WR_ADDR2_V, EX_PS_RA_WR_SIZE2,
                                    EX_PS_PAGE_FAULT_EXC, EX_PS_GPROT_EXC};
    assign {WB_PS_WR_ADDR1_V, WB_PS_RA_WR_SIZE1, WB_PS_WR_ADDR2_V, WB_PS_RA_WR_SIZE2,
            WB_PS_PAGE_FAULT_EXC, WB_PS_GPROT_EXC} = WB_PS_SAVE_MEM[31:20];
    
+   and2$ and_wb_gen_prot_exc_exist (WB_GEN_PROT_EXC_EXIST_V, WB_V, WB_PS_GPROT_EXC);
+   and2$ and_wb_page_fault_exc_exist (WB_PAGE_FAULT_EXC_EXIST_V, WB_V, WB_PS_PAGE_FAULT_EXC);
+
    reg32e$ u_reg_wb_ps_save_mem (CLK, wb_ps_save_mem, WB_PS_SAVE_MEM, , CLR, PRE, LD_WB);
 
    assign WB_V_LSU_IN = WB_V;
@@ -1388,13 +1458,28 @@ module PIPELINE(CLK, CLR, PRE, IR);
    assign WB_WR_ADDR2_V_LSU_IN = WB_PS_WR_ADDR2_V;
    assign WB_WR_ADDR2_LSU_IN = WB_PS_RA_WR_ADDR2;
    assign WB_WR_SIZE2_LSU_IN = WB_PS_RA_WR_SIZE2;
+
+   wire or_wb_exc_out, and_wb_exc_v_out, nor_wb_v_out;
+   wire EX_OUT_WB_V_IN;
+
+   // wb_repne_terminate_all = WB_V && termination_conditions && IS_SECOND_UOP && wb_repne
+   or2$ or_wb_exc (or_wb_exc_out, WB_PS_PAGE_FAULT_EXC, WB_PS_GPROT_EXC);
+   and2$ and_wb_ints_v (and_wb_exc_v_out, WB_V, or_wb_exc_out);
+   nor3$ nor_wb_v (nor_wb_v_out, and_wb_exc_v_out, wb_repne_terminate_all, INTERRUPT_SIGNAL);
+   and2$ and_wb_v (EX_OUT_WB_V_IN, EX_V, nor_wb_v_out);
+   assign WB_EXC_V_OUT = and_wb_exc_v_out;
+   assign WB_FLUSH_PIPELINE_BAR = nor_wb_v_out;
+
+   wire [31:0] WB_V_out;
+   reg32e$ u_WB_v_latch(CLK, {{31{1'b0}}, EX_OUT_WB_V_IN}, WB_V_out, , CLR, PRE, LD_WB); 
+   assign WB_V = WB_V_out[0]; 
    //========================================================
    
    // WB_V_next = EX_V
     //register between EX and WB
-    wire [31:0] WB_V_out;
-    reg32e$ u_WB_v_latch(CLK, {{31{1'b0}}, WB_V_next}, WB_V_out, ,CLR,PRE,LD_WB); 
-    assign WB_V = WB_V_out[0]; 
+//    wire [31:0] WB_V_out;
+//    reg32e$ u_WB_v_latch(CLK, {{31{1'b0}}, WB_V_next}, WB_V_out, ,CLR,PRE,LD_WB); 
+//    assign WB_V = WB_V_out[0]; 
 
     wire [31:0] WB_NEIP, WB_NEIP_NOT_TAKEN;
     reg32e$ u_WB_neip_latch(CLK, WB_NEIP_next, WB_NEIP, ,CLR,PRE,LD_WB);

@@ -1,5 +1,6 @@
 module decode_stage2 (
    input clk, set, reset,
+   input D2_V,
    input [127:0] IR, 
    input [31:0] EIP,
    input [15:0] CS,
@@ -19,6 +20,8 @@ module decode_stage2 (
    input [2:0] segID,
    input [7:0] modrm, sib,
    input [7:0] decode_address,
+
+   input NMI_INT_EN, GEN_PROT_EXC_EN, PAGE_FAULT_EXC_EN,
 
    output [31:0] EIP_OUT, 
    output [15:0] CS_OUT,
@@ -44,7 +47,7 @@ module decode_stage2 (
 
    output PAGE_FAULT_EXC_EXIST_OUT,
    output NMI_INT_EN_OUT, GEN_PROT_EXC_EN_OUT, PAGE_FAULT_EXC_EN_OUT,
-   output D2_REPNE_WB
+   output D2_REPNE_WB, D2_UOP_STALL_OUT
 );
 `include "./control_store/control_store_wires.v"
 `include "./control_store/control_store_signals.v"
@@ -102,11 +105,35 @@ module decode_stage2 (
 //           control_address = opcode[4:0];
 //   end
 
+    wire [31:0] Dnext_micro_addr, Qnext_micro_addr;
+    wire [7:0] next_micro_op_address;
+
+    assign Dnext_micro_addr = {25'b0, CS_NEXT_MICRO_ADDRESS_DE};
+    reg32e$ reg_save_next_uaddr (clk, Dnext_micro_addr, Qnext_micro_addr, , reset, set, 1'b1);
+    assign next_micro_op_address = {1'b0, Qnext_micro_addr[6:0]};
+
+    wire [31:0] Dsel_uop, Qsel_uop;
+    wire sel_uop;
+
+    assign Dsel_uop = {31'b0, CS_UOP_STALL_DE};
+    reg32e$ reg_save_sel_uop (clk, Dsel_uop, Qsel_uop, , reset, set, 1'b1);
+    //assign sel_uop = Qsel_uop[0];
+    assign sel_uop = 1'b0; //TODO temporary
+
     // Mux for choosing the control address, the sel signal needs to be
     // generated -TODO
     // mux4_8$ mux1_cntrl_addr (control_store_address, decode_address, interrupt_address, next_micro_op_address, sel0, sel1);
-    ucontrol_store u_ucontrol_store2 (.opcode(decode_address), .opcode_size(opcode_size), .control_signal(CONTROL_STORE[63:0]));
-    ucontrol_store u_ucontrol_store1 (.opcode(decode_address), .opcode_size(opcode_size), .control_signal(CONTROL_STORE[127:64]));
+    // ucontrol_store u_ucontrol_store2 (.opcode(decode_address), .opcode_size(opcode_size), .control_signal(CONTROL_STORE[63:0]));
+    // ucontrol_store u_ucontrol_store1 (.opcode(decode_address), .opcode_size(opcode_size), .control_signal(CONTROL_STORE[127:64]));
+
+    wire [7:0] control_store_address;
+    wire control_store_op_size;
+
+    mux2_8$ muxl_cntrl_addr (control_store_address, decode_address, next_micro_op_address, sel_uop);
+    mux2$ mux_opcode_size (control_store_op_size, opcode_size, 1'b0, sel_uop);
+
+    ucontrol_store u_ucontrol_store2 (.opcode(control_store_address), .opcode_size(control_store_op_size), .control_signal(CONTROL_STORE[63:0]));
+    ucontrol_store u_ucontrol_store1 (.opcode(control_store_address), .opcode_size(control_store_op_size), .control_signal(CONTROL_STORE[127:64]));
 
     inv1$ inv1 (mod7_b, modrm[7]);
     inv1$ inv2 (mod6_b, modrm[6]);
@@ -265,11 +292,13 @@ module decode_stage2 (
    // Increment the EIP with proper length
    adder32_w_carry_in add_rel (EIP_OUT, , EIP, {28'b0, instr_length_updt}, 1'b0);
 
-   // check exception address with incremented EIP
+   // TODO: check exception address with incremented EIP
    assign PAGE_FAULT_EXC_EXIST_OUT = 1'b0;
-   assign NMI_INT_EN_OUT = 1'b0;
-   assign GEN_PROT_EXC_EN_OUT = 1'b0;;
-   assign PAGE_FAULT_EXC_EN_OUT = 1'b0;
-   
+   assign NMI_INT_EN_OUT = NMI_INT_EN;
+   assign GEN_PROT_EXC_EN_OUT = GEN_PROT_EXC_EN;
+   assign PAGE_FAULT_EXC_EN_OUT = PAGE_FAULT_EXC_EN;
+ 
+   and2$ and_uop_stall_v (D2_UOP_STALL_OUT, D2_V, CS_UOP_STALL_DE);
+
 endmodule
 

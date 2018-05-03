@@ -1,6 +1,9 @@
 module decode_stage1 (
     input clk, set, reset, 
     input [127:0] IR, 
+
+    input INT_EXIST,
+
     output [127:0] IR_OUT,
     output [3:0] instr_length_updt,
     output [15:0] opcode, 
@@ -40,8 +43,8 @@ wire [1:0] segID_sel;
 // Opcode length decoder
 wire [2:0] opcode_sel;
 wire [7:0] out1m, out2m;
-wire eq_FF, eq_0F70;
-wire AGB1, BGA1, AGB2, BGA2;
+wire eq_FF, eq_0F70, eq_A6;
+wire AGB1, BGA1, AGB2, BGA2, AGB3, BGA3;
 wire [7:0] FF_out;
 
 assign IR_OUT = IR;
@@ -143,7 +146,19 @@ nor2$ nand1 (eq_FF, AGB1, BGA1);
 mag_comp8$ comp2 (opcode[7:0], 8'h70, AGB2, BGA2);
 nor2$ nand2 (eq_0F70, AGB2, BGA2);
 
+mag_comp8$ comp3 ({opcode[7:1], 1'b0}, 8'hA6, AGB3, BGA3);
+nor2$ nand3 (eq_A6, AGB3, BGA3);
+
+and2$ and_rep (and_rep_out, repeat_prefix, eq_A6);
+or2$ or_opcode3 (or_opcode3_out, and_rep_out, opcode[3]);
+
+wire [7:0] default_control_store_address;
+
+`define INT_CONTROL_STORE_ADDR 8'b10
+
 mux4_8$ mux1 (FF_out, 8'h18, 8'h19, 8'h1A, 8'h1B, modrm[4], modrm[5]);
-mux4_8$ mux2 (control_store_address, opcode[7:0], 8'h03, FF_out, , eq_0F70, eq_FF);
+mux4_8$ mux2 (default_control_store_address, {opcode[7:4], or_opcode3_out, opcode[2:0]}, 8'h03, FF_out, , eq_0F70, eq_FF);
+
+mux2_8$ mux3 (control_store_address, default_control_store_address, `INT_CONTROL_STORE_ADDR, INT_EXIST);
 
 endmodule
