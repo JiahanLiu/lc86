@@ -11,10 +11,16 @@ module TOP;
     wire  [2:0] DEST;
     wire  [11:0] SIZE;
     wire  RW;
-    wire  ACK;
+   
     //interface with arbitrator
     wire BR;
     reg BG;
+    wire ACK_OUT;
+    reg   ACK_IN;
+    reg 	  DEST_IN;
+    wire 	  DEST_OUT;
+   
+
     //interface with work unit
     reg MOD_EN; //simple signal saying we have a request
     reg MOD_WR;
@@ -29,16 +35,16 @@ module TOP;
     bus_controller u_bus_cntrl (//interface with bus
       clk,
       rst, set,
-      MY_ID,
       D,
       A,
-      MASTER,
-      DEST,
       SIZE,
       RW,
-      ACK,
       BR,
       BG,
+      ACK_OUT,
+      ACK_IN,
+      DEST_OUT,
+      DEST_IN,
       MOD_EN,
       MOD_WR,
       MOD_A,
@@ -46,8 +52,6 @@ module TOP;
       MOD_READ_DATA,
       MOD_R
     );
-
-    wire ACK_IN;
 
     reg size, rw, ack_v;
     reg [31:0] din;
@@ -63,9 +67,7 @@ module TOP;
     assign MASTER = wr_master?master:3'bz;
     assign DEST = wr_dest?dest:3'bz;
     assign RW = wr_RW?rw:1'bz;
-    assign ACK = wr_ack?ack_v:1'bz;
 
-    assign ACK_IN = ACK;
 
     // By default, setting everything as output, change the wr signal for
     // making it input
@@ -81,7 +83,8 @@ module TOP;
         #(half_cycle)
         u_bus_cntrl.state_reg.Q = 16'h0001;
         rst = 1'b1;
-        MY_ID = 3'd5;
+       DEST_IN = 1'b1;
+       MY_ID = 3'd5;
         wr_size = 1'b0;
         wr_d = 1'b1;
         wr_a = 1'b1;
@@ -94,6 +97,8 @@ module TOP;
         rw = 1'b1;
         din = 32'h1234_1234;
         addr = 16'hA000;
+        ACK_IN = 1;
+       
       //  ack_v = 1'b0;
         master = 3'd3;
 
@@ -106,18 +111,24 @@ module TOP;
        # (clk_cycle)
         din = 32'hBBBB_BBBB;
 
-//        #(half_cycle-2)
-//        wr_size = 1'b0;
-//        wr_d = 1'b0;
-//        wr_a = 1'b0;
-//        wr_master = 1'b0;
-//        wr_dest = 1'b0;
-//        wr_RW = 1'b0;
-//        wr_ack = 1'b0;
-      
-
         #(2*clk_cycle)
+       DEST_IN = 0;
+               wr_size = 1'b0;
+        wr_d = 1'b0;
+        wr_a = 1'b0;
+        wr_master = 1'b0;
+        wr_dest = 1'b0;
+        wr_RW = 1'b0;
+        wr_ack = 1'b0;
+       MOD_EN = 1;
+       MOD_WR = 1;
+       MOD_A = 16'hABC0;
+       MOD_WRITE_DATA = 128'h11111111_22222222_33333333_44444444;
         BG = 1'b1;
+
+
+       // #(2*clk_cycle)
+       
         
 
 

@@ -8,5 +8,7 @@
 ../../pipeline/common/basic_components/equality.v
 ../../pipeline/common/basic_components/muxes.v
 ../../pipeline/common/basic_components/logic_gates.v
+../../pipeline/common.v
 ./bus_controller.v
-./bus.v
+#./bus.v outdated
+./bus_tb.v
