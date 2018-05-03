@@ -1,7 +1,7 @@
 
 //IMPORTANT: This module is the template bus controller
 //EACH Memory module has a slightly specialized version of this controller
-module kbd_bus_controller(//interface with bus
+module DMA_bus_controller(//interface with bus
 		      input BUS_CLK,
 		      input RST, SET,
 		      inout [31:0] D,

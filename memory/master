@@ -1,0 +1,20 @@
+/home/projects/courses/spring_16/ee382n-16785/lib/time -v
+/home/projects/courses/spring_16/ee382n-16785/lib/lib1
+/home/projects/courses/spring_16/ee382n-16785/lib/lib2
+/home/projects/courses/spring_16/ee382n-16785/lib/lib3
+/home/projects/courses/spring_16/ee382n-16785/lib/lib4
+/home/projects/courses/spring_16/ee382n-16785/lib/lib5
+/home/projects/courses/spring_16/ee382n-16785/lib/lib6
+../pipeline/common/basic_components/equality.v
+../pipeline/common/basic_components/muxes.v
+../pipeline/common/basic_components/logic_gates.v
+../pipeline/common.v
+./bus/bus_controller.v
+./arbitrator/arbitrator.v
+./cache/cache_bus_controller.v
+./main_memory/mem_bus_controller.v
+./DMA/dma_bus_controller.v
+./keyboard/kbd_bus_controller.v
+./interrupt/intr_bus_controller.v
+
+
