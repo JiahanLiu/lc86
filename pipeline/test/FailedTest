@@ -2,7 +2,7 @@ salD0 - EX_B is 0 instead of hard coded 1
 salD1 - EX_B is 0 instead of hard coded 1
 sarD0 - EX_B is 0 instead of hard coded 1
 sarD1 - EX_B is 0 instead of hard coded 1
-jmp - FF04 - Eip is not connected to memory, nelson will patch
+jmp - FF04 - expect to source NEip from memory
 inc - EX_A, EX_B both come in wrong
 movB0 - wrong DR1
 
