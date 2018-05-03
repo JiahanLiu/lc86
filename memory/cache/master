@@ -11,5 +11,5 @@
 ../../pipeline/common/basic_components/decoder.v
 ../../pipeline/common.v
 ./cache.v
-./cache_tb.v
+./cache_tb_ext.v
 
