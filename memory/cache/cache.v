@@ -3,7 +3,7 @@ module cache( //interface with the processor
     input [127:0] data_write,
     input RW,
     input enable,
-    input [15:0] address,
+    input [15:0] addr,
     input [3:0] size,
     output [127:0] data_read,
     output ready,
@@ -16,7 +16,12 @@ module cache( //interface with the processor
     input [127:0] BUS_READ
 );
 
-
+    wire [15:0] addr1, addr2, addr3, addr4, address;
+    bufferH1024$ buf1 [15:0] (addr1, addr);
+    bufferH1024$ buf2 [15:0] (addr2, addr1);
+    bufferH1024$ buf3 [15:0] (addr3, addr2);
+    bufferH1024$ buf4 [15:0] (addr4, addr3);
+    bufferH1024$ buf5 [15:0] (address, addr4);
    //STATE MACHINE ENCODING 00000000
    parameter IDLE  = 16'b0000_0000_0000_0001,
 	       RD = 16'b0000_0000_0000_0010,
@@ -258,7 +263,7 @@ module gen_n_state(
 	input BUS_R,
 	input EV
 	);
-   assign next_state[15:8] = 8'b0000_0000;
+   assign next_state[15:9] = 8'b0000_0000;
    
 	wire enable_not, RW_not, HIT_not, BUS_R_not, EV_not;
 
