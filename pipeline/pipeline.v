@@ -400,7 +400,11 @@ module PIPELINE(CLK, CLR, PRE, IR);
       DE_OFFSET_SIZE_OUT,
       DE_SEGID_OUT,
       DE_MODRM_OUT, DE_SIB_OUT,
-      DE_CONTROL_STORE_ADDRESS, 1'b0, 1'b0, 1'b0,
+      DE_CONTROL_STORE_ADDRESS, 
+      1'b0, //NMI_INT_EN
+      1'b0, //GEN_PROT_EXC_EN
+      1'b0, //PAGE_FAULT_EXC_EN
+      1'b0, //PAGE_FAULT_EXC_EXIST
 
       D2_EIP_OUT, 
       D2_CS_OUT,

@@ -21,7 +21,9 @@ module decode_stage2 (
    input [7:0] modrm, sib,
    input [7:0] decode_address,
 
-   input NMI_INT_EN, GEN_PROT_EXC_EN, PAGE_FAULT_EXC_EN,
+   input NMI_INT_EN, 
+   input GEN_PROT_EXC_EN, 
+   input PAGE_FAULT_EXC_EN,
    input PAGE_FAULT_EXC_EXIST,
 
    input INT_EXIST,
