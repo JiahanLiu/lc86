@@ -75,5 +75,5 @@ dependency_check/mem_dependency_check.v
 ./writeback_components/writeback_components.v
 ./execute.v
 ./writeback.v
-./pipeline_stalls.v
+./pipeline_caches.v
 ./fetch_tb.v
