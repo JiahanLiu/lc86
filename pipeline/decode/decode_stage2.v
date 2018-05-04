@@ -47,7 +47,7 @@ module decode_stage2 (
 
    output PAGE_FAULT_EXC_EXIST_OUT,
    output NMI_INT_EN_OUT, GEN_PROT_EXC_EN_OUT, PAGE_FAULT_EXC_EN_OUT,
-   output D2_REPNE_WB, D2_UOP_STALL_OUT
+   output D2_REPNE_WB, D2_UOP_STALL_OUT, D2_EXC_EN_V_OUT
 );
 `include "./control_store/control_store_wires.v"
 `include "./control_store/control_store_signals.v"
@@ -109,15 +109,15 @@ module decode_stage2 (
     wire [7:0] next_micro_op_address;
 
     assign Dnext_micro_addr = {25'b0, CS_NEXT_MICRO_ADDRESS_DE};
-    reg32e$ reg_save_next_uaddr (clk, Dnext_micro_addr, Qnext_micro_addr, , reset, set, 1'b1);
+    reg32e$ reg_save_next_uaddr (clk, Dnext_micro_addr, Qnext_micro_addr, , reset, set, D2_V);
     assign next_micro_op_address = {1'b0, Qnext_micro_addr[6:0]};
 
     wire [31:0] Dsel_uop, Qsel_uop;
     wire sel_uop;
 
     assign Dsel_uop = {31'b0, CS_UOP_STALL_DE};
-    reg32e$ reg_save_sel_uop (clk, Dsel_uop, Qsel_uop, , reset, set, 1'b1);
-    //assign sel_uop = Qsel_uop[0];
+    reg32e$ reg_save_sel_uop (clk, Dsel_uop, Qsel_uop, , reset, set, D2_V);
+//    assign sel_uop = Qsel_uop[0];
     assign sel_uop = 1'b0; //TODO temporary
 
     // Mux for choosing the control address, the sel signal needs to be
@@ -298,6 +298,9 @@ module decode_stage2 (
    assign GEN_PROT_EXC_EN_OUT = GEN_PROT_EXC_EN;
    assign PAGE_FAULT_EXC_EN_OUT = PAGE_FAULT_EXC_EN;
  
+   or3$ or_exc_en (or_exc_en_out, NMI_INT_EN, GEN_PROT_EXC_EN, PAGE_FAULT_EXC_EN);
+   and2$ and_exc_v (D2_EXC_EN_V_OUT, D2_V, or_exc_en_out);
+
    and2$ and_uop_stall_v (D2_UOP_STALL_OUT, D2_V, CS_UOP_STALL_DE);
 
 endmodule
