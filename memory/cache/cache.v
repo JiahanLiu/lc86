@@ -371,7 +371,7 @@ module  write_masker(output [15:0] DC_WR,
    and4$ and_u(size_full, size[3], size[2], size[1], size[0]);
    mux2_16$ mux2_u(complete_mask, shifted_mask, allwrite, size_full);
    wire [15:0] 			 DC_WR_REG;
-   mux2_16$ mux2_u2(DC_WR_REG, nowrite, complete_mask, CACHE_WR);
+   and2$ clearing [15:0] (DC_WR_REG, complete_mask, CACHE_WR);
    not16_1way not_u(DC_WR, DC_WR_REG);
 
    
