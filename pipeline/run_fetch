@@ -1,1 +1,1 @@
-vcs -full64 -debug_all -f master_fetch
+vcs -full64 -debug_all +incdir+./control_store/ -f master_fetch

@@ -22,6 +22,9 @@ module decode_stage2 (
    input [7:0] decode_address,
 
    input NMI_INT_EN, GEN_PROT_EXC_EN, PAGE_FAULT_EXC_EN,
+   input PAGE_FAULT_EXC_EXIST,
+
+   input INT_EXIST,
 
    output [31:0] EIP_OUT, 
    output [15:0] CS_OUT,
@@ -115,8 +118,11 @@ module decode_stage2 (
     wire [31:0] Dsel_uop, Qsel_uop;
     wire sel_uop;
 
+    wire rst_sel_uop, int_exist_bar;
+    inv1$ inv_int_exist (int_exist_bar, INT_EXIST);
+    and2$ and_rst_sel_uop (rst_sel_uop, reset, int_exist_bar);
     assign Dsel_uop = {31'b0, CS_UOP_STALL_DE};
-    reg32e$ reg_save_sel_uop (clk, Dsel_uop, Qsel_uop, , reset, set, D2_V);
+    reg32e$ reg_save_sel_uop (clk, Dsel_uop, Qsel_uop, , rst_sel_uop, set, D2_V);
 //    assign sel_uop = Qsel_uop[0];
     assign sel_uop = 1'b0; //TODO temporary
 
@@ -293,7 +299,7 @@ module decode_stage2 (
    adder32_w_carry_in add_rel (EIP_OUT, , EIP, {28'b0, instr_length_updt}, 1'b0);
 
    // TODO: check exception address with incremented EIP
-   assign PAGE_FAULT_EXC_EXIST_OUT = 1'b0;
+   assign PAGE_FAULT_EXC_EXIST_OUT = PAGE_FAULT_EXC_EXIST;
    assign NMI_INT_EN_OUT = NMI_INT_EN;
    assign GEN_PROT_EXC_EN_OUT = GEN_PROT_EXC_EN;
    assign PAGE_FAULT_EXC_EN_OUT = PAGE_FAULT_EXC_EN;

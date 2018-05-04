@@ -46,7 +46,7 @@ module fetch (
    output [2:0] modrm_sel,
    output [7:0] control_store_address,
 
-   output FETCH_STALL
+   output FETCH_STALL_OUT, PAGE_FAULT_EXC_OUT
 );
 
    //The four buffers for the fetch unit
@@ -418,7 +418,8 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
    and2$ and_state1 (and_state1_out, fill_state, Dfull_state);
    or2$ or_state1 (or_state1_out, and_state0_out, and_state1_out);
 
-   or4$ or_stall (FETCH_STALL, flush_state, Dflush_state, empty_state, Dempty_state);
+   or4$ or_stall (FETCH_STALL_OUT, flush_state, Dflush_state, empty_state, Dempty_state);
+   and2$ and_page_fault_exc_out (PAGE_FAULT_EXC_OUT, Dexc_state, buf_empty);
 
    and4$
       and5 (FE_buf_0_en, buf_ptr_bar[1], buf_ptr_bar[0], ifu_icache_rd_stall_out_bar, or_state1_out),

@@ -161,27 +161,50 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
     //*******CACHE FILES*******//
     //Cache file systems to be used by the system
-    wire [127:0] ICACHE_DOUT, DCACHE_DIN, DCACHE_DOUT;
-    wire [31:0] ICACHE_PADDR_OUT, DC_PADDR;
-    wire ICACHE_EN_OUT, DC_WE, ICACHE_READY, DC_R;	//ICACHE_EN_OUT needs to be included
-    wire [4:0] FE_ICACHE_RD_SIZE_OUT;
-    //icache u_icache (CLK, RST, ICACHE_PADDR_OUT, IC_R, IC_DOUT);
-    //dcache u_dcache(CLK, RST, DC_PADDR, DC_DIN, DC_SIZE, DC_WE, DC_R, DC_DOUT);
+   wire [127:0] ICACHE_DOUT;
+   wire [31:0] FE_ICACHE_PADDR_OUT;
+   wire FE_ICACHE_EN_OUT, ICACHE_READY;	//ICACHE_EN_OUT needs to be included
+   wire [4:0] FE_ICACHE_RD_SIZE_OUT;
 
-    wire V_FETCH;
-    wire [31:0] FETCH_POINTER;
-    wire [4:0] ICACHE_SIZE_OUT;
-    wire ICACHE_RW;
-    wire ICACHE_RD_STALL;
-    wire [127:0] IR_DATA_OUT;
+   wire ICACHE_BUS_WR_OUT, ICACHE_BUS_EN_OUT;
+   wire [15:0] ICACHE_BUS_ADDR_OUT;
+   wire [127:0] ICACHE_BUS_WRITE_OUT;
+
+   wire BUS_READY;
+   wire [127:0] BUS_READ_DATA;
+
+   cache u_icache (
+      CLK, PRE, CLR, ,
+      1'b0, FE_ICACHE_EN_OUT, FE_ICACHE_PADDR_OUT[15:0], FE_ICACHE_RD_SIZE_OUT,
+      ICACHE_DOUT, ICACHE_READY,
+      // bus signals
+      ICACHE_BUS_WR_OUT, ICACHE_BUS_EN_OUT, ICACHE_BUS_ADDR_OUT, ICACHE_BUS_WRITE_OUT,
+      BUS_READY, BUS_READ_DATA
+   );
 
    wire [127:0]  DCACHE_RD_DATA_OUT_LSU_IN;
-   wire 	 DCACHE_READY_LSU_IN;
+   wire DCACHE_READY_LSU_IN;
+   wire DCACHE_BUS_WR_OUT, DCACHE_BUS_EN_OUT;
+   wire [15:0] DCACHE_BUS_ADDR_OUT;
+   wire [127:0] DCACHE_BUS_WRITE_OUT;
+
    wire [31:0] 	 LSU_OUT_DCACHE_ADDR_IN;
    wire [3:0] 	 LSU_OUT_DCACHE_SIZE_IN;
    wire 	 LSU_OUT_DCACHE_RW_IN;
    wire 	 LSU_OUT_DCACHE_EN;
    wire [63:0] 	 LSU_OUT_DCACHE_WR_DATA_IN;
+
+   cache u_dcache (
+       CLK, PRE, CLR, 
+       LSU_OUT_DCACHE_WR_DATA_IN, LSU_OUT_DCACHE_RW_IN, LSU_OUT_DCACHE_EN, 
+       LSU_OUT_DCACHE_ADDR_IN[15:0], {1'b0, LSU_OUT_DCACHE_SIZE_IN},
+
+       DCACHE_RD_DATA_OUT_LSU_IN, DCACHE_READY_LSU_IN,
+       // bus signals
+       DCACHE_BUS_WR_OUT, DCACHE_BUS_EN_OUT, DCACHE_BUS_ADDR_OUT, DCACHE_BUS_WRITE_OUT,
+       BUS_READY, BUS_READ_DATA
+   );
+
 
    wire 	 LSU_OUT_RD_STALL, LSU_OUT_WR_STALL, LSU_OUT_WR_STALL_BAR;
    wire [63:0] 	 LSU_OUT_RD_DATA;
@@ -255,10 +278,10 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire [7:0] DE_CONTROL_STORE_ADDRESS_IN, DE_CONTROL_STORE_ADDRESS;
     wire [31:0] DE_CONTROL_STORE_ADDRESS_OUT;
 
-    reg [127:0] temp_icache_data;
-    reg icache_ready;
-    assign ICACHE_DOUT = temp_icache_data;
-    assign ICACHE_READY = icache_ready;
+//    reg [127:0] temp_icache_data;
+//    reg icache_ready;
+//    assign ICACHE_DOUT = temp_icache_data;
+//    assign ICACHE_READY = icache_ready;
     //assign FE_EIP_IN = 32'b0;
 
 //    initial begin
@@ -277,42 +300,42 @@ module PIPELINE(CLK, CLR, PRE, IR);
 //       #15
 //       icache_ready = 1'b1;
 //    end
-    always @(posedge icache_ready) begin
-       #12
-       icache_ready = 1'b0;
-    end
-    always @(ICACHE_PADDR_OUT) begin
-       icache_ready = 1'b0;
-    end
-    always @(ICACHE_PADDR_OUT or posedge CLK or ICACHE_EN_OUT) begin
-       if (ICACHE_EN_OUT) begin
-          $strobe("ICACHE_RD_ADDR %0h size %0h @ time %0t", ICACHE_PADDR_OUT, FE_ICACHE_RD_SIZE_OUT, $time);
-          if (ICACHE_PADDR_OUT[7:0] == 8'h00) begin
-             //temp_icache_data = 128'h0F6FEB254B212F9681773D090CDB1283;
-             //temp_icache_data = 128'h8312DB0C093D7781962F214B25EB6F0F;
-             //temp_icache_data = 128'h1504AB230566441205F205;
-             temp_icache_data = 128'h23643484B10F;
-             $strobe("icache data 0 %0h", temp_icache_data);
-          end
-          else if (ICACHE_PADDR_OUT[7:0] == 8'h10) begin
-             //temp_icache_data = 128'h7E6D39201F21D32285BC148878235B49;
-             temp_icache_data = 128'h495B23788814BC8522D3211F29386D7E;
-             $strobe("icache data 1 %0h", temp_icache_data);
-          end
-          else if (ICACHE_PADDR_OUT[7:0] == 8'h20) begin
-             //temp_icache_data = 128'h0F6FEB254B212F9681773D090CDB1283;
-             temp_icache_data = 128'h8312DB0C093D7781962F214B25EB6F0F;
-             $strobe("icache data 2 %0h", temp_icache_data);
-          end
-          else if (ICACHE_PADDR_OUT[7:0] == 8'h30) begin
-             //temp_icache_data = 128'h7E6D39201F21D32285BC148878235B49;;
-             temp_icache_data = 128'h495B23788814BC8522D3211F29386D7E;
-             $strobe("icache data 3 %0h", temp_icache_data);
-          end
-       end
-       #10
-       icache_ready = 1'b1;
-    end
+//    always @(posedge icache_ready) begin
+//       #12
+//       icache_ready = 1'b0;
+//    end
+//    always @(ICACHE_PADDR_OUT) begin
+//       icache_ready = 1'b0;
+//    end
+//    always @(ICACHE_PADDR_OUT or posedge CLK or ICACHE_EN_OUT) begin
+//       if (FE_ICACHE_EN_OUT) begin
+//          $strobe("ICACHE_RD_ADDR %0h size %0h @ time %0t", FE_ICACHE_PADDR_OUT, FE_ICACHE_RD_SIZE_OUT, $time);
+//          if (FE_ICACHE_PADDR_OUT[7:0] == 8'h00) begin
+//             //temp_icache_data = 128'h0F6FEB254B212F9681773D090CDB1283;
+//             //temp_icache_data = 128'h8312DB0C093D7781962F214B25EB6F0F;
+//             //temp_icache_data = 128'h1504AB230566441205F205;
+//             temp_icache_data = 128'h23643484B10F;
+//             $strobe("icache data 0 %0h", temp_icache_data);
+//          end
+//          else if (FE_ICACHE_PADDR_OUT[7:0] == 8'h10) begin
+//             //temp_icache_data = 128'h7E6D39201F21D32285BC148878235B49;
+//             temp_icache_data = 128'h495B23788814BC8522D3211F29386D7E;
+//             $strobe("icache data 1 %0h", temp_icache_data);
+//          end
+//          else if (FE_ICACHE_PADDR_OUT[7:0] == 8'h20) begin
+//             //temp_icache_data = 128'h0F6FEB254B212F9681773D090CDB1283;
+//             temp_icache_data = 128'h8312DB0C093D7781962F214B25EB6F0F;
+//             $strobe("icache data 2 %0h", temp_icache_data);
+//          end
+//          else if (FE_ICACHE_PADDR_OUT[7:0] == 8'h30) begin
+//             //temp_icache_data = 128'h7E6D39201F21D32285BC148878235B49;;
+//             temp_icache_data = 128'h495B23788814BC8522D3211F29386D7E;
+//             $strobe("icache data 3 %0h", temp_icache_data);
+//          end
+//       end
+//       #10
+//       icache_ready = 1'b1;
+//    end
              
     wire INT_EXIST_DE_IN;
     or2$ or_de_exc_v (INT_EXIST_DE_IN, WB_EXC_V_OUT, INTERRUPT_SIGNAL);
@@ -343,9 +366,9 @@ module PIPELINE(CLK, CLR, PRE, IR);
         DE_CS_IN,
 
         // outputs to ICACHE
-        ICACHE_PADDR_OUT,
+        FE_ICACHE_PADDR_OUT,
         FE_ICACHE_RD_SIZE_OUT,
-        ICACHE_EN_OUT,
+        FE_ICACHE_EN_OUT,
 
         FE_SEG_LIM_EXC,
         IR_IN,
