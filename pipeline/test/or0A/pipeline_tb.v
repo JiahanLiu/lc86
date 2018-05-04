@@ -39,7 +39,7 @@
 `define if_check_aluk 1'b1
 `define check_opA (`default_mem_Value) //check values
 `define check_opB (`default_reg_EX_B_32)
-`define check_aluk 3'b000
+`define check_aluk 3'b001
 
 `define if_check_data1 1'b0
 `define if_check_data2 1'b1

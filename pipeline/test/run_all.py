@@ -11,7 +11,7 @@ test_dirs = next(os.walk('.'))[1]
 with open('failed_tests', 'w+') as outfile:
 	for dir_ in test_dirs:
 		os.chdir(dir_)
-		#print(dir_)
+		print("starting: " + dir_)
 		shell_command = 'vcs -full64 -debug_all -f master'
 		P = subprocess.Popen(shell_command.split())
 		P.wait()

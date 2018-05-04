@@ -39,7 +39,7 @@
 `define if_check_aluk 1'b1
 `define check_opA (`default_reg_EAX_32) //check values
 `define check_opB (`default_big_endian_imm8)
-`define check_aluk 3'b000
+`define check_aluk 3'b001
 
 `define if_check_data1 1'b1
 `define if_check_data2 1'b0

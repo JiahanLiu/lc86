@@ -906,7 +906,7 @@ module TOP;
                 error <= 1; 
               end
             end else begin
-              if(1'b1 === if_rel_eip) begin
+              if(1'b1 === `if_rel_eip) begin
                 if(u_pipeline.WB_Final_EIP !== `default_eip + instr_length + `default_rel_value) begin 
                   $display("Error: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_EIP, `default_eip + instr_length + `default_rel_value);
                   error <= 1; 
