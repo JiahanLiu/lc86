@@ -21,6 +21,8 @@ with open('failed_tests', 'w+') as outfile:
 			if('Error' == ln[0:5]):
 				outfile.write(dir_ + '\n')
 				outfile.write(ln);
+				print(dir_ + '\n')
+				print(ln)
 		P2.wait()
 		#outfile.write("Go Light it up");
 		#test_dirs2 = next(os.walk('.'))[1]
