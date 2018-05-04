@@ -57,7 +57,7 @@ module arbitrator(input BUS_CLK,
    dff8$ current_mstr(BUS_CLK, next_master, current_master, , CLR, PRE);
 
    //EASY TASK UNIFYING ALL REQUESTS
-   or1_6way(BUS_ACK, CNTRLR_ACK[0], CNTRLR_ACK[1], CNTRLR_ACK[2],
+   or1_6way ACK_UNIFIER(BUS_ACK, CNTRLR_ACK[0], CNTRLR_ACK[1], CNTRLR_ACK[2],
      CNTRLR_ACK[3], CNTRLR_ACK[4], CNTRLR_ACK[5]);
    
 
