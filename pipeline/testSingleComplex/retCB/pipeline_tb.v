@@ -802,7 +802,7 @@ module TOP;
             end
 
             tb_alu_result = u_pipeline.u_execute.u_functional_unit_ex.alu32_result;
-            if(1'b1 === if_check_alu_result) begin
+            if(1'b1 === `if_check_alu_result) begin
               if(tb_alu_result !== `alu_result) begin 
                 $display("Error: alu32_result is: %h, but needs to be: %h", tb_alu_result, `alu_result);
                 error <= 1;

@@ -37,7 +37,7 @@
 
 `define if_check_op_a 1'b0
 `define if_check_op_b 1'b0
-`define if_check_aluk 1'b1
+`define if_check_aluk 1'b0
 `define check_opA (`default_reg_EAX_32) //check values
 `define check_opB (`default_big_endian_imm32)
 `define check_aluk 3'b101
@@ -66,7 +66,7 @@
 `define which_check_eip 1'b0 //0 for eip + instr length, 1 for other
 `define if_check_cs 1'b0
 `define check_ld_mm 1'b0 //check values
-`define check_ld_eip 1'b1
+`define check_ld_eip 1'b0
 `define check_ld_cs 1'b0
 `define check_ld_seg 1'b0
 `define check_mm_data 64'h0

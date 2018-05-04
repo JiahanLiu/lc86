@@ -57,7 +57,7 @@
 `define check_data1 `check_opA
 `define check_data2 `check_opA
 `define check_data3 32'h0
-`define check_dr1 3'b000
+`define check_dr1 `default_modrm_reg_opcode
 `define check_dr2 `default_modrm_reg_opcode
 `define check_dr3 3'b000
 `define produced_flags 32'h095

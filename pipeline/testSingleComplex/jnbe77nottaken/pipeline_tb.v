@@ -69,7 +69,7 @@
 `define if_rel_eip 1'b1 //0 for absolute, 1 for relative
 `define if_check_cs 1'b0
 `define check_ld_mm 1'b0 //check values
-`define check_ld_eip 1'b2
+`define check_ld_eip 1'b1
 `define check_ld_cs 1'b0
 `define check_ld_seg 1'b0
 `define check_mm_data 64'h0

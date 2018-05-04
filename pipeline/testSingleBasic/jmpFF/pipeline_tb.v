@@ -72,7 +72,7 @@
 `define check_ld_cs 1'b0
 `define check_ld_seg 1'b0
 `define check_mm_data 64'h0
-`define taken_eip `default_mem_Value
+`define taken_eip 32'h90AB_CDEF
 `define check_cs 16'h0
 
 `define if_check_dcachedata 1'b0

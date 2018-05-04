@@ -1,4 +1,3 @@
-
 `timescale 1ns/1ps
 `define EOF = 32'hFFFF_FFFF
 `define NULL 0
@@ -47,7 +46,7 @@
 `define check_opA (`default_eip + 8) //check values
 `define check_opB (`default_reg_EAX_32)
 `define check_opC (`default_reg_ESP_32 - 4)
-`define check_opMMA ({16{1'b0}, `default_cs, (`default_eip + 10)})
+`define check_opMMA 64'h0000_0022_0000_000B
 `define check_aluk 3'b100
 `define alu_result (check_opB - check_opA)
 
@@ -804,7 +803,7 @@ module TOP;
             end
 
             tb_alu_result = u_pipeline.u_execute.u_functional_unit_ex.alu32_result;
-            if(1'b1 === if_check_alu_result) begin
+            if(1'b1 === `if_check_alu_result) begin
               if(tb_alu_result !== `alu_result) begin 
                 $display("Error: alu32_result is: %h, but needs to be: %h", tb_alu_result, `alu_result);
                 error <= 1;

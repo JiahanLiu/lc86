@@ -32,7 +32,7 @@
 `define default_offset 32'h1234_5678
 `define default_offset2 16'h2413
 `define default_modrm_mod 2'b10
-`define default_modrm_reg_opcode 3'b010
+`define default_modrm_reg_opcode 3'b000
 `define default_modrm_rm 3'b101
 
 `define if_check_op_a 1'b0

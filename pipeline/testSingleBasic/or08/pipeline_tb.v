@@ -48,7 +48,7 @@
 `define if_check_dr1 1'b0
 `define if_check_dr2 1'b0
 `define if_check_dr3 1'b0
-`define if_check_flags 1'b1
+`define if_check_flags 1'b0
 `define if_check_datasize 1'b1 
 `define check_ld_gpr1 1'b0 //check values
 `define check_ld_gpr2 1'b0

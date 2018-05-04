@@ -1,4 +1,3 @@
-
 `timescale 1ns/1ps
 `define EOF = 32'hFFFF_FFFF
 `define NULL 0
@@ -758,14 +757,14 @@ module TOP;
 
             if(1'b1 === `if_check_op_mm_a) begin
               if(u_pipeline.EX_MM_A !== `check_opMMA) begin 
-                $display("Error: EX_A is: %h, but needs to be: %h", u_pipeline.EX_MM_A, check_opMMA);
+                $display("Error: EX_A is: %h, but needs to be: %h", u_pipeline.EX_MM_A, `check_opMMA);
                 error <= 1;
               end
             end
 
             if(1'b1 === `if_check_op_mm_b) begin
               if(u_pipeline.EX_MM_B !== `check_opMMB) begin 
-                $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_MM_B, check_opMMB);
+                $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_MM_B, `check_opMMB);
                 error <= 1;
               end
             end
