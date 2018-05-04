@@ -426,7 +426,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
       D2_PAGE_FAULT_EXC_EXIST_OUT,
       D2_NMI_INT_EN_OUT, D2_GEN_PROT_EXC_EN_OUT, D2_PAGE_FAULT_EXC_EN_OUT,
-      D2_REPNE_WB_OUT, 
+      D2_REPNE_WB_OUT, ,
    );
 
    wire [31:0] AG_PS_EIP;
@@ -641,7 +641,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
         AG_MM_SCOREBOARD_OUT,
 
         // other outputs
-        AG_DEP_STALL_OUT, AG_PAGE_FAULT_EXC_EXIST_OUT, AG_REPNE_WB_OUT
+        AG_DEP_STALL_OUT, AG_PAGE_FAULT_EXC_EXIST_OUT, AG_REPNE_WB_OUT,
    );
 
    // Signals to be saved in pipeline latches

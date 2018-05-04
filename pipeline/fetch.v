@@ -240,7 +240,7 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
    wire [31:0] IFU_FETCH_POINTER_IN;
 
    wire or_rst_flush_out;
-   or2$ or_rst_flush (or_rst_flush_out, rst_state, flush_state);
+   or3$ or_rst_flush (or_rst_flush_out, rst_state, flush_state, INT_EXIST_DE_IN);
 
    adder32_w_carry_in add_fetch_ptr (add_fetch_ptr_out, , fetch_ptr, 32'h10, 1'b0);
    adder32_w_carry_in add_eip_cs (add_eip_cs_out, , EIP, {CS, 16'b0}, 1'b0);

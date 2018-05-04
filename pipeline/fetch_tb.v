@@ -89,7 +89,7 @@ module TOP;
         clk = 1;
         clr = 0;
         pre = 1;
-        #6
+        #5
         clr = 1;
         forever #(half_cycle)  clk = ~clk;
     end
@@ -170,7 +170,7 @@ module TOP;
 
      end 
 
-     initial #100 $finish;
+     initial #500 $finish;
 
      always @(posedge clk) begin
          $strobe ("at time %0d, IR = %h", $time, u_pipeline.u_fetch.CURRENT_IR);

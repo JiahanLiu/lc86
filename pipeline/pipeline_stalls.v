@@ -130,8 +130,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
         REG_SR1_SIZE, REG_SR2_SIZE, REG_SR3_SIZE, REG_SR4_SIZE,
         WB_Final_DR1, WB_Final_DR2, WB_Final_DR3, WB_Final_datasize, WB_Final_datasize, WB_Final_DR3_datasize,
         // Enable signals from writeback
-        1'b0, 1'b0, 1'b0,
-//        WB_Final_ld_gpr1, WB_Final_ld_gpr2, WB_Final_ld_gpr3, 
+//        1'b0, 1'b0, 1'b0,
+        WB_Final_ld_gpr1, WB_Final_ld_gpr2, WB_Final_ld_gpr3, 
         CS_DIN, WB_Final_EIP, EFLAGS_DIN,
         LD_CS, WB_Final_ld_eip, LD_EFLAGS,
         SEG1_DATA, SEG2_DATA, MM1_DATA, MM2_DATA,
@@ -289,7 +289,9 @@ module PIPELINE(CLK, CLR, PRE, IR);
           $strobe("ICACHE_RD_ADDR %0h size %0h @ time %0t", ICACHE_PADDR_OUT, FE_ICACHE_RD_SIZE_OUT, $time);
           if (ICACHE_PADDR_OUT[7:0] == 8'h00) begin
              //temp_icache_data = 128'h0F6FEB254B212F9681773D090CDB1283;
-             temp_icache_data = 128'h8312DB0C093D7781962F214B25EB6F0F;
+             //temp_icache_data = 128'h8312DB0C093D7781962F214B25EB6F0F;
+             //temp_icache_data = 128'h1504AB230566441205F205;
+             temp_icache_data = 128'h23643484B10F;
              $strobe("icache data 0 %0h", temp_icache_data);
           end
           else if (ICACHE_PADDR_OUT[7:0] == 8'h10) begin
@@ -394,20 +396,29 @@ module PIPELINE(CLK, CLR, PRE, IR);
 //        DE_CONTROL_STORE_ADDRESS_IN
 //    );
 
-   wire DE_V_IN, LD_D2;
+   wire DE_V_IN, LD_D2, and0_ld_d2_out;
    wire AG_STALL_OUT_LD_D2_IN;
    wire D2_UOP_STALL_OUT, D2_UOP_STALL_OUT_BAR;
 
-   nor2$ nor_de_v (DE_V_IN, FETCH_STALL_OUT, 1'b0);
+   wire D2_EXC_EN_V_OUT, AG_EXC_EN_V_OUT, AG2_EXC_EN_V_OUT,
+        ME_EXC_EN_V_OUT, ME2_EXC_EN_V_OUT, EX_EXC_EN_V_OUT;
+
+   wire nor_de_v_out;
+   nor2$ nor_de_v (nor_de_v_out, FETCH_STALL_OUT, 1'b0);
+   or3$ or0_de_v (DE_V_IN, nor_de_v_out, WB_EXC_V_OUT, INTERRUPT_SIGNAL);
    // assign DE_V_IN = 1'b1;
-   // DE_V_IN = !FETCH_STALL && !D2_EXC_EN_OUT && !AG_EXC_EN_OUT &&
-   // !AG2_EXC_EN_OUT && ! ME_EXC_EN_OUT && !ME2_EXC_EN_OUT  && !EX_EXC_EN_OUT
-   // && !wb_repne_terminate_all
+   // DE_V_IN = (!FETCH_STALL && !FE_PAGE_FAULT_EXC && !D2_EXC_EN_OUT && !AG_EXC_EN_OUT &&
+   // !AG2_EXC_EN_OUT && !ME_EXC_EN_OUT && !ME2_EXC_EN_OUT  && !EX_EXC_EN_OUT
+   // && !wb_repne_terminate_all) || WB_EXC_V_OUT || INTERRUPT_SIGNAL
+   //
    // TODO LD_D2 = !REG_DEP_STALL && ! MEM_DEP_STALL && !MEM_RD_STALL && !MEM_WR_STALL && !UOP_STALL
+   // || WB_V && (PAGE_FAULT | GPROT_EXC) || INT_SIGNAL
    // wire LD_D2 = 1'b1;
    inv1$ inv_uop_stall (D2_UOP_STALL_OUT_BAR, D2_UOP_STALL_OUT);
-   and2$ and_ld_d2_stall (LD_D2, AG_STALL_OUT_LD_D2_IN, D2_UOP_STALL_OUT_BAR);
-   assign DEP_AND_MEM_STALLS_BAR = LD_D2;
+   and2$ and_ld_d2_stall (and0_ld_d2_out, AG_STALL_OUT_LD_D2_IN, D2_UOP_STALL_OUT_BAR);
+   or3$ or0_ld_d2 (LD_D2, and0_ld_d2_out, WB_EXC_V_OUT, INTERRUPT_SIGNAL);
+
+   assign DEP_AND_MEM_STALLS_BAR = and0_ld_d2_out;
    inv1$ inv_dep_mem_stalls (DEP_AND_MEM_STALLS, DEP_AND_MEM_STALLS_BAR);
 
    // Latches between fetch and decode
@@ -544,7 +555,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
       D2_PAGE_FAULT_EXC_EXIST_OUT,
       D2_NMI_INT_EN_OUT, D2_GEN_PROT_EXC_EN_OUT, D2_PAGE_FAULT_EXC_EN_OUT,
-      D2_REPNE_WB_OUT, D2_UOP_STALL_OUT
+      D2_REPNE_WB_OUT, D2_UOP_STALL_OUT, D2_EXC_EN_V_OUT
    );
 
    wire [31:0] AG_PS_EIP;
@@ -696,8 +707,12 @@ module PIPELINE(CLK, CLR, PRE, IR);
             AG_PS_D2_MEM_SIZE_WB,
 	    AG_PS_NMI_INT_EN, AG_PS_GEN_PROT_EXC_EN, AG_PS_PAGE_FAULT_EXC_EN } = AG_PS_IN2[31:12];
 
+   wire ag_ps_page_fault_exc_exist_bar, ag_ps_v_stage_in;
+   inv1$ inv_ag_ps_page_fault_exc_exist (ag_ps_page_fault_exc_exist_bar, AG_PS_PAGE_FAULT_EXC_EXIST);
+   and2$ and_ag_ps_v_stage_in (ag_ps_v_stage_in, AG_PS_V, ag_ps_page_fault_exc_exist_bar);
+
    agen_stage1 u_agen_stage1 (
-        CLK, CLR, PRE, AG_PS_V,
+        CLK, CLR, PRE, ag_ps_v_stage_in, // AG_PS_V,
         // s from pipestage latches
         AG_PS_EIP, AG_PS_CS, AG_PS_CONTROL_STORE, AG_PS_OFFSET, AG_PS_REPNE_WB,
         AG_PS_D2_SR1_NEEDED_AG, AG_PS_D2_SEG1_NEEDED_AG, AG_PS_D2_MM1_NEEDED_AG,
@@ -761,7 +776,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
         AG_MM_SCOREBOARD_OUT,
 
         // other outputs
-        AG_DEP_STALL_OUT, AG_PAGE_FAULT_EXC_EXIST_OUT, AG_REPNE_WB_OUT
+        AG_DEP_STALL_OUT, AG_PAGE_FAULT_EXC_EXIST_OUT, AG_REPNE_WB_OUT,
+        AG_EXC_EN_V_OUT
    );
 
    // Signals to be saved in pipeline latches
@@ -791,7 +807,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire [1:0] AG2_PS_D2_MEM_SIZE_WB;
 
    // EXCEPTION/INTERRUPT STATUS
-   wire AG2_PS_PAGE_FAULT_EXC_EXIST;
+   wire AG2_PS_PAGE_FAULT_EXC_EXIST, AG2_PS_EXC_EN_V;
+
    // AG2 outputs		   
    wire [1:0] AG2_D2_DR1_SIZE_WB_OUT, AG2_D2_DR2_SIZE_WB_OUT;
    wire [1:0] AG2_D2_MEM_SIZE_WB_OUT;
@@ -817,7 +834,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire AG2_D2_LD_GPR1_WB_OUT, AG2_D2_LD_MM_WB_OUT;
 
    // Other signals
-   wire AG2_SEG_LIMIT_EXC_EXIST_OUT, AG2_PS_PAGE_FAULT_EXC_EXIST_OUT;
+   wire AG2_SEG_LIMIT_EXC_EXIST_OUT, AG2_PAGE_FAULT_EXC_EXIST_OUT;
 
    // TODO AG2_V = !REG_DEP_STALL
    wire ag_dep_stall_out_bar, and_flush_ag2_v_out;
@@ -870,25 +887,32 @@ module PIPELINE(CLK, CLR, PRE, IR);
      u_reg_ag2_ps_int_addr (CLK, AG_INTERRUPT_ADDR_OUT, AG2_PS_INTERRUPT_ADDR, , CLR, PRE, LD_AG2);
 
    wire [31:0] AG_OUT1_AG2_PS, AG2_PS_IN1;
-   assign AG_OUT1_AG2_PS[31:7] = { AG_AG2_V_OUT, AG_SEG1_OUT, AG_D2_ALUK_EX_OUT, AG_DRID1_OUT, AG_DRID2_OUT,
+   assign AG_OUT1_AG2_PS[31:6] = { AG_AG2_V_OUT, AG_EXC_EN_V_OUT,
+                                AG_SEG1_OUT, AG_D2_ALUK_EX_OUT, AG_DRID1_OUT, AG_DRID2_OUT,
                                 AG_D2_MEM_RD_ME_OUT, AG_D2_MEM_WR_WB_OUT, AG_D2_LD_GPR1_WB_OUT,
                                 AG_D2_LD_MM_WB_OUT, AG_D2_DR1_SIZE_WB_OUT, AG_D2_DR2_SIZE_WB_OUT,
                                 AG_D2_MEM_SIZE_WB_OUT, AG_PAGE_FAULT_EXC_EXIST_OUT, AG_REPNE_WB_OUT };
-   assign { AG2_PS_V, AG2_PS_SEG1, AG2_PS_D2_ALUK_EX, AG2_PS_DRID1, AG2_PS_DRID2,
+   assign { AG2_PS_V, AG2_PS_EXC_EN_V, AG2_PS_SEG1, AG2_PS_D2_ALUK_EX, AG2_PS_DRID1, AG2_PS_DRID2,
             AG2_PS_D2_MEM_RD_ME, AG2_PS_D2_MEM_WR_WB, AG2_PS_D2_LD_GPR1_WB,
             AG2_PS_D2_LD_MM_WB, AG2_PS_D2_DR1_SIZE_WB, AG2_PS_D2_DR2_SIZE_WB,
-            AG2_PS_D2_MEM_SIZE_WB, AG2_PS_PAGE_FAULT_EXC_EXIST, AG2_PS_REPNE_WB } = AG2_PS_IN1[31:7];
+            AG2_PS_D2_MEM_SIZE_WB, AG2_PS_PAGE_FAULT_EXC_EXIST, AG2_PS_REPNE_WB } = AG2_PS_IN1[31:6];
    reg32e$ u_reg_ag2_ps_in1 (CLK, AG_OUT1_AG2_PS, AG2_PS_IN1, , CLR, PRE, LD_AG2);
+
+   and2$ and_ag2_exc_en_v (AG2_EXC_EN_V_OUT, AG2_PS_V, AG2_PS_EXC_EN_V);
 
    // TODO forwarded?
    wire EFLAGS_DF = EFLAGSDOUT[10];
 
+   wire ag2_ps_page_fault_exc_exist_bar, ag2_ps_v_stage_in;
+   inv1$ inv_ag2_ps_page_fault_exc_exist (ag2_ps_page_fault_exc_exist_bar, AG2_PS_PAGE_FAULT_EXC_EXIST);
+   and2$ and_ag2_ps_v_stage_in (ag2_ps_v_stage_in, AG2_PS_V, ag2_ps_page_fault_exc_exist_bar);
+
    // agen_stage1 dependency check input
-   assign AG2_PS_V_OUT_AG_IN = AG2_PS_V;
+   assign AG2_PS_V_OUT_AG_IN = ag2_ps_v_stage_in;
    //==================================
    
    agen_stage2 u_agen_stage2 (
-      CLK, CLR, PRE, AG2_PS_V,
+      CLK, CLR, PRE, ag2_ps_v_stage_in,
 
       AG2_PS_EIP, AG2_PS_NEIP, AG2_PS_NCS,
       AG2_PS_CONTROL_STORE,
@@ -953,6 +977,9 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
    wire ME_PS_D2_MEM_RD_ME, ME_PS_D2_MEM_WR_WB, ME_PS_D2_LD_GPR1_WB, ME_PS_D2_LD_MM_WB;
 
+   // interrupts/exceptions
+   wire ME_PS_GPROT_EXC_EXIST, ME_PS_PAGE_FAULT_EXC_EXIST, ME_PS_EXC_EN_V;
+
    wire [31:0] ME_MEM_WR_ADDR_OUT;
    wire [1:0] ME_D2_MEM_SIZE_WB_OUT;
    wire ME_D2_MEM_WR_WB_OUT;
@@ -1006,7 +1033,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
      u_reg_me_mem_rd_addr (CLK, AG2_MEM_RD_ADDR_OUT, ME_PS_MEM_RD_ADDR, , CLR, PRE, LD_ME),
      u_reg_me_mem_wr_addr (CLK, AG2_MEM_WR_ADDR_OUT, ME_PS_MEM_WR_ADDR, , CLR, PRE, LD_ME);
 
-   assign AG2_OUT1_ME_PS[31:11] = { AG2_ME_V_OUT,
+   assign AG2_OUT1_ME_PS[31:8] = { AG2_ME_V_OUT,
+          AG2_SEG_LIMIT_EXC_EXIST_OUT, AG2_PAGE_FAULT_EXC_EXIST_OUT, AG2_PS_EXC_EN_V,
           AG2_D2_ALUK_EX_OUT, AG2_DRID1_OUT, AG2_DRID2_OUT, AG2_D2_MEM_RD_ME_OUT, AG2_D2_MEM_WR_WB_OUT,
 	  AG2_D2_LD_GPR1_WB_OUT, AG2_D2_LD_MM_WB_OUT,
           AG2_D2_DR1_SIZE_WB_OUT, AG2_D2_DR2_SIZE_WB_OUT,
@@ -1015,14 +1043,18 @@ module PIPELINE(CLK, CLR, PRE, IR);
    reg32e$
      u_reg_me_ps_in1 (CLK, AG2_OUT1_ME_PS, ME_PS_IN1, , CLR, PRE, LD_ME);
 
-   assign { ME_PS_V,
+   assign { ME_PS_V, ME_PS_GPROT_EXC_EXIST, ME_PS_PAGE_FAULT_EXC_EXIST, ME_PS_EXC_EN_V,
             ME_PS_D2_ALUK_EX, ME_PS_DRID1, ME_PS_DRID2, ME_PS_D2_MEM_RD_ME, ME_PS_D2_MEM_WR_WB,
             ME_PS_D2_LD_GPR1_WB, ME_PS_D2_LD_MM_WB,
             ME_PS_D2_DR1_SIZE_WB, ME_PS_D2_DR2_SIZE_WB,
-            ME_PS_D2_MEM_SIZE_WB, ME_PS_D2_REPNE_WB } = ME_PS_IN1[31:11];
+            ME_PS_D2_MEM_SIZE_WB, ME_PS_D2_REPNE_WB } = ME_PS_IN1[31:8];
+
+   wire nor_me_exc_exist_out, me_ps_v_stage_in;
+   nor2$ nor_me_exc_exist (nor_me_exc_exist_out, ME_PS_GPROT_EXC_EXIST, ME_PS_PAGE_FAULT_EXC_EXIST);
+   and2$ and_me_ps_v_stage_in (me_ps_v_stage_in, ME_PS_V, nor_me_exc_exist_out);
 
    // agen_stage1 dependency check input
-   assign ME_PS_V_OUT_AG_IN = ME_PS_V;
+   assign ME_PS_V_OUT_AG_IN = me_ps_v_stage_in;
    //==================================
    
    wire ME2_V_ME_IN, ME2_WR_ADDR1_V_ME_IN, ME2_WR_ADDR2_V_ME_IN,
@@ -1033,7 +1065,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
 	      EX_WR_SIZE1_ME_IN, EX_WR_SIZE2_ME_IN;
    
    memory_stage1 u_memory_stage1 (
-      CLK, CLR, PRE, ME_PS_V,
+      CLK, CLR, PRE, me_ps_v_stage_in, // ME_PS_V,
 
       // inputs from previous stage
       ME_PS_MEM_RD_ADDR, ME_PS_MEM_WR_ADDR,
@@ -1062,7 +1094,12 @@ module PIPELINE(CLK, CLR, PRE, IR);
 				  
       ME_PAGE_FAULT_EXC_OUT, ME_GPROT_EXC_OUT, ME_MEM_DEP_STALL_OUT
    );
-			  
+
+   wire ME_PAGE_FAULT_EXC_EXIST_OUT, ME_GPROT_EXC_EXIST_OUT;
+   or2$ or0_me_page_fault (ME_PAGE_FAULT_EXC_EXIST_OUT, ME_PAGE_FAULT_EXC_OUT, ME_PS_PAGE_FAULT_EXC_EXIST);
+   or2$ or0_me_gprot_exc (ME_GPROT_EXC_EXIST_OUT, ME_GPROT_EXC_OUT, ME_PS_GPROT_EXC_EXIST);
+   and2$ and0_me_exc_en (ME_EXC_EN_V_OUT, ME_PS_V, ME_PS_EXC_EN_V);
+
    wire ME2_PS_V;
    wire [31:0] ME2_PS_NEIP, ME2_PS_NEIP_NOT_TAKEN;
    wire [15:0] ME2_PS_NCS, ME2_PS_NCS_NC;
@@ -1145,18 +1182,24 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire [31:0] me2_ps_save_mem, ME2_PS_SAVE_MEM;
    wire ME2_PS_RD_ADDR1_V, ME2_PS_RD_ADDR2_V, ME2_PS_WR_ADDR1_V, ME2_PS_WR_ADDR2_V;
    wire [3:0] ME2_PS_RA_RD_SIZE1, ME2_PS_RA_RD_SIZE2, ME2_PS_RA_WR_SIZE1, ME2_PS_RA_WR_SIZE2;
-   wire ME2_PS_PAGE_FAULT_EXC, ME2_PS_GPROT_EXC;
+   wire ME2_PS_PAGE_FAULT_EXC_EXIST, ME2_PS_GPROT_EXC_EXIST, ME2_PS_EXC_EN_V;
    
-   assign me2_ps_save_mem[31:10] = {ME_RD_ADDR1_V_OUT, ME_RA_RD_SIZE1_OUT, ME_RD_ADDR2_V_OUT, ME_RA_RD_SIZE2_OUT,
+   assign me2_ps_save_mem[31:9] = {ME_RD_ADDR1_V_OUT, ME_RA_RD_SIZE1_OUT, ME_RD_ADDR2_V_OUT, ME_RA_RD_SIZE2_OUT,
                                     ME_WR_ADDR1_V_OUT, ME_RA_WR_SIZE1_OUT, ME_WR_ADDR2_V_OUT, ME_RA_WR_SIZE2_OUT,
-                                    ME_PAGE_FAULT_EXC_OUT, ME_GPROT_EXC_OUT};
+                                    ME_PAGE_FAULT_EXC_EXIST_OUT, ME_GPROT_EXC_EXIST_OUT, ME_EXC_EN_V_OUT};
    assign {ME2_PS_RD_ADDR1_V, ME2_PS_RA_RD_SIZE1, ME2_PS_RD_ADDR2_V, ME2_PS_RA_RD_SIZE2,
            ME2_PS_WR_ADDR1_V, ME2_PS_RA_WR_SIZE1, ME2_PS_WR_ADDR2_V, ME2_PS_RA_WR_SIZE2,
-           ME2_PS_PAGE_FAULT_EXC, ME2_PS_GPROT_EXC} = ME2_PS_SAVE_MEM[31:10];
-   
+           ME2_PS_PAGE_FAULT_EXC_EXIST, ME2_PS_GPROT_EXC_EXIST, ME2_PS_EXC_EN_V} = ME2_PS_SAVE_MEM[31:9];
+
+   and2$ and_me2_exc_en (ME2_EXC_EN_V_OUT, ME2_PS_V, ME2_PS_EXC_EN_V);
+
    reg32e$ u_reg_me2_ps_save_mem (CLK, me2_ps_save_mem, ME2_PS_SAVE_MEM, , CLR, PRE, LD_ME2);
 
-   assign ME2_V_ME_IN = ME2_PS_V;
+   wire nor_me2_exc_exist_out, me2_ps_v_stage_in;
+   nor2$ nor_me2_exc_exist (nor_me2_exc_exist_out, ME2_PS_PAGE_FAULT_EXC_EXIST, ME2_PS_GPROT_EXC_EXIST);
+   and2$ and_me2_v_stage_in (me2_v_stage_in, ME2_PS_V, nor_me2_exc_exist_out);
+
+   assign ME2_V_ME_IN = me2_ps_v_stage_in;
    assign ME2_WR_ADDR1_V_ME_IN = ME2_PS_WR_ADDR1_V;
    assign ME2_WR_ADDR1_ME_IN = ME2_PS_RA_WR_ADDR1;
    assign ME2_WR_SIZE1_ME_IN = ME2_PS_RA_WR_SIZE1;
@@ -1172,7 +1215,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
    assign ME2_RD_ADDR2_LSU_IN = ME2_PS_RA_RD_ADDR2;
    assign ME2_RD_SIZE2_LSU_IN = ME2_PS_RA_RD_SIZE2;
 
-   assign ME2_V_LSU_IN = ME2_PS_V;
+   assign ME2_V_LSU_IN = me2_ps_v_stage_in;
    assign ME2_MEM_RD_LSU_IN = ME2_PS_D2_MEM_RD_ME;
    //==================================================================================//
    
@@ -1214,7 +1257,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
             ME2_PS_D2_MEM_SIZE_WB, ME2_PS_D2_REPNE_WB } = ME2_PS_IN1[31:11];
 
    // agen_stage1 dependency check inputs
-   assign ME2_PS_V_OUT_AG_IN = ME2_PS_V;
+   assign ME2_PS_V_OUT_AG_IN = me2_ps_v_stage_in;
    //===================================
    
     //******************************************************************************//
@@ -1224,7 +1267,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
     //*******************************************************************************//
 
    memory_stage2 u_memory_stage2 (
-        CLK, CLR, PRE, ME2_PS_V,
+        CLK, CLR, PRE, me2_ps_v_stage_in,
 
         ME2_PS_NEIP,
         ME2_PS_NCS,
@@ -1300,16 +1343,22 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire [31:0] ex_ps_save_mem, EX_PS_SAVE_MEM;
    wire EX_PS_WR_ADDR1_V, EX_PS_WR_ADDR2_V;
    wire [3:0] EX_PS_RA_WR_SIZE1, EX_PS_RA_WR_SIZE2;
-   wire EX_PS_PAGE_FAULT_EXC, EX_PS_GPROT_EXC;
+   wire EX_PS_PAGE_FAULT_EXC_EXIST, EX_PS_GPROT_EXC_EXIST, EX_PS_EXC_EN_V;
    wire EX_PS_REPNE_WB;
-   assign ex_ps_save_mem[31:19] = {ME2_PS_WR_ADDR1_V, ME2_PS_RA_WR_SIZE1, ME2_PS_WR_ADDR2_V, ME2_PS_RA_WR_SIZE2,
-                                   ME2_PS_PAGE_FAULT_EXC, ME2_PS_GPROT_EXC, ME2_PS_D2_REPNE_WB};
+   assign ex_ps_save_mem[31:18] = {ME2_PS_WR_ADDR1_V, ME2_PS_RA_WR_SIZE1, ME2_PS_WR_ADDR2_V, ME2_PS_RA_WR_SIZE2,
+                                   ME2_PS_PAGE_FAULT_EXC_EXIST, ME2_PS_GPROT_EXC_EXIST, ME2_PS_EXC_EN_V, ME2_PS_D2_REPNE_WB};
    assign {EX_PS_WR_ADDR1_V, EX_PS_RA_WR_SIZE1, EX_PS_WR_ADDR2_V, EX_PS_RA_WR_SIZE2,
-           EX_PS_PAGE_FAULT_EXC, EX_PS_GPROT_EXC, EX_PS_REPNE_WB} = EX_PS_SAVE_MEM[31:19];
+           EX_PS_PAGE_FAULT_EXC_EXIST, EX_PS_GPROT_EXC_EXIST, EX_PS_EXC_EN_V, EX_PS_REPNE_WB} = EX_PS_SAVE_MEM[31:18];
+
+   and2$ and_ex_exc_en_v (EX_EXC_EN_V_OUT, EX_V, EX_PS_EXC_EN_V);
    
    reg32e$ u_reg_ex_ps_save_mem (CLK, ex_ps_save_mem, EX_PS_SAVE_MEM, , CLR, PRE, LD_EX);
 
-   assign EX_V_ME_IN = EX_V;
+   wire nor_ex_exc_exist_out, ex_ps_v_stage_in;
+   nor2$ nor_ex_exc_exist (nor_ex_exc_exist_out, EX_PS_PAGE_FAULT_EXC_EXIST, EX_PS_GPROT_EXC_EXIST);
+   and2$ and_ex_v_stage_in (ex_ps_v_stage_in, EX_V, nor_ex_exc_exist_out);
+
+   assign EX_V_ME_IN = ex_ps_v_stage_in;
    assign EX_WR_ADDR1_V_ME_IN = EX_PS_WR_ADDR1_V;
    assign EX_WR_ADDR1_ME_IN = EX_PS_RA_WR_ADDR1;
    assign EX_WR_SIZE1_ME_IN = EX_PS_RA_WR_SIZE1;
@@ -1326,6 +1375,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
    reg32e$ u_EX_v_latch(CLK, {{31{1'b0}}, EX_V_next}, EX_V_out, ,CLR,PRE,LD_EX); 
    assign EX_V = EX_V_out[0]; 
     
+    // reg dependency checks
+    assign EX_PS_V_OUT_AG_IN = ex_ps_v_stage_in;
    //=============================
    
    // EX_V_next = ME2_PS_V && !MEM_RD_STALL
@@ -1333,9 +1384,6 @@ module PIPELINE(CLK, CLR, PRE, IR);
 //    wire [31:0] EX_V_out; 
 //    reg32e$ u_EX_v_latch(CLK, {{31{1'b0}}, EX_V_next}, EX_V_out, ,CLR,PRE,LD_EX); 
 //    assign EX_V = EX_V_out[0]; 
-
-    // reg dependency checks
-    assign EX_PS_V_OUT_AG_IN = EX_V;
 
     wire [31:0] EX_NEIP_next = ME2_NEIP_OUT;
     wire [31:0] EX_NEIP, EX_NEIP_NOT_TAKEN;
@@ -1444,7 +1492,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
     execute u_execute(
         CLK, PRE, CLR, //not uesd SET/RST
 
-        EX_V,
+        ex_ps_v_stage_in,
         EX_NEIP,
         EX_NCS,
         EX_CONTROL_STORE,
@@ -1520,18 +1568,22 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire [31:0] wb_ps_save_mem, WB_PS_SAVE_MEM;
    wire WB_PS_WR_ADDR1_V, WB_PS_WR_ADDR2_V;
    wire [3:0] WB_PS_RA_WR_SIZE1, WB_PS_RA_WR_SIZE2;
-   wire WB_PS_PAGE_FAULT_EXC, WB_PS_GPROT_EXC;
-   assign wb_ps_save_mem[31:20] = {EX_PS_WR_ADDR1_V, EX_PS_RA_WR_SIZE1, EX_PS_WR_ADDR2_V, EX_PS_RA_WR_SIZE2,
-                                   EX_PS_PAGE_FAULT_EXC, EX_PS_GPROT_EXC};
+   wire WB_PS_PAGE_FAULT_EXC_EXIST, WB_PS_GPROT_EXC_EXIST, WB_PS_EXC_EN_V;
+   assign wb_ps_save_mem[31:19] = {EX_PS_WR_ADDR1_V, EX_PS_RA_WR_SIZE1, EX_PS_WR_ADDR2_V, EX_PS_RA_WR_SIZE2,
+                                   EX_PS_PAGE_FAULT_EXC_EXIST, EX_PS_GPROT_EXC_EXIST, EX_PS_EXC_EN_V};
    assign {WB_PS_WR_ADDR1_V, WB_PS_RA_WR_SIZE1, WB_PS_WR_ADDR2_V, WB_PS_RA_WR_SIZE2,
-           WB_PS_PAGE_FAULT_EXC, WB_PS_GPROT_EXC} = WB_PS_SAVE_MEM[31:20];
+           WB_PS_PAGE_FAULT_EXC_EXIST, WB_PS_GPROT_EXC_EXIST, WB_PS_EXC_EN_V} = WB_PS_SAVE_MEM[31:19];
    
-   and2$ and_wb_gen_prot_exc_exist (WB_GEN_PROT_EXC_EXIST_V, WB_V, WB_PS_GPROT_EXC);
-   and2$ and_wb_page_fault_exc_exist (WB_PAGE_FAULT_EXC_EXIST_V, WB_V, WB_PS_PAGE_FAULT_EXC);
+   and2$ and_wb_gen_prot_exc_exist (WB_GEN_PROT_EXC_EXIST_V, WB_V, WB_PS_GPROT_EXC_EXIST);
+   and2$ and_wb_page_fault_exc_exist (WB_PAGE_FAULT_EXC_EXIST_V, WB_V, WB_PS_PAGE_FAULT_EXC_EXIST);
 
    reg32e$ u_reg_wb_ps_save_mem (CLK, wb_ps_save_mem, WB_PS_SAVE_MEM, , CLR, PRE, LD_WB);
 
-   assign WB_V_LSU_IN = WB_V;
+   wire nor_wb_exc_exist_out, wb_ps_v_stage_in;
+   nor2$ nor_wb_exc_exist (nor_wb_exc_exist_out, WB_PS_PAGE_FAULT_EXC_EXIST, WB_PS_GPROT_EXC_EXIST);
+   and2$ and_wb_v_stage_in (wb_ps_v_stage_in, WB_V, nor_wb_exc_exist_out);
+
+   assign WB_V_LSU_IN = wb_ps_v_stage_in;
    assign WB_WR_ADDR1_V_LSU_IN = WB_PS_WR_ADDR1_V;
    assign WB_WR_ADDR1_LSU_IN = WB_PS_RA_WR_ADDR1;
    assign WB_WR_SIZE1_LSU_IN = WB_PS_RA_WR_SIZE1;
@@ -1543,7 +1595,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire EX_OUT_WB_V_IN;
 
    // wb_repne_terminate_all = WB_V && termination_conditions && IS_SECOND_UOP && wb_repne
-   or2$ or_wb_exc (or_wb_exc_out, WB_PS_PAGE_FAULT_EXC, WB_PS_GPROT_EXC);
+   or2$ or_wb_exc (or_wb_exc_out, WB_PS_PAGE_FAULT_EXC_EXIST, WB_PS_GPROT_EXC_EXIST);
    and2$ and_wb_ints_v (and_wb_exc_v_out, WB_V, or_wb_exc_out);
    nor3$ nor_wb_v (nor_wb_v_out, and_wb_exc_v_out, wb_repne_terminate_all, INTERRUPT_SIGNAL);
    and2$ and_wb_v (EX_OUT_WB_V_IN, EX_V, nor_wb_v_out);
@@ -1634,7 +1686,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
     writeback u_writeback(
         CLK, PRE, CLR, //not uesd SET/RST
 
-        WB_V,
+        wb_ps_v_stage_in,
         WB_NEIP_NOT_TAKEN,
         WB_NEIP,
         WB_NCS,
