@@ -16,5 +16,5 @@
 ./DMA/dma_bus_controller.v
 ./keyboard/kbd_bus_controller.v
 ./interrupt/intr_bus_controller.v
-
+./all_mem.v
 

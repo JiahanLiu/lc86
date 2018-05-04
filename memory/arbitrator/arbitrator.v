@@ -1,7 +1,10 @@
 module arbitrator(input BUS_CLK,
-		                    input CLR, PRE,
-		                    input [5:0] BR,
-		  output [5:0] BG);
+		  input CLR, PRE,
+		  input [5:0] BR,
+		  output [5:0] BG,
+		  //The arbitrator unifes all acknowledge signals together
+		  input [5:0] CNTRLR_ACK,
+		  output BUS_ACK);
 
       //NEXT STATE LOGIC
    parameter IDLE = 8'b0000_0001, BUSY = 8'b0000_0010;
@@ -53,7 +56,10 @@ module arbitrator(input BUS_CLK,
 
    dff8$ current_mstr(BUS_CLK, next_master, current_master, , CLR, PRE);
 
-
+   //EASY TASK UNIFYING ALL REQUESTS
+   or1_6way(BUS_ACK, CNTRLR_ACK[0], CNTRLR_ACK[1], CNTRLR_ACK[2],
+     CNTRLR_ACK[3], CNTRLR_ACK[4], CNTRLR_ACK[5]);
+   
 
 
    endmodule // arbitrator
