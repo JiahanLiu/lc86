@@ -13,7 +13,7 @@
 `define flags_affected ({`OF_affected, `DF_affected, 2'b0, `SF_affected, `ZF_affected, 1'b0, `AF_affected, 1'b0, `PF_affected, 1'b0, `CF_affected})
 
 `define macro_sign_extend 1'b0
-`define macro_check_length 2'b00 
+`define macro_check_length 2'b10 
 
 `define default_mem_Value 64'h1234_5678_90AB_CDEF
 `define default_reg_base_macro 32'h90
@@ -77,7 +77,7 @@
 `define if_check_address 1'b0
 `define check_ld_dcache 1'b0 //check values
 `define check_dcache_data (`check_opA + `check_opB)
-`define check_address ((`default_cs << 16) + (`default_reg_base_32 + `default_big_endian_dis))
+`define check_address ((`default_ss << 16) + (`default_reg_base_32 + `default_big_endian_dis))
 
 module TOP;
 //this module is used to debug the basic functionality of the simulator

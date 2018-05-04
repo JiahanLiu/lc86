@@ -21,6 +21,7 @@
 `define default_reg_base_32 ((`default_reg_base_macro + `default_modrm_rm) + ((`default_reg_base_macro + `default_modrm_rm) << 8) + ((`default_reg_base_macro + `default_modrm_rm) << 16) + ((`default_reg_base_macro + `default_modrm_rm) << 24))
 `define default_eip 32'h1 
 `define default_cs 32'h22 
+`define default_ss ((`default_reg_base_macro + 3'b010) + ((`default_reg_base_macro + 3'b010) << 8))
 `define default_flags 32'h111
 `define default_imm 32'h8765_4321
 `define default_big_endian_imm8 8'h21
