@@ -76,7 +76,7 @@
 `define if_check_dcachedata 1'b1
 `define if_check_address 1'b1
 `define check_ld_dcache 1'b1 //check values
-`define check_dcache_data (`check_opA >> `check_opB)
+`define check_dcache_data (`check_opA >>> `check_opB)
 `define check_address ((`default_ss << 16) + (`default_reg_base_32 + `default_big_endian_dis))
 
 module TOP;

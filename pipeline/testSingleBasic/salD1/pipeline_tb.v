@@ -39,7 +39,7 @@
 `define if_check_op_b 1'b1
 `define if_check_aluk 1'b1
 `define check_opA (`default_mem_Value) //check values
-`define check_opB (`default_big_endian_imm8)
+`define check_opB 32'b1
 `define check_aluk 3'b100
 
 `define if_check_data1 1'b0
