@@ -105,10 +105,10 @@ module bus_controller(//interface with bus
    tristate_bus_driver1$ MAS2_TRI(MASTER_TRI_EN, MASTER_TRI_IN[2], MASTER[2]);
    tristate_bus_driver1$ MAS1_TRI(MASTER_TRI_EN, MASTER_TRI_IN[1], MASTER[1]);
    tristate_bus_driver1$ MAS0_TRI(MASTER_TRI_EN, MASTER_TRI_IN[0], MASTER[0]);
+ */
     wire 		    A_TRI_EN;
    assign A_TRI_EN = CTRL_TRI_EN;
    tristate_bus_driver16$ A_TRI(A_TRI_EN, MOD_A, A);
- */
    
 
    wire [11:0] 		    SIZE_TRI_IN;
