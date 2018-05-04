@@ -28,5 +28,4 @@ with open('failed_tests', 'w+') as outfile:
 		#subprocess.call(['./run_pipeline'])
 		#subprocess.call(['./simv'])
 		os.chdir('..')
-		break
 
