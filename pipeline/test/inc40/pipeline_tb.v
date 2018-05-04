@@ -22,6 +22,7 @@
 `define default_reg_base_32 ((`default_reg_base_macro + `default_modrm_rm) + ((`default_reg_base_macro + `default_modrm_rm) << 8) + ((`default_reg_base_macro + `default_modrm_rm) << 16) + ((`default_reg_base_macro + `default_modrm_rm) << 24))
 `define default_eip 32'h1 
 `define default_cs 32'h22 
+`define default_ss ((`default_reg_base_macro + 3'b010) + ((`default_reg_base_macro + 3'b010) << 8))
 `define default_flags 32'hFFF
 `define default_imm 32'h8765_4321
 `define default_big_endian_imm8 8'h21
@@ -978,7 +979,7 @@ module TOP;
               if(u_pipeline.WB_Final_Dcache_Address !== `check_address) begin 
                 $display("Error: WB_Final_Dcache_Address is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_Address, `check_address);
                 error <= 1;
-                $display("Debug: default_cs << 16 is: %h", `default_cs << 16);
+                $display("Debug: default_ss << 16 is: %h", `default_ss << 16);
                 $display("Debug: default_reg_whole_value << is : %h", `default_reg_base_32);
                 $display("Debug: default_dis is: %h", `default_big_endian_dis);
               end
