@@ -1025,7 +1025,7 @@ module TOP;
               if(u_pipeline.WB_Final_Dcache_Address !== `check_address) begin 
                 $display("Error: WB_Final_Dcache_Address is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_Address, `check_address);
                 error <= 1;
-                $display("Debug: default_cs << 16 is: %h", `default_cs << 16);
+                $display("Debug: default_ss << 16 is: %h", `default_ss << 16);
                 $display("Debug: default_reg_whole_value << is : %h", `default_reg_base_32);
                 $display("Debug: default_dis is: %h", `default_big_endian_dis);
               end
