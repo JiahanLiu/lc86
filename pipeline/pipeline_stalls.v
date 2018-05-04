@@ -55,7 +55,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
    wire WB_EXC_V_OUT;
    wire WB_FLUSH_PIPELINE_BAR;
-   wire INTERRUPT_SIGNAL; // TODO where does it come from
+   wire INTERRUPT_SIGNAL = 1'b0; // TODO where does it come from
  
    wire WB_GEN_PROT_EXC_EXIST_V, WB_PAGE_FAULT_EXC_EXIST_V;
 
@@ -162,9 +162,10 @@ module PIPELINE(CLK, CLR, PRE, IR);
     //*******CACHE FILES*******//
     //Cache file systems to be used by the system
     wire [127:0] ICACHE_DOUT, DCACHE_DIN, DCACHE_DOUT;
-    wire [31:0] IC_PADDR, DC_PADDR;
-    wire IC_EN, DC_WE, IC_R, DC_R;	//IC_EN needs to be included
-    //icache u_icache (CLK, RST, IC_PADDR, IC_R, IC_DOUT);
+    wire [31:0] ICACHE_PADDR_OUT, DC_PADDR;
+    wire ICACHE_EN_OUT, DC_WE, ICACHE_READY, DC_R;	//ICACHE_EN_OUT needs to be included
+    wire [4:0] FE_ICACHE_RD_SIZE_OUT;
+    //icache u_icache (CLK, RST, ICACHE_PADDR_OUT, IC_R, IC_DOUT);
     //dcache u_dcache(CLK, RST, DC_PADDR, DC_DIN, DC_SIZE, DC_WE, DC_R, DC_DOUT);
 
     wire V_FETCH;
@@ -241,8 +242,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire [15:0] DE_OPCODE_IN;
     // Placeholder for now TODO: add selection for EIP when
     // interrupt/exceptions exist
-    wire [15:0] DE_CS_IN = 16'h1A;
-    wire [31:0] DE_EIP_IN = 32'h01;
+    wire [15:0] DE_CS_IN; //= 16'h1A;
+    wire [31:0] DE_EIP_IN; //= 32'h01;
     wire [31:0] DE_EIP_OUT, DE_EIP_OUT_BAR;
     wire [127:0] IR_IN;
     //Debug - change reg to wire
@@ -254,53 +255,99 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire [7:0] DE_CONTROL_STORE_ADDRESS_IN, DE_CONTROL_STORE_ADDRESS;
     wire [31:0] DE_CONTROL_STORE_ADDRESS_OUT;
 
-    //fetch u_fetch(
-    //    CLK, PRE, CLR, 
-    //    FE_EIP_IN, 
-    //    IC_DOUT, 
-    //    IC_R,
-    //	      
-    //    FE_JMP_FP, FE_TRAP_FP,
-    //    CSDOUT,
-    //    FE_FP_MUX,
-    //    FE_LD_EIP,
-    //
-    //    DE_EIP_IN,
-    //    DE_CS_IN,
-    //    IC_EN,
-    //    IC_PADDR,
-    //    FE_SEG_LIM_EXC,
-    //    IR_IN,
-    //    DE_INSTR_LENGTH_UPDT_IN,
-    //    DE_OPCODE_IN,
-    //    DE_PRE_SIZE_IN,
-    //    DE_PRE_PRES_IN,  DE_SEG_OVR_IN,  DE_OP_OVR_IN,  DE_RE_PRE_IN, 
-    //    DE_MODRM_PRES_IN,  DE_IMM_PRES_IN, 
-    //    DE_IMM_SIZE_IN, 
-    //    DE_SIB_PRES_IN,  DE_DISP_PRES_IN,  DE_DISP_SIZE_IN, 
-    //    DE_IMM_SEL_IN, 
-    //    DE_DISP_SEL_IN, 
-    //    DE_OFFSET_PRES_IN, 
-    //    DE_OP_SIZE_IN, 
-    //    DE_OFFSET_SIZE_IN, 
-    //    DE_SEGID_IN, 
-    //    DE_MODRM_IN,  DE_SIB_IN, 
-    //    DE_MODRM_SEL_IN
-    //
-    //    IR_OUT,
-    //); 
+    reg [127:0] temp_icache_data;
+    reg icache_ready;
+    assign ICACHE_DOUT = temp_icache_data;
+    assign ICACHE_READY = icache_ready;
+    //assign FE_EIP_IN = 32'b0;
 
+//    initial begin
+//       icache_ready = 1'b0;
+//       #32
+//       icache_ready = 1'b1;
+//       #12
+//       icache_ready = 1'b0;
+//       #9
+//       icache_ready = 1'b1;
+//       #12 icache_ready = 1'b0;
+//       #10
+//       icache_ready = 1'b1;
+//       #12
+//       icache_ready = 1'b0;
+//       #15
+//       icache_ready = 1'b1;
+//    end
+    always @(posedge icache_ready) begin
+       #12
+       icache_ready = 1'b0;
+    end
+    always @(ICACHE_PADDR_OUT) begin
+       icache_ready = 1'b0;
+    end
+    always @(ICACHE_PADDR_OUT or posedge CLK or ICACHE_EN_OUT) begin
+       if (ICACHE_EN_OUT) begin
+          $strobe("ICACHE_RD_ADDR %0h size %0h @ time %0t", ICACHE_PADDR_OUT, FE_ICACHE_RD_SIZE_OUT, $time);
+          if (ICACHE_PADDR_OUT[7:0] == 8'h00) begin
+             //temp_icache_data = 128'h0F6FEB254B212F9681773D090CDB1283;
+             temp_icache_data = 128'h8312DB0C093D7781962F214B25EB6F0F;
+             $strobe("icache data 0 %0h", temp_icache_data);
+          end
+          else if (ICACHE_PADDR_OUT[7:0] == 8'h10) begin
+             //temp_icache_data = 128'h7E6D39201F21D32285BC148878235B49;
+             temp_icache_data = 128'h495B23788814BC8522D3211F29386D7E;
+             $strobe("icache data 1 %0h", temp_icache_data);
+          end
+          else if (ICACHE_PADDR_OUT[7:0] == 8'h20) begin
+             //temp_icache_data = 128'h0F6FEB254B212F9681773D090CDB1283;
+             temp_icache_data = 128'h8312DB0C093D7781962F214B25EB6F0F;
+             $strobe("icache data 2 %0h", temp_icache_data);
+          end
+          else if (ICACHE_PADDR_OUT[7:0] == 8'h30) begin
+             //temp_icache_data = 128'h7E6D39201F21D32285BC148878235B49;;
+             temp_icache_data = 128'h495B23788814BC8522D3211F29386D7E;
+             $strobe("icache data 3 %0h", temp_icache_data);
+          end
+       end
+       #10
+       icache_ready = 1'b1;
+    end
+             
     wire INT_EXIST_DE_IN;
     or2$ or_de_exc_v (INT_EXIST_DE_IN, WB_EXC_V_OUT, INTERRUPT_SIGNAL);
 
-    decode_stage1 u_decode_stage1 (
-        CLK, PRE, CLR,
-        IR,
-        // interrupt enable inputs
+    wire DEP_AND_MEM_STALLS, DEP_AND_MEM_STALLS_BAR;
+    assign FE_EIP_IN = EIPDOUT;
+
+    wire FETCH_STALL_OUT;
+
+    fetch u_fetch (
+        CLK, CLR, PRE, 
+
+        FE_EIP_IN, 
+        CSDOUT,
+
+        ICACHE_DOUT, 
+        ICACHE_READY,
+    	      
+        FE_JMP_FP, FE_TRAP_FP,
+        FE_FP_MUX,
+        FE_LD_EIP,
+    
+        DEP_AND_MEM_STALLS, DEP_AND_MEM_STALLS_BAR, 1'b0, 1'b0,
         INT_EXIST_DE_IN,
 
-        // outputs
+        // outputs to next stage
+        DE_EIP_IN,
+        DE_CS_IN,
+
+        // outputs to ICACHE
+        ICACHE_PADDR_OUT,
+        FE_ICACHE_RD_SIZE_OUT,
+        ICACHE_EN_OUT,
+
+        FE_SEG_LIM_EXC,
         IR_IN,
+
         DE_INSTR_LENGTH_UPDT_IN,
         DE_OPCODE_IN,
         DE_PRE_SIZE_IN,
@@ -316,19 +363,52 @@ module PIPELINE(CLK, CLR, PRE, IR);
         DE_SEGID_IN, 
         DE_MODRM_IN,  DE_SIB_IN, 
         DE_MODRM_SEL_IN,
-        DE_CONTROL_STORE_ADDRESS_IN
-    );
+        DE_CONTROL_STORE_ADDRESS_IN,
+
+        FETCH_STALL_OUT
+    ); 
+
+//    decode_stage1 u_decode_stage1 (
+//        CLK, PRE, CLR,
+//        IR,
+//        // interrupt enable inputs
+//        INT_EXIST_DE_IN,
+//
+//        // outputs
+//        IR_IN,
+//        DE_INSTR_LENGTH_UPDT_IN,
+//        DE_OPCODE_IN,
+//        DE_PRE_SIZE_IN,
+//        DE_PRE_PRES_IN,  DE_SEG_OVR_IN,  DE_OP_OVR_IN,  DE_RE_PRE_IN, 
+//        DE_MODRM_PRES_IN,  DE_IMM_PRES_IN, 
+//        DE_IMM_SIZE_IN, 
+//        DE_SIB_PRES_IN,  DE_DISP_PRES_IN,  DE_DISP_SIZE_IN, 
+//        DE_IMM_SEL_IN, 
+//        DE_DISP_SEL_IN, 
+//        DE_OFFSET_PRES_IN, 
+//        DE_OP_SIZE_IN, 
+//        DE_OFFSET_SIZE_IN, 
+//        DE_SEGID_IN, 
+//        DE_MODRM_IN,  DE_SIB_IN, 
+//        DE_MODRM_SEL_IN,
+//        DE_CONTROL_STORE_ADDRESS_IN
+//    );
 
    wire DE_V_IN, LD_D2;
    wire AG_STALL_OUT_LD_D2_IN;
    wire D2_UOP_STALL_OUT, D2_UOP_STALL_OUT_BAR;
-   assign DE_V_IN = 1'b1;
+
+   nor2$ nor_de_v (DE_V_IN, FETCH_STALL_OUT, 1'b0);
+   // assign DE_V_IN = 1'b1;
    // DE_V_IN = !FETCH_STALL && !D2_EXC_EN_OUT && !AG_EXC_EN_OUT &&
    // !AG2_EXC_EN_OUT && ! ME_EXC_EN_OUT && !ME2_EXC_EN_OUT  && !EX_EXC_EN_OUT
+   // && !wb_repne_terminate_all
    // TODO LD_D2 = !REG_DEP_STALL && ! MEM_DEP_STALL && !MEM_RD_STALL && !MEM_WR_STALL && !UOP_STALL
    // wire LD_D2 = 1'b1;
    inv1$ inv_uop_stall (D2_UOP_STALL_OUT_BAR, D2_UOP_STALL_OUT);
    and2$ and_ld_d2_stall (LD_D2, AG_STALL_OUT_LD_D2_IN, D2_UOP_STALL_OUT_BAR);
+   assign DEP_AND_MEM_STALLS_BAR = LD_D2;
+   inv1$ inv_dep_mem_stalls (DEP_AND_MEM_STALLS, DEP_AND_MEM_STALLS_BAR);
 
    // Latches between fetch and decode
    wire [31:0] DE_V_OUT_T, DE_V_OUT_T_BAR, DE_OP_CS_OUT_T, DE_OP_CS_OUT_T_BAR, MOD_SIB_OUT, MOD_SIB_OUT_BAR;	//temp wires

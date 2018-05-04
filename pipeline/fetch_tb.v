@@ -149,6 +149,24 @@ module TOP;
 //        u_pipeline.u_fetch.u_FE_buf_2.high.Q = 64'h7E6D39201F21D322;
 //        u_pipeline.u_fetch.u_FE_buf_1.high.Q = 64'h0F6FEB254B212F96;
 //        u_pipeline.u_fetch.u_FE_buf_0.high.Q = 64'h7E6D39201F21D322;
+        u_pipeline.u_register_file.segr.regfilelo.mem_array[0] = 8'h0;
+        u_pipeline.u_register_file.segr.regfilelo.mem_array[1] = 8'h1;
+        u_pipeline.u_register_file.segr.regfilelo.mem_array[2] = 8'h2;
+        u_pipeline.u_register_file.segr.regfilelo.mem_array[3] = 8'h3;
+        u_pipeline.u_register_file.segr.regfilelo.mem_array[4] = 8'h4;
+        u_pipeline.u_register_file.segr.regfilelo.mem_array[5] = 8'h5;
+        u_pipeline.u_register_file.segr.regfilelo.mem_array[6] = 8'h6;
+        u_pipeline.u_register_file.segr.regfilelo.mem_array[7] = 8'h7;
+
+        u_pipeline.u_register_file.segr.regfilehi.mem_array[0] = 8'h0;
+        u_pipeline.u_register_file.segr.regfilehi.mem_array[1] = 8'h1;
+        u_pipeline.u_register_file.segr.regfilehi.mem_array[2] = 8'h2;
+        u_pipeline.u_register_file.segr.regfilehi.mem_array[3] = 8'h3;
+        u_pipeline.u_register_file.segr.regfilehi.mem_array[4] = 8'h4;
+        u_pipeline.u_register_file.segr.regfilehi.mem_array[5] = 8'h5;
+        u_pipeline.u_register_file.segr.regfilehi.mem_array[6] = 8'h6;
+        u_pipeline.u_register_file.segr.regfilehi.mem_array[7] = 8'h7;
+
 
      end 
 
@@ -188,4 +206,27 @@ module TOP;
        $vcdpluson(0, TOP);
    end
 
+    // Initializing the control store
+    initial begin
+        $readmemb("control_store/rom0_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom1.mem);
+        $readmemb("control_store/rom0_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom1.mem);
+        $readmemb("control_store/rom1_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom2.mem);
+        $readmemb("control_store/rom1_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom2.mem);
+        $readmemb("control_store/rom2_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom3.mem);
+        $readmemb("control_store/rom2_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom3.mem);
+        $readmemb("control_store/rom3_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom4.mem);
+        $readmemb("control_store/rom3_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom4.mem);
+        $readmemb("control_store/rom4_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom5.mem);
+        $readmemb("control_store/rom4_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom5.mem);
+        $readmemb("control_store/rom5_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom6.mem);
+        $readmemb("control_store/rom5_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom6.mem);
+        $readmemb("control_store/rom6_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom7.mem);
+        $readmemb("control_store/rom6_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom7.mem);
+        $readmemb("control_store/rom7_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom8.mem);
+        $readmemb("control_store/rom7_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom8.mem);
+        $readmemb("control_store/rom8_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom9.mem);
+        $readmemb("control_store/rom8_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom9.mem);
+    end
+
 endmodule
+

@@ -62,8 +62,8 @@ module register_file (CLK,
 
    // Format: reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
    reg32e$
-     segr_cs (CLK, {16'b0, CS_DIN}, {cs_unused, CSDOUT}, , 1'b1, 1'b1, LD_CS),
-     eip     (CLK, EIP_DIN, EIPDOUT, , 1'b1, 1'b1, LD_EIP),
+     segr_cs (CLK, {16'b0, CS_DIN}, {cs_unused, CSDOUT}, , RST, 1'b1, LD_CS),
+     eip     (CLK, EIP_DIN, EIPDOUT, , RST, 1'b1, LD_EIP),
      eflags  (CLK, EFLAGS_DIN, EFLAGSDOUT, , 1'b1, 1'b1, LD_EFLAGS);
      
 endmodule // register_file

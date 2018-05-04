@@ -13,8 +13,10 @@ module fetch (
    input [1:0] fp_mux,
    input load_eip,
 
-   input REG_DEP_STALL, MEM_DEP_STALL,
+   input DEP_AND_MEM_STALLS, DEP_AND_MEM_STALLS_BAR,
    input JMP_STALL, EXC_STALL,
+
+   input INT_EXIST_DE_IN,
 
    output [31:0] EIP_OUT,
    output [15:0] CS_OUT,
@@ -42,7 +44,9 @@ module fetch (
    output [2:0] segID,
    output [7:0] modrm, sib,
    output [2:0] modrm_sel,
-   output [7:0] control_store_address
+   output [7:0] control_store_address,
+
+   output FETCH_STALL
 );
 
    //The four buffers for the fetch unit
@@ -126,8 +130,10 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
 
    or2$ or_flush (flush, JMP_STALL, EXC_STALL);
    nor2$ nor_flush (flush_bar, JMP_STALL, EXC_STALL);
-   or2$ or_dep_stall (dep_stall, REG_DEP_STALL, MEM_DEP_STALL);
-   nor2$ nor_dep_stall (dep_stall_bar, REG_DEP_STALL, MEM_DEP_STALL);
+   assign dep_stall = DEP_AND_MEM_STALLS;
+   assign dep_stall_bar = DEP_AND_MEM_STALLS_BAR;
+//   or2$ or_dep_stall (dep_stall, REG_DEP_STALL, MEM_DEP_STALL);
+//   nor2$ nor_dep_stall (dep_stall_bar, REG_DEP_STALL, MEM_DEP_STALL);
 
    nor3$ nor_v_fetch (nor_v_fetch_out, full_state, flush, exc_state);
    assign IFU_V_FETCH_IN = nor_v_fetch_out;
@@ -412,6 +418,8 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
    and2$ and_state1 (and_state1_out, fill_state, Dfull_state);
    or2$ or_state1 (or_state1_out, and_state0_out, and_state1_out);
 
+   or4$ or_stall (FETCH_STALL, flush_state, Dflush_state, empty_state, Dempty_state);
+
    and4$
       and5 (FE_buf_0_en, buf_ptr_bar[1], buf_ptr_bar[0], ifu_icache_rd_stall_out_bar, or_state1_out),
       and6 (FE_buf_1_en, buf_ptr_bar[1], buf_ptr[0], ifu_icache_rd_stall_out_bar, or_state1_out),
@@ -440,24 +448,27 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
    assign FE_buf_2_in = IFU_IR_DATA_OUT;
    assign FE_buf_3_in = IFU_IR_DATA_OUT;
 
-   decode_stage1 u_decode_stage1 (CLK, set, reset,
-				  CURRENT_IR, ,
-				  instr_length_updt,
-				  opcode,
-				  prefix_size,
-				  prefix_present, segment_override, operand_override, repeat_prefix,
-				  modrm_present, imm_present,
-				  imm_size,
-				  sib_present, disp_present, disp_size,
-				  imm_sel,
-				  disp_sel,
-				  offset_present,
-				  opcode_size,
-				  offset_size,
-				  segID,
-				  modrm, sib,
-				  modrm_sel,
-                  control_store_address
+   decode_stage1 u_decode_stage1 (
+      CLK, set, reset,
+      CURRENT_IR, INT_EXIST_DE_IN, ,
+
+      // outputs
+      instr_length_updt,
+      opcode,
+      prefix_size,
+      prefix_present, segment_override, operand_override, repeat_prefix,
+      modrm_present, imm_present,
+      imm_size,
+      sib_present, disp_present, disp_size,
+      imm_sel,
+      disp_sel,
+      offset_present,
+      opcode_size,
+      offset_size,
+      segID,
+      modrm, sib,
+      modrm_sel,
+      control_store_address
     );
 
 endmodule

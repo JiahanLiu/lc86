@@ -44,9 +44,10 @@ dependency_check/reg_dependency_check.v
 dependency_check/mem_dependency_check.v
 
 ./segment_limit_check.v
-./address_generation.v
+./agen_stage1.v
+./agen_stage2.v
 ./memory_stage1.v
-./memory_stage.v
+./memory_stage2.v
 //Execute and WB
 ./common/basic_components/equality.v
 ./common/basic_components/logic_gates.v
@@ -62,5 +63,5 @@ dependency_check/mem_dependency_check.v
 ./writeback_components/writeback_components.v
 ./execute.v
 ./writeback.v
-./pipeline_fetch.v
+./pipeline_stalls.v
 ./fetch_tb.v
