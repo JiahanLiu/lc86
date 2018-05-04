@@ -17,13 +17,13 @@ with open('failed_tests', 'w+') as outfile:
 		P.wait()
 		shell_command2 = './simv'
 		P2 = subprocess.Popen(shell_command2.split(), stdout=subprocess.PIPE)
+		P2.wait()
 		for ln in P2.stdout:
 			if('Error' == ln[0:5]):
 				outfile.write(dir_ + '\n')
 				outfile.write(ln);
 				print(dir_ + '\n')
 				print(ln)
-		P2.wait()
 		#outfile.write("Go Light it up");
 		#test_dirs2 = next(os.walk('.'))[1]
 		#print(test_dirs2)
