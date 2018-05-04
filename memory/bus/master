@@ -10,5 +10,4 @@
 ../../pipeline/common/basic_components/logic_gates.v
 ../../pipeline/common.v
 ./bus_controller.v
-#./bus.v outdated
-./bus_tb.v
+./bus_tb_ext.v
