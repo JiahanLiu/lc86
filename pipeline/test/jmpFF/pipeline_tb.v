@@ -1,4 +1,3 @@
-
 `timescale 1ns/1ps
 `define EOF = 32'hFFFF_FFFF
 `define NULL 0
@@ -22,6 +21,7 @@
 `define default_reg_base_32 ((`default_reg_base_macro + `default_modrm_rm) + ((`default_reg_base_macro + `default_modrm_rm) << 8) + ((`default_reg_base_macro + `default_modrm_rm) << 16) + ((`default_reg_base_macro + `default_modrm_rm) << 24))
 `define default_eip 32'h1 
 `define default_cs 32'h22 
+`define default_ss ((`default_reg_base_macro + 3'b010) + ((`default_reg_base_macro + 3'b010) << 8))
 `define default_flags 32'hFFF
 `define default_imm 32'h8765_4321
 `define default_big_endian_imm8 8'h21
@@ -33,7 +33,7 @@
 `define default_offset2 16'h2413
 `define default_rel_value 8'h78
 `define default_modrm_mod 2'b10
-`define default_modrm_reg_opcode 3'b010
+`define default_modrm_reg_opcode 3'b100
 `define default_modrm_rm 3'b101
 
 `define if_check_op_a 1'b0
@@ -79,7 +79,7 @@
 `define if_check_address 1'b0
 `define check_ld_dcache 1'b0 //check values
 `define check_dcache_data (`check_opA + `check_opB)
-`define check_address ((`default_cs << 16) + (`default_reg_base_32 + `default_big_endian_dis))
+`define check_address ((`default_ss << 16) + (`default_reg_base_32 + `default_big_endian_dis))
 
 module TOP;
 //this module is used to debug the basic functionality of the simulator

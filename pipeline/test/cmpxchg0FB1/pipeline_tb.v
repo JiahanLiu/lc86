@@ -22,6 +22,7 @@
 `define default_reg_base_32 ((`default_reg_base_macro + `default_modrm_rm) + ((`default_reg_base_macro + `default_modrm_rm) << 8) + ((`default_reg_base_macro + `default_modrm_rm) << 16) + ((`default_reg_base_macro + `default_modrm_rm) << 24))
 `define default_eip 32'h1 
 `define default_cs 32'h22 
+`define default_ss ((`default_reg_base_macro + 3'b010) + ((`default_reg_base_macro + 3'b010) << 8))
 `define default_flags 32'hFFF
 `define default_imm 32'h8765_4321
 `define default_big_endian_imm8 8'h21
@@ -80,7 +81,7 @@
 `define if_check_address 1'b0
 `define check_ld_dcache 1'b0 //check values
 `define check_dcache_data (`check_opC)
-`define check_address ((`default_cs << 16) + (`default_reg_base_32 + `default_big_endian_dis))
+`define check_address ((`default_ss << 16) + (`default_reg_base_32 + `default_big_endian_dis))
 
 module TOP;
 //this module is used to debug the basic functionality of the simulator
