@@ -1,4 +1,3 @@
-
 `timescale 1ns/1ps
 `define EOF = 32'hFFFF_FFFF
 `define NULL 0
@@ -79,7 +78,7 @@
 `define taken_eip 32'b0
 `define check_cs 16'h0
 
-`define if_check_dcachedata 1'b
+`define if_check_dcachedata 1'b0
 `define if_check_address 1'b0
 `define check_ld_dcache 1'b0 //check values
 `define check_dcache_data (`check_opA)
