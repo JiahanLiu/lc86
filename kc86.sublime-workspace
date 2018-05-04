@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"WB_RESUL",
+				"WB_RESULT_C"
+			],
+			[
+				"WB_RESU",
+				"WB_RESULT_C"
+			],
+			[
 				"WB_F",
 				"WB_Final_CS"
 			],
@@ -30,10 +38,6 @@
 			[
 				"inter",
 				"interrupt_flags"
-			],
-			[
-				"WB_RESUL",
-				"WB_RESULT_A"
 			],
 			[
 				"WB",
@@ -510,15 +514,467 @@
 			[
 				"inc_by",
 				"inc_by_1_lookahead"
-			],
-			[
-				"buf",
-				"bufferedA"
 			]
 		]
 	},
 	"buffers":
 	[
+		{
+			"file": "pipeline/testSingleBasic/sarD0/run_pipeline",
+			"settings":
+			{
+				"buffer_size": 48,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/call9A/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388337332800,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/callE8/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388337436562,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/callFF/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388337535611,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/cmovc0F42nottaken/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388337644028,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/cmovc0F42taken/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131698736729659072,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/cmpxchg0FB0/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131697721782183331,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/cmpxchg0FB1/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131697721782381299,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/jnbe0F87taken/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388337831063,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/jnbe77nottaken/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388337958332,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/jnbe77taken/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388338084340,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/jne0F85taken/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388338241000,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/jne75nottaken/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388338392262,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/jne75taken/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388338520749,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/movq0F6F/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388338681368,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/movq0F7F/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388338809686,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/paddd0FFE/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388338964761,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/paddsw0FED/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388339072263,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/paddw0FFD/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388339202625,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/pop07/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388339334552,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/pop0FA1/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388339454973,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/pop0FA9/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388339570420,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/pop17/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388339701062,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/pop1F/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388339811089,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/pop58/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388339913117,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/pop8F/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388340259364,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/pshufw0F70/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388340396327,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/push06/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388340528435,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/push0E/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388340682065,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/push0FA0/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388340901259,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/push0FA8/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388341075407,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/push16/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388341238465,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/push1E/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388341394637,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/push50/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388341517684,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/push68/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388341743083,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/push6A/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388341884497,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/pushFF/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388342046504,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/retC2/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388342199231,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/retCA/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388342525287,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/retC3/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388342372773,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\n",
+			"file": "pipeline/testSingleComplex/retCB/run_pipeline",
+			"file_size": 33,
+			"file_write_time": 131699388342702759,
+			"settings":
+			{
+				"buffer_size": 144,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "pipeline/testSingleComplex/run_all.py",
+			"settings":
+			{
+				"buffer_size": 825,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -566,142 +1022,201 @@
 	[
 		"/Users/jiahanliu/Documents/School/EE382N/lc86v0",
 		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/decode",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/common",
 		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/execute_components",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/movq0F6F",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/movq0F7F"
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/execute_components/test_execute",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/add00",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/add01",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/add02",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/add03",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/add04",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/add05",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/and20",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/and21",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/and22",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/and23",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/and24",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/and25",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/cldFC",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/daa27",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/hltF4",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/inc40",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/incFE",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/incFF",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/jmpE9",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/jmpEA",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/jmpEB",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/jmpFF",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/mov88",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/mov89",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/mov8A",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/mov8B",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/mov8C",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/mov8E",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/movB0",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/movB8",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/movC6",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/movC7",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/notF6",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/notF7",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/or08",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/or09",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/or0A",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/or0B",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/or0C",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/or0D",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/salC0",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/salC1",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/salC1operandoverride",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/salD0",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/salD1",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/salD2",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/salD3",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/sarC0",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/sarC1",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/sarC1operandoverride",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/sarD0",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/sarD1",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/sarD2",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/sarD3",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/stdFD",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/xchg86",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/xchg87",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/xchg96",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/writeback_components"
 	],
 	"file_history":
 	[
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/paddw0FFD/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/paddd0FFE/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/paddd0FFE/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/paddsw0FED/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/paddw/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/paddw/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/paddsw/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/movq0F7F/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/movq0F6F/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/movq0F7F/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/movq0F6F/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/paddsb0FEC/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/paddsb0FEC/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/paddsw0FED/instruction_trace",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/salD0/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/sarD0/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/sarD1/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/sarD2/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/sarD3/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/stdFD/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/xchg86/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/xchg87/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/xchg96/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/call9A/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/callE8/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/callFF/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/cmovc0F42nottaken/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/cmovc0F42taken/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/cmpxchg0FB0/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/cmpxchg0FB1/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/jnbe0F87taken/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/jnbe77nottaken/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/jnbe77taken/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/jne0F85taken/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/jne75nottaken/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/jne75taken/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/movq0F6F/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/movq0F7F/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/paddd0FFE/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/paddsw0FED/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/paddw0FFD/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/pop07/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/pop0FA1/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/pop0FA9/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/pop17/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/pop1F/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/pop58/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/pop8F/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/pshufw0F70/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/push06/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/push0E/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/push0FA0/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/push0FA8/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/push16/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/push1E/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/push50/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/push68/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/push6A/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/pushFF/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/retC2/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/retC3/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/add00/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/add01/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/add02/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/add03/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/add04/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/add05/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/and20/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/and21/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/and22/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/and23/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/and24/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/and25/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/cldFC/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/daa27/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/hltF4/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/inc40/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/incFE/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/incFF/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/jmpE9/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/jmpEA/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/jmpEB/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/jmpFF/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/mov88/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/mov89/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/mov8A/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/mov8B/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/mov8C/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/mov8E/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/movB0/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/movB8/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/movC6/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/movC7/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/notF6/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/notF7/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/or08/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/or09/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/or0A/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/or0B/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/or0C/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/or0D/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/salC0/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/salC1/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/salC1operandoverride/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/salD1/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/salD2/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/salD3/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/sarC0/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/sarC1/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/sarC1operandoverride/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/retCA/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/retCB/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/sarD0/run_pipeline",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex/run_all.py",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/salD0/instruction_trace",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/sarD0/instruction_trace",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/movB0/instruction_trace",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic/movB8/instruction_trace",
 		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/pipeline.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pop58/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pop1F/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pop07/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pop17/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pop0FA1/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pop0FA1/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pop0FA9/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pop58/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pop1F/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pop17/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pop0FA9/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pop0F1A/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pop07/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pop8F/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pop8F/pipeline_tb.v",
 		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/decode/decode_stage2.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push06/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push0E/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push0FA0/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push0FA8/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push16/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push1E/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push50/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push68/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push6A/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pushFF/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push0FA0/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push0FA8/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push16/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push1E/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push50/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push68/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push6A/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/jnbe0F87taken/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/jne0F85taken/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pushFF/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push06/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/push0E/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/jne75taken/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/jnbe0F87taken/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/jne0F85taken/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/jne77nottaken/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/jnbe77nottaken/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/jnbe77taken/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/jnbe77/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/jnbe77/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/xchg86/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/cmovc0F42nottaken/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/cmovc0F42taken/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/cmpxchg0FB0/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/cmpxchg0FB1/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/daa27/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/hltF4/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/inc40/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/incFE/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/incFF/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/jmpE9/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/jmpEA/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/jmpEB copy/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/common/functional_units/adder.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/writeback_components/writeback_components.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/writeback.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/callFF/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/retCA/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/retCA/instruction_trace",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/retC2/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/retC2/instruction_trace",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/retCB/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/retCB/instruction_trace",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/retC3/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/retC3/instruction_trace",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/call9A/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/callFF/instruction_trace",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/call9A/instruction_trace",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/callE8/pipeline_tb.v",
 		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/jmpEB/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/jmpFF/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/mov88/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/mov89/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/mov8A/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/mov8B/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/mov8C/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/mov8E/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/movB0/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/movB8/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/movC6/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/movC7/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/notF6/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/notF7/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/or08/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/or09/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/or0A/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/or0B/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/or0C/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/or0D/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/salC0/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/salC1/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/salC1operandoverride/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/salD0/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/salD1/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/salD2/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/salD3/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/sarC0/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/sarC1/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/sarC1operandoverride/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/sarD0/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/sarD1/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/sarD2/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/sarD3/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/stdFD/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/add00/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/add01/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/add02/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/add03/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/add04/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/add05/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/and20/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/and21/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/and22/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/and23/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/and24/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/and25/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/cldFC/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/xchg87/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/xchg96/pipeline_tb.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/inc40/instruction_trace",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/agen_stage1.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/agen_stage2.v",
-		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/run_all.py"
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/callE8/instruction_trace",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pshufw0F70/instruction_trace",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/pshufw0F70/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/paddw0FFD/pipeline_tb.v",
+		"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/paddd0FFE/pipeline_tb.v"
 	],
 	"find":
 	{
@@ -712,6 +1227,9 @@
 		"height": 107.0,
 		"where_history":
 		[
+			"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex",
+			"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleBasic",
+			"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/testSingleComplex",
 			"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test",
 			"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test,/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test/add01",
 			"/Users/jiahanliu/Documents/School/EE382N/lc86v0/pipeline/test",
@@ -723,6 +1241,17 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"vcs -full64 -debug_all -f master",
+			"control_store/",
+			"if_check_dca",
+			"if_check",
+			"$display(\"Error: EX_B is: %h, but needs to be: %h\", u_pipeline.EX_MM_B, check_opMMB);",
+			"$display(\"Error: EX_A is: %h, but needs to be: %h\", u_pipeline.EX_MM_A, check_opMMA);",
+			"check_ld_eip",
+			"`check_dcache_data",
+			"if(1'b1 === if_check_alu_result) begin",
+			"D2_UOP_STALL_OUT",
+			"WB_RESULT_B",
 			"default_rel_value",
 			"$display(\"Debug: default_cs << 16 is: %h\", `default_cs << 16);",
 			"`define check_address ((`default_cs << 16) + (`default_reg_base_32 + `default_big_endian_dis))",
@@ -741,6 +1270,11 @@
 		"regex": false,
 		"replace_history":
 		[
+			"vcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../\nvcs -full64 -debug_all -f master +incdir+../../",
+			"../../control_store",
+			"$display(\"Error: EX_B is: %h, but needs to be: %h\", u_pipeline.EX_MM_B, `check_opMMB);",
+			"$display(\"Error: EX_A is: %h, but needs to be: %h\", u_pipeline.EX_MM_A, `check_opMMA);",
+			"if(1'b1 === `if_check_alu_result) begin",
 			"$display(\"Debug: default_ss << 16 is: %h\", `default_ss << 16);",
 			"`define check_address ((`default_ss << 16) + (`default_reg_base_32 + `default_big_endian_dis))",
 			"`define default_cs 32'h22 \n`define default_ss ((`default_reg_base_macro + 3'b010) + ((`default_reg_base_macro + 3'b010) << 8))",
@@ -756,8 +1290,1186 @@
 	"groups":
 	[
 		{
+			"selected": 38,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "pipeline/testSingleBasic/sarD0/run_pipeline",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 48,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								47,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 41,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "pipeline/testSingleComplex/call9A/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 40,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "pipeline/testSingleComplex/callE8/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 39,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "pipeline/testSingleComplex/callFF/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 38,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "pipeline/testSingleComplex/cmovc0F42nottaken/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 37,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "pipeline/testSingleComplex/cmovc0F42taken/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 36,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "pipeline/testSingleComplex/cmpxchg0FB0/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 35,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "pipeline/testSingleComplex/cmpxchg0FB1/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 34,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "pipeline/testSingleComplex/jnbe0F87taken/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 33,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "pipeline/testSingleComplex/jnbe77nottaken/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 32,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "pipeline/testSingleComplex/jnbe77taken/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 31,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "pipeline/testSingleComplex/jne0F85taken/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 30,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "pipeline/testSingleComplex/jne75nottaken/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 29,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "pipeline/testSingleComplex/jne75taken/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 28,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "pipeline/testSingleComplex/movq0F6F/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 27,
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "pipeline/testSingleComplex/movq0F7F/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 26,
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "pipeline/testSingleComplex/paddd0FFE/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 25,
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "pipeline/testSingleComplex/paddsw0FED/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 24,
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "pipeline/testSingleComplex/paddw0FFD/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 23,
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "pipeline/testSingleComplex/pop07/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 22,
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "pipeline/testSingleComplex/pop0FA1/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 21,
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "pipeline/testSingleComplex/pop0FA9/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 20,
+					"type": "text"
+				},
+				{
+					"buffer": 22,
+					"file": "pipeline/testSingleComplex/pop17/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 19,
+					"type": "text"
+				},
+				{
+					"buffer": 23,
+					"file": "pipeline/testSingleComplex/pop1F/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 18,
+					"type": "text"
+				},
+				{
+					"buffer": 24,
+					"file": "pipeline/testSingleComplex/pop58/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 17,
+					"type": "text"
+				},
+				{
+					"buffer": 25,
+					"file": "pipeline/testSingleComplex/pop8F/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 16,
+					"type": "text"
+				},
+				{
+					"buffer": 26,
+					"file": "pipeline/testSingleComplex/pshufw0F70/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 15,
+					"type": "text"
+				},
+				{
+					"buffer": 27,
+					"file": "pipeline/testSingleComplex/push06/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 28,
+					"file": "pipeline/testSingleComplex/push0E/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 29,
+					"file": "pipeline/testSingleComplex/push0FA0/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 30,
+					"file": "pipeline/testSingleComplex/push0FA8/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 31,
+					"file": "pipeline/testSingleComplex/push16/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 32,
+					"file": "pipeline/testSingleComplex/push1E/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 33,
+					"file": "pipeline/testSingleComplex/push50/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 34,
+					"file": "pipeline/testSingleComplex/push68/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 35,
+					"file": "pipeline/testSingleComplex/push6A/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 36,
+					"file": "pipeline/testSingleComplex/pushFF/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 37,
+					"file": "pipeline/testSingleComplex/retC2/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 38,
+					"file": "pipeline/testSingleComplex/retCA/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 39,
+					"file": "pipeline/testSingleComplex/retC3/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 40,
+					"file": "pipeline/testSingleComplex/retCB/run_pipeline",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 144,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111,
+								111
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 41,
+					"file": "pipeline/testSingleComplex/run_all.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 825,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				}
 			]
 		}
 	],

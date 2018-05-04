@@ -1007,24 +1007,24 @@ module TOP;
 
     // Initializing the control store
     initial begin
-        $readmemb("control_store/rom0_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom1.mem);
-        $readmemb("control_store/rom0_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom1.mem);
-        $readmemb("control_store/rom1_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom2.mem);
-        $readmemb("control_store/rom1_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom2.mem);
-        $readmemb("control_store/rom2_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom3.mem);
-        $readmemb("control_store/rom2_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom3.mem);
-        $readmemb("control_store/rom3_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom4.mem);
-        $readmemb("control_store/rom3_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom4.mem);
-        $readmemb("control_store/rom4_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom5.mem);
-        $readmemb("control_store/rom4_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom5.mem);
-        $readmemb("control_store/rom5_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom6.mem);
-        $readmemb("control_store/rom5_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom6.mem);
-        $readmemb("control_store/rom6_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom7.mem);
-        $readmemb("control_store/rom6_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom7.mem);
-        $readmemb("control_store/rom7_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom8.mem);
-        $readmemb("control_store/rom7_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom8.mem);
-        $readmemb("control_store/rom8_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom9.mem);
-        $readmemb("control_store/rom8_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom9.mem);
+        $readmemb("../../../../control_storerom0_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom1.mem);
+        $readmemb("../../../../control_storerom0_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom1.mem);
+        $readmemb("../../../../control_storerom1_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom2.mem);
+        $readmemb("../../../../control_storerom1_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom2.mem);
+        $readmemb("../../../../control_storerom2_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom3.mem);
+        $readmemb("../../../../control_storerom2_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom3.mem);
+        $readmemb("../../../../control_storerom3_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom4.mem);
+        $readmemb("../../../../control_storerom3_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom4.mem);
+        $readmemb("../../../../control_storerom4_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom5.mem);
+        $readmemb("../../../../control_storerom4_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom5.mem);
+        $readmemb("../../../../control_storerom5_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom6.mem);
+        $readmemb("../../../../control_storerom5_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom6.mem);
+        $readmemb("../../../../control_storerom6_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom7.mem);
+        $readmemb("../../../../control_storerom6_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom7.mem);
+        $readmemb("../../../../control_storerom7_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom8.mem);
+        $readmemb("../../../../control_storerom7_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom8.mem);
+        $readmemb("../../../../control_storerom8_0.list", u_pipeline.u_decode_stage2.u_ucontrol_store1.u_rom9.mem);
+        $readmemb("../../../../control_storerom8_1.list", u_pipeline.u_decode_stage2.u_ucontrol_store2.u_rom9.mem);
     end
    
 endmodule

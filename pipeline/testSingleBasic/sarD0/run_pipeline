@@ -1,1 +1,1 @@
-vcs -full64 -debug_all -f master
+vcs -full64 -debug_all -f master +incdir+../../ +incdir+../../

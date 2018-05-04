@@ -12,7 +12,7 @@ with open('failed_tests', 'w+') as outfile:
 	for dir_ in test_dirs:
 		os.chdir(dir_)
 		print("starting: " + dir_)
-		shell_command = 'vcs -full64 -debug_all -f master'
+		shell_command = 'vcs -full64 -debug_all -f master +incdir+../../'
 		P = subprocess.Popen(shell_command.split())
 		P.wait()
 		shell_command2 = './simv'
