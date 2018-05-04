@@ -79,7 +79,7 @@
 `define if_check_address 1'b0
 `define check_ld_dcache 1'b0 //check values
 `define check_dcache_data (`check_opB)
-`define check_address ((`default_cs << 16) + (`default_reg_base_32 + `default_big_endian_dis))
+`define check_address ((`default_ss << 16) + (`default_reg_base_32 + `default_big_endian_dis))
 
 module TOP;
 //this module is used to debug the basic functionality of the simulator
