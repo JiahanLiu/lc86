@@ -50,11 +50,16 @@ module cache( //interface with the processor
 
    //ACCESSING THE DATA LINE
    wire [15:0] 	     DC_WR;
+   wire [127:0] out1b, out2b;
    write_masker write_masker_u(DC_WR, CACHE_WR, size, address[3:0]);
 
-   wire [127:0]      data_write_shifted, data_read_shifted, dcache_input;
+   wire [127:0]      data_write_shifted, data_read_shifted, dcache_input, dcache_input_t;
    shiftleft leftshifter_u(data_write_shifted, data_write, address[3:0]);
-   mux4_128 data_sel(dcache_input, data_write_shifted, data_write_shifted, BUS_READ, BUS_READ, d_mux, d_mux);
+   mux4_128 data_sel(dcache_input_t, data_write_shifted, data_write_shifted, BUS_READ, BUS_READ, d_mux, d_mux);
+   bufferH256$ buf1d [127:0] (out1b, dcache_input_t);
+   bufferH16$ buf2d [127:0] (out2b, out1b);
+   bufferH16$ buf3d [127:0] (dcache_input, out2b);
+
    wire [15:0] 	     dcache_wrmask_input;
    mux2_16$ mask_sel(dcache_wrmask_input, DC_WR, 16'h0000, d_mux);
       //accessing the datacache
@@ -167,10 +172,10 @@ module full_cache_d (input [4:0] A, //bits 8 to 4 in the phys address
    
 
    
-    eight_cachelines_d data_line0 (A[2:0], DIN, OE, wr0, DOUT_ARRAY[0]);
-    eight_cachelines_d data_line1 (A[2:0], DIN, OE, wr1, DOUT_ARRAY[1]);
-    eight_cachelines_d data_line2 (A[2:0], DIN, OE, wr2, DOUT_ARRAY[2]);
-    eight_cachelines_d data_line3 (A[2:0], DIN, OE, wr3, DOUT_ARRAY[3]);
+    eight_cachelines_d data_line0 (A[2:0], DIN, 1'b0, wr0, DOUT_ARRAY[0]);
+    eight_cachelines_d data_line1 (A[2:0], DIN, 1'b0, wr1, DOUT_ARRAY[1]);
+    eight_cachelines_d data_line2 (A[2:0], DIN, 1'b0, wr2, DOUT_ARRAY[2]);
+    eight_cachelines_d data_line3 (A[2:0], DIN, 1'b0, wr3, DOUT_ARRAY[3]);
 
     //need to select between the four possible d_cache lines
     mux4_128 dout_mux (DOUT,DOUT_ARRAY[0],DOUT_ARRAY[1],DOUT_ARRAY[2],DOUT_ARRAY[3],A[3],A[4]);
@@ -368,9 +373,10 @@ module  write_masker(output [15:0] DC_WR,
    shifter16bit u_shifter16bit (shifted_mask, mask, address);
    wire [15:0] 			 complete_mask;
    wire 			 size_full;
-   and4$ and_u(size_full, size[3], size[2], size[1], size[0]);
+   nor4$ and_u(size_full, size[3], size[2], size[1], size[0]);
    mux2_16$ mux2_u(complete_mask, shifted_mask, allwrite, size_full);
    wire [15:0] 			 DC_WR_REG;
+//   mux2_16$ mux2_u2(DC_WR_REG, nowrite, complete_mask, CACHE_WR);
    and2$ clearing [15:0] (DC_WR_REG, complete_mask, CACHE_WR);
    not16_1way not_u(DC_WR, DC_WR_REG);
 

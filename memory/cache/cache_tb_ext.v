@@ -153,6 +153,7 @@ module TOP;
     assign tag = address[15:9];
     assign offset =  address[3:0];
     integer seed;
+    reg [127:0] mask_val;
 
     initial begin
         valid = 32'h0;
@@ -166,14 +167,13 @@ module TOP;
         write_miss =0;
         write_evict = 0;
         read_evict = 0;
-        seed =0;
+        seed = 0;
 
         for(j=0; j<32; j=j+1) begin
             dcache[j] = 128'b0;
             tagcache[j] = 7'h0;
         end
-        
-   end
+    end
  
 
     initial begin
@@ -182,22 +182,26 @@ module TOP;
             cycles = cycles+1;
             wait(u_cache.current_state === IDLE);     
             address[15] = 0;
-            address[8:4] = {$random(seed)%20};
-            address[14:9] = {$random(seed)%10};
+            address[8:4] = {$random(seed)}%20;
+            address[14:9] = {$random(seed)}%10;
             address[3:0] = {$random(seed)};
+            data_write[31:0]  = {$random(seed)};
+            data_write[63:32]  = {$random(seed)};
+            data_write[95:64]  = {$random(seed)};
+            data_write[127:96]  = {$random(seed)};
 
             if(offset == 4'd15)
                 size = 1;
             else if(offset < 4'd15 && offset >= 4'd13)
-                size = (cycles%2)+1;
+                size = 2**({$random(seed)}%2);
             else if(offset < 4'd13 && offset >= 4'd9)
-                size = 4;       //1, 2, or 4
+                size = 2**({$random(seed)}%3);       //1, 2, or 4
             else if(offset < 4'd9 && offset >= 4'd1)
-                size = 8;        // 1, 2, 4, 8
+                size = 2**({$random(seed)}%4);        // 1, 2, 4, 8
             else if(offset == 4'd0)
-                size = 16;      //1, 2, 4, or 16
+                size = 0;      //1, 2, 4, or 16
 
-            RW = cycles%2;
+            RW = {$random(seed)}%2;
 
             #2
             if(!valid[cache_line]) begin
@@ -206,17 +210,52 @@ module TOP;
                     $display("Write miss at time %0d", $time);
                     wait(u_cache.current_state === WRMISS);
                     #2;
-                    BUS_READ = {$random(seed)};
+                    BUS_READ[127:96] = {$random(seed)};
+                    BUS_READ[95:64] = {$random(seed)};
+                    BUS_READ[63:32] = {$random(seed)};
+                    BUS_READ[31:0] = {$random(seed)};
+                      //BUS_READ = {$random(seed)};
                     BUS_R = 1;
                     dcache[cache_line] = BUS_READ;
                     tagcache[cache_line] = tag;
                     valid[cache_line] = 1;
+                    wait(u_cache.current_state === WRHIT);
+                    #2;
+
+                    $display("BUS_READ : %h", BUS_READ);
+                    if(size==0)
+                        dcache[cache_line] = data_write;
+                    else if(size==1) begin
+                        mask_val = (data_write << offset*8) & (128'hFF << offset*8);
+                        dcache[cache_line] = (dcache[cache_line] & ~(128'hFF << offset*8)) | mask_val;
+                    end
+                    else if(size==2) begin
+                        mask_val = (data_write << offset*8) & (128'hFFFF << offset*8);
+                        dcache[cache_line] = (dcache[cache_line] & ~(128'hFFFF << offset*8)) | mask_val;
+                    end else if(size==4) begin
+                        mask_val = (data_write << offset*8) & (128'hFFFF_FFFF << offset*8);
+                        dcache[cache_line] = (dcache[cache_line] & ~(128'hFFFF_FFFF << offset*8)) | mask_val;
+                    end else if(size==8) begin
+                        mask_val = (data_write << offset*8) & (128'hFFFF_FFFF_FFFF_FFFF << offset*8);
+                        dcache[cache_line] = (dcache[cache_line] & ~(128'hFFFF_FFFF_FFFF_FFFF << offset*8)) | mask_val;
+                    end
+
+                    //$display("Cache update: %h, offset : %h, data_write: %h, size: %h", dcache[cache_line], offset, data_write, size);
+                    //if(BUS_READ !== data_write)
+                    //    $display("Write error at time %0d, data_write: %h, BUS_WRITE: %h", $time, data_write, BUS_WRITE);
+
+
                 end else begin
                     read_miss = read_miss+1;
                     $display("Read miss at time %0d", $time);
                     wait(u_cache.current_state === RDMISS);
                     #2;
-                    BUS_READ = {$random(seed)};
+                    BUS_READ[127:96] = {$random(seed)};
+                    BUS_READ[95:64] = {$random(seed)};
+                    BUS_READ[63:32] = {$random(seed)};
+                    BUS_READ[31:0] = {$random(seed)};
+                     //BUS_READ = {$random(seed)};
+
                     BUS_R = 1;
                     valid[cache_line] = 1;
                     wait(u_cache.current_state === RDHIT);
@@ -234,29 +273,24 @@ module TOP;
                     $display("Write hit at time %0d", $time);
                     wait(u_cache.current_state === WRHIT);
                     #2;
+
                     if(size==0)
                         dcache[cache_line] = data_write;
-                    else if(size==1)
-                        dcache[cache_line][offset] = data_write[7:0];
-                    else if(size==2) begin
-                        dcache[cache_line][offset+1] = data_write[15:8];
-                        dcache[cache_line][offset] = data_write[7:0];
-                    end else if(size==4) begin
-                        dcache[cache_line][offset+3] = data_write[31:24];
-                        dcache[cache_line][offset+2] = data_write[23:16];
-                        dcache[cache_line][offset+1] = data_write[15:8];
-                        dcache[cache_line][offset] = data_write[7:0];
-                    end else if(size==8) begin
-                        dcache[cache_line][offset+7] = data_write[63:56];
-                        dcache[cache_line][offset+6] = data_write[55:48];
-                        dcache[cache_line][offset+5] = data_write[47:40];
-                        dcache[cache_line][offset+4] = data_write[39:32];
-                        dcache[cache_line][offset+3] = data_write[31:24];
-                        dcache[cache_line][offset+2] = data_write[23:16];
-                        dcache[cache_line][offset+1] = data_write[15:8];
-                        dcache[cache_line][offset+0] = data_write[7:0];
+                    else if(size==1) begin
+                        mask_val = (data_write << offset*8) & (128'hFF << offset*8);
+                        dcache[cache_line] = (dcache[cache_line] & ~(128'hFF << offset*8)) | mask_val;
                     end
-
+                    else if(size==2) begin
+                        mask_val = (data_write << offset*8) & (128'hFFFF << offset*8);
+                        dcache[cache_line] = (dcache[cache_line] & ~(128'hFFFF << offset*8)) | mask_val;
+                    end else if(size==4) begin
+                        mask_val = (data_write << offset*8) & (128'hFFFF_FFFF << offset*8);
+                        dcache[cache_line] = (dcache[cache_line] & ~(128'hFFFF_FFFF << offset*8)) | mask_val;
+                    end else if(size==8) begin
+                        mask_val = (data_write << offset*8) & (128'hFFFF_FFFF_FFFF_FFFF << offset*8);
+                        dcache[cache_line] = (dcache[cache_line] & ~(128'hFFFF_FFFF_FFFF_FFFF << offset*8)) | mask_val;
+                    end
+                    $display("Cache update: %h", dcache[cache_line]);
 
                     valid[cache_line] = 1;
                 end else begin
@@ -277,15 +311,42 @@ module TOP;
                     $display("Write evict at time %0d", $time);
                     wait(u_cache.current_state === WREVICT);
                     #2;
+                    $display("Write miss at time %0d", $time);
                     BUS_R = 1;
-                    $display("Write evict at time %0d", $time);
+                    if(BUS_WRITE !== dcache[cache_line])
+                        $display("Evict error at time %0d, correct data: %h, BUS_WRITE: %h, size: %h", $time, dcache[cache_line], BUS_WRITE, size);
                     wait(u_cache.current_state === WRMISS);
                     #2;
-                    BUS_READ = {$random(seed)};
+                    BUS_READ[127:96] = {$random(seed)};
+                    BUS_READ[95:64] = {$random(seed)};
+                    BUS_READ[63:32] = {$random(seed)};
+                    BUS_READ[31:0] = {$random(seed)};
+                      //BUS_READ = {$random(seed)};
+
                     dcache[cache_line] = BUS_READ;
                     tagcache[cache_line] = tag;
                     valid[cache_line] = 1;
-                    $display("Write evict at time %0d", $time);
+                    $display("Write hit at time %0d", $time);
+                    wait(u_cache.current_state === WRHIT);
+                    #2;
+
+                    if(size==0)
+                        dcache[cache_line] = data_write;
+                    else if(size==1) begin
+                        mask_val = (data_write << offset*8) & (128'hFF << offset*8);
+                        dcache[cache_line] = (dcache[cache_line] & ~(128'hFF << offset*8)) | mask_val;
+                    end
+                    else if(size==2) begin
+                        mask_val = (data_write << offset*8) & (128'hFFFF << offset*8);
+                        dcache[cache_line] = (dcache[cache_line] & ~(128'hFFFF << offset*8)) | mask_val;
+                    end else if(size==4) begin
+                        mask_val = (data_write << offset*8) & (128'hFFFF_FFFF << offset*8);
+                        dcache[cache_line] = (dcache[cache_line] & ~(128'hFFFF_FFFF << offset*8)) | mask_val;
+                    end else if(size==8) begin
+                        mask_val = (data_write << offset*8) & (128'hFFFF_FFFF_FFFF_FFFF << offset*8);
+                        dcache[cache_line] = (dcache[cache_line] & ~(128'hFFFF_FFFF_FFFF_FFFF << offset*8)) | mask_val;
+                    end
+
                 end else begin
                     read_evict = read_evict+1;
                     read_miss = read_miss+1;
@@ -296,7 +357,12 @@ module TOP;
                     BUS_R = 1;
                     wait(u_cache.current_state === RDMISS);
                     #2;
-                    BUS_READ = {$random(seed)};
+                    BUS_READ[127:96] = {$random(seed)};
+                    BUS_READ[95:64] = {$random(seed)};
+                    BUS_READ[63:32] = {$random(seed)};
+                    BUS_READ[31:0] = {$random(seed)};
+                    //BUS_READ = {$random(seed)};
+
                     valid[cache_line] = 1;
                     wait(u_cache.current_state === RDHIT);
                     #2;
@@ -314,7 +380,7 @@ module TOP;
 
     // Run simulation.  
     initial begin
-        #(clk_cycle*5000) 
+        #(clk_cycle*50000) 
         $display("READ_MISS = %0d", read_miss);
         $display("READ_HIT = %0d", read_hit);
         $display("READ_EVICT = %0d", read_evict);
