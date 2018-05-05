@@ -1,41 +1,9 @@
-salD1
-Error: EX_B is: 00000001, but needs to be: 00000002
-salD1
-Error: WB_Final_Dcache_Data is: 0000000021579bde, but needs to be: 0000000042af37bc
 sarC0
 Error: WB_Final_Dcache_Data is: 00000000000000fb, but needs to be: 000000000000007b
 sarC1
 Error: WB_Final_Dcache_Data is: 00000000e42af37b, but needs to be: 00000000242af37b
-sarD0
-Error: EX_A is: 000000xx, but needs to be: 000000ef
-sarD0
-Error: EX_B is: 000000xx, but needs to be: 00000001
-sarD0
-Error: EX_d2_aluk_ex is: x, but needs to be: 7
-sarD0
-Error: WB_Final_ld_gpr2 is: x, but needs to be: 0
-sarD0
-Error: WB_Final_ld_gpr3 is: x, but needs to be: 0
-sarD0
-Error: WB_Final_datasize is: x, but needs to be: 0
-sarD0
-Error: WB_Final_EIP is: xxxxxxxx, but needs to be: 00000007
-sarD0
-Error: WB_Final_ld_mm is: x, but needs to be: 0
-sarD0
-Error: WB_Final_ld_eip is: x, but needs to be: 1
-sarD0
-Error: WB_Final_ld_cs is: x, but needs to be: 0
-sarD0
-Error: WB_Final_Dcache_Data is: 00000000000000xx, but needs to be: 00000000000000f7
-sarD0
-Error: WB_Final_Dcache_Address is: xxxxxxxx, but needs to be: 282795a0
-sarD0
-Error: WB_Final_Dcache_Write is: x, but needs to be: 1
 sarD1
-Error: EX_B is: 00000001, but needs to be: 00000002
-sarD1
-Error: WB_Final_Dcache_Data is: 00000000c855e6f7, but needs to be: 00000000242af37b
+Error: WB_Final_Dcache_Data is: 00000000c855e6f7, but needs to be: 000000004855e6f7
 sarD2
 Error: WB_Final_Dcache_Data is: 00000000000000fd, but needs to be: 00000000000000bd
 sarD3

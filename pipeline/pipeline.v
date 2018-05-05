@@ -405,6 +405,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
       1'b0, //GEN_PROT_EXC_EN
       1'b0, //PAGE_FAULT_EXC_EN
       1'b0, //PAGE_FAULT_EXC_EXIST
+      1'b0, //INT_EXIST
 
       D2_EIP_OUT, 
       D2_CS_OUT,

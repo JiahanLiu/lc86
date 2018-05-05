@@ -925,8 +925,9 @@ module TOP;
             end
 
             if(1'b1 === `check_ld_gpr3) begin 
-              $display("Error: WB_Final_DR3_datasize is: %h, but needs to be: %h", u_pipeline.WB_Final_DR3_datasize, 2'b10);
-              error <= 1;
+              if(u_pipeline.WB_Final_DR3_datasize !== 2'b10) begin 
+                $display("Error: WB_Final_DR3_datasize is: %h, but needs to be: %h", u_pipeline.WB_Final_datasize, 2'b10);
+                error <= 1;
             end
 
             if(1'b1 === `if_check_flags) begin
