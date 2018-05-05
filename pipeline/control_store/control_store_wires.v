@@ -76,7 +76,7 @@ wire CS_LD_EIP_WB;
 wire CS_LD_CS_WB;
 wire CS_IS_CMOVC_WB;
 wire CS_LD_SEG_WB;
-wire CS_LD_MM_WB;
+wire CS_LD_MM_CS;
 wire CS_MM_MEM_WB;
 wire CS_LD_FLAGS_WB;
 wire CS_IS_HALT_WB;

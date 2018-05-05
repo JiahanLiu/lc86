@@ -1242,7 +1242,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire EX_d2_ld_mm_ex_next = ME2_D2_LD_MM_WB_OUT;
     wire [31:0] EX_d2_ld_mm_ex_out;
     wire EX_d2_ld_mm_ex;
-    reg32e$ u_EX_de_ld_gpr1_wb_latch (CLK, {31'b0, EX_d2_ld_mm_ex_next}, EX_d2_ld_mm_ex_out, ,CLR,PRE,LD_EX);
+    reg32e$ u_EX_d2_ld_mm_wb_latch (CLK, {31'b0, EX_d2_ld_mm_ex_next}, EX_d2_ld_mm_ex_out, ,CLR,PRE,LD_EX);
     assign EX_d2_ld_mm_ex = EX_d2_ld_mm_ex_out[0]; 
 
     wire EX_d2_dcache_write_ex_next = ME2_D2_MEM_WR_WB_OUT;
@@ -1449,7 +1449,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
     wire [31:0] WB_d2_ld_mm_wb_out; 
     wire WB_d2_ld_mm_wb; 
-    reg32e$ u_WB_ex_ld_gpr2_wb_latch(CLK, {31'b0, WB_d2_ld_mm_wb_next}, WB_d2_ld_mm_wb_out, ,CLR,PRE,LD_WB);
+    reg32e$ u_WB_d2_ld_mm_wb_latch(CLK, {31'b0, WB_d2_ld_mm_wb_next}, WB_d2_ld_mm_wb_out, ,CLR,PRE,LD_WB);
     assign WB_d2_ld_mm_wb = WB_d2_ld_mm_wb_out[0]; 
 
     wire [31:0] WB_ex_dcache_write_wb_out; 
