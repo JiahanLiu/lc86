@@ -53,8 +53,11 @@ module register_file (CLK,
    // input [1:0] WE1, WE2, WE3,
    // output [31:0] regA, regB, regC, regD
 
-   regfile8x16  segr (SEG_DIN, SEGID1, SEGID2, 1'b1, 1'b1, WRSEGID, SEGWE, SEGDOUT1, SEGDOUT2, CLK);
-   regfile8x64  mmr  (MM_DIN, MMID1, MMID2, 1'b1, 1'b1, WRMMID, MMWE, MMDOUT1, MMDOUT2, CLK);
+   wire clk_n;
+   inv1$ inv_clk (clk_n, CLK);
+   
+   regfile8x16  segr (SEG_DIN, SEGID1, SEGID2, 1'b1, 1'b1, WRSEGID, SEGWE, SEGDOUT1, SEGDOUT2, clk_n);
+   regfile8x64  mmr  (MM_DIN, MMID1, MMID2, 1'b1, 1'b1, WRMMID, MMWE, MMDOUT1, MMDOUT2, clk_n);
    regfile8x32e gpr  (CLK, GPR_DIN0, GPR_DIN1, GPR_DIN2, 
 		      GPRID0, GPRID1, GPRID2, GPRID3, GPR_RE0, GPR_RE1, GPR_RE2, GPR_RE3, 
 		      WRGPR0, WRGPR1, WRGPR2, WE0, WE1, WE2, GPRWE0, GPRWE1, GPRWE2, 
@@ -62,9 +65,9 @@ module register_file (CLK,
 
    // Format: reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
    reg32e$
-     segr_cs (CLK, {16'b0, CS_DIN}, {cs_unused, CSDOUT}, , RST, 1'b1, LD_CS),
-     eip     (CLK, EIP_DIN, EIPDOUT, , RST, 1'b1, LD_EIP),
-     eflags  (CLK, EFLAGS_DIN, EFLAGSDOUT, , 1'b1, 1'b1, LD_EFLAGS);
+     segr_cs (clk_n, {16'b0, CS_DIN}, {cs_unused, CSDOUT}, , RST, 1'b1, LD_CS),
+     eip     (clk_n, EIP_DIN, EIPDOUT, , RST, 1'b1, LD_EIP),
+     eflags  (clk_n, EFLAGS_DIN, EFLAGSDOUT, , 1'b1, 1'b1, LD_EFLAGS);
      
 endmodule // register_file
 
