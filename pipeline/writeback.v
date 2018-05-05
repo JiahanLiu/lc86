@@ -58,10 +58,11 @@ module writeback (
 
    output wb_halt_all, 
    output wb_repne_terminate_all,
-   output WB_stall,
+   output wb_stall,
+   output wb_branch_taken
    
    output [31:0] flags_dataforwarded,
-   output [31:0] count_dataforwarded
+   output [31:0] count_dataforwarded,
    );
 
   //control signals
@@ -89,7 +90,7 @@ module writeback (
       CS_PUSH_FLAGS_WB, CS_USE_TEMP_NEIP_WB, mux_not_taken_eip, CS_USE_TEMP_NCS_WB, WB_RESULT_A, WB_RESULT_C, WB_NEIP,
       WB_NEIP_NOT_TAKEN, WB_NCS, final_out_flags);
 
-   conditional_support_wb u_conditional_support_wb(mux_not_taken_eip, wb_ld_gpr2, CS_IS_JNBE_WB,  CS_IS_JNE_WB, final_out_flags, 
+   conditional_support_wb u_conditional_support_wb(mux_not_taken_eip, wb_ld_gpr2, wb_branch_taken, CS_IS_JNBE_WB,  CS_IS_JNE_WB, final_out_flags, 
        CS_IS_CMOVC_WB, WB_ex_ld_gpr2_wb);
 
    validate_signals_wb u_validate_signals_wb(v_wb_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3,
@@ -137,13 +138,12 @@ module writeback (
    //DCACHE outputs
    assign data1_64 = {{32{1'b0}}, data1};
    mux64_2way u_dache_data_in(WB_Final_Dcache_Data, data1_64, WB_RESULT_MM, CS_MM_MEM_WB);
-   assign WB_Final_Dcache_Data = data1; 
    assign WB_Final_Dcache_Address = WB_ADDRESS; 
    assign WB_Final_Dcache_Write = v_ex_dcache_write;
 
    //stall logic
    inv1$ u_not_write_ready(In_write_ready_not, In_write_ready);
-   and2$ u_wb_stall(WB_stall, v_ex_dcache_write, In_write_ready_not);
+   and2$ u_wb_stall(wb_stall, v_ex_dcache_write, In_write_ready_not);
 
    //dataforward
    assign flags_dataforwarded = final_out_flags;

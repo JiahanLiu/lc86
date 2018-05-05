@@ -33,7 +33,7 @@
 `define default_big_endian_dis 32'h0000_000B
 `define default_offset 32'h1234_5678
 `define default_offset2 16'h2413
-`define default_rel_value 8'h78
+`define default_rel_value 32'h7856_3412
 `define default_modrm_mod 2'b10
 `define default_modrm_reg_opcode 3'b110
 `define default_modrm_rm 3'b101
@@ -43,7 +43,7 @@
 `define if_check_op_c 1'b1
 `define if_check_aluk 1'b0
 `define if_check_alu_result 1'b0
-`define check_opA (`default_eip + 8) //check values
+`define check_opA (`default_eip + 5) //check values
 `define check_opB (`default_reg_EAX_32)
 `define check_opC (`default_reg_ESP_32 - 4)
 `define check_aluk 3'b110
@@ -962,6 +962,9 @@ module TOP;
               if(1'b1 === `if_rel_eip) begin
                 if(u_pipeline.WB_Final_EIP !== `default_eip + instr_length + `default_rel_value) begin 
                   $display("Error: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_EIP, `default_eip + instr_length + `default_rel_value);
+                  $display("Debug: default_eip is: %h", `default_eip);
+                  $display("Debug: instr_length is: %h", instr_length);
+                  $display("Debug: default_rel_value is: %h", `default_rel_value);
                   error <= 1; 
                 end
               end else begin
@@ -1041,7 +1044,7 @@ module TOP;
                 $display("Error: WB_Final_Dcache_Address is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_Address, `check_address);
                 error <= 1;
                 $display("Debug: default_ss << 16 is: %h", `default_ss << 16);
-                $display("Debug: default_reg_whole_value << is : %h", `default_reg_base_32);
+                $display("Debug: default_reg_ESP_32 << is : %h", `default_reg_ESP_32);
                 $display("Debug: default_dis is: %h", `default_big_endian_dis);
               end
             end

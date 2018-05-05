@@ -45,8 +45,8 @@
 `define if_check_alu_result 1'b0
 `define check_opA (`default_eip + 8) //check values
 `define check_opB (`default_reg_EAX_32)
-`define check_opC (`default_reg_ESP_32 - 4)
-`define check_opMMA 64'h0000_0022_0000_000B
+`define check_opC (`default_reg_ESP_32 - 8)
+`define check_opMMA 64'h0000_0022_0000_0008
 `define check_aluk 3'b100
 `define alu_result (check_opB - check_opA)
 
@@ -74,7 +74,7 @@
 `define which_check_eip 1'b1 //0 for eip + instr length, 1 for other
 `define if_rel_eip 1'b0 //0 for absolute, 1 for relative
 `define if_check_cs 1'b1
-`define check_ld_mm 1'b0 //check values
+`define check_ld_mm 1'b1  //check values
 `define check_ld_eip 1'b1
 `define check_ld_cs 1'b1
 `define check_ld_seg 1'b0
@@ -86,7 +86,7 @@
 `define if_check_address 1'b1
 `define check_ld_dcache 1'b1 //check values
 `define check_dcache_data (`check_opMMA)
-`define check_address ((`default_ss << 16) + (`default_reg_ESP_32 - 4))
+`define check_address ((`default_ss << 16) + (`default_reg_ESP_32 - 8))
 
 module TOP;
 //this module is used to debug the basic functionality of the simulator
@@ -1018,7 +1018,6 @@ module TOP;
               end 
             end else if(2'b10 === `macro_check_length) begin
               check_dcache_data[31:0] = tb_dcache_data[31:0];
-              correct_dcache_data[31:0] = u_pipeline.WB_Final_Dcache_Data[31:0];
               if(1'b1 === `macro_sign_extend) begin
                 check_dcache_data[63:32] = {32{tb_dcache_data[31]}};
                 correct_dcache_data[63:32] = u_pipeline.WB_Final_Dcache_Data[63:32];
@@ -1042,8 +1041,7 @@ module TOP;
                 $display("Error: WB_Final_Dcache_Address is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_Address, `check_address);
                 error <= 1;
                 $display("Debug: default_ss << 16 is: %h", `default_ss << 16);
-                $display("Debug: default_reg_whole_value << is : %h", `default_reg_base_32);
-                $display("Debug: default_dis is: %h", `default_big_endian_dis);
+                $display("Debug: default_reg_ESP_32 << is : %h", `default_reg_ESP_32);
               end
             end
 

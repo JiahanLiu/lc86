@@ -67,6 +67,7 @@ endmodule // operand_select_wb
 module conditional_support_wb(
 	output mux_not_taken_eip,
 	output wb_ld_gpr2, 
+	output wb_branch_taken,
 	input CS_IS_JNBE_WB,
 	input CS_IS_JNE_WB,
 	input [31:0] current_flags,
@@ -92,6 +93,7 @@ module conditional_support_wb(
 	and2$ u_and_jnbe(jnbe_not_taken, cf_or_zf, CS_IS_JNBE_WB);
 
 	or2$ u_or_final_not_taken_(mux_not_taken_eip, jne_not_taken, jnbe_not_taken); 
+	inv1$ u_wb_branch_taken(wb_branch_taken, mux_not_taken_eip)
 
 	//cmovc
 

@@ -1,134 +1,160 @@
-add00
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-add01
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-and20
-Error: WB_Final_Flags is: 000007ee, but needs to be: 000007bf
-and20
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-and21
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
+cmovc0F42nottaken
+Error: WB_Final_ld_gpr2 is: 1, but needs to be: 0
+cmovc0F42nottaken
+Error: WB_Final_datasize is: 2, but needs to be: 0
 cmovc0F42taken
 Error: WB_Final_ld_gpr2 is: 0, but needs to be: 1
 cmovc0F42taken
 Error: WB_Final_datasize is: 2, but needs to be: 0
 cmpxchg0FB0
 Error: WB_Final_Flags is: 0000077f, but needs to be: 00000f7f
-cmpxchg0FB0
-Error: WB_Final_Dcache_Address is: 0b0b0712, but needs to be: 07290712
-hltF4
-Error: EX_d2_aluk_ex is: 0, but needs to be: 5
-hltF4
-Error: WB_Final_ld_eip is: 0, but needs to be: 1
-inc40
-Error: EX_A is: 000000ef, but needs to be: 00000090
-inc40
-Error: EX_B is: 00000090, but needs to be: 00000001
-inc40
-Error: WB_Final_ld_gpr1 is: 0, but needs to be: 1
-inc40
-Error: WB_Final_ld_gpr2 is: 1, but needs to be: 0
-inc40
+jnbe0F87taken
+Error: WB_Final_EIP is: 78563419, but needs to be: 00000019
+jne0F85taken
+Error: WB_Final_EIP is: 78563419, but needs to be: 00000019
+movq0F6F
+Error: EX_d2_aluk_ex is: 5, but needs to be: 4
+movq0F6F
+Error: WB_Final_MM_Data is: 0202020202020202, but needs to be: 1234567890abcdef
+movq0F7F
+Error: EX_B is: 0202020202020202, but needs to be: 00000000
+movq0F7F
+Error: WB_Final_ld_mm is: 1, but needs to be: 0
+movq0F7F
+Error: WB_Final_Dcache_Data is: 0X0X0X0X0X0X0XXX, but needs to be: 2424242400000000
+paddd0FFE
+Error: EX_B is: 0202020202020202, but needs to be: 00000000
+paddd0FFE
+Error: EX_d2_aluk_ex is: 1, but needs to be: 2
+paddd0FFE
+Error: WB_Final_MM_Data is: 1436143614361436, but needs to be: 3658365812341234
+paddsw0FED
+Error: EX_B is: 0202020202020202, but needs to be: 00000000
+paddsw0FED
+Error: WB_Final_MM_Data is: 1436143614361436, but needs to be: 3658365812341234
+paddw0FFD
+Error: EX_B is: 0202020202020202, but needs to be: 00000000
+paddw0FFD
+Error: WB_Final_MM_Data is: 1436143614361436, but needs to be: 3658365812341234
+pop07
+Error: WB_Final_data3 is: 2424242c, but needs to be: 24242428
+pop0FA1
+Error: WB_Final_data3 is: 2424242c, but needs to be: 24242428
+pop0FA9
+Error: WB_Final_data3 is: 2424242c, but needs to be: 24242428
+pop17
+Error: WB_Final_data3 is: 2424242c, but needs to be: 24242428
+pop1F
+Error: WB_Final_data3 is: 2424242c, but needs to be: 24242428
+pop58
+Error: WB_Final_data3 is: 2424242c, but needs to be: 24242428
+pop58
+Error: WB_Final_DR1 is: 0, but needs to be: 6
+pop8F
+Error: WB_Final_data3 is: 2424242c, but needs to be: 24242428
+pop8F
+Error: WB_Final_Dcache_Address is: 47472530, but needs to be: 46462428
+pshufw0F70
+Error: WB_Final_MM_Data is: 0202020202020202, but needs to be: cdef90ab56781234
+push06
+Error: EX_C is: 24242440, but needs to be: 24242420
+push06
+Error: WB_Final_data3 is: 24242440, but needs to be: 24242420
+push06
+Error: WB_Final_Dcache_Address is: 40402020, but needs to be: 46462420
+push0E
+Error: EX_A is: 00002222, but needs to be: 00000022
+push0E
+Error: EX_C is: 24242440, but needs to be: 24242420
+push0E
+Error: WB_Final_data3 is: 24242440, but needs to be: 24242420
+push0E
+Error: WB_Final_Dcache_Data is: 0000000000002222, but needs to be: 0000000000000022
+push0E
+Error: WB_Final_Dcache_Address is: 46462440, but needs to be: 46462420
+push0FA0
+Error: EX_C is: 24242440, but needs to be: 24242420
+push0FA0
+Error: WB_Final_data3 is: 24242440, but needs to be: 24242420
+push0FA0
+Error: WB_Final_Dcache_Address is: 48482424, but needs to be: 46462420
+push0FA8
+Error: EX_C is: 24242440, but needs to be: 24242420
+push0FA8
+Error: WB_Final_data3 is: 24242440, but needs to be: 24242420
+push0FA8
+Error: WB_Final_Dcache_Address is: 4a4a2525, but needs to be: 46462420
+push16
+Error: EX_C is: 24242440, but needs to be: 24242420
+push16
+Error: WB_Final_data3 is: 24242440, but needs to be: 24242420
+push16
+Error: WB_Final_Dcache_Address is: 46462440, but needs to be: 46462420
+push1E
+Error: EX_C is: 24242440, but needs to be: 24242420
+push1E
+Error: WB_Final_data3 is: 24242440, but needs to be: 24242420
+push1E
+Error: WB_Final_Dcache_Address is: 46462440, but needs to be: 46462420
+push50
+Error: EX_A is: 20202020, but needs to be: 26262626
+push50
+Error: EX_C is: 24242440, but needs to be: 24242420
+push50
+Error: WB_Final_data3 is: 24242440, but needs to be: 24242420
+push50
+Error: WB_Final_Dcache_Data is: 0000000020202020, but needs to be: 0000000026262626
+push50
+Error: WB_Final_Dcache_Address is: 46462440, but needs to be: 46462420
+push68
+Error: EX_A is: 27272727, but needs to be: 21436587
+push68
+Error: EX_C is: 24242440, but needs to be: 24242420
+push68
+Error: WB_Final_data3 is: 24242440, but needs to be: 24242420
+push68
+Error: WB_Final_Dcache_Address is: 46462440, but needs to be: 46462420
+push6A
+Error: EX_A is: 21212121, but needs to be: 00000021
+push6A
+Error: EX_C is: 24242440, but needs to be: 00000020
+push6A
+Error: WB_Final_data3 is: 24242440, but needs to be: 24242420
+push6A
 Error: WB_Final_datasize is: 2, but needs to be: 0
-incFE
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-incFF
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-jmpFF
-Error: WB_Final_ld_gpr3 is: 1, but needs to be: 0
-jmpFF
-Error: WB_Final_EIP is: 90abcdef, but needs to be: 1234567890abcdef
-jmpFF
-Error: WB_Final_Dcache_Write is: 1, but needs to be: 0
-mov88
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-mov89
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-mov8C
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-mov8E
-Error: WB_Final_DR1 is: 2, but needs to be: 0
-movB0
-Error: WB_Final_DR1 is: 0, but needs to be: 2
-movB8
-Error: EX_B is: 21436587, but needs to be: 00000021
-movB8
-Error: WB_Final_DR1 is: 0, but needs to be: 2
-movC6
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-movC7
-Error: EX_B is: 21436587, but needs to be: 00000021
-movC7
-Error: WB_Final_Dcache_Data is: 0000000021436587, but needs to be: 0000000000000021
-movC7
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-notF6
-Error: WB_Final_Flags is: 00000fff, but needs to be: 0000072a
-notF6
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-notF7
-Error: WB_Final_Flags is: 00000fff, but needs to be: 0000072a
-notF7
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-or08
-Error: WB_Final_Flags is: 000007ee, but needs to be: 000007bf
-or08
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-or09
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-salC0
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-salC1
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-salC1operandoverride
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-salD0
-Error: EX_B is: 00000091, but needs to be: 00000001
-salD0
-Error: WB_Final_Dcache_Data is: 0000000000000000, but needs to be: 00000000000000de
-salD0
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-salD1
-Error: EX_B is: 00000001, but needs to be: 00000002
-salD1
-Error: WB_Final_Dcache_Data is: 0000000021579bde, but needs to be: 0000000042af37bc
-salD1
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-salD2
-Error: WB_Final_Dcache_Address is: 0b0b0712, but needs to be: 07290712
-salD3
-Error: WB_Final_Dcache_Address is: 0b0b0712, but needs to be: 07290712
-sarC0
-Error: WB_Final_Dcache_Data is: 00000000000000fb, but needs to be: 000000000000007b
-sarC0
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-sarC1
-Error: WB_Final_Dcache_Data is: 00000000e42af37b, but needs to be: 00000000242af37b
-sarC1
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-sarC1operandoverride
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-sarD0
-Error: EX_B is: 00000091, but needs to be: 00000001
-sarD0
-Error: WB_Final_Dcache_Data is: 00000000000000ff, but needs to be: 00000000000000f7
-sarD0
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-sarD1
-Error: EX_B is: 00000001, but needs to be: 00000002
-sarD1
-Error: WB_Final_Dcache_Data is: 00000000c855e6f7, but needs to be: 00000000242af37b
-sarD1
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-sarD2
-Error: WB_Final_Dcache_Data is: 00000000000000fd, but needs to be: 00000000000000bd
-sarD2
-Error: WB_Final_Dcache_Address is: 0b0b0712, but needs to be: 07290712
-sarD3
-Error: WB_Final_Dcache_Data is: 00000000f21579bd, but needs to be: 00000000121579bd
-sarD3
-Error: WB_Final_Dcache_Address is: 0b0b0712, but needs to be: 07290712
-xchg86
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
-xchg87
-Error: WB_Final_Dcache_Address is: 282795a0, but needs to be: 95b795a0
+push6A
+Error: WB_Final_Dcache_Address is: 46462440, but needs to be: 46462420
+pushFF
+Error: EX_C is: 24242440, but needs to be: 24242420
+pushFF
+Error: WB_Final_data3 is: 24242440, but needs to be: 24242420
+pushFF
+Error: WB_Final_Dcache_Address is: 46462440, but needs to be: 46462420
+retC2
+Error: EX_B is: 00000643, but needs to be: 00000006
+retC2
+Error: EX_C is: 24242a67, but needs to be: 24242424
+retC2
+Error: WB_Final_data3 is: 24242a6f, but needs to be: 2424242e
+retCA
+Error: EX_C is: 24242a67, but needs to be: 24242424
+retCA
+Error: WB_Final_data3 is: 24242a7d, but needs to be: 24242432
+retCA
+Error: WB_Final_datasize is: 3, but needs to be: 2
+retCA
+Error: WB_Final_EIP is: 00000000, but needs to be: 00000003
+retCA
+Error: WB_Final_EIP is: 001a, but needs to be: 0007
+retCA
+Error: WB_Final_ld_cs is: 1, but needs to be: 0
+retCB
+Error: WB_Final_data3 is: 24242424, but needs to be: 2424242c
+retCB
+Error: WB_Final_DR3 is: 0, but needs to be: 4
+retCB
+Error: WB_Final_ld_gpr3 is: 0, but needs to be: 1
+retCB
+Error: WB_Final_datasize is: 3, but needs to be: 2
+retCB
+Error: WB_Final_ld_eip is: 0, but needs to be: 1

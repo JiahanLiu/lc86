@@ -49,7 +49,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
     //WB outputs
     wire wb_halt_all;
     wire wb_repne_terminate_all;
-    wire WB_stall;
+    wire wb_stall;
+    wire wb_branch_taken;
     //Dataforwarded, currently for daa
     wire [31:0] flags_dataforwarded, count_dataforwarded;
    
@@ -1537,7 +1538,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
         wb_halt_all, 
         wb_repne_terminate_all,
-        WB_stall,
+        wb_stall,
+        wb_branch_taken, 
 
         flags_dataforwarded,
         count_dataforwarded
