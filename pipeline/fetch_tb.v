@@ -14,8 +14,8 @@ module TOP;
 //the clk cycle used to drive the entire system
    reg clk, clr, pre;
    reg [127:0] IR;
-   integer clk_cycle = 12;
-   integer half_cycle = 6;
+   integer clk_cycle = 20;
+   integer half_cycle = 10;
 
    // Signals for testbench loop
    integer file, char, retval, lineno, cntErrors;
@@ -89,8 +89,10 @@ module TOP;
         clk = 1;
         clr = 0;
         pre = 1;
-        #5
+        #(half_cycle)
         clr = 1;
+        u_pipeline.u_icache.tagstore_u.valid_store.Q = 32'hFFFF_FFFF;
+        u_pipeline.u_icache.state.Q = 16'h0001;
         forever #(half_cycle)  clk = ~clk;
     end
 
@@ -166,9 +168,92 @@ module TOP;
         u_pipeline.u_register_file.segr.regfilehi.mem_array[5] = 8'h5;
         u_pipeline.u_register_file.segr.regfilehi.mem_array[6] = 8'h6;
         u_pipeline.u_register_file.segr.regfilehi.mem_array[7] = 8'h7;
-
-
      end 
+
+     initial begin
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line0.ram0.mem);
+        $readmemh("ram1.list", u_pipeline.u_icache.data_u.data_line0.ram1.mem);
+        $readmemh("ram2.list", u_pipeline.u_icache.data_u.data_line0.ram2.mem);
+        $readmemh("ram3.list", u_pipeline.u_icache.data_u.data_line0.ram3.mem);
+        $readmemh("ram4.list", u_pipeline.u_icache.data_u.data_line0.ram4.mem);
+        $readmemh("ram5.list", u_pipeline.u_icache.data_u.data_line0.ram5.mem);
+        $readmemh("ram6.list", u_pipeline.u_icache.data_u.data_line0.ram6.mem);
+        $readmemh("ram7.list", u_pipeline.u_icache.data_u.data_line0.ram7.mem);
+        $readmemh("ram8.list", u_pipeline.u_icache.data_u.data_line0.ram8.mem);
+        $readmemh("ram9.list", u_pipeline.u_icache.data_u.data_line0.ram9.mem);
+        $readmemh("ram10.list", u_pipeline.u_icache.data_u.data_line0.ram10.mem);
+        $readmemh("ram11.list", u_pipeline.u_icache.data_u.data_line0.ram11.mem);
+        $readmemh("ram12.list", u_pipeline.u_icache.data_u.data_line0.ram12.mem);
+        $readmemh("ram13.list", u_pipeline.u_icache.data_u.data_line0.ram13.mem);
+        $readmemh("ram14.list", u_pipeline.u_icache.data_u.data_line0.ram14.mem);
+        $readmemh("ram15.list", u_pipeline.u_icache.data_u.data_line0.ram15.mem);
+
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line1.ram0.mem);
+        $readmemh("ram1.list", u_pipeline.u_icache.data_u.data_line1.ram1.mem);
+        $readmemh("ram2.list", u_pipeline.u_icache.data_u.data_line1.ram2.mem);
+        $readmemh("ram3.list", u_pipeline.u_icache.data_u.data_line1.ram3.mem);
+        $readmemh("ram4.list", u_pipeline.u_icache.data_u.data_line1.ram4.mem);
+        $readmemh("ram5.list", u_pipeline.u_icache.data_u.data_line1.ram5.mem);
+        $readmemh("ram6.list", u_pipeline.u_icache.data_u.data_line1.ram6.mem);
+        $readmemh("ram7.list", u_pipeline.u_icache.data_u.data_line1.ram7.mem);
+        $readmemh("ram8.list", u_pipeline.u_icache.data_u.data_line1.ram8.mem);
+        $readmemh("ram9.list", u_pipeline.u_icache.data_u.data_line1.ram9.mem);
+        $readmemh("ram10.list", u_pipeline.u_icache.data_u.data_line1.ram10.mem);
+        $readmemh("ram11.list", u_pipeline.u_icache.data_u.data_line1.ram11.mem);
+        $readmemh("ram12.list", u_pipeline.u_icache.data_u.data_line1.ram12.mem);
+        $readmemh("ram13.list", u_pipeline.u_icache.data_u.data_line1.ram13.mem);
+        $readmemh("ram14.list", u_pipeline.u_icache.data_u.data_line1.ram14.mem);
+        $readmemh("ram15.list", u_pipeline.u_icache.data_u.data_line1.ram15.mem);
+
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line2.ram0.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line2.ram1.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line2.ram2.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line2.ram3.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line2.ram4.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line2.ram5.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line2.ram6.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line2.ram7.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line2.ram8.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line2.ram9.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line2.ram10.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line2.ram11.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line2.ram12.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line2.ram13.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line2.ram14.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line2.ram15.mem);
+
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line3.ram0.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line3.ram1.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line3.ram2.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line3.ram3.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line3.ram4.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line3.ram5.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line3.ram6.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line3.ram7.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line3.ram8.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line3.ram9.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line3.ram10.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line3.ram11.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line3.ram12.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line3.ram13.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line3.ram14.mem);
+        $readmemh("ram0.list", u_pipeline.u_icache.data_u.data_line3.ram15.mem);
+
+        $readmemh("tag_ram0.list", u_pipeline.u_icache.tagstore_u.u_tag_ram0.mem);
+        $readmemh("tag_ram0.list", u_pipeline.u_icache.tagstore_u.u_tag_ram1.mem);
+        $readmemh("tag_ram0.list", u_pipeline.u_icache.tagstore_u.u_tag_ram2.mem);
+        $readmemh("tag_ram0.list", u_pipeline.u_icache.tagstore_u.u_tag_ram3.mem);
+
+//        u_pipeline.u_icache.BUS_R = 1'b0;
+     end
+
+
+//     initial begin
+//        #(clk_cycle)
+//        
+//     end
+
+
 
      initial #500 $finish;
 
@@ -200,6 +285,18 @@ module TOP;
          u_pipeline.u_fetch.u_ifu.itlb.ENTRY[6] = `TLB_ENTRY_6;
          u_pipeline.u_fetch.u_ifu.itlb.ENTRY[7] = `TLB_ENTRY_7;
       end
+   initial
+      begin
+         u_pipeline.u_memory_stage1.u_lsu.dtlb.ENTRY[0] = `TLB_ENTRY_0;
+         u_pipeline.u_memory_stage1.u_lsu.dtlb.ENTRY[1] = `TLB_ENTRY_1;
+         u_pipeline.u_memory_stage1.u_lsu.dtlb.ENTRY[2] = `TLB_ENTRY_2;
+         u_pipeline.u_memory_stage1.u_lsu.dtlb.ENTRY[3] = `TLB_ENTRY_3;
+         u_pipeline.u_memory_stage1.u_lsu.dtlb.ENTRY[4] = `TLB_ENTRY_4;
+         u_pipeline.u_memory_stage1.u_lsu.dtlb.ENTRY[5] = `TLB_ENTRY_5;
+         u_pipeline.u_memory_stage1.u_lsu.dtlb.ENTRY[6] = `TLB_ENTRY_6;
+         u_pipeline.u_memory_stage1.u_lsu.dtlb.ENTRY[7] = `TLB_ENTRY_7;
+      end
+
 
    initial begin
        $vcdplusfile("pipeline.dump.vpd");

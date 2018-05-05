@@ -201,7 +201,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
    cache u_dcache (
        CLK, PRE, CLR, 
        {64'b0, LSU_OUT_DCACHE_WR_DATA_IN}, LSU_OUT_DCACHE_RW_IN, LSU_OUT_DCACHE_EN, 
-       LSU_OUT_DCACHE_ADDR_IN[15:0], {1'b0, LSU_OUT_DCACHE_SIZE_IN},
+       LSU_OUT_DCACHE_ADDR_IN[15:0], LSU_OUT_DCACHE_SIZE_IN,
 
        DCACHE_RD_DATA_OUT_LSU_IN, DCACHE_READY_LSU_IN,
        // bus signals
@@ -1267,7 +1267,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
    wire nor_me2_exc_exist_out, me2_ps_v_stage_in;
    nor2$ nor_me2_exc_exist (nor_me2_exc_exist_out, ME2_PS_PAGE_FAULT_EXC_EXIST, ME2_PS_GPROT_EXC_EXIST);
-   and2$ and_me2_v_stage_in (me2_v_stage_in, ME2_PS_V, nor_me2_exc_exist_out);
+   and2$ and_me2_v_stage_in (me2_ps_v_stage_in, ME2_PS_V, nor_me2_exc_exist_out);
 
    assign ME2_V_ME_IN = me2_ps_v_stage_in;
    assign ME2_WR_ADDR1_V_ME_IN = ME2_PS_WR_ADDR1_V;
@@ -1821,7 +1821,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
 	wb_mispredict_taken_all,
 
         flags_dataforwarded,
-        count_dataforwarded,
+        count_dataforwarded
     );
 
 endmodule
