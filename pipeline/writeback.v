@@ -59,10 +59,10 @@ module writeback (
    output wb_halt_all, 
    output wb_repne_terminate_all,
    output wb_stall,
-   output wb_branch_taken
+   output wb_branch_taken,
    
    output [31:0] flags_dataforwarded,
-   output [31:0] count_dataforwarded,
+   output [31:0] count_dataforwarded
    );
 
   //control signals

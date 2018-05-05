@@ -1332,7 +1332,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
         EX_DR2,
         EX_ADDRESS,
 
-        WB_stall, 
+        wb_stall, 
         wb_repne_terminate_all,
 
         flags_dataforwarded,
