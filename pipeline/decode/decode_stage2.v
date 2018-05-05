@@ -286,7 +286,7 @@ module decode_stage2 (
    // LD_MM = CS_LD_MM || (MOD == 2'b11 REG && opcode == 0F7F):MOVQ mm/m64,mm  
    comp16 comp_0F7F (op_0F7F, op_0F7F_bar, opcode, 16'h0F7F);
    and2$ and_ld_mm (and_ld_mm_out, MOD_EQ_REG, op_0F7F);
-   or2$ or_ld_mm (D2_LD_MM_WB, CS_LD_MM_WB, and_ld_mm_out);
+   or2$ or_ld_mm (D2_LD_MM_WB, CS_LD_MM_D2, and_ld_mm_out);
  
    //CS_MM1_NEEDED_DE??, CS_SR1_NEEDED_DE?? CS_LD_MM_DE??
    // SR1_NEEDED = SR1_NEEDED || (CS_MM1_NEEDED && MOD_EQ_MEM) || (MOD_EQ_MEM && modrm_present): MM INSTs

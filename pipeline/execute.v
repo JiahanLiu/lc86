@@ -11,6 +11,7 @@ module execute (
     input [1:0] EX_d2_datasize_all,
     input [2:0] EX_d2_aluk_ex, 
     input EX_d2_ld_gpr1_ex,
+    input EX_d2_ld_mm_wb,
     input EX_d2_dcache_write_ex,  
     input EX_d2_repne_wb, 
 
@@ -39,6 +40,7 @@ module execute (
     output [1:0] WB_d2_datasize_all_next,
     output WB_ex_ld_gpr1_wb_next,
     output WB_ex_ld_gpr2_wb_next, 
+    output WB_ex_ld_mm_wb_next,
     output WB_ex_dcache_write_wb_next, 
     output WB_d2_repne_wb_next, 
 
@@ -77,7 +79,7 @@ module execute (
   //cmpxchg_decision_ex
   wire ex_ld_gpr1, ex_ld_gpr2, ex_dcache_write;
   //validate_signal_ex
-  wire v_ex_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3, v_cs_ld_seg, v_cs_ld_mm, v_ex_dcache_write;
+  wire v_ex_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3, v_cs_ld_seg, v_d2_ld_mm, v_ex_dcache_write;
   //functional_units
   wire [31:0] alu32_result, alu32_flags, shift_result, shift_flags, count_minus_one, stack_pointer_pop; 
   wire [63:0] alu64_result; 
@@ -98,6 +100,7 @@ module execute (
   assign WB_d2_datasize_all_next = EX_d2_datasize_all;
   assign WB_ex_ld_gpr1_wb_next = ex_ld_gpr1;
   assign WB_ex_ld_gpr2_wb_next = ex_ld_gpr2;
+  assign WB_ex_ld_mm_wb_next = EX_d2_ld_mm_wb;
   assign WB_ex_dcache_write_wb_next = ex_dcache_write;
   assign WB_d2_repne_wb_next = EX_d2_repne_wb;
 
@@ -118,15 +121,15 @@ module execute (
   assign WB_ADDRESS_next = EX_ADDRESS;
 
   validate_signal_ex u_validate_signal_ex(v_ex_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3, 
-    v_cs_ld_seg, v_cs_ld_mm, v_ex_dcache_write, EX_V, ex_ld_gpr1, ex_ld_gpr2, 
-    CS_LD_GPR3_WB, CS_LD_SEG_WB, CS_LD_MM_WB, ex_dcache_write);
+    v_cs_ld_seg, v_d2_ld_mm, v_ex_dcache_write, EX_V, ex_ld_gpr1, ex_ld_gpr2, 
+    CS_LD_GPR3_WB, CS_LD_SEG_WB, EX_d2_ld_mm_wb, ex_dcache_write);
  
 
   assign DEP_v_ex_ld_gpr1 = v_ex_ld_gpr1;
   assign DEP_v_ex_ld_gpr2 = v_ex_ld_gpr2;
   assign DEP_v_ex_ld_gpr3 = v_cs_ld_gpr3;
   assign Dep_v_ex_ld_seg = v_cs_ld_seg;
-  assign Dep_v_ex_ld_mm = v_cs_ld_mm;
+  assign Dep_v_ex_ld_mm = v_d2_ld_mm;
 
   stall_and_bubble_ex u_stall_and_bubble_ex(WB_ld_latches, WB_V_next, WB_stall, EX_d2_repne_wb,
     EX_V, wb_repne_terminate_all);

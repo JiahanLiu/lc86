@@ -113,7 +113,7 @@ module validate_signals_wb(
 	output v_ex_ld_gpr2,
 	output v_cs_ld_gpr3,
 	output v_cs_ld_seg,
-	output v_cs_ld_mm,
+	output v_d2_ld_mm,
 	output v_ex_dcache_write,
 	output v_cs_ld_flags,
 	output v_cs_ld_eip, 
@@ -123,7 +123,7 @@ module validate_signals_wb(
 	input WB_ex_ld_gpr2_wb,
 	input CS_LD_GPR3_WB,
 	input CS_LD_SEG_WB,
-	input CS_LD_MM_WB,
+	input WB_d2_ld_mm_wb,
 	input WB_ex_dcache_write_wb,
 	input CS_LD_FLAGS_WB,
 	input cs_ld_eip,
@@ -137,7 +137,7 @@ module validate_signals_wb(
 	and2$ u_and_gpr2(v_ex_ld_gpr2, WB_V, WB_ex_ld_gpr2_wb); 
 	and2$ u_and_gpr3(v_cs_ld_gpr3, WB_V, CS_LD_GPR3_WB); 
 	and2$ u_and_seg(v_cs_ld_seg, WB_V, CS_LD_SEG_WB); 
-	and2$ u_and_mm(v_cs_ld_mm, WB_V, CS_LD_MM_WB); 
+	and2$ u_and_mm(v_d2_ld_mm, WB_V, WB_d2_ld_mm_wb); 
 	and2$ u_and_dcache(v_ex_dcache_write, WB_V, WB_ex_dcache_write_wb); 
 	and2$ u_and_flags(v_cs_ld_flags, WB_V, CS_LD_FLAGS_WB); 
 

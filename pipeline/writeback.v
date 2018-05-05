@@ -10,6 +10,7 @@ module writeback (
    input [1:0] WB_d2_datasize_all,
    input WB_ex_ld_gpr1_wb,
    input WB_ex_ld_gpr2_wb,
+   input WB_d2_ld_mm_wb,
    input WB_ex_dcache_write_wb,
    input WB_d2_repne_wb, 
 
@@ -75,7 +76,7 @@ module writeback (
    //conditional_support_wb
    wire mux_not_taken_eip, wb_ld_gpr2;
    //validate_signals_wb
-   wire v_wb_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3, v_cs_ld_seg, v_cs_ld_mm, 
+   wire v_wb_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3, v_cs_ld_seg, v_d2_ld_mm, 
       v_ex_dcache_write, v_cs_ld_flags, v_cs_ld_eip, v_cs_ld_cs;
    //repne_halt_wb
    wire ZF; 
@@ -94,16 +95,16 @@ module writeback (
        CS_IS_CMOVC_WB, WB_ex_ld_gpr2_wb);
 
    validate_signals_wb u_validate_signals_wb(v_wb_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3,
-      v_cs_ld_seg, v_cs_ld_mm, v_ex_dcache_write, v_cs_ld_flags, v_cs_ld_eip, v_cs_ld_cs,
-      WB_V, WB_ex_ld_gpr1_wb, wb_ld_gpr2, CS_LD_GPR3_WB, CS_LD_SEG_WB, CS_LD_MM_WB, 
-      WB_ex_dcache_write_wb, CS_LD_FLAGS_WB, CS_LD_EIP_WB, CS_LD_CS_WB,CS_IS_CMPS_SECOND_UOP_ALL,
+      v_cs_ld_seg, v_d2_ld_mm, v_ex_dcache_write, v_cs_ld_flags, v_cs_ld_eip, v_cs_ld_cs,
+      WB_V, WB_ex_ld_gpr1_wb, wb_ld_gpr2, CS_LD_GPR3_WB, CS_LD_SEG_WB, WB_d2_ld_mm_wb, 
+      WB_ex_dcache_write_wb, CS_LD_FLAGS_WB, CS_LD_EIP_WB, CS_LD_CS_WB, CS_IS_CMPS_SECOND_UOP_ALL,
       WB_d2_repne_wb, wb_repne_terminate_all);
    
    assign DEP_v_wb_ld_gpr1 = v_wb_ld_gpr1;
    assign DEP_v_wb_ld_gpr2 = v_ex_ld_gpr2;
    assign DEP_v_wb_ld_gpr3 = v_cs_ld_gpr3;
    assign DEP_v_wb_ld_seg = v_cs_ld_seg;
-   assign DEP_v_wb_ld_mm = v_cs_ld_mm;
+   assign DEP_v_wb_ld_mm = v_d2_ld_mm;
    assign DEP_v_wb_dcache_write = v_ex_dcache_write;
 
    repne_halt_wb u_repne_halt_wb(wb_halt_all, wb_repne_terminate_all, WB_V, CS_IS_HALT_WB, CS_IS_CMPS_SECOND_UOP_ALL,
@@ -127,7 +128,7 @@ module writeback (
    assign WB_Final_ld_seg = v_cs_ld_seg; 
    //regfile64
    assign WB_Final_MM_Data = WB_RESULT_MM; 
-   assign WB_Final_ld_mm = v_cs_ld_mm; 
+   assign WB_Final_ld_mm = v_d2_ld_mm; 
    //EIP register
    assign WB_Final_ld_eip = v_cs_ld_eip;
    //CS register

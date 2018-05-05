@@ -86,14 +86,14 @@ module validate_signal_ex(
 	output v_ex_ld_gpr2,
 	output v_cs_ld_gpr3,
 	output v_cs_ld_seg,
-	output v_cs_ld_mm,
+	output v_d2_ld_mm,
 	output v_ex_dcache_write,
 	input EX_V,
 	input ex_ld_gpr1,
 	input ex_ld_gpr2,
 	input CS_LD_GPR3_WB,
 	input CS_LD_SEG_WB,
-	input CS_LD_MM_WB,
+	input d2_ld_mm_wb,
 	input ex_dcache_write
 	);
 
@@ -101,7 +101,7 @@ module validate_signal_ex(
 	and2$ u_and_gpr2(v_ex_ld_gpr2, EX_V, ex_ld_gpr2);
 	and2$ u_and_gpr3(v_cs_ld_gpr3, EX_V, CS_LD_GPR3_WB);
 	and2$ u_and_seg(v_cs_ld_seg, EX_V, CS_LD_SEG_WB);
-	and2$ u_and_mm(v_cs_ld_mm, EX_V, CS_LD_MM_WB);
+	and2$ u_and_mm(v_d2_ld_mm, EX_V, d2_ld_mm_wb);
 	and2$ u_and_dcache(v_ex_dcache_write, EX_V, ex_dcache_write);
 
 endmodule // validate_signal_ex
