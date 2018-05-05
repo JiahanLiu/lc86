@@ -59,7 +59,7 @@ module writeback (
    output wb_halt_all, 
    output wb_repne_terminate_all,
    output wb_stall,
-   output wb_branch_taken,
+   output wb_v_branch_taken,
    
    output [31:0] flags_dataforwarded,
    output [31:0] count_dataforwarded
@@ -144,7 +144,7 @@ module writeback (
    //stall logic
    inv1$ u_not_write_ready(In_write_ready_not, In_write_ready);
    and2$ u_wb_stall(wb_stall, v_ex_dcache_write, In_write_ready_not);
-
+   and2$ u_wb_v_branch_taken(wb_v_branch_taken, wb_branch_taken, WB_V);
    //dataforward
    assign flags_dataforwarded = final_out_flags;
    assign count_dataforwarded = count;
