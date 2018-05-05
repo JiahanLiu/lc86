@@ -1,15 +1,14 @@
+//WRITE_SIZE one bit hot for amnt, 0 is the full line
+//SRC, IC=0, DC=1, DMA=2
+
 module main_memory (
-    input CLK,
-    input CLR, PRE,
     input [14:0] ADDR,
-    input WR, BUS_R, EN,
+    input WR, EN,//BS_R removed because no use
     input [2:0] WRITE_SIZE,
-    input [2:0] SRC,
-    input [127:0] BUS_READ,
-    output [127:0] BUS_OUT
+    inout [255:0] DATA_BUF
 );
 
-wire [255:0] DATA_BUF, BUF_OUT;
+
 wire [31:0] bit_lines;
 wire [1023:0] word_lines, word_lines_b;
 wire [9:0] row_address;
@@ -74,13 +73,6 @@ word_lines128 blk_line6 (ADDR[11:5], DATA_BUF, OE_BAR[6], write_read_mask, 1'b0)
 word_lines128 blk_line7 (ADDR[11:5], DATA_BUF, OE_BAR[7], write_read_mask, 1'b0);
 
 
-//Shift amt
-
-
-// section_sel is column_address[4]
-buffer_io icache_buf (BUS_READ, DATA_BUF, WR, CLK, CLR, PRE, column_address[4], shift_amt, BUS_OUT);
-buffer_io dcache_buf (BUS_READ, DATA_BUF, WR, CLK, CLR, PRE, column_address[4], shift_amt, BUS_OUT);
-buffer_io iobuf (BUS_READ, DATA_BUF, WR, CLK, CLR, PRE, column_address[4], shift_amt, BUS_OUT);
 
 endmodule
 

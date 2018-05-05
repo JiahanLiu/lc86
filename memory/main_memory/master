@@ -11,4 +11,6 @@
 ../../pipeline/common/basic_components/decoder.v
 ../../pipeline/common/functional_units/shift_components.v
 ../../pipeline/common.v
+../bus/bus_controller.v
 ./main_memory.v
+./mem_bus_controller.v

@@ -17,14 +17,10 @@ module mem_bus_controller(//interface with bus
 		      output DEST_OUT,//wire goes directly to RAM
 		      input DEST_IN,
 		      //interface with work unit
-		      //needs to be modifed for each unit
-		      input MOD_EN, //simple signal saying we have a request
-		      input MOD_WR,
-		      input [15:0] MOD_A,
-		      input [127:0] MOD_WRITE_DATA,
-		      output [127:0] MOD_READ_DATA,
-		      output MOD_R
-
+			  output [14:0] ADDR,
+			  output WR, EN,//BS_R removed because no use
+			  output [2:0] WRITE_SIZE,
+			  inout [255:0] DATA_BUF
 		      );
    //CURRENT STATE REG
    wire [7:0] 		    current_state, next_state;
