@@ -7,6 +7,8 @@ module memory_stage1 (
 
    input D2_MEM_RD_ME, D2_MEM_WR_WB,
 
+   input [127:0] CONTROL_STORE,
+		      
    // inputs for dependency check
    input ME_V,
    input ME_WR_ADDR1_V,
@@ -50,10 +52,11 @@ module memory_stage1 (
 
    output PAGE_FAULT_EXC_OUT,
    output GPROT_EXC_OUT,
-   output MEM_DEP_STALL_OUT
+   output MEM_DEP_STALL_OUT,
+   output JMP_STALL_OUT, V_LD_DF_OUT
 );
-//`include "./control_store/control_store_wires.v"
-//`include "./control_store/control_store_signals.v"
+`include "./control_store/control_store_wires.v"
+`include "./control_store/control_store_signals.v"
 
    wire v_mem_rd, v_mem_wr;
    wire lsu_rd_addr1_v_out, lsu_rd_addr2_v_out,
@@ -117,4 +120,10 @@ module memory_stage1 (
    assign D2_MEM_SIZE_WB_OUT = D2_MEM_SIZE_WB;
    assign D2_MEM_WR_WB_OUT = D2_MEM_WR_WB;
 
+   wire or_jmp_stall_out;
+   or3$ or_jmp_stall (or_jmp_stall_out, CS_JMP_STALL_DE, CS_IS_NEAR_RET_M2, CS_IS_FAR_RET_M2);
+   and2$ and_jmp_stall (JMP_STALL_OUT, V, or_jmp_stall_out);
+
+   and3$ and_ld_df (V_LD_DF_OUT, V, CS_LD_FLAGS_WB, CS_FLAGS_AFFECTED_WB[5]);
+   
 endmodule

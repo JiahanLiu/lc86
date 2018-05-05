@@ -38,7 +38,8 @@ module memory_stage2 (
    output [2:0] DE_ALUK_EX_OUT,
    output [2:0] DRID1_OUT, DRID2_OUT,
 
-   output D2_MEM_WR_WB_OUT, D2_LD_GPR1_WB_OUT, D2_LD_MM_WB_OUT
+   output D2_MEM_WR_WB_OUT, D2_LD_GPR1_WB_OUT, D2_LD_MM_WB_OUT,
+   output JMP_STALL_OUT, V_LD_DF_OUT
 );
 `include "./control_store/control_store_wires.v"
 `include "./control_store/control_store_signals.v"
@@ -162,4 +163,10 @@ module memory_stage2 (
    assign D2_LD_GPR1_WB_OUT = D2_LD_GPR1_WB;
    assign D2_LD_MM_WB_OUT = D2_LD_MM_WB;
 
+   wire or_jmp_stall_out;
+   or3$ or_jmp_stall (or_jmp_stall_out, CS_JMP_STALL_DE, CS_IS_NEAR_RET_M2, CS_IS_FAR_RET_M2);
+   and2$ and_jmp_stall (JMP_STALL_OUT, V, or_jmp_stall_out);
+
+   and3$ and_ld_df (V_LD_DF_OUT, V, CS_LD_FLAGS_WB, CS_FLAGS_AFFECTED_WB[5]);
+   
 endmodule

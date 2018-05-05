@@ -26,7 +26,7 @@ module decode_stage2 (
    input PAGE_FAULT_EXC_EN,
    input PAGE_FAULT_EXC_EXIST,
 
-   input INT_EXIST,
+   input INT_EXIST, WB_REPNE_TERMINATE_ALL,
 
    output [31:0] EIP_OUT, 
    output [15:0] CS_OUT,
@@ -52,7 +52,9 @@ module decode_stage2 (
 
    output PAGE_FAULT_EXC_EXIST_OUT,
    output NMI_INT_EN_OUT, GEN_PROT_EXC_EN_OUT, PAGE_FAULT_EXC_EN_OUT,
-   output D2_REPNE_WB, D2_UOP_STALL_OUT, D2_EXC_EN_V_OUT
+   output D2_REPNE_WB, D2_UOP_STALL_OUT, D2_EXC_EN_V_OUT,
+
+   output D2_JMP_STALL_OUT
 );
 `include "./control_store/control_store_wires.v"
 `include "./control_store/control_store_signals.v"
@@ -120,12 +122,12 @@ module decode_stage2 (
     wire [31:0] Dsel_uop, Qsel_uop;
     wire sel_uop;
 
-    wire rst_sel_uop, int_exist_bar;
-    inv1$ inv_int_exist (int_exist_bar, INT_EXIST);
-    and2$ and_rst_sel_uop (rst_sel_uop, reset, int_exist_bar);
-    assign Dsel_uop = {31'b0, CS_UOP_STALL_DE};
-    reg32e$ reg_save_sel_uop (clk, Dsel_uop, Qsel_uop, , rst_sel_uop, set, D2_V);
-//    assign sel_uop = Qsel_uop[0];
+    wire and_sel_uop_out, nor_int_exist_bar;
+    nor2$ nor_int_exist (nor_int_exist_bar, INT_EXIST, WB_REPNE_TERMINATE_ALL);
+    and3$ and_sel_uop (and_sel_uop_out, D2_V, CS_UOP_STALL_DE, nor_int_exist_bar);
+    assign Dsel_uop = {31'b0, and_sel_uop_out};
+    reg32e$ reg_save_sel_uop (clk, Dsel_uop, Qsel_uop, , reset, set, 1'b1);
+   // assign sel_uop = Qsel_uop[0];
     assign sel_uop = 1'b0; //TODO temporary
 
     // Mux for choosing the control address, the sel signal needs to be
@@ -309,7 +311,11 @@ module decode_stage2 (
    or3$ or_exc_en (or_exc_en_out, NMI_INT_EN, GEN_PROT_EXC_EN, PAGE_FAULT_EXC_EN);
    and2$ and_exc_v (D2_EXC_EN_V_OUT, D2_V, or_exc_en_out);
 
-   and2$ and_uop_stall_v (D2_UOP_STALL_OUT, D2_V, CS_UOP_STALL_DE);
+   and3$ and_uop_stall_v (D2_UOP_STALL_OUT, D2_V, CS_UOP_STALL_DE, nor_int_exist_bar);
 
+   wire or_jmp_stall_out;
+   or3$ or_jmp_stall (or_jmp_stall_out, CS_JMP_STALL_DE, CS_IS_NEAR_RET_M2, CS_IS_FAR_RET_M2);
+   and2$ and_jmp_stall (D2_JMP_STALL_OUT, D2_V, or_jmp_stall_out);
+   
 endmodule
 

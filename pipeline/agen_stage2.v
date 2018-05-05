@@ -50,7 +50,8 @@ module agen_stage2 (
    output D2_LD_GPR1_WB_OUT, D2_LD_MM_WB_OUT,
 
    // Other signals
-   output SEG_LIMIT_EXC_EXIST_OUT, PAGE_FAULT_EXC_EXIST_OUT, AG_REPNE_WB
+   output SEG_LIMIT_EXC_EXIST_OUT, PAGE_FAULT_EXC_EXIST_OUT, AG_REPNE_WB,
+   output JMP_STALL_OUT, V_LD_DF_OUT
 );
 //`include "ag_control_store.v"
 `include "./control_store/control_store_wires.v"
@@ -161,5 +162,11 @@ module agen_stage2 (
    );
 
    assign PAGE_FAULT_EXC_EXIST_OUT = PAGE_FAULT_EXC_EXIST;
+
+   wire or_jmp_stall_out;
+   or3$ or_jmp_stall (or_jmp_stall_out, CS_JMP_STALL_DE, CS_IS_NEAR_RET_M2, CS_IS_FAR_RET_M2);
+   and2$ and_jmp_stall (JMP_STALL_OUT, V, or_jmp_stall_out);
+
+   and3$ and_ld_df (V_LD_DF_OUT, V, CS_LD_FLAGS_WB, CS_FLAGS_AFFECTED_WB[5]);
    
 endmodule

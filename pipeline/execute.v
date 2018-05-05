@@ -59,8 +59,10 @@ module execute (
     output Dep_v_ex_ld_mm,
     output Dep_v_ex_dcache_write,
 
-    output WB_ld_latches
-    );
+    output WB_ld_latches,
+
+    output JMP_STALL_OUT, V_LD_DF_OUT
+);
   //control signals
   //test within execute
   //  `include "../../../control_store/control_store_wires.v"
@@ -128,5 +130,11 @@ module execute (
 
   stall_and_bubble_ex u_stall_and_bubble_ex(WB_ld_latches, WB_V_next, WB_stall, EX_d2_repne_wb,
     EX_V, wb_repne_terminate_all);
+
+   wire or_jmp_stall_out;
+   or3$ or_jmp_stall (or_jmp_stall_out, CS_JMP_STALL_DE, CS_IS_NEAR_RET_M2, CS_IS_FAR_RET_M2);
+   and2$ and_jmp_stall (JMP_STALL_OUT, EX_V, or_jmp_stall_out);
+
+   and3$ and_ld_df (V_LD_DF_OUT, EX_V, CS_LD_FLAGS_WB, CS_FLAGS_AFFECTED_WB[5]);
 
 endmodule

@@ -56,6 +56,8 @@ module agen_stage1 (
    input [7:0] EX_SEG_SCOREBOARD,
    input [7:0] EX_MM_SCOREBOARD,
 
+   input AG2_V_LD_DF, ME_V_LD_DF, ME2_V_LD_DF, EX_V_LD_DF,
+		    
    // Signals to register file
    output [2:0] SR1_OUT, SR2_OUT, SR3_OUT, SIB_I_OUT, SEG1_OUT, SEG2_OUT, MM1_OUT, MM2_OUT,
 
@@ -92,7 +94,8 @@ module agen_stage1 (
 
    // Other signals
    output DEP_STALL_OUT, PAGE_FAULT_EXC_EXIST_OUT, AG_REPNE_WB_OUT,
-   output EXC_EN_V
+   output EXC_EN_V,
+   output AG_JMP_STALL_OUT
 );
 //`include "ag_control_store.v"
 `include "./control_store/control_store_wires.v"
@@ -246,9 +249,15 @@ module agen_stage1 (
    
    assign D2_LD_GPR1_WB_OUT = D2_LD_GPR1_WB; 
    assign D2_LD_MM_WB_OUT = D2_LD_MM_WB;
+
+   wire cs_repne_steady_state_bar, DEP_V_IN;
+   inv1$ inv_cs_repne_steady_state (cs_repne_steady_state_bar, CS_REPNE_STEADY_STATE);
+   and2$ and_dep_valid (DEP_V_IN, V, cs_repne_steady_state_bar);
+
+   wire reg_dep_stall_out;
    
    reg_dependency_check u_reg_dependency_check (
-      V, SR1, SR2, SR3, SIB_I, SEG1, SEG2,
+      DEP_V_IN, SR1, SR2, SR3, SIB_I, SEG1, SEG2,
       D2_SR1_SIZE_AG, D2_SR2_SIZE_AG, sr3_size, sib_i_size,
       D2_SR1_NEEDED_AG, CS_SR2_NEEDED_AG, CS_IS_CMPXCHG_EX, DE_SIB_EN_AG,
       D2_SEG1_NEEDED_AG, CS_SEG2_NEEDED_AG, D2_MM1_NEEDED_AG, CS_MM2_NEEDED_AG,
@@ -256,9 +265,15 @@ module agen_stage1 (
       ME_V, ME_GPR_SCOREBOARD, ME_SEG_SCOREBOARD, ME_MM_SCOREBOARD,
       ME2_V, ME_GPR_SCOREBOARD, ME2_SEG_SCOREBOARD, ME2_MM_SCOREBOARD,
       EX_V, EX_GPR_SCOREBOARD, EX_SEG_SCOREBOARD, EX_MM_SCOREBOARD,
-      DEP_STALL_OUT
+      reg_dep_stall_out
    );
 
+   wire or_v_ld_df_out, dep_df_stall;
+   or4$ or_v_ld_df (or_v_ld_df_out, AG2_V_LD_DF, ME_V_LD_DF, ME2_V_LD_DF, EX_V_LD_DF);
+   and4$ and_ld_df (dep_df_stall, V, D2_REPNE_WB, cs_repne_steady_state_bar, or_v_ld_df_out);
+
+   or2$ or_dep_stall_out (DEP_STALL_OUT, reg_dep_stall_out, dep_df_stall);
+   
 // MOVED TO AG2 
 //   segment_limit_check u_seg_limit_check (
 //      V, D2_MEM_RD_ME, D2_MEM_WR_ME, CS_MUX_MEM_RD_ADDR_AG, CS_MUX_MEM_WR_ADDR_AG,
@@ -285,4 +300,8 @@ module agen_stage1 (
    or3$ or_exc (or_exc_out, NMI_INT_EN, GEN_PROT_EXC_EN, PAGE_FAULT_EXC_EN);
    and2$ and_exc_v (EXC_EN_V, V, or_exc_out);
 
+   wire or_jmp_stall_out;
+   or3$ or_jmp_stall (or_jmp_stall_out, CS_JMP_STALL_DE, CS_IS_NEAR_RET_M2, CS_IS_FAR_RET_M2);
+   and2$ and_jmp_stall (AG_JMP_STALL_OUT, V, or_jmp_stall_out);
+   
 endmodule
