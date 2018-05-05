@@ -16,6 +16,8 @@ module cache( //interface with the processor
     input [127:0] BUS_READ
 );
 
+    // PLCAEHOLDER
+    assign BUS_R = 1'b0;
     wire [15:0] addr1, addr2, addr3, addr4, address;
     bufferH1024$ buf1 [15:0] (addr1, addr);
     bufferH1024$ buf2 [15:0] (addr2, addr1);
