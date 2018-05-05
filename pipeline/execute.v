@@ -11,6 +11,7 @@ module execute (
     input [1:0] EX_d2_datasize_all,
     input [2:0] EX_d2_aluk_ex, 
     input EX_d2_ld_gpr1_ex,
+    input EX_d2_ld_mm_wb,
     input EX_d2_dcache_write_ex,  
     input EX_d2_repne_wb, 
 
@@ -39,6 +40,7 @@ module execute (
     output [1:0] WB_d2_datasize_all_next,
     output WB_ex_ld_gpr1_wb_next,
     output WB_ex_ld_gpr2_wb_next, 
+    output WB_ex_ld_mm_wb_next,
     output WB_ex_dcache_write_wb_next, 
     output WB_d2_repne_wb_next, 
 
@@ -98,6 +100,7 @@ module execute (
   assign WB_d2_datasize_all_next = EX_d2_datasize_all;
   assign WB_ex_ld_gpr1_wb_next = ex_ld_gpr1;
   assign WB_ex_ld_gpr2_wb_next = ex_ld_gpr2;
+  assign WB_ex_ld_mm_wb_next = EX_d2_ld_mm_wb;
   assign WB_ex_dcache_write_wb_next = ex_dcache_write;
   assign WB_d2_repne_wb_next = EX_d2_repne_wb;
 

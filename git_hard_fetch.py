@@ -8,7 +8,7 @@ print("fetching")
 #print(test_dirs)
 
 
-shell_command = 'eval "$(ssh-agent -s)”'
+shell_command = 'eval "$(ssh-agent -s)"'
 P = subprocess.Popen(shell_command.split())
 P.wait()
 shell_command2 = 'ssh-add ../github'
