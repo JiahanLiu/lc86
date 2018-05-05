@@ -129,7 +129,7 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
    wire and_full_out, and_empty_out, nand_full_out;
 
    assign flush = FLUSH;
-   assign flus_bar = FLUSH_BAR;
+   assign flush_bar = FLUSH_BAR;
 //   or2$ or_flush (flush, JMP_STALL, EXC_STALL);
 //   nor2$ nor_flush (flush_bar, JMP_STALL, EXC_STALL);
    assign dep_stall = DEP_AND_MEM_STALLS;

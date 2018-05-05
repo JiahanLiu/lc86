@@ -79,41 +79,6 @@ word_lines128 blk_line7 (ADDR[11:5], DATA_BUF, OE_BAR[7], write_read_mask, 1'b0)
 
 endmodule
 
-module shiftleft(
-    output [127:0] Dout,
-    input [127:0] Din,
-    input [3:0] amnt
-
-);
-
-
-wire [127:0] array [15:0];
-wire [127:0] mux_array [3:0];
-   wire [127:0] zero = 127'h0000_0000_0000_0000;
-   
-genvar i;
-generate
-for(i=1;i<16;i=i+1)
-  begin : shifter
-  //Allowed since i is constant when the loop is unrolled
-  assign array[i] = {Din[127-i*8:0], zero[127:127-i*8+1]};
-  end
-    endgenerate
-   assign array[0] = Din;
-   
-//muxes to select shifted value, first round of muxes
-mux4_128 mux1 (mux_array[0],array[0],array[1],array[2],array[3],amnt[0],amnt[1]);
-mux4_128 mux2 (mux_array[1],array[4],array[5],array[6],array[7],amnt[0],amnt[1]);
-mux4_128 mux3 (mux_array[2],array[8],array[9],array[10],array[11],amnt[0],amnt[1]);
-mux4_128 mux4 (mux_array[3],array[12],array[13],array[14],array[15],amnt[0],amnt[1]);
-
-//last round of muxes
-mux4_128 mux5 (Dout,mux_array[0],mux_array[1],mux_array[2],mux_array[3],amnt[2],amnt[3]);
-	
-
-endmodule
-
-
 module word_lines128 (
     input [6:0] A,
     input [255:0] DIO,
