@@ -12,9 +12,9 @@
 `define flags_affected ({`OF_affected, `DF_affected, 2'b0, `SF_affected, `ZF_affected, 1'b0, `AF_affected, 1'b0, `PF_affected, 1'b0, `CF_affected})
 
 `define macro_sign_extend 1'b1
-`define macro_check_length 2'b10 
+`define macro_check_length 2'b01 
 
-`define default_mem_Value 64'h0000_0007_0000_0003
+`define default_mem_Value 64'h0000_0000_0000_0002
 `define default_reg_base_macro 32'h20
 `define default_reg_EAX_32 ((`default_reg_base_macro) + ((`default_reg_base_macro) << 8) + ((`default_reg_base_macro ) << 16) + ((`default_reg_base_macro) << 24))
 `define default_reg_ESP_32 ((`default_reg_base_macro + 3'b100) + ((`default_reg_base_macro + 3'b100) << 8) + ((`default_reg_base_macro + 3'b100) << 16) + ((`default_reg_base_macro + 3'b100) << 24)) 
@@ -24,8 +24,8 @@
 `define default_cs 32'h22 
 `define default_ss ((`default_reg_base_macro + 3'b010) + ((`default_reg_base_macro + 3'b010) << 8))
 `define default_flags 32'hFFF
-`define default_imm 32'h8765_4306
-`define default_big_endian_imm8 8'h06
+`define default_imm 32'h8765_4321
+`define default_big_endian_imm8 8'h21
 `define default_big_endian_imm16 32'h2143
 `define default_big_endian_imm32 32'h2143_6587
 `define default_dis 32'h0B00_0000
@@ -34,17 +34,19 @@
 `define default_offset2 16'h2413
 `define default_rel_value 8'h78
 `define default_modrm_mod 2'b10
-`define default_modrm_reg_opcode 3'b110
+`define default_modrm_reg_opcode 3'b010
 `define default_modrm_rm 3'b101
 
 `define if_check_op_a 1'b0
-`define if_check_op_b 1'b1
+`define if_check_op_b 1'b0
 `define if_check_op_c 1'b1
+`define if_check_op_mm_a 1'b1
 `define if_check_aluk 1'b0
 `define if_check_alu_result 1'b0
-`define check_opA (`default_reg_ESP_32) //check values
-`define check_opB (`default_big_endian_imm8)
-`define check_opC (`default_reg_ESP_32)
+`define check_opA (`default_eip + 5) //check values
+`define check_opB (`default_reg_EAX_32)
+`define check_opC (`default_reg_ESP_32 - 2)
+`define check_opMMA (`default_eip + 7)
 `define check_aluk 3'b110
 `define alu_result (check_opB - check_opA)
 
@@ -61,7 +63,7 @@
 `define check_ld_gpr3 1'b1
 `define check_data1 32'h0
 `define check_data2 (`default_mem_Value)
-`define check_data3 (`check_opC + 4 + `check_opB)
+`define check_data3 (`check_opC)
 `define check_dr1 3'b000
 `define check_dr2 3'b000
 `define check_dr3 3'b100
@@ -77,14 +79,14 @@
 `define check_ld_cs 1'b0
 `define check_ld_seg 1'b0
 `define check_mm_data 64'h0
-`define taken_eip 32'h0000_0003
+`define taken_eip (`default_mem_Value)
 `define check_cs 16'h0
 
-`define if_check_dcachedata 1'b0
-`define if_check_address 1'b0
-`define check_ld_dcache 1'b0 //check values
-`define check_dcache_data (`check_opA)
-`define check_address ((`default_ss << 16) + (`default_reg_ESP_32 + 4))
+`define if_check_dcachedata 1'b1
+`define if_check_address 1'b1
+`define check_ld_dcache 1'b1 //check values
+`define check_dcache_data (`check_opMMA)
+`define check_address ((`default_ss << 16) + (`default_reg_ESP_32 - 2))
 
 module TOP;
 //this module is used to debug the basic functionality of the simulator
@@ -793,6 +795,13 @@ module TOP;
               end
             end
 
+            if(1'b1 === `if_check_op_mm_a) begin
+              if(u_pipeline.EX_MM_A !== `check_opMMA) begin 
+                $display("Error: EX_MM_A is: %h, but needs to be: %h", u_pipeline.EX_MM_A, `check_opMMA);
+                error <= 1;
+              end
+            end
+
             if(1'b1 === `if_check_aluk) begin
               if(u_pipeline.EX_d2_aluk_ex !== `check_aluk) begin 
                 $display("Error: EX_d2_aluk_ex is: %h, but needs to be: %h", u_pipeline.EX_d2_aluk_ex, `check_aluk);
@@ -928,7 +937,7 @@ module TOP;
               if(u_pipeline.WB_Final_DR3_datasize !== 2'b10) begin 
                 $display("Error: WB_Final_DR3_datasize is: %h, but needs to be: %h", u_pipeline.WB_Final_datasize, 2'b10);
                 error <= 1;
-              end 
+              end
             end
 
             if(1'b1 === `if_check_flags) begin
@@ -962,6 +971,9 @@ module TOP;
                 if(u_pipeline.WB_Final_EIP !== `default_eip + instr_length + `default_rel_value) begin 
                   $display("Error: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_EIP, `default_eip + instr_length + `default_rel_value);
                   error <= 1; 
+                  $display("Debug: default_eip is: %h", `default_eip);
+                  $display("Debug: instr_length is: %h", instr_length);
+                  $display("Debug: default_rel_value is: %h", `default_rel_value);
                 end
               end else begin
                 if(u_pipeline.WB_Final_EIP !== `taken_eip) begin 
@@ -1040,7 +1052,7 @@ module TOP;
                 $display("Error: WB_Final_Dcache_Address is: %h, but needs to be: %h", u_pipeline.WB_Final_Dcache_Address, `check_address);
                 error <= 1;
                 $display("Debug: default_ss << 16 is: %h", `default_ss << 16);
-                $display("Debug: default_reg_whole_value << is : %h", `default_reg_base_32);
+                $display("Debug: default_reg_ESP_32 << is : %h", `default_reg_ESP_32);
                 $display("Debug: default_dis is: %h", `default_big_endian_dis);
               end
             end

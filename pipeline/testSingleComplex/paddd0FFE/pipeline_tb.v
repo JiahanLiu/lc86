@@ -282,8 +282,8 @@ module TOP;
         u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[7] = 8'h7;
 
 
-        u_pipeline.u_register_file.eip.Q = `default_eip;
-        u_pipeline.u_register_file.segr_cs.Q = `default_cs;
+        u_pipeline.debug_eip_in = `default_eip;
+        u_pipeline.debug_cs_in = `default_cs;
         u_pipeline.u_register_file.eflags.Q = `default_flags;
         u_pipeline.u_writeback.u_flags_wb.u_flags_register.Q = `default_flags; //internal flags register
         u_pipeline.u_writeback.u_flags_wb.overwrite_ld_flags = 1'b0;
@@ -758,14 +758,14 @@ module TOP;
 
             if(1'b1 === `if_check_op_mm_a) begin
               if(u_pipeline.EX_MM_A !== `check_opMMA) begin 
-                $display("Error: EX_A is: %h, but needs to be: %h", u_pipeline.EX_MM_A, `check_opMMA);
+                $display("Error: EX_MM_A is: %h, but needs to be: %h", u_pipeline.EX_MM_A, `check_opMMA);
                 error <= 1;
               end
             end
 
             if(1'b1 === `if_check_op_mm_b) begin
               if(u_pipeline.EX_MM_B !== `check_opMMB) begin 
-                $display("Error: EX_B is: %h, but needs to be: %h", u_pipeline.EX_MM_B, `check_opMMB);
+                $display("Error: EX_MM_B is: %h, but needs to be: %h", u_pipeline.EX_MM_B, `check_opMMB);
                 error <= 1;
               end
             end

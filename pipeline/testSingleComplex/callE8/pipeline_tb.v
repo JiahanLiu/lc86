@@ -38,14 +38,16 @@
 `define default_modrm_reg_opcode 3'b110
 `define default_modrm_rm 3'b101
 
-`define if_check_op_a 1'b1
+`define if_check_op_a 1'b0
 `define if_check_op_b 1'b0
 `define if_check_op_c 1'b1
+`define if_check_op_mm_a 1'b1
 `define if_check_aluk 1'b0
 `define if_check_alu_result 1'b0
 `define check_opA (`default_eip + 5) //check values
 `define check_opB (`default_reg_EAX_32)
 `define check_opC (`default_reg_ESP_32 - 4)
+`define check_opMMA (`default_eip + 5)
 `define check_aluk 3'b110
 `define alu_result (check_opB - check_opA)
 
@@ -84,7 +86,7 @@
 `define if_check_dcachedata 1'b1
 `define if_check_address 1'b1
 `define check_ld_dcache 1'b1 //check values
-`define check_dcache_data (`check_opA)
+`define check_dcache_data (`check_opMMA)
 `define check_address ((`default_ss << 16) + (`default_reg_ESP_32 - 4))
 
 module TOP;
@@ -288,8 +290,8 @@ module TOP;
         u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[7] = 8'h7;
 
 
-        u_pipeline.u_register_file.eip.Q = `default_eip;
-        u_pipeline.u_register_file.segr_cs.Q = `default_cs;
+        u_pipeline.debug_eip_in = `default_eip;
+        u_pipeline.debug_cs_in = `default_cs;
         u_pipeline.u_register_file.eflags.Q = `default_flags;
         u_pipeline.u_writeback.u_flags_wb.u_flags_register.Q = `default_flags; //internal flags register
         u_pipeline.u_writeback.u_flags_wb.overwrite_ld_flags = 1'b0;
@@ -790,6 +792,13 @@ module TOP;
             if(1'b1 === `if_check_op_c) begin
               if(correct_opC !== check_opC) begin 
                 $display("Error: EX_C is: %h, but needs to be: %h", correct_opC, check_opC);
+                error <= 1;
+              end
+            end
+            
+            if(1'b1 === `if_check_op_mm_a) begin
+              if(u_pipeline.EX_MM_A !== `check_opMMA) begin 
+                $display("Error: EX_MM_A is: %h, but needs to be: %h", u_pipeline.EX_MM_A, `check_opMMA);
                 error <= 1;
               end
             end

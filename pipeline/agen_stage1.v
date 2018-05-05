@@ -215,7 +215,7 @@ module agen_stage1 (
 // -2 = 1110; -4 = 1100; -8 = 1000
    mux4_4 mux_push_size (mux_push_size_out, , 4'b1110, 4'b1100, 4'b1000, D2_MEM_SIZE_WB[0], D2_MEM_SIZE_WB[1]);
    mux4_4 mux_pop_size (mux_pop_size_out, , 4'b0010, 4'b0100, 4'b1000, D2_MEM_SIZE_WB[0], D2_MEM_SIZE_WB[1]);
-   mux2_32 mux_sp_add_size (mux_sp_add_size_out, {28'b1, mux_push_size_out}, Qprev_pop_size, CS_MUX_SP_ADD_SIZE_AG); // 0 for push, 1 for pop (multiple only)
+   mux2_32 mux_sp_add_size (mux_sp_add_size_out, {28'hFFF_FFFF, mux_push_size_out}, Qprev_pop_size, CS_MUX_SP_ADD_SIZE_AG); // 0 for push, 1 for pop (multiple only)
 
    mux2_32 mux_push_add (mux_push_add_out, 32'b0, mux_sp_add_size_out, CS_MUX_SP_PUSH_AG); // set when wanting to add to stack pointer for multi-access
    mux2_32 mux_temp_sp (mux_temp_sp_out, SR2_DATA, Qtemp_sp, CS_MUX_TEMP_SP_AG);

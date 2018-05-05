@@ -53,7 +53,11 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire wb_branch_taken;
     //Dataforwarded, currently for daa
     wire [31:0] flags_dataforwarded, count_dataforwarded;
-   
+   //debug
+   reg [63:0] debug_memory; 
+    reg [15:0] debug_cs_in;
+    reg [31:0] debug_eip_in;
+
 //*******REGISTER FILE*******//
    wire RST;
    wire [15:0] SEG_DIN;
@@ -228,8 +232,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire [7:0] DE_MODRM_IN, DE_SIB_IN;
     wire [15:0] DE_OPCODE_IN;
     // Placeholder for now
-    wire [15:0] DE_CS_IN = 16'h1A;
-    wire [31:0] DE_EIP_IN = 32'h01;
+    wire [15:0] DE_CS_IN = debug_cs_in;
+    wire [31:0] DE_EIP_IN = debug_eip_in;
     wire [31:0] DE_EIP_OUT, DE_EIP_OUT_BAR;
     wire [127:0] IR_IN;
     //Debug - change reg to wire
@@ -1097,8 +1101,6 @@ module PIPELINE(CLK, CLR, PRE, IR);
     //*                                MEMORY STAGE
     //*
     //*******************************************************************************//
-
-    reg [63:0] debug_memory; 
 
    memory_stage2 u_memory_stage2 (
         CLK, CLR, PRE, ME2_PS_V,
