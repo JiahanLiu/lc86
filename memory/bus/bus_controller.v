@@ -43,7 +43,7 @@ module bus_controller(//interface with bus
 
 
    //GENERATE CTRL SIGNALS
-   gen_ctrl_bus gen_ctrl_bus_u(current_state, CTRL_TRI_EN, D_TRI_EN, ACK_TRI_EN, BR_EN, SIZE_DECR, RD_BUS_CTRL);
+   gen_ctrl_bus gen_ctrl_bus_u(current_state, CTRL_TRI_EN, D_TRI_EN, ACK_OUT, BR, SIZE_DECR, RD_BUS_CTRL);
    wire 		    DONE;
    ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MOD_EN, BG, ACK_IN, RW, DEST_IN, DONE);
    wire [2:0] 		    amnt_decr;

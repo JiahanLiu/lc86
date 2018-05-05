@@ -112,30 +112,45 @@ module  FULL_MEMORY(//lines between dcache bus controller and dcache
    //signals between main memory bus port and the main mem itself
    wire       MEM_EN;
    wire       MEM_WR;//Will always be one
-   wire [15:0] MEM_A;
-   wire [127:0] MEM_WRITE_DATA, MEM_READ_DATA;
+   wire [14:0] MEM_A;
+   wire [255:0] MEM_INOUT;
+   wire [2:0] 	MEM_WR_SIZE;
    wire 	MEM_R;
-   mem_bus_controller MEM_PORT(BUS_CLK,
-				    RST, SET,
-				    D,
-				    A,
-				    SIZE,
-				    RW,
-				    BR[2],
-				    BG[2],
-				    ACK_OUT[2],
-				    ACK_IN,
-				    //NEED TO MAKE MODULE HAVE DEST LOGIC
-				    DEST_OUT,
-				    DEST_IN,
-				    MEM_EN,
-				    MEM_WR,
-				    MEM_A,
-				    MEM_WRITE_DATA,
-				    MEM_READ_DATA,
-				    MEM_R
-				    );
+   mem_bus_controller mem_bus_controller_u(//interface with bus
+		      BUS_CLK,
+		      RST, SET,
+		      D,
+		      A,
+		      SIZE,
+		      RW,
+		      //interface with arbitrator and other controllers
+		      BR[2],
+		      BG[2],
+		      ACK_OUT[2],
+		      ACK_IN,
+		      DEST_OUT_IC,
+		      DEST_OUT_DC,
+		      DEST_IC,
+		      DEST_DC,
+		      DEST_DMA,
+		      //interface with work unit
+			  MEM_A,
+			  MEM_WR, MEM_EN,
+			  MEM_WR_SIZE,
+			  MEM_INOUT
+		      );
+
+
+   main_memory main_memory_u (
+    MEM_A,
+    MEM_WR, MEM_EN,
+    MEM_WR_SIZE,
+    MEM_INOUT
+);
+
+
    
+
 
    //KBD controller
    //will insert when confident ports are correct
