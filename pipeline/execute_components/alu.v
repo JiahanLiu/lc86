@@ -290,13 +290,17 @@ module alu_cmp (
 	input [31:0] a, b,
 	input [1:0] datasize
 	);
-
+	
 	wire [31:0] carry_out;
 	subtract32 u_subtract32 (cmp_result, carry_out ,a, b);
 
+	wire [31:0] b_neg, b_not; 
+	not32_1way not_b(b_not, b);
+	adder32 u_adder32(b_neg, , b_not, 32'h1);
+
 	wire OF, DF, SF, ZF, AF, PF, CF;  
 
-	OF_logic u_OF_logic(OF, cmp_result, a, b, datasize);
+	OF_logic u_OF_logic(OF, cmp_result, a, b_neg, datasize);
 	assign DF = 0;
 	SF_logic u_SF_logic(SF, cmp_result, datasize);
 	ZF_logic u_ZF_logic(ZF, cmp_result, datasize);
