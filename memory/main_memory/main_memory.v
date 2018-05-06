@@ -15,10 +15,7 @@ wire [9:0] row_address;
 wire [4:0] column_address;
 wire [31:0] write_mask1, write_mask2, write_mask3, write_out, write_out_b, write_read_mask, write_out_final;
 wire [31:0] shift1, shift2, shift3;
-wire [7:0] CE, CE_BAR;
-wire en1_b;
-wire [31:0] ROW_BUF_D;
-wire [3:0] shift_amt;
+wire [7:0] CE, CE_BAR, CE_EN;
 
 assign column_address = ADDR[4:0];
 assign row_address = ADDR[14:5];
@@ -64,15 +61,16 @@ mux32_2way mux3_write (write_read_mask, 32'hFFFF_FFFF, write_out_b, WR);
 
 // OE for the correct block
 decoder3_8$ u_decoder3to8 (ADDR[14:12], CE, CE_BAR);
+nand2$ chip_en[7:0] (CE_EN, EN, CE);
 
-word_lines128 blk_line0 (ADDR[11:5], DATA_BUF, 1'b0, write_read_mask, CE_BAR[0]);
-word_lines128 blk_line1 (ADDR[11:5], DATA_BUF, 1'b0, write_read_mask, CE_BAR[1]);
-word_lines128 blk_line2 (ADDR[11:5], DATA_BUF, 1'b0, write_read_mask, CE_BAR[2]);
-word_lines128 blk_line3 (ADDR[11:5], DATA_BUF, 1'b0, write_read_mask, CE_BAR[3]);
-word_lines128 blk_line4 (ADDR[11:5], DATA_BUF, 1'b0, write_read_mask, CE_BAR[4]);
-word_lines128 blk_line5 (ADDR[11:5], DATA_BUF, 1'b0, write_read_mask, CE_BAR[5]);
-word_lines128 blk_line6 (ADDR[11:5], DATA_BUF, 1'b0, write_read_mask, CE_BAR[6]);
-word_lines128 blk_line7 (ADDR[11:5], DATA_BUF, 1'b0, write_read_mask, CE_BAR[7]);
+word_lines128 blk_line0 (ADDR[11:5], DATA_BUF, 1'b0, write_read_mask, CE_EN[0]);
+word_lines128 blk_line1 (ADDR[11:5], DATA_BUF, 1'b0, write_read_mask, CE_EN[1]);
+word_lines128 blk_line2 (ADDR[11:5], DATA_BUF, 1'b0, write_read_mask, CE_EN[2]);
+word_lines128 blk_line3 (ADDR[11:5], DATA_BUF, 1'b0, write_read_mask, CE_EN[3]);
+word_lines128 blk_line4 (ADDR[11:5], DATA_BUF, 1'b0, write_read_mask, CE_EN[4]);
+word_lines128 blk_line5 (ADDR[11:5], DATA_BUF, 1'b0, write_read_mask, CE_EN[5]);
+word_lines128 blk_line6 (ADDR[11:5], DATA_BUF, 1'b0, write_read_mask, CE_EN[6]);
+word_lines128 blk_line7 (ADDR[11:5], DATA_BUF, 1'b0, write_read_mask, CE_EN[7]);
 
 
 
