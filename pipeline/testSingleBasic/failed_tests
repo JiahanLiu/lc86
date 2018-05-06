@@ -1,3 +1,6 @@
+
+movB8
+Error: WB_Final_DR1 is: 7, but needs to be: 2
 sarC0
 Error: WB_Final_Dcache_Data is: 00000000000000fb, but needs to be: 000000000000007b
 sarC1

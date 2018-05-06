@@ -141,8 +141,8 @@ module validate_signals_wb(
 	and2$ u_and_dcache(v_ex_dcache_write, WB_V, WB_ex_dcache_write_wb); 
 	and2$ u_and_flags(v_cs_ld_flags, WB_V, CS_LD_FLAGS_WB); 
 
-	wire regular_ld_eip, repne_second_uop_cmps;
-	or2$ u_second_uop_of_repne(repne_second_uop_cmps, CS_IS_CMPS_SECOND_UOP_ALL, WB_d2_repne_wb);
+	wire regular_ld_eip, v_repne_second_uop_cmps;
+	and3$ u_v_ssecond_uop_of_repne(v_repne_second_uop_cmps, CS_IS_CMPS_SECOND_UOP_ALL, WB_d2_repne_wb, WB_V);
 	and2$ u_and_regular_eip(regular_ld_eip, WB_V, cs_ld_eip);
 	mux2$ u_and_final_eip(v_cs_ld_eip, regular_ld_eip, wb_repne_terminate_all, repne_second_uop_cmps);
 	and2$ u_and_cs(v_cs_ld_cs, WB_V, CS_LD_CS_WB);

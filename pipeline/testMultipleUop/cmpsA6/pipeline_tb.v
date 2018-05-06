@@ -791,27 +791,27 @@ module TOP;
             tb_opB = `check_internal_b; 
             if(2'b00 === `macro_check_length) begin
               check_opB[7:0] = tb_opB[7:0];
-              correct_opB[7:0] = u_pipeline.EX_B[7:0];
+              correct_opB[7:0] = u_pipeline.u_execute.b[7:0];
               if(1'b1 === `macro_sign_extend) begin
                 check_opB[31:8] = {24{tb_opB[7]}};
-                correct_opB[31:8] = u_pipeline.EX_B[31:8];
+                correct_opB[31:8] = u_pipeline.u_execute.b[31:8];
               end else begin 
                 check_opB[31:8] = 0;
                 correct_opB[31:8] = 0;
               end
             end else if(2'b01 === `macro_check_length) begin
               check_opB[15:0] = tb_opB[15:0];
-              correct_opB[15:0] = u_pipeline.EX_B[15:0];
+              correct_opB[15:0] = u_pipeline.u_execute.b[15:0];
               if(1'b1 === `macro_check_length) begin
                 check_opB[31:16] = {16{tb_opB[15]}};
-                correct_opB[31:16] = u_pipeline.EX_B[31:16];
+                correct_opB[31:16] = u_pipeline.u_execute.b[31:16];
               end else begin
                 check_opB[31:16] = 0;
                 correct_opB[31:16] = 0;
               end 
             end else if(2'b10 === `macro_check_length) begin
               check_opB = tb_opB; 
-              correct_opB = u_pipeline.EX_B;
+              correct_opB = u_pipeline.u_execute.b;
             end
             if(1'b1 === `if_check_op_b) begin
               if(correct_opB !== check_opB) begin 
@@ -861,12 +861,6 @@ module TOP;
               end
             end
 
-            tb_alu_result = u_pipeline.u_execute.u_functional_unit_ex.alu32_result;
-            if(tb_alu_result !== `alu_result) begin 
-              $display("Error: alu32_result is: %h, but needs to be: %h at time: %d", tb_alu_result, `alu_result, $time);
-              error <= 1;
-            end
-
             if(u_pipeline.WB_Final_ld_gpr1 !== 1'b0) begin 
               $display("Error: WB_Final_ld_gpr1 is: %h, but needs to be: %h at time: %d", u_pipeline.WB_Final_ld_gpr1, `check_ld_gpr1, $time);
               error <= 1;
@@ -897,9 +891,16 @@ module TOP;
               error <= 1;
             end
 
+            #5
+            tb_alu_result = u_pipeline.u_execute.u_functional_unit_ex.alu32_result;
+            if(tb_alu_result !== `alu_result) begin 
+              $display("Error: alu32_result is: %h, but needs to be: %h at time: %d", tb_alu_result, `alu_result, $time);
+              error <= 1;
+            end
+
 
 /*************************** UOP2WB ******************************/
-            #(clk_cycle-1);
+            #(clk_cycle-1-5); //-5 to have time for execute
             #1;    // Allow for setup time
 
             tb_data1 = `check_data1; 

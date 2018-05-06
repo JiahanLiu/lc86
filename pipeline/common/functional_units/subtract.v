@@ -24,8 +24,10 @@ module subtract32 (
 	wire [31:0] b_not;
 	wire carry_in;
 
+	assign carry_in = 1'b1; 
+
 	not32_1way u_not_b(b_not, b);
 
-	adder32_w_carry_in adder32_w_carry_in(difference, carry_out, a, b_not, 1'b1);
+	adder32_w_carry_in adder32_w_carry_in(difference, carry_out, a, b_not, carry_in);
 
 endmodule
