@@ -196,7 +196,7 @@ module result_select_ex(
 	mux32_2way u_mux_c(post_mux_c, shift_result, EX_C, CS_IS_CMPXCHG_EX);
 	mux32_2way u_mux_a(post_mux_a, post_mux_c, EX_A, CS_PASS_A_EX);
 	mux32_2way u_mux_b(post_mux_b, post_mux_a, EX_B, choose_a_as_b_signal);
-	mux32_2way u_mux_cmps(post_mux_cmps, cmps_pointer_updated, post_mux_b, CS_MUX_CMPS_POINTER_EX);
+	mux32_2way u_mux_cmps(post_mux_cmps, post_mux_b, cmps_pointer_updated, CS_MUX_CMPS_POINTER_EX);
 	mux32_2way u_mux_resultA(WB_RESULT_A_next, post_mux_cmps, alu32_result, CS_IS_ALU32_EX);
 	//WB_RESULT_B
 	wire [31:0] post_stage1_b, post_stage2_b; 
