@@ -733,7 +733,7 @@ module TOP;
             end
 
             tb_opB = `check_opB_uop1; 
-            if(2'b00 === `macro_check_length) begin
+            if(2'b00 === `macro_check_pointer_length) begin
               check_opB[7:0] = tb_opB[7:0];
               correct_opB[7:0] = u_pipeline.EX_B[7:0];
               if(1'b1 === `macro_sign_extend) begin
@@ -743,7 +743,7 @@ module TOP;
                 check_opB[31:8] = 0;
                 correct_opB[31:8] = 0;
               end
-            end else if(2'b01 === `macro_check_length) begin
+            end else if(2'b01 === `macro_check_pointer_length) begin
               check_opB[15:0] = tb_opB[15:0];
               correct_opB[15:0] = u_pipeline.EX_B[15:0];
               if(1'b1 === `macro_sign_extend) begin
@@ -753,7 +753,7 @@ module TOP;
                 check_opB[31:16] = 0;
                 correct_opB[31:16] = 0;
               end 
-            end else if(2'b10 === `macro_check_length) begin
+            end else if(2'b10 === `macro_check_pointer_length) begin
               check_opB = tb_opB; 
               correct_opB = u_pipeline.EX_B;
             end
@@ -770,7 +770,7 @@ module TOP;
             #1;    // Allow for setup time
 
             tb_opA = `check_opA_uop2; 
-            if(2'b00 === `macro_check_pointer_length) begin
+            if(2'b00 === `macro_check_length) begin
               check_opA[7:0] = tb_opA[7:0];
               correct_opA[7:0] = u_pipeline.EX_A[7:0];
               if(1'b1 === `macro_sign_extend) begin
@@ -780,7 +780,7 @@ module TOP;
                 check_opA[31:8] = 0;
                 correct_opA[31:8] = 0;
               end
-            end else if(2'b01 === `macro_check_pointer_length) begin
+            end else if(2'b01 === `macro_check_length) begin
               check_opA[15:0] = tb_opA[15:0];
               correct_opA[15:0] = u_pipeline.EX_A[15:0];
               if(1'b1 === `macro_sign_extend) begin
@@ -790,7 +790,7 @@ module TOP;
                 check_opA[31:16] = 0;
                 correct_opA[31:16] = 0;
               end 
-            end else if(2'b10 === `macro_check_pointer_length) begin
+            end else if(2'b10 === `macro_check_length) begin
               check_opA = tb_opA; 
               correct_opA = u_pipeline.EX_A;
             end
@@ -1015,7 +1015,7 @@ module TOP;
                 error <= 1;
               end
             end 
-            $display("Force: WB_Final_data is: %h, but needs to be: %h at time: %d", correct_data2, check_data2, $time);
+            $display("Force: WB_Final_data2 is: %h, but needs to be: %h at time: %d", correct_data2, check_data2, $time);
                 
 
             if(1'b1 === `if_check_data3) begin
