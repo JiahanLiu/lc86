@@ -741,7 +741,7 @@ module TOP;
             end else if(2'b01 === `macro_check_length) begin
               check_opB[15:0] = tb_opB[15:0];
               correct_opB[15:0] = u_pipeline.EX_B[15:0];
-              if(1'b1 === `macro_check_length) begin
+              if(1'b1 === `macro_sign_extend) begin
                 check_opB[31:16] = {16{tb_opB[15]}};
                 correct_opB[31:16] = u_pipeline.EX_B[31:16];
               end else begin
@@ -773,7 +773,7 @@ module TOP;
             end else if(2'b01 === `macro_check_length) begin
               check_opC[15:0] = tb_opC[15:0];
               correct_opC[15:0] = u_pipeline.EX_C[15:0];
-              if(1'b1 === `macro_check_length) begin
+              if(1'b1 === `macro_sign_extend) begin
                 check_opC[31:16] = {16{tb_opC[15]}};
                 correct_opC[31:16] = u_pipeline.EX_C[31:16];
               end else begin

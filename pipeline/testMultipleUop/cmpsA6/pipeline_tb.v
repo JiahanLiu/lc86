@@ -11,8 +11,9 @@
 `define CF_affected 1'b1
 `define flags_affected ({`OF_affected, `DF_affected, 2'b0, `SF_affected, `ZF_affected, 1'b0, `AF_affected, 1'b0, `PF_affected, 1'b0, `CF_affected})
 
-`define macro_sign_extend 1'b1
+`define macro_sign_extend 1'b0
 `define macro_check_length 2'b00 
+`define macro_check_pointer_length 2'b10 
 
 `define default_mem_Value 64'h0000_0000_0000_0092
 `define default_reg_base_macro 32'h02
@@ -732,8 +733,30 @@ module TOP;
             end
 
             tb_opB = `check_opB_uop1; 
-            check_opB = tb_opB; 
-            correct_opB = u_pipeline.EX_B;
+            if(2'b00 === `macro_check_length) begin
+              check_opB[7:0] = tb_opB[7:0];
+              correct_opB[7:0] = u_pipeline.EX_B[7:0];
+              if(1'b1 === `macro_sign_extend) begin
+                check_opB[31:8] = {24{tb_opB[7]}};
+                correct_opB[31:8] = u_pipeline.EX_B[31:8];
+              end else begin 
+                check_opB[31:8] = 0;
+                correct_opB[31:8] = 0;
+              end
+            end else if(2'b01 === `macro_check_length) begin
+              check_opB[15:0] = tb_opB[15:0];
+              correct_opB[15:0] = u_pipeline.EX_B[15:0];
+              if(1'b1 === `macro_sign_extend) begin
+                check_opB[31:16] = {16{tb_opB[15]}};
+                correct_opB[31:16] = u_pipeline.EX_B[31:16];
+              end else begin
+                check_opB[31:16] = 0;
+                correct_opB[31:16] = 0;
+              end 
+            end else if(2'b10 === `macro_check_length) begin
+              check_opB = tb_opB; 
+              correct_opB = u_pipeline.EX_B;
+            end
             if(1'b1 === `if_check_op_b) begin
               if(correct_opB !== check_opB) begin 
                 $display("Error: uop1 EX_B is: %h, but needs to be: %h at time: %d", correct_opB, check_opB, $time);
@@ -747,7 +770,7 @@ module TOP;
             #1;    // Allow for setup time
 
             tb_opA = `check_opA_uop2; 
-            if(2'b00 === `macro_check_length) begin
+            if(2'b00 === `macro_check_pointer_length) begin
               check_opA[7:0] = tb_opA[7:0];
               correct_opA[7:0] = u_pipeline.EX_A[7:0];
               if(1'b1 === `macro_sign_extend) begin
@@ -757,7 +780,7 @@ module TOP;
                 check_opA[31:8] = 0;
                 correct_opA[31:8] = 0;
               end
-            end else if(2'b01 === `macro_check_length) begin
+            end else if(2'b01 === `macro_check_pointer_length) begin
               check_opA[15:0] = tb_opA[15:0];
               correct_opA[15:0] = u_pipeline.EX_A[15:0];
               if(1'b1 === `macro_sign_extend) begin
@@ -767,7 +790,7 @@ module TOP;
                 check_opA[31:16] = 0;
                 correct_opA[31:16] = 0;
               end 
-            end else if(2'b10 === `macro_check_length) begin
+            end else if(2'b10 === `macro_check_pointer_length) begin
               check_opA = tb_opA; 
               correct_opA = u_pipeline.EX_A;
             end
@@ -779,8 +802,30 @@ module TOP;
             end
       
             tb_opB = `check_opB_uop2; 
-            check_opB = tb_opB; 
-            correct_opB = u_pipeline.EX_B;
+            if(2'b00 === `macro_check_pointer_length) begin
+              check_opB[7:0] = tb_opB[7:0];
+              correct_opB[7:0] = u_pipeline.EX_B[7:0];
+              if(1'b1 === `macro_sign_extend) begin
+                check_opB[31:8] = {24{tb_opB[7]}};
+                correct_opB[31:8] = u_pipeline.EX_B[31:8];
+              end else begin 
+                check_opB[31:8] = 0;
+                correct_opB[31:8] = 0;
+              end
+            end else if(2'b01 === `macro_check_pointer_length) begin
+              check_opB[15:0] = tb_opB[15:0];
+              correct_opB[15:0] = u_pipeline.EX_B[15:0];
+              if(1'b1 === `macro_sign_extend) begin
+                check_opB[31:16] = {16{tb_opB[15]}};
+                correct_opB[31:16] = u_pipeline.EX_B[31:16];
+              end else begin
+                check_opB[31:16] = 0;
+                correct_opB[31:16] = 0;
+              end 
+            end else if(2'b10 === `macro_check_pointer_length) begin
+              check_opB = tb_opB; 
+              correct_opB = u_pipeline.EX_B;
+            end
             if(1'b1 === `if_check_op_b) begin
               if(correct_opB !== check_opB) begin 
                 $display("Error: uop2 EX_B is: %h, but needs to be: %h at time: %d", correct_opB, check_opB, $time);
@@ -802,7 +847,7 @@ module TOP;
             end else if(2'b01 === `macro_check_length) begin
               check_opB[15:0] = tb_opB[15:0];
               correct_opB[15:0] = u_pipeline.u_execute.b[15:0];
-              if(1'b1 === `macro_check_length) begin
+              if(1'b1 === `macro_sign_extend) begin
                 check_opB[31:16] = {16{tb_opB[15]}};
                 correct_opB[31:16] = u_pipeline.u_execute.b[31:16];
               end else begin
@@ -834,7 +879,7 @@ module TOP;
             end else if(2'b01 === `macro_check_length) begin
               check_opC[15:0] = tb_opC[15:0];
               correct_opC[15:0] = u_pipeline.EX_C[15:0];
-              if(1'b1 === `macro_check_length) begin
+              if(1'b1 === `macro_sign_extend) begin
                 check_opC[31:16] = {16{tb_opC[15]}};
                 correct_opC[31:16] = u_pipeline.EX_C[31:16];
               end else begin
@@ -904,7 +949,7 @@ module TOP;
             #1;    // Allow for setup time
 
             tb_data1 = `check_data1; 
-            if(2'b00 === `macro_check_length) begin
+            if(2'b00 === `macro_check_pointer_length) begin
               check_data1[7:0] = tb_data1[7:0];
               correct_data1[7:0] = u_pipeline.WB_Final_data1[7:0];
               if(1'b1 === `macro_sign_extend) begin
@@ -914,7 +959,7 @@ module TOP;
                 check_data1[31:8] = 0;
                 correct_data1[31:8] = 0;
               end 
-            end else if(2'b01 === `macro_check_length) begin
+            end else if(2'b01 === `macro_check_pointer_length) begin
               check_data1[15:0] = tb_data1[15:0];
               correct_data1[15:0] = u_pipeline.WB_Final_data1[15:0];
               if(1'b1 === `macro_sign_extend) begin
@@ -924,7 +969,7 @@ module TOP;
                 check_data1[31:16] = 0;
                 correct_data1[31:16] = 0;
               end
-            end else if(2'b10 === `macro_check_length) begin
+            end else if(2'b10 === `macro_check_pointer_length) begin
               check_data1 = tb_data1; 
               correct_data1 = u_pipeline.WB_Final_data1;
             end
@@ -938,7 +983,7 @@ module TOP;
                 
 
             tb_data2 = `check_data2; 
-            if(2'b00 === `macro_check_length) begin
+            if(2'b00 === `macro_check_pointer_length) begin
               check_data2[7:0] = tb_data2[7:0];
               correct_data2[7:0] = u_pipeline.WB_Final_data2[7:0];
               if(1'b1 === `macro_sign_extend) begin
@@ -948,7 +993,7 @@ module TOP;
                 check_data2[31:8] = 0;
                 correct_data2[31:8] = 0;
               end 
-            end else if(2'b01 === `macro_check_length) begin
+            end else if(2'b01 === `macro_check_pointer_length) begin
               check_data2[15:0] = tb_data2[15:0];
               correct_data2[15:0] = u_pipeline.WB_Final_data2[15:0];
               if(1'b1 === `macro_sign_extend) begin
@@ -958,7 +1003,7 @@ module TOP;
                 check_data2[31:8] = 0;
                 correct_data2[31:8] = 0;
               end
-            end else if(2'b10 === `macro_check_length) begin
+            end else if(2'b10 === `macro_check_pointer_length) begin
               check_data2 = tb_data2; 
               correct_data2 = u_pipeline.WB_Final_data2;
             end else begin 

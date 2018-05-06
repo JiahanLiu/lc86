@@ -22,7 +22,7 @@
 `define default_eip 32'h1 
 `define default_cs 32'h22 
 `define default_ss ((`default_reg_base_macro + 3'b010) + ((`default_reg_base_macro + 3'b010) << 8))
-`define default_flags 32'hFFF
+`define default_flags 32'h000
 `define default_imm 32'h8765_4307
 `define default_big_endian_imm8 8'h07
 `define default_big_endian_imm16 32'h0243
@@ -39,7 +39,7 @@
 `define if_check_op_b 1'b1
 `define if_check_aluk 1'b1
 `define check_opA (`default_mem_Value) //check values
-`define check_opB (32'h1)
+`define check_opB (`default_big_endian_imm8)
 `define check_aluk 3'b100
 
 `define if_check_data1 1'b0
@@ -48,7 +48,7 @@
 `define if_check_dr1 1'b0
 `define if_check_dr2 1'b0
 `define if_check_dr3 1'b0
-`define if_check_flags 1'b0
+`define if_check_flags 1'b1
 `define if_check_datasize 1'b1 
 `define check_ld_gpr1 1'b0 //check values
 `define check_ld_gpr2 1'b0
@@ -59,7 +59,7 @@
 `define check_dr1 3'b000
 `define check_dr2 3'b000
 `define check_dr3 3'b000
-`define produced_flags 32'h095
+`define produced_flags 32'h081
 `define check_datasize `macro_check_length
 
 `define if_check_mm_data 1'b0
@@ -732,7 +732,7 @@ module TOP;
             end else if(2'b01 === `macro_check_length) begin
               check_opB[15:0] = tb_opB[15:0];
               correct_opB[15:0] = u_pipeline.EX_B[15:0];
-              if(1'b1 === `macro_check_length) begin
+              if(1'b1 === `macro_sign_extend) begin
                 check_opB[31:16] = {16{tb_opB[15]}};
                 correct_opB[31:16] = u_pipeline.EX_B[31:16];
               end else begin

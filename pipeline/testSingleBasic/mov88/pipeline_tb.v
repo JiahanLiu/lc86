@@ -733,7 +733,7 @@ module TOP;
             end else if(2'b01 === `macro_check_length) begin
               check_opB[15:0] = tb_opB[15:0];
               correct_opB[15:0] = u_pipeline.EX_B[15:0];
-              if(1'b1 === `macro_check_length) begin
+              if(1'b1 === `macro_sign_extend) begin
                 check_opB[31:16] = {16{tb_opB[15]}};
                 correct_opB[31:16] = u_pipeline.EX_B[31:16];
               end else begin
@@ -743,7 +743,7 @@ module TOP;
             end else if(2'b10 === `macro_check_length) begin
               check_opB = tb_opB; 
               correct_opB = u_pipeline.EX_B;
-            end
+            end 
             if(1'b1 === `if_check_op_b) begin
               if(correct_opB !== check_opB) begin 
                 $display("Error: EX_B is: %h, but needs to be: %h", correct_opB, check_opB);

@@ -114,6 +114,7 @@ module functional_unit_ex(
 	output [31:0] shift_flags,
 	output [31:0] count_minus_one,
 	output [31:0] stack_pointer_pop,
+	output [31:0] cmps_pointer_updated,
 	input [2:0] EX_d2_aluk_ex,
 	input [1:0] EX_d2_datasize_all,
 	input [31:0] EX_A,
@@ -131,13 +132,21 @@ module functional_unit_ex(
 	wire CF_dataforwarded, AF_dataforwarded; 
 	assign CF_dataforwarded = flags_dataforwarded[0];
 	assign AF_dataforwarded = flags_dataforwarded[4];
+	assign DF_dataforwarded = flags_dataforwarded[10];
 
  	alu32 u_alu32(alu32_result, alu32_flags, EX_A, b, EX_d2_aluk_ex, EX_d2_datasize_all, CF_dataforwarded, AF_dataforwarded);
   	alu64 u_alu64(alu64_result, EX_MM_A, EX_MM_B, b, CS_ALUK_D2);
   	shifter32 u_shifter32(shift_result, shift_flags, EX_d2_aluk_ex[0], EX_A, EX_B, EX_d2_datasize_all, flags_dataforwarded);
  	adder32 u_count_minus_one(count_minus_one, ,count, 32'hffff_ffff);
- 	mux32_4way u_pop_mux(pop_increment, 32'h0000_0001, 32'h0000_0002, 32'h0000_0004, 32'h0000_008, EX_d2_datasize_all);
+ 	mux32_4way u_pop_mux(pop_increment, 32'h0000_0001, 32'h0000_0002, 32'h0000_0004, 32'h0000_0008, EX_d2_datasize_all);
  	adder32 u_stack_add(stack_pointer_pop, ,EX_C, pop_increment);
+
+ 	wire [31:0] cmps_inc_amount, cmps_dec_amount, cmps_inc_pointer, cmps_dec_pointer;
+ 	mux32_4way u_inc_mux(cmps_inc_amount, 32'h0000_0001, 32'h0000_0002, 32'h0000_0004, 32'h0000_0008, EX_d2_datasize_all);
+ 	mux32_4way u_dec_mux(cmps_dec_amount, 32'hFFFF_FFFF, 32'hFFFF_FFFE, 32'hFFFF_FFFC, 32'hFFFF_FFF8, EX_d2_datasize_all);
+ 	adder32 u_cmps_pointer_increment(cmps_inc_pointer, EX_B, cmps_inc_amount); 
+ 	adder32 u_cmps_pointer_decrement(cmps_dec_pointer, EX_B, cmps_dec_amount); 
+ 	mux32_2way u_cmps_pointer(cmps_pointer_updated, cmps_inc_pointer, cmps_dec_pointer, DF_dataforwarded);
 
 endmodule // functional_unit_ex
 
@@ -165,12 +174,14 @@ module result_select_ex(
 	input CS_MUX_SP_POP_EX,
 	input CS_IS_ALU32_FLAGS_EX,
 	input CS_ALU_TO_B_EX,
+	input CS_MUX_CMPS_POINTER_EX,
 	input [31:0] shift_result,
 	input [31:0] EX_C,
 	input [31:0] EX_A,
 	input [31:0] EX_B,
 	input [31:0] alu32_result,
 	input [31:0] stack_pointer_pop,
+	input [31:0] cmps_pointer_updated,
 	input [31:0] count_minus_one,
 	input [31:0] shift_flags,
 	input [31:0] alu32_flags,
@@ -187,10 +198,11 @@ module result_select_ex(
 	mux32_2way u_mux_b(post_mux_b, post_mux_a, EX_B, choose_a_as_b_signal);
 	mux32_2way u_mux_resultA(WB_RESULT_A_next, post_mux_b, alu32_result, CS_IS_ALU32_EX);
 	//WB_RESULT_B
-	wire [31:0] post_stage1_b; 
+	wire [31:0] post_stage1_b, post_stage2_b; 
 	mux32_2way u_mux_stage1B(post_stage1_b, EX_B, EX_A, choose_b_as_a_signal);
-	mux32_2way u_mux_resultB(WB_RESULT_B_next, post_stage1_b, alu32_result, CS_ALU_TO_B_EX);
-	//	//WB_RESULT_C
+	mux32_2way u_mux_stage2B(post_stage2_b, post_stage1_b, alu32_result, CS_ALU_TO_B_EX);
+	mux32_2way u_mux_resultB(WB_RESULT_B_next, post_stage2_b, cmps_pointer_updated, CS_MUX_CMPS_POINTER_EX);
+	//WB_RESULT_C
 	wire [31:0] post_stack_pointer;
 	mux32_2way u_mux_increment_size(post_stack_pointer, EX_C, stack_pointer_pop, CS_MUX_SP_POP_EX);
 	mux32_2way u_mux_resultC(WB_RESULT_C_next, post_stack_pointer, count_minus_one, CS_IS_CMPS_SECOND_UOP_ALL);
