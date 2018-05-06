@@ -1,41 +1,4 @@
-callE8
-Error: EX_MM_A is: 0202020200000006, but needs to be: 00000006
-callE8
-Error: WB_Final_Dcache_Data is: 0202020200000006, but needs to be: 0000000000000006
-callFF
-Error: EX_MM_A is: 0505050500000007, but needs to be: 00000007
-callFF
-Error: WB_Final_Dcache_Data is: 0505050500000007, but needs to be: 0000000000000007
-callFFoperandoverride
-Error: EX_C is: 24242422, but needs to be: 00002422
-callFFoperandoverride
-Error: EX_MM_A is: 0505050500000008, but needs to be: 00000008
-callFFoperandoverride
-Error: WB_Final_Dcache_Data is: 0505050500000008, but needs to be: 0000000000000008
-cmpxchg0FB0equal
-Error: WB_Final_Flags is: 0000077f, but needs to be: 00000f7f
-movq0F7F
-Error: EX_MM_B is: 0202020202020202, but needs to be: 00000000
-movq0F7F
-Error: EX_d2_aluk_ex is: 4, but needs to be: 5
-movq0F7F
-Error: WB_Final_ld_mm is: 1, but needs to be: 0
-movq0F7F
-Error: WB_Final_Dcache_Data is: 0505050505050505, but needs to be: 2424242400000000
-paddd0FFE
-Error: EX_MM_B is: 0202020202020202, but needs to be: 00000000
-paddd0FFE
-Error: EX_d2_aluk_ex is: 1, but needs to be: 2
-paddd0FFE
-Error: WB_Final_MM_Data is: 1436143614361436, but needs to be: 3658365812341234
-paddsw0FED
-Error: EX_MM_B is: 0202020202020202, but needs to be: 00000000
-paddsw0FED
-Error: WB_Final_MM_Data is: 1436143614361436, but needs to be: 3658365812341234
-paddw0FFD
-Error: EX_MM_B is: 0202020202020202, but needs to be: 00000000
-paddw0FFD
-Error: WB_Final_MM_Data is: 1436143614361436, but needs to be: 3658365812341234
+
 pop07
 Error: WB_Final_data3 is: 2424242c, but needs to be: 24242428
 pop0FA1
@@ -55,7 +18,7 @@ Error: WB_Final_data3 is: 2424242c, but needs to be: 24242428
 pop8F
 Error: WB_Final_Dcache_Address is: 47472530, but needs to be: 46462428
 pshufw0F70
-Error: WB_Final_MM_Data is: 0202020202020202, but needs to be: cdef90ab56781234
+Error: WB_Final_MM_Data is: 1212121212121212, but needs to be: cdef90ab56781234
 push06
 Error: WB_Final_Dcache_Address is: 40402020, but needs to be: 46462420
 push0E
