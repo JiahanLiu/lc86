@@ -20,7 +20,7 @@
 `define default_reg_EAX_32 ((`default_reg_base_macro) + ((`default_reg_base_macro) << 8) + ((`default_reg_base_macro ) << 16) + ((`default_reg_base_macro) << 24)) 
 `define default_reg_EX_B_32 ((`default_reg_base_macro + `default_modrm_reg_opcode) + ((`default_reg_base_macro + `default_modrm_reg_opcode) << 8) + ((`default_reg_base_macro + `default_modrm_reg_opcode) << 16) + ((`default_reg_base_macro + `default_modrm_reg_opcode) << 24)) 
 `define default_reg_base_32 ((`default_reg_base_macro + `default_modrm_rm) + ((`default_reg_base_macro + `default_modrm_rm) << 8) + ((`default_reg_base_macro + `default_modrm_rm) << 16) + ((`default_reg_base_macro + `default_modrm_rm) << 24))
-`define default_MM_EX_B_64 (`default_reg_EX_B_32 + `default_reg_EX_B_32 << 32)
+`define default_MM_EX_B_64 (`default_reg_EX_B_32 + (`default_reg_EX_B_32 << 32))
 `define default_eip 32'h1 
 `define default_cs 32'h22 
 `define default_ss ((`default_reg_base_macro + 3'b010) + ((`default_reg_base_macro + 3'b010) << 8))
@@ -209,77 +209,77 @@ module TOP;
         u_pipeline.u_register_file.segr.regfilehi.mem_array[6] = (`default_reg_base_macro + 6);
         u_pipeline.u_register_file.segr.regfilehi.mem_array[7] = (`default_reg_base_macro + 7);
 
-        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilehi.mem_array[0] = 8'h0;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilehi.mem_array[1] = 8'h1;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilehi.mem_array[2] = 8'h2;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilehi.mem_array[3] = 8'h3;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilehi.mem_array[4] = 8'h4;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilehi.mem_array[5] = 8'h5;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilehi.mem_array[6] = 8'h6;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilehi.mem_array[7] = 8'h7;
+        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilehi.mem_array[0] = (`default_reg_base_macro + 0);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilehi.mem_array[1] = (`default_reg_base_macro + 1);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilehi.mem_array[2] = (`default_reg_base_macro + 2);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilehi.mem_array[3] = (`default_reg_base_macro + 3);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilehi.mem_array[4] = (`default_reg_base_macro + 4);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilehi.mem_array[5] = (`default_reg_base_macro + 5);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilehi.mem_array[6] = (`default_reg_base_macro + 6);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilehi.mem_array[7] = (`default_reg_base_macro + 7);
 
-        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilelo.mem_array[0] = 8'h0;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilelo.mem_array[1] = 8'h1;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilelo.mem_array[2] = 8'h2;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilelo.mem_array[3] = 8'h3;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilelo.mem_array[4] = 8'h4;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilelo.mem_array[5] = 8'h5;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilelo.mem_array[6] = 8'h6;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilelo.mem_array[7] = 8'h7;
+        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilelo.mem_array[0] = (`default_reg_base_macro + 0);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilelo.mem_array[1] = (`default_reg_base_macro + 1);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilelo.mem_array[2] = (`default_reg_base_macro + 2);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilelo.mem_array[3] = (`default_reg_base_macro + 3);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilelo.mem_array[4] = (`default_reg_base_macro + 4);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilelo.mem_array[5] = (`default_reg_base_macro + 5);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilelo.mem_array[6] = (`default_reg_base_macro + 6);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilehi.regfilelo.mem_array[7] = (`default_reg_base_macro + 7);
 
-        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilehi.mem_array[0] = 8'h0;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilehi.mem_array[1] = 8'h1;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilehi.mem_array[2] = 8'h2;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilehi.mem_array[3] = 8'h3;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilehi.mem_array[4] = 8'h4;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilehi.mem_array[5] = 8'h5;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilehi.mem_array[6] = 8'h6;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilehi.mem_array[7] = 8'h7;
+        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilehi.mem_array[0] = (`default_reg_base_macro + 0);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilehi.mem_array[1] = (`default_reg_base_macro + 1);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilehi.mem_array[2] = (`default_reg_base_macro + 2);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilehi.mem_array[3] = (`default_reg_base_macro + 3);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilehi.mem_array[4] = (`default_reg_base_macro + 4);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilehi.mem_array[5] = (`default_reg_base_macro + 5);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilehi.mem_array[6] = (`default_reg_base_macro + 6);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilehi.mem_array[7] = (`default_reg_base_macro + 7);
 
-        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilelo.mem_array[0] = 8'h0;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilelo.mem_array[1] = 8'h1;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilelo.mem_array[2] = 8'h2;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilelo.mem_array[3] = 8'h3;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilelo.mem_array[4] = 8'h4;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilelo.mem_array[5] = 8'h5;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilelo.mem_array[6] = 8'h6;
-        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilelo.mem_array[7] = 8'h7;
+        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilelo.mem_array[0] = (`default_reg_base_macro + 0);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilelo.mem_array[1] = (`default_reg_base_macro + 1);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilelo.mem_array[2] = (`default_reg_base_macro + 2);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilelo.mem_array[3] = (`default_reg_base_macro + 3);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilelo.mem_array[4] = (`default_reg_base_macro + 4);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilelo.mem_array[5] = (`default_reg_base_macro + 5);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilelo.mem_array[6] = (`default_reg_base_macro + 6);
+        u_pipeline.u_register_file.mmr.regfilehi.regfilelo.regfilelo.mem_array[7] = (`default_reg_base_macro + 7);
 
-        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilehi.mem_array[0] = 8'h0;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilehi.mem_array[1] = 8'h1;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilehi.mem_array[2] = 8'h2;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilehi.mem_array[3] = 8'h3;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilehi.mem_array[4] = 8'h4;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilehi.mem_array[5] = 8'h5;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilehi.mem_array[6] = 8'h6;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilehi.mem_array[7] = 8'h7;
+        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilehi.mem_array[0] = (`default_reg_base_macro + 0);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilehi.mem_array[1] = (`default_reg_base_macro + 1);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilehi.mem_array[2] = (`default_reg_base_macro + 2);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilehi.mem_array[3] = (`default_reg_base_macro + 3);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilehi.mem_array[4] = (`default_reg_base_macro + 4);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilehi.mem_array[5] = (`default_reg_base_macro + 5);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilehi.mem_array[6] = (`default_reg_base_macro + 6);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilehi.mem_array[7] = (`default_reg_base_macro + 7);
 
-        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilelo.mem_array[0] = 8'h0;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilelo.mem_array[1] = 8'h1;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilelo.mem_array[2] = 8'h2;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilelo.mem_array[3] = 8'h3;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilelo.mem_array[4] = 8'h4;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilelo.mem_array[5] = 8'h5;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilelo.mem_array[6] = 8'h6;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilelo.mem_array[7] = 8'h7;
+        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilelo.mem_array[0] = (`default_reg_base_macro + 0);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilelo.mem_array[1] = (`default_reg_base_macro + 1);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilelo.mem_array[2] = (`default_reg_base_macro + 2);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilelo.mem_array[3] = (`default_reg_base_macro + 3);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilelo.mem_array[4] = (`default_reg_base_macro + 4);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilelo.mem_array[5] = (`default_reg_base_macro + 5);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilelo.mem_array[6] = (`default_reg_base_macro + 6);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilehi.regfilelo.mem_array[7] = (`default_reg_base_macro + 7);
 
-        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilehi.mem_array[0] = 8'h0;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilehi.mem_array[1] = 8'h1;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilehi.mem_array[2] = 8'h2;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilehi.mem_array[3] = 8'h3;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilehi.mem_array[4] = 8'h4;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilehi.mem_array[5] = 8'h5;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilehi.mem_array[6] = 8'h6;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilehi.mem_array[7] = 8'h7;
+        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilehi.mem_array[0] = (`default_reg_base_macro + 0);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilehi.mem_array[1] = (`default_reg_base_macro + 1);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilehi.mem_array[2] = (`default_reg_base_macro + 2);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilehi.mem_array[3] = (`default_reg_base_macro + 3);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilehi.mem_array[4] = (`default_reg_base_macro + 4);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilehi.mem_array[5] = (`default_reg_base_macro + 5);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilehi.mem_array[6] = (`default_reg_base_macro + 6);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilehi.mem_array[7] = (`default_reg_base_macro + 7);
 
-        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[0] = 8'h0;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[1] = 8'h1;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[2] = 8'h2;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[3] = 8'h3;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[4] = 8'h4;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[5] = 8'h5;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[6] = 8'h6;
-        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[7] = 8'h7;
+        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[0] = (`default_reg_base_macro + 0);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[1] = (`default_reg_base_macro + 1);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[2] = (`default_reg_base_macro + 2);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[3] = (`default_reg_base_macro + 3);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[4] = (`default_reg_base_macro + 4);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[5] = (`default_reg_base_macro + 5);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[6] = (`default_reg_base_macro + 6);
+        u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[7] = (`default_reg_base_macro + 7);
 
 
         u_pipeline.debug_eip_in = `default_eip;
@@ -767,6 +767,8 @@ module TOP;
               if(u_pipeline.EX_MM_B !== `check_opMMB) begin 
                 $display("Error: EX_MM_B is: %h, but needs to be: %h", u_pipeline.EX_MM_B, `check_opMMB);
                 error <= 1;
+                $display("default_MM_EX_B_64: %h", `default_MM_EX_B_64);
+                $display("default_reg_EX_B_32: %h", `default_reg_EX_B_32);
               end
             end
 
