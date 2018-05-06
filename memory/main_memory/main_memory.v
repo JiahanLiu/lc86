@@ -10,7 +10,7 @@ module main_memory (
 
 
 wire [31:0] bit_lines;
-wire [1023:0] word_lines, word_lines_b;
+wire [1023:0] word_lines;
 wire [9:0] row_address;
 wire [4:0] column_address;
 wire [31:0] write_mask1, write_mask2, write_mask3, write_out, write_out_b, write_read_mask, write_out_final;
@@ -27,7 +27,6 @@ assign row_address = ADDR[14:5];
 decoder5to32 u_column_decoder (bit_lines, column_address);
 decoder10to1024 u_row_decoder (word_lines, row_address);
 
-inv1$ inv_row [1023:0] (word_lines, word_lines_b);
 
 // Read-write mask logic
 //if (read)
@@ -45,9 +44,9 @@ inv1$ inv_row [1023:0] (word_lines, word_lines_b);
 
 //STEVEN: should these shift amounts be 2, 3, and 4?
 // I would expect 1, 2, 3    
-shift_arithmetic_left u_SAL1 (shift1, bit_lines, 32'h2);
-shift_arithmetic_left u_SAL2 (shift2, bit_lines, 32'h3);
-shift_arithmetic_left u_SAL3 (shift3, bit_lines, 32'h4);
+shift_arithmetic_left u_SAL1 (shift1, bit_lines, 32'h1);
+shift_arithmetic_left u_SAL2 (shift2, bit_lines, 32'h2);
+shift_arithmetic_left u_SAL3 (shift3, bit_lines, 32'h3);
 
 or2$ or1[31:0] (write_mask1, bit_lines, shift1);
 or3$ or2[31:0] (write_mask2, bit_lines, shift1, shift2);
@@ -55,9 +54,9 @@ or4$ or3[31:0] (write_mask3, bit_lines, shift1, shift2, shift3);
 
 mux32_4way mux4_write (write_out, write_mask3, bit_lines, write_mask1, write_mask2, WRITE_SIZE[1:0]);
 
-or3$ or_all (write_all, WRITE_SIZE[0], WRITE_SIZE[1], WRITE_SIZE[2]);
+nor3$ or_all (write_all, WRITE_SIZE[0], WRITE_SIZE[1], WRITE_SIZE[2]);
    //STEVEN: write all should write 16bytes, not 32bytes
-mux32_2way mux2_write (write_out_final, write_out, 32'hFFFF_FFFF, write_all);
+mux32_4way mux2_write (write_out_final, write_out, write_out, 32'h0000_FFFF, 32'hFFFF_0000, {ADDR[14], write_all});
 inv1$ inv1_wr[31:0] (write_out_b, write_out_final);
 
 // write is active low for sram
