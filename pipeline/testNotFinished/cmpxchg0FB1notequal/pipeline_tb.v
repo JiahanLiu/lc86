@@ -1,3 +1,4 @@
+
 `timescale 1ns/1ps
 `define EOF = 32'hFFFF_FFFF
 `define NULL 0
@@ -12,10 +13,10 @@
 `define flags_affected ({`OF_affected, `DF_affected, 2'b0, `SF_affected, `ZF_affected, 1'b0, `AF_affected, 1'b0, `PF_affected, 1'b0, `CF_affected})
 
 `define macro_sign_extend 1'b1
-`define macro_check_length 2'b00 
+`define macro_check_length 2'b10 
 
 `define default_mem_Value 64'h0000_0000_0000_0002
-`define default_reg_base_macro 32'h02
+`define default_reg_base_macro 32'h03
 `define default_reg_EAX_32 ((`default_reg_base_macro) + ((`default_reg_base_macro) << 8) + ((`default_reg_base_macro ) << 16) + ((`default_reg_base_macro) << 24)) 
 `define default_reg_EX_B_32 ((`default_reg_base_macro + `default_modrm_reg_opcode) + ((`default_reg_base_macro + `default_modrm_reg_opcode) << 8) + ((`default_reg_base_macro + `default_modrm_reg_opcode) << 16) + ((`default_reg_base_macro + `default_modrm_reg_opcode) << 24)) 
 `define default_reg_base_32 ((`default_reg_base_macro + `default_modrm_rm) + ((`default_reg_base_macro + `default_modrm_rm) << 8) + ((`default_reg_base_macro + `default_modrm_rm) << 16) + ((`default_reg_base_macro + `default_modrm_rm) << 24))
@@ -46,23 +47,23 @@
 `define alu_result (check_opB - check_opA)
 
 `define if_check_data1 1'b0
-`define if_check_data2 1'b0
+`define if_check_data2 1'b1
 `define if_check_data3 1'b0
 `define if_check_dr1 1'b0
-`define if_check_dr2 1'b0
+`define if_check_dr2 1'b1
 `define if_check_dr3 1'b0
 `define if_check_flags 1'b1
 `define if_check_datasize 1'b1 
 `define check_ld_gpr1 1'b0 //check values
-`define check_ld_gpr2 1'b0
+`define check_ld_gpr2 1'b1
 `define check_ld_gpr3 1'b0
-`define check_data1 (`check_opC)
-`define check_data2 32'h0
+`define check_data1 32'h0
+`define check_data2 (`default_mem_Value)
 `define check_data3 32'h0
 `define check_dr1 3'b000
 `define check_dr2 3'b000
 `define check_dr3 3'b000
-`define produced_flags 32'h055
+`define produced_flags 32'h011
 `define check_datasize `macro_check_length
 
 `define if_check_mm_data 1'b0
@@ -76,9 +77,9 @@
 `define taken_eip 32'b0
 `define check_cs 16'h0
 
-`define if_check_dcachedata 1'b1
-`define if_check_address 1'b1
-`define check_ld_dcache 1'b1 //check values
+`define if_check_dcachedata 1'b0
+`define if_check_address 1'b0
+`define check_ld_dcache 1'b0 //check values
 `define check_dcache_data (`check_opC)
 `define check_address ((`default_ss << 16) + (`default_reg_base_32 + `default_big_endian_dis))
 
@@ -724,8 +725,6 @@ module TOP;
                 error <= 1;
               end
             end
-            $display("Force: EX_A is: %h, but needs to be: %h", correct_opA, check_opA);
-               
 
             tb_opB = `check_opB; 
             if(2'b00 === `macro_check_length) begin
@@ -758,8 +757,6 @@ module TOP;
                 error <= 1;
               end
             end
-            $display("Force: EX_B is: %h, but needs to be: %h", correct_opB, check_opB);
-                
 
             tb_opC = `check_opC; 
             if(2'b00 === `macro_check_length) begin
@@ -792,8 +789,6 @@ module TOP;
                 error <= 1;
               end
             end
-            $display("Force: EX_C is: %h, but needs to be: %h", correct_opC, check_opC);
-                
 
             if(1'b1 === `if_check_aluk) begin
               if(u_pipeline.EX_d2_aluk_ex !== `check_aluk) begin 
@@ -807,6 +802,8 @@ module TOP;
               $display("Error: alu32_result is: %h, but needs to be: %h", tb_alu_result, `alu_result);
               error <= 1;
             end
+            $display("Force: alu32_result is: %h, but needs to be: %h", tb_alu_result, `alu_result);
+              
           
 /*************************** WRITEBACK STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
@@ -1024,7 +1021,7 @@ module TOP;
                 $display("Error: WB_Final_Dcache_Data is: %h, but needs to be: %h", correct_dcache_data, check_dcache_data);
                 error <= 1;
               end
-            end       
+            end
 
             if(1'b1 === `if_check_address) begin
               if(u_pipeline.WB_Final_Dcache_Address !== `check_address) begin 
