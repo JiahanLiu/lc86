@@ -155,7 +155,7 @@ module agen_stage2 (
 
    wire seg_limit_v_in;
    inv1$ inv_exc_en_v (exc_en_v_bar, EXC_EN_V);
-   and2$ (seg_limit_v_in, V, exc_en_v_bar);
+   and2$ and_seg_limit_v_in(seg_limit_v_in, V, exc_en_v_bar);
 
    segment_limit_check u_seg_limit_check (
       seg_limit_v_in, D2_MEM_RD_ME, D2_MEM_WR_WB, CS_MUX_MEM_RD_ADDR_AG, CS_MUX_MEM_WR_ADDR_AG,

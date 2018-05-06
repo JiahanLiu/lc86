@@ -127,8 +127,8 @@ module decode_stage2 (
     and3$ and_sel_uop (and_sel_uop_out, D2_V, CS_UOP_STALL_DE, nor_int_exist_bar);
     assign Dsel_uop = {31'b0, and_sel_uop_out};
     reg32e$ reg_save_sel_uop (clk, Dsel_uop, Qsel_uop, , reset, set, 1'b1);
-    //assign sel_uop = Qsel_uop[0];
-     assign sel_uop = 1'b0; //TODO temporary
+    assign sel_uop = Qsel_uop[0];
+     //assign sel_uop = 1'b0; //TODO temporary
 
     // Mux for choosing the control address, the sel signal needs to be
     // generated -TODO
