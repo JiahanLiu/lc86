@@ -144,8 +144,8 @@ module functional_unit_ex(
  	wire [31:0] cmps_inc_amount, cmps_dec_amount, cmps_inc_pointer, cmps_dec_pointer;
  	mux32_4way u_inc_mux(cmps_inc_amount, 32'h0000_0001, 32'h0000_0002, 32'h0000_0004, 32'h0000_0008, EX_d2_datasize_all);
  	mux32_4way u_dec_mux(cmps_dec_amount, 32'hFFFF_FFFF, 32'hFFFF_FFFE, 32'hFFFF_FFFC, 32'hFFFF_FFF8, EX_d2_datasize_all);
- 	adder32 u_cmps_pointer_increment(cmps_inc_pointer, EX_B, cmps_inc_amount); 
- 	adder32 u_cmps_pointer_decrement(cmps_dec_pointer, EX_B, cmps_dec_amount); 
+ 	adder32 u_cmps_pointer_increment(cmps_inc_pointer, ,EX_B, cmps_inc_amount); 
+ 	adder32 u_cmps_pointer_decrement(cmps_dec_pointer, ,EX_B, cmps_dec_amount); 
  	mux32_2way u_cmps_pointer(cmps_pointer_updated, cmps_inc_pointer, cmps_dec_pointer, DF_dataforwarded);
 
 endmodule // functional_unit_ex
