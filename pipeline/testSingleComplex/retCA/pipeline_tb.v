@@ -793,6 +793,7 @@ module TOP;
                 error <= 1;
               end
             end
+            $display("Force: EX_C is: %h, but needs to be: %h", correct_opC, check_opC);
 
             if(1'b1 === `if_check_aluk) begin
               if(u_pipeline.EX_d2_aluk_ex !== `check_aluk) begin 

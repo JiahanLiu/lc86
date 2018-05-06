@@ -1,23 +1,16 @@
-
+pop58
+Error: WB_Final_DR1 is: 0, but needs to be: 6
+push68
+Error: EX_A is: 27272727, but needs to be: 21436587
+push6A
+Error: EX_A is: 21212121, but needs to be: 00000021
 retCA
-Error: EX_C is: 24242a67, but needs to be: 24242424
-retCA
-Error: WB_Final_data3 is: 24242a6f, but needs to be: 24242432
+Error: WB_Final_data3 is: 24242a67, but needs to be: 24242a6f
 retCA
 Error: WB_Final_datasize is: 3, but needs to be: 2
 retCA
-Error: WB_Final_EIP is: 00000000, but needs to be: 00000003
-retCA
-Error: WB_Final_EIP is: 0022, but needs to be: 0007
-retCA
-Error: WB_Final_ld_cs is: 1, but needs to be: 0
+Error: WB_Final_ld_cs is: 0, but needs to be: 1
 retCB
 Error: WB_Final_data3 is: 24242424, but needs to be: 2424242c
 retCB
-Error: WB_Final_DR3 is: 0, but needs to be: 4
-retCB
-Error: WB_Final_ld_gpr3 is: 0, but needs to be: 1
-retCB
 Error: WB_Final_datasize is: 3, but needs to be: 2
-retCB
-Error: WB_Final_ld_eip is: 0, but needs to be: 1

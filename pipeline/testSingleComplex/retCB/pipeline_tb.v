@@ -1,4 +1,3 @@
-
 `timescale 1ns/1ps
 `define EOF = 32'hFFFF_FFFF
 `define NULL 0
@@ -75,7 +74,7 @@
 `define if_check_cs 1'b1
 `define check_ld_mm 1'b0 //check values
 `define check_ld_eip 1'b1
-`define check_ld_cs 1'b0
+`define check_ld_cs 1'b1
 `define check_ld_seg 1'b0
 `define check_mm_data 64'h0
 `define taken_eip 32'h0000_0003
