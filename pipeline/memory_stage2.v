@@ -49,7 +49,6 @@ module memory_stage2 (
 
    bufferH64$ buf_mem [63:0] (buf_mem_out, DCACHE_DATA);
 
-
 // for near return
 // if data size is 32, EIP = MEM[31:0] --also JMP r/m, CALL r/m
 // if data size is 16, EIP = {16'b0, MEM[15:0]}
@@ -131,9 +130,30 @@ module memory_stage2 (
 
    mux4_32 mux_mem (mux_mem_out, mem_sext8, mem_sext16, buf_mem_out[31:0], , D2_MEM_SIZE_WB[0], D2_MEM_SIZE_WB[1]);
 
+   wire [31:0] buf_a_out, buf_b_out;
+   wire [31:0] a_sext8, a_sext16,
+	       b_sext8, b_sext16;
+
+   bufferH64$ buf_a [31:0] (buf_a_out, A);
+   bufferH64$ buf_b [31:0] (buf_b_out, B);
+   
+   assign a_sext8 = {{24{buf_a_out[7]}}, buf_a_out[7:0]};
+   assign a_sext16 = {{16{buf_a_out[15]}}, buf_a_out[15:0]};
+
+   assign b_sext8 = {{24{buf_b_out[7]}}, buf_b_out[7:0]};
+   assign b_sext16 = {{16{buf_b_out[15]}}, buf_b_out[15:0]};
+
+   wire [31:0] mux_a_sext_out, mux_b_sext_out, mux_a_cmpxchg_out, mux_b_cmpxchg_out;
+
+   mux4_32 mux_a_sext (mux_a_sext_out, a_sext8, a_sext16, buf_a_out, , D2_MEM_SIZE_WB[0], D2_MEM_SIZE_WB[1]);
+   mux4_32 mux_b_sext (mux_b_sext_out, b_sext8, b_sext16, buf_b_out, , D2_MEM_SIZE_WB[0], D2_MEM_SIZE_WB[1]);
+
+   mux2_32 mux_a_cmpxchg (mux_a_cmpxchg_out, buf_a_out, mux_a_sext_out, CS_IS_CMPXCHG_EX); 
+   mux2_32 mux_b_cmpxchg (mux_b_cmpxchg_out, buf_b_out, mux_b_sext_out, CS_IS_CMPXCHG_EX); 
+
    mux2_32
-      mux_a (A_OUT, A, mux_mem_out, D2_MEM_RD_ME),
-      mux_b (B_OUT, B, A, CS_MUX_B_ME);
+      mux_a (A_OUT, mux_a_cmpxchg_out, mux_mem_out, D2_MEM_RD_ME),
+      mux_b (B_OUT, mux_b_cmpxchg_out, A, CS_MUX_B_ME);
 
    wire nor_mm_a_out, and_mm_a_out;
    // if it's a call (any) or IDT LOAD, don't overwrite MM_A (already contains EIP/CS data

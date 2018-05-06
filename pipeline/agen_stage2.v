@@ -28,7 +28,7 @@ module agen_stage2 (
    input D2_REPNE_WB, EFLAGS_DF,
 
    // EXCEPTION/INTERRUPT STATUS
-   input PAGE_FAULT_EXC_EXIST,
+   input PAGE_FAULT_EXC_EXIST, EXC_EN_V,
 			   
    output [1:0] D2_DR1_SIZE_WB_OUT, D2_DR2_SIZE_WB_OUT,
    output [1:0] D2_MEM_SIZE_WB_OUT,
@@ -153,8 +153,12 @@ module agen_stage2 (
    mux2_3 mux_cmps_seg (mux_cmps_seg_out, cmps_src1_seg, cmps_src2_seg, CS_IS_CMPS_SECOND_UOP_ALL);
    mux2_3 mux_repne_seg (mux_repne_seg_out, SEG1, mux_cmps_seg_out, CS_REPNE_STEADY_STATE);
 
+   wire seg_limit_v_in;
+   inv1$ inv_exc_en_v (exc_en_v_bar, EXC_EN_V);
+   and2$ (seg_limit_v_in, V, exc_en_v_bar);
+
    segment_limit_check u_seg_limit_check (
-      V, D2_MEM_RD_ME, D2_MEM_WR_WB, CS_MUX_MEM_RD_ADDR_AG, CS_MUX_MEM_WR_ADDR_AG,
+      seg_limit_v_in, D2_MEM_RD_ME, D2_MEM_WR_WB, CS_MUX_MEM_RD_ADDR_AG, CS_MUX_MEM_WR_ADDR_AG,
       SEG1, D2_MEM_SIZE_WB, ADD_BASE_DISP, SIB_SI_DATA, EIP,
       D2_REPNE_WB, mux_cmps_base_out, mux_repne_seg_out,
 

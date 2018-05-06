@@ -154,8 +154,6 @@ or2$ or_opcode3 (or_opcode3_out, and_rep_out, opcode[3]);
 
 wire [7:0] default_control_store_address;
 
-`define INT_CONTROL_STORE_ADDR 8'b10
-
 mux4_8$ mux1 (FF_out, 8'h18, 8'h19, 8'h1A, 8'h1B, modrm[4], modrm[5]);
 mux4_8$ mux2 (default_control_store_address, {opcode[7:4], or_opcode3_out, opcode[2:0]}, 8'h03, FF_out, , eq_0F70, eq_FF);
 
