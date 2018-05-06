@@ -1482,8 +1482,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire [2:0] WB_DR1, WB_DR2;
     reg32e$ u_WB_DR1_latch(CLK, {29'b0, WB_DR1_next}, WB_DR1_out, ,CLR,PRE,LD_WB);
     reg32e$ u_WB_DR2_latch(CLK, {29'b0, WB_DR2_next}, WB_DR2_out, ,CLR,PRE,LD_WB);
-    assign WB_DR1 = WB_DR1_next[2:0];
-    assign WB_DR2 = WB_DR2_next[2:0];
+    assign WB_DR1 = WB_DR1_out[2:0];
+    assign WB_DR2 = WB_DR2_out[2:0];
 
     wire [31:0] WB_ADDRESS; 
     reg32e$ u_WB_ADDRESS_latch(CLK, WB_ADDRESS_next, WB_ADDRESS, ,CLR,PRE,LD_WB);
