@@ -89,9 +89,11 @@ module conditional_support_wb(
 	or2$ u_or_cf_zf(cf_or_zf, CF, ZF);
 	and2$ u_and_jnbe(jnbe_not_taken, cf_or_zf, CS_IS_JNBE_WB);
 
+	wire jne_Or_jnbe, inter_wb_branch_taken;
 	or2$ u_or_final_not_taken_(mux_not_taken_eip, jne_not_taken, jnbe_not_taken); 
-	inv1$ u_wb_branch_taken(wb_branch_taken, mux_not_taken_eip);
-
+	inv1$ u_wb_branch_taken(inter_wb_branch_taken, mux_not_taken_eip);
+	or2$ u_or_jne_Or_jnbe(jne_Or_jnbe, CS_IS_JNE_WB, CS_IS_JNBE_WB);
+	and2$ u_and_wb_branch_taken_jne_jnbe(wb_branch_taken, inter_wb_branch_taken, jne_Or_jnbe);
 	//cmovc
 
 	mux2$ u_mux_cmovc(wb_ld_gpr2, WB_ex_ld_gpr2_wb, CF, CS_IS_CMOVC_WB);
