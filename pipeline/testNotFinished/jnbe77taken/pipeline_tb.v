@@ -1,3 +1,4 @@
+
 `timescale 1ns/1ps
 `define EOF = 32'hFFFF_FFFF
 `define NULL 0
@@ -11,18 +12,18 @@
 `define CF_affected 1'b1
 `define flags_affected ({`OF_affected, `DF_affected, 2'b0, `SF_affected, `ZF_affected, 1'b0, `AF_affected, 1'b0, `PF_affected, 1'b0, `CF_affected})
 
-`define macro_sign_extend 1'b1
+`define macro_sign_extend 1'b0
 `define macro_check_length 2'b00 
 
-`define default_mem_Value 64'h0000_0000_0000_0002
-`define default_reg_base_macro 32'h02
+`define default_mem_Value 64'h1234_5678_90AB_CDEF
+`define default_reg_base_macro 32'h90
 `define default_reg_EAX_32 ((`default_reg_base_macro) + ((`default_reg_base_macro) << 8) + ((`default_reg_base_macro ) << 16) + ((`default_reg_base_macro) << 24)) 
 `define default_reg_EX_B_32 ((`default_reg_base_macro + `default_modrm_reg_opcode) + ((`default_reg_base_macro + `default_modrm_reg_opcode) << 8) + ((`default_reg_base_macro + `default_modrm_reg_opcode) << 16) + ((`default_reg_base_macro + `default_modrm_reg_opcode) << 24)) 
 `define default_reg_base_32 ((`default_reg_base_macro + `default_modrm_rm) + ((`default_reg_base_macro + `default_modrm_rm) << 8) + ((`default_reg_base_macro + `default_modrm_rm) << 16) + ((`default_reg_base_macro + `default_modrm_rm) << 24))
 `define default_eip 32'h1 
 `define default_cs 32'h22 
 `define default_ss ((`default_reg_base_macro + 3'b010) + ((`default_reg_base_macro + 3'b010) << 8))
-`define default_flags 32'hFFF
+`define default_flags 32'h000
 `define default_imm 32'h8765_4321
 `define default_big_endian_imm8 8'h21
 `define default_big_endian_imm16 32'h2143
@@ -31,19 +32,17 @@
 `define default_big_endian_dis 32'h0000_000B
 `define default_offset 32'h1234_5678
 `define default_offset2 16'h2413
+`define default_rel_value 8'h78
 `define default_modrm_mod 2'b10
 `define default_modrm_reg_opcode 3'b010
 `define default_modrm_rm 3'b101
 
-`define if_check_op_a 1'b1
-`define if_check_op_b 1'b1
-`define if_check_op_c 1'b1
+`define if_check_op_a 1'b0
+`define if_check_op_b 1'b0
 `define if_check_aluk 1'b0
 `define check_opA (`default_mem_Value) //check values
-`define check_opB (`default_reg_EAX_32)
-`define check_opC (`default_reg_EX_B_32)
-`define check_aluk 3'b110
-`define alu_result (check_opB - check_opA)
+`define check_opB (`default_reg_EX_B_32)
+`define check_aluk 3'b000
 
 `define if_check_data1 1'b0
 `define if_check_data2 1'b0
@@ -51,22 +50,23 @@
 `define if_check_dr1 1'b0
 `define if_check_dr2 1'b0
 `define if_check_dr3 1'b0
-`define if_check_flags 1'b1
-`define if_check_datasize 1'b1 
+`define if_check_flags 1'b0
+`define if_check_datasize 1'b0 
 `define check_ld_gpr1 1'b0 //check values
 `define check_ld_gpr2 1'b0
 `define check_ld_gpr3 1'b0
-`define check_data1 (`check_opC)
+`define check_data1 32'h0
 `define check_data2 32'h0
 `define check_data3 32'h0
 `define check_dr1 3'b000
 `define check_dr2 3'b000
 `define check_dr3 3'b000
-`define produced_flags 32'h055
+`define produced_flags 32'h095
 `define check_datasize `macro_check_length
 
 `define if_check_mm_data 1'b0
-`define which_check_eip 1'b0 //0 for eip + instr length, 1 for other
+`define which_check_eip 1'b1 //0 for eip + instr length, 1 for other
+`define if_rel_eip 1'b1 //0 for absolute, 1 for relative
 `define if_check_cs 1'b0
 `define check_ld_mm 1'b0 //check values
 `define check_ld_eip 1'b1
@@ -76,10 +76,10 @@
 `define taken_eip 32'b0
 `define check_cs 16'h0
 
-`define if_check_dcachedata 1'b1
-`define if_check_address 1'b1
-`define check_ld_dcache 1'b1 //check values
-`define check_dcache_data (`check_opC)
+`define if_check_dcachedata 1'b0
+`define if_check_address 1'b0
+`define check_ld_dcache 1'b0 //check values
+`define check_dcache_data (`check_opA + `check_opB)
 `define check_address ((`default_ss << 16) + (`default_reg_base_32 + `default_big_endian_dis))
 
 module TOP;
@@ -115,22 +115,18 @@ module TOP;
 
    reg [31:0] tb_opA;
    reg [31:0] tb_opB;
-   reg [31:0] tb_opC;
    reg [31:0] tb_data1;
    reg [31:0] tb_data2;
    reg [31:0] tb_dcache;
    reg [63:0] tb_dcache_data; 
-   reg [31:0] tb_alu_result;
 
    reg [31:0] check_opA;
    reg [31:0] check_opB;
-   reg [31:0] check_opC;
    reg [31:0] check_data1;
    reg [31:0] check_data2;
    reg [63:0] check_dcache_data;
    reg [31:0] correct_opA;
    reg [31:0] correct_opB;
-   reg [31:0] correct_opC;
    reg [31:0] correct_data1;
    reg [31:0] correct_data2;
    reg [63:0] correct_dcache_data;
@@ -724,8 +720,6 @@ module TOP;
                 error <= 1;
               end
             end
-            $display("Force: EX_A is: %h, but needs to be: %h", correct_opA, check_opA);
-               
 
             tb_opB = `check_opB; 
             if(2'b00 === `macro_check_length) begin
@@ -758,42 +752,7 @@ module TOP;
                 error <= 1;
               end
             end
-            $display("Force: EX_B is: %h, but needs to be: %h", correct_opB, check_opB);
-                
 
-            tb_opC = `check_opC; 
-            if(2'b00 === `macro_check_length) begin
-              check_opC[7:0] = tb_opC[7:0];
-              correct_opC[7:0] = u_pipeline.EX_C[7:0];
-              if(1'b1 === `macro_sign_extend) begin
-                check_opC[31:8] = {24{tb_opC[7]}};
-                correct_opC[31:8] = u_pipeline.EX_C[31:8];
-              end else begin 
-                check_opC[31:8] = 0;
-                correct_opC[31:8] = 0;
-              end
-            end else if(2'b01 === `macro_check_length) begin
-              check_opC[15:0] = tb_opC[15:0];
-              correct_opC[15:0] = u_pipeline.EX_C[15:0];
-              if(1'b1 === `macro_check_length) begin
-                check_opC[31:16] = {16{tb_opC[15]}};
-                correct_opC[31:16] = u_pipeline.EX_C[31:16];
-              end else begin
-                check_opC[31:16] = 0;
-                correct_opC[31:16] = 0;
-              end 
-            end else if(2'b10 === `macro_check_length) begin
-              check_opC = tb_opC; 
-              correct_opC = u_pipeline.EX_C;
-            end
-            if(1'b1 === `if_check_op_c) begin
-              if(correct_opC !== check_opC) begin 
-                $display("Error: EX_C is: %h, but needs to be: %h", correct_opC, check_opC);
-                error <= 1;
-              end
-            end
-            $display("Force: EX_C is: %h, but needs to be: %h", correct_opC, check_opC);
-                
 
             if(1'b1 === `if_check_aluk) begin
               if(u_pipeline.EX_d2_aluk_ex !== `check_aluk) begin 
@@ -801,13 +760,7 @@ module TOP;
                 error <= 1;
               end
             end
-
-            tb_alu_result = u_pipeline.u_execute.u_functional_unit_ex.alu32_result;
-            if(tb_alu_result !== `alu_result) begin 
-              $display("Error: alu32_result is: %h, but needs to be: %h", tb_alu_result, `alu_result);
-              error <= 1;
-            end
-          
+            
 /*************************** WRITEBACK STAGE INPUTS COMPARE ******************************/
             #(clk_cycle-1);
             #1;    // Allow for setup time
@@ -956,10 +909,17 @@ module TOP;
                 error <= 1; 
               end
             end else begin
-              if(u_pipeline.WB_Final_EIP !== `taken_eip) begin 
-                $display("Error: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_EIP, `taken_eip);
-                error <= 1; 
-              end
+              if(1'b1 === `if_rel_eip) begin
+                if(u_pipeline.WB_Final_EIP !== `default_eip + instr_length + `default_rel_value) begin 
+                  $display("Error: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_EIP, `default_eip + instr_length + `default_rel_value);
+                  error <= 1; 
+                end
+              end else begin
+                if(u_pipeline.WB_Final_EIP !== `taken_eip) begin 
+                  $display("Error: WB_Final_EIP is: %h, but needs to be: %h", u_pipeline.WB_Final_EIP, `taken_eip);
+                  error <= 1; 
+                end 
+              end 
             end
 
             if(1'b1 === `if_check_cs) begin 
@@ -1024,7 +984,7 @@ module TOP;
                 $display("Error: WB_Final_Dcache_Data is: %h, but needs to be: %h", correct_dcache_data, check_dcache_data);
                 error <= 1;
               end
-            end       
+            end
 
             if(1'b1 === `if_check_address) begin
               if(u_pipeline.WB_Final_Dcache_Address !== `check_address) begin 
