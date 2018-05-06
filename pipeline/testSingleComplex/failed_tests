@@ -1,9 +1,3 @@
-pop58
-Error: WB_Final_DR1 is: 0, but needs to be: 6
-push68
-Error: EX_A is: 27272727, but needs to be: 21436587
-push6A
-Error: EX_A is: 21212121, but needs to be: 00000021
 retCA
 Error: WB_Final_data3 is: 24242a67, but needs to be: 24242a6f
 retCA

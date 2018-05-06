@@ -1,4 +1,3 @@
-
 `timescale 1ns/1ps
 `define EOF = 32'hFFFF_FFFF
 `define NULL 0
@@ -37,13 +36,13 @@
 `define default_modrm_reg_opcode 3'b110
 `define default_modrm_rm 3'b101
 
-`define if_check_op_a 1'b1
-`define if_check_op_b 1'b0
+`define if_check_op_a 1'b0
+`define if_check_op_b 1'b1
 `define if_check_op_c 1'b1
 `define if_check_aluk 1'b0
 `define if_check_alu_result 1'b0
 `define check_opA (`default_big_endian_imm32) //check values
-`define check_opB (`default_reg_EAX_32)
+`define check_opB (`default_big_endian_imm32)
 `define check_opC (`default_reg_ESP_32 - 4)
 `define check_aluk 3'b110
 `define alu_result (check_opB - check_opA)
