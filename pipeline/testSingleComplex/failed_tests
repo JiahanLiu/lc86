@@ -1,0 +1,23 @@
+
+retCA
+Error: EX_C is: 24242a67, but needs to be: 24242424
+retCA
+Error: WB_Final_data3 is: 24242a6f, but needs to be: 24242432
+retCA
+Error: WB_Final_datasize is: 3, but needs to be: 2
+retCA
+Error: WB_Final_EIP is: 00000000, but needs to be: 00000003
+retCA
+Error: WB_Final_EIP is: 0022, but needs to be: 0007
+retCA
+Error: WB_Final_ld_cs is: 1, but needs to be: 0
+retCB
+Error: WB_Final_data3 is: 24242424, but needs to be: 2424242c
+retCB
+Error: WB_Final_DR3 is: 0, but needs to be: 4
+retCB
+Error: WB_Final_ld_gpr3 is: 0, but needs to be: 1
+retCB
+Error: WB_Final_datasize is: 3, but needs to be: 2
+retCB
+Error: WB_Final_ld_eip is: 0, but needs to be: 1
