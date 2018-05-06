@@ -6,26 +6,22 @@ callFF
 Error: EX_MM_A is: 0505050500000007, but needs to be: 00000007
 callFF
 Error: WB_Final_Dcache_Data is: 0505050500000007, but needs to be: 0000000000000007
-cmovc0F42nottaken
-Error: WB_Final_datasize is: 2, but needs to be: 0
-cmovc0F42taken
-Error: WB_Final_datasize is: 2, but needs to be: 0
-cmpxchg0FB0
+callFFoperandoverride
+Error: EX_C is: 24242422, but needs to be: 00002422
+callFFoperandoverride
+Error: EX_MM_A is: 0505050500000008, but needs to be: 00000008
+callFFoperandoverride
+Error: WB_Final_Dcache_Data is: 0505050500000008, but needs to be: 0000000000000008
+cmpxchg0FB0equal
 Error: WB_Final_Flags is: 0000077f, but needs to be: 00000f7f
-jnbe0F87taken
-Error: WB_Final_EIP is: 78563419, but needs to be: 00000019
-jne0F85taken
-Error: WB_Final_EIP is: 78563419, but needs to be: 00000019
-movq0F6F
-Error: EX_d2_aluk_ex is: 5, but needs to be: 4
-movq0F6F
-Error: WB_Final_MM_Data is: 0202020202020202, but needs to be: 1234567890abcdef
 movq0F7F
 Error: EX_MM_B is: 0202020202020202, but needs to be: 00000000
 movq0F7F
+Error: EX_d2_aluk_ex is: 4, but needs to be: 5
+movq0F7F
 Error: WB_Final_ld_mm is: 1, but needs to be: 0
 movq0F7F
-Error: WB_Final_Dcache_Data is: 0202020202020202, but needs to be: 2424242400000000
+Error: WB_Final_Dcache_Data is: 0505050505050505, but needs to be: 2424242400000000
 paddd0FFE
 Error: EX_MM_B is: 0202020202020202, but needs to be: 00000000
 paddd0FFE
@@ -110,9 +106,3 @@ retCB
 Error: WB_Final_datasize is: 3, but needs to be: 2
 retCB
 Error: WB_Final_ld_eip is: 0, but needs to be: 1
-callFFoperandoverride
-Error: EX_C is: 24242422, but needs to be: 00002422
-callFFoperandoverride
-Error: EX_MM_A is: 0505050500000008, but needs to be: 00000008
-callFFoperandoverride
-Error: WB_Final_Dcache_Data is: 0505050500000008, but needs to be: 0000000000000008
