@@ -13,7 +13,7 @@
 `define flags_affected ({`OF_affected, `DF_affected, 2'b0, `SF_affected, `ZF_affected, 1'b0, `AF_affected, 1'b0, `PF_affected, 1'b0, `CF_affected})
 
 `define macro_sign_extend 1'b1
-`define macro_check_length 2'b10 
+`define macro_check_length 2'b10
 
 `define default_mem_Value 64'h0000_0007_0000_0003
 `define default_reg_base_macro 32'h20
@@ -27,8 +27,8 @@
 `define default_flags 32'hFFF
 `define default_imm 32'h8765_4306
 `define default_big_endian_imm8 8'h06
-`define default_big_endian_imm16 32'h2143
-`define default_big_endian_imm32 32'h2143_6587
+`define default_big_endian_imm16 32'h0643
+`define default_big_endian_imm32 32'h0643_6587
 `define default_dis 32'h0B00_0000
 `define default_big_endian_dis 32'h0000_000B
 `define default_offset 32'h1234_5678
@@ -45,7 +45,7 @@
 `define if_check_alu_result 1'b0
 `define check_opA (`default_mem_Value) //check values
 `define check_opB (`default_big_endian_imm8)
-`define check_opC (`default_reg_ESP_32)
+`define check_opC (`default_reg_ESP_32 + `default_big_endian_imm16)
 `define check_aluk 3'b110
 `define alu_result (check_opB - check_opA)
 
@@ -62,7 +62,7 @@
 `define check_ld_gpr3 1'b1
 `define check_data1 32'h0
 `define check_data2 (`default_mem_Value)
-`define check_data3 (`check_opC + 8 + `default_big_endian_imm8)
+`define check_data3 (`check_opC + 8)
 `define check_dr1 3'b000
 `define check_dr2 3'b000
 `define check_dr3 3'b100
@@ -75,7 +75,7 @@
 `define if_check_cs 1'b1
 `define check_ld_mm 1'b0 //check values
 `define check_ld_eip 1'b1
-`define check_ld_cs 1'b0
+`define check_ld_cs 1'b1
 `define check_ld_seg 1'b0
 `define check_mm_data 64'h0
 `define taken_eip 32'h0000_0003

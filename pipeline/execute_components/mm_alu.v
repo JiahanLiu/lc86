@@ -23,7 +23,7 @@ module alu64(
 	PADDW u_PADDW(PADDW_result, MM_A, MM_B);
 	PADDD u_PADDD(PADDD_result, MM_A, MM_B);
 	PADDSW u_PADDSW(PADDSW_result, MM_A, MM_B);
-	PSHUFW u_PSHUFW(PSHUFW_result, MM_B, imm[7:0]);
+	PSHUFW u_PSHUFW(PSHUFW_result, MM_A, imm[7:0]);
 	assign Pass_result = MM_A; 
 	assign Swap_result = MM_B;
 

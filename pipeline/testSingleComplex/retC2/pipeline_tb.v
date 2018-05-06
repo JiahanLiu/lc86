@@ -26,7 +26,7 @@
 `define default_flags 32'hFFF
 `define default_imm 32'h8765_4306
 `define default_big_endian_imm8 8'h06
-`define default_big_endian_imm16 32'h2143
+`define default_big_endian_imm16 32'h0643
 `define default_big_endian_imm32 32'h2143_6587
 `define default_dis 32'h0B00_0000
 `define default_big_endian_dis 32'h0000_000B
@@ -38,13 +38,13 @@
 `define default_modrm_rm 3'b101
 
 `define if_check_op_a 1'b0
-`define if_check_op_b 1'b1
+`define if_check_op_b 1'b0
 `define if_check_op_c 1'b1
 `define if_check_aluk 1'b0
 `define if_check_alu_result 1'b0
 `define check_opA (`default_reg_ESP_32) //check values
 `define check_opB (`default_big_endian_imm8)
-`define check_opC (`default_reg_ESP_32)
+`define check_opC (`default_reg_ESP_32 + `default_big_endian_imm16)
 `define check_aluk 3'b110
 `define alu_result (check_opB - check_opA)
 
@@ -61,7 +61,7 @@
 `define check_ld_gpr3 1'b1
 `define check_data1 32'h0
 `define check_data2 (`default_mem_Value)
-`define check_data3 (`check_opC + 4 + `check_opB)
+`define check_data3 (`check_opC + 4)
 `define check_dr1 3'b000
 `define check_dr2 3'b000
 `define check_dr3 3'b100
