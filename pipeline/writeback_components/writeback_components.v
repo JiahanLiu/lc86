@@ -255,3 +255,19 @@ module flags_wb(
 	assign final_out_flags = final_flags; 
 
 endmodule // Flags_WB
+
+module dr_select_wb(
+	output [2:0] WB_Final_DR1,
+	output [2:0] WB_Final_DR2,
+	input CS_IS_CMPS_SECOND_UOP_ALL,
+	input [2:0] WB_DR1,
+	input [2:0] WB_DR2, 
+	input [2:0] CS_DR1_D2,
+	input [2:0] CS_DR2_D2
+	);
+	
+	mux3_2way u_mux_dr1(WB_Final_DR1, WB_DR1, CS_DR1_D2, CS_IS_CMPS_SECOND_UOP_ALL);
+	mux3_2way u_mux_dr2(WB_Final_DR2, WB_DR2, CS_DR2_D2, CS_IS_CMPS_SECOND_UOP_ALL);
+	
+endmodule // DR_select
+

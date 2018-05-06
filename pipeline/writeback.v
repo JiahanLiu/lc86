@@ -113,9 +113,10 @@ module writeback (
    flags_wb u_flags_wb(final_out_flags, CLK, v_cs_ld_flags, CS_POP_FLAGS_WB, 
       CS_FLAGS_AFFECTED_WB, WB_FLAGS, WB_RESULT_A);
 
+   dr_select_wb u_dr_select_wb(WB_Final_DR1, WB_Final_DR2, CS_IS_CMPS_SECOND_UOP_ALL, 
+      WB_DR1, WB_DR2, CS_DR1_D2, CS_DR2_D2);
+   
    //regfile32
-   assign WB_Final_DR1 = WB_DR1;
-   assign WB_Final_DR2 = WB_DR2;
    assign WB_Final_DR3 = CS_DR3_WB; 
    assign WB_Final_data1 = data1;
    assign WB_Final_data2 = WB_RESULT_B;

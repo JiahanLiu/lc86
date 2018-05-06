@@ -230,3 +230,4 @@ module stall_and_bubble_ex(
 	mux2$ u_mux_wb_valid(WB_V_next, EX_V, valid_terminate, WB_de_repne_all);
 
 endmodule // stall_and_bubble_ex
+

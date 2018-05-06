@@ -37,6 +37,19 @@ module mux1_8way(
 
 endmodule
 
+module mux3_2way(
+	output [2:0] mux_out,
+	input [2:0] a, b,
+	input select
+	);
+
+	mux2$ u_mux0(mux_out[0], a[0], b[0], select);
+	mux2$ u_mux1(mux_out[1], a[1], b[1], select);
+	mux2$ u_mux2(mux_out[2], a[2], b[2], select);
+
+	
+endmodule // mux3_2way
+
 //-------------------------------------------------------------------------------------
 //
 // 					 		    16-bit Mux with 2 inputs
