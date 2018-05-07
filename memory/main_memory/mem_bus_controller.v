@@ -93,19 +93,18 @@ module mem_bus_controller(//interface with bus
    
    //READ DATA BUFFER
    wire [127:0] 		    rd_data_buffer_in, rd_data_buffer_out;
-   wire 			    RD_BUF_EN;
-   //TODO: assign RD_BUF_EN
-   wire [14:0] 			    rd_address;
-   //TODO: assign rd_address
-   mux4_128 rd_buf_sel(rd_data_buffer_in, rd_data_buffer_out, rd_data_buffer_out, MEM_INOUT[127:0], MEM_INOUT[127:0], RD_BUF_EN, rd_address[5]);
+   wire [15:0]			    RD_A;
+   
+   //TODO: debug the PEND_RD signal
+   mux4_128 rd_buf_sel(rd_data_buffer_in, rd_data_buffer_out, rd_data_buffer_out, MEM_INOUT[127:0], MEM_INOUT[127:0], PEND_RD, RD_A[5]);
    ioreg128$ read_data_buffer(BUS_CLK, rd_data_buffer_in, rd_data_buffer_out, , RST, SET);
    
    //addresses
-   wire [15:0] 			    WR_A, WR_A_IN, RD_A, RD_A_IN;
+   wire [15:0] 			    WR_A, WR_A_IN, RD_A_IN;
    wire 			    UPD_WR_A, UPD_RD_A;
-   //TODO: drive UPD values
-   assign UPD_WR_A = DONE;
-   assign UPD_RD_A = DONE;
+
+   assign UPD_WR_A = current_state[4];
+   assign UPD_RD_A = current_state[4];
    
    mux16_2way WR_A_SEL(WR_A_IN, WR_A, A, UPD_WR_A);   
    ioreg16$ WR_ADDRESS(BUS_CLK, WR_A_IN, WR_A, , RST, SET);
@@ -119,8 +118,8 @@ module mem_bus_controller(//interface with bus
    wire 			    UPD_WR_SRC, UPD_RD_SRC;
    wire [3:0]			    BUS_SRC;
    assign BUS_SRC = {1'b0, DEST_DMA, DEST_DC,  DEST_IC};
-   assign UPD_WR_SRC = DONE;
-   assign UPD_RD_SRC = DONE;
+   assign UPD_WR_SRC = current_state[4];
+   assign UPD_RD_SRC = current_state[4];
    //TODO: improve update logic   
    mux2$ WR_SRC_SEL [3:0] (WR_SRC_IN, WR_SRC, BUS_SRC, UPD_WR_SRC);
    mux2$ RD_SRC_SEL [3:0] (RD_SRC_IN, RD_SRC, WR_SRC, UPD_RD_SRC);
@@ -136,10 +135,10 @@ module mem_bus_controller(//interface with bus
    mux4$ RD_SEL (RW_IN, RW_OUT, RW_OUT, 1'b0, 1'b1, UPD_RW, RW);
    wire 			    PEND_BR_IN;
    wire 			    UPD_PEND_BR;
-   assign UPD_PEND_BR = DONE;//TODO: drive this value
-   assign UPD_RW = DONE;
-   assign UPD_WR_SIZE = DONE;
-   assign UPD_RD_SIZE = DONE;
+   assign UPD_PEND_BR = current_state[4];
+   assign UPD_RW = current_state[4];
+   assign UPD_WR_SIZE = current_state[4];
+   assign UPD_RD_SIZE = current_state[4];
    
    inv1$ PENDING_READ(PEND_RD, RW_OUT);
    mux2$ PEND_BR_SEL (PEND_BR_IN, PEND_BR, PEND_RD, UPD_PEND_BR);
@@ -161,10 +160,10 @@ module mem_bus_controller(//interface with bus
    and2$ MEM_WR_EN(MEM_WR, MEM_DONE_OUT[2],RW_OUT);
    assign MEM_EN = MEM_DONE_OUT[1];
    and2$ NXT_STE_DRIVER(PENDING_BR, MEM_DONE_OUT[4], PEND_BR);
-
    //TRISTATE BUFFER FOR MEMORY
    //TODO: shift the data!
    wire [127:0] 		    write_data_shifted;
+   assign write_data_shifted = data_buffer_out;
    tristate_bus_driver32$ IO_LOW [3:0] (RW_OUT, write_data_shifted, MEM_INOUT[127:0]);
       tristate_bus_driver32$ IO_HIGH [3:0] (RW_OUT, write_data_shifted, MEM_INOUT[255:128]);
 
