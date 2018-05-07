@@ -282,7 +282,7 @@ module TOP;
         u_pipeline.debug_cs_in = `default_cs;
         u_pipeline.u_register_file.eflags.Q = `default_flags;
         u_pipeline.u_writeback.u_flags_wb.u_flags_register.Q = `default_flags; //internal flags register
-        u_pipeline.u_writeback.u_flags_wb.overwrite_ld_flags = 1'b0;
+         
         u_pipeline.debug_memory = `default_mem_Value;
         
      end 
