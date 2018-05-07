@@ -152,17 +152,22 @@ WR.OP2 = (DCACHE.R&!RD.OP1&!RD.OP2&!WR.OP2&WR.V&WR.ADDR1.V&WR.ADDR2.V) | (
    wire [31:0] mux_rd_addr_out, mux_wr_addr_out;
    wire [3:0] mux_rd_size_out, mux_wr_size_out;
 
+   wire nor_rd_op1_2_out;
+
    mux2_32
       mux_rd_addr (mux_rd_addr_out, RA_RD_ADDR1, RA_RD_ADDR2, rd_op2),
       mux_wr_addr (mux_wr_addr_out, RA_WR_ADDR1, RA_WR_ADDR2, wr_op2),
-      mux_rw_addr (DCACHE_ADDR_OUT, mux_rd_addr_out, mux_wr_addr_out, V_MEM_WR);
+      mux_rw_addr (DCACHE_ADDR_OUT, mux_rd_addr_out, mux_wr_addr_out, nor_rd_op1_2_out);
 
    mux2_4
       mux_rd_size (mux_rd_size_out, RA_RD_SIZE1, RA_RD_SIZE2, rd_op2),
       mux_wr_size (mux_wr_size_out, RA_WR_SIZE1, RA_WR_SIZE2, wr_op2),
-      mux_rw_size (DCACHE_SIZE_OUT, mux_rd_size_out, mux_wr_size_out, V_MEM_WR);
+      mux_rw_size (DCACHE_SIZE_OUT, mux_rd_size_out, mux_wr_size_out, nor_rd_op1_2_out);
 
-   assign DCACHE_RW_OUT = V_MEM_WR;
+   nor2$ nor_rd_op1_2 (nor_rd_op1_2_out, rd_op1, rd_op2);
+   and2$ and_dcache_rw (DCACHE_RW_OUT, V_MEM_WR, nor_rd_op1_2_out);
+   // assign DCACHE_RW_OUT = V_MEM_WR;
+
    or2$ or3 (DCACHE_EN, V_MEM_RD, V_MEM_WR);
 
    wire and_rd_op2_out, and_wr_op2_out;
@@ -204,7 +209,7 @@ WR.OP2 = (DCACHE.R&!RD.OP1&!RD.OP2&!WR.OP2&WR.V&WR.ADDR1.V&WR.ADDR2.V) | (
    or4$ or4 (or4_out, Drd_op1, Drd_op2, Dwr_op1, Dwr_op2);
    and2$ and_rd_stall (DCACHE_RD_STALL, V_MEM_RD, or4_out);
 
-   or2$ or5 (or5_out, Dwr_op1, Dwr_op2);
+   or4$ or5 (or5_out, rd_op1, rd_op2, Dwr_op1, Dwr_op2);
    and2$ and_wr_stall (DCACHE_WR_STALL, V_MEM_WR, or5_out);
 
 endmodule  

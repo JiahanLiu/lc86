@@ -5,7 +5,7 @@ module cache( //interface with the processor
     input enable,
     input [15:0] addr,
     input [3:0] size,
-    output [127:0] data_read,
+    output [127:0] data_read_out,
     output ready,
 
     output BUS_WR,
@@ -48,7 +48,7 @@ module cache( //interface with the processor
    wire 	     OE, CACHE_WR, TS_WR, d_mux;
    gen_ctrl gen_ctrl_u(current_state, OE, CACHE_WR, BUS_WR, BUS_EN, TS_WR, ready, d_mux);
    
-   
+   wire [127:0] data_read;
 
    //ACCESSING THE DATA LINE
    wire [15:0] 	     DC_WR;
@@ -61,6 +61,8 @@ module cache( //interface with the processor
    bufferH256$ buf1d [127:0] (out1b, dcache_input_t);
    bufferH16$ buf2d [127:0] (out2b, out1b);
    bufferH16$ buf3d [127:0] (dcache_input, out2b);
+
+   assign data_read_out = data_read_shifted;
 
    wire [15:0] 	     dcache_wrmask_input;
    mux2_16$ mask_sel(dcache_wrmask_input, DC_WR, 16'h0000, d_mux);
@@ -510,30 +512,41 @@ module shiftright(
 );
 
 
-wire [127:0] array [15:0];
-wire [127:0] mux_array [3:0];
-   wire [127:0] zero = 0;
-   
-genvar i;
-generate
-for(i=1;i<16;i=i+1)
-  begin : shifter
-  //Allowed since i is constant when the loop is unrolled
-  assign array[i] = {zero[127:i*8], Din[127:127-i*8+1]};
-  end
-    endgenerate
-   assign array[0] = Din;
-   
-
-
-//muxes to select shifted value, first round of muxes
-mux4_128$ mux1 (mux_array[0],array[0],array[1],array[2],array[3],amnt[0],amnt[1]);
-mux4_128$ mux2 (mux_array[1],array[4],array[5],array[6],array[7],amnt[0],amnt[1]);
-mux4_128$ mux3 (mux_array[2],array[8],array[9],array[10],array[11],amnt[0],amnt[1]);
-mux4_128$ mux4 (mux_array[3],array[12],array[13],array[14],array[15],amnt[0],amnt[1]);
-
-//last round of muxes
-mux4_128$ mux5 (Dout,mux_array[0],mux_array[1],mux_array[2],mux_array[3],amnt[2],amnt[3]);
+//wire [127:0] array [15:0];
+//wire [127:0] mux_array [3:0];
+//   wire [127:0] zero = 0;
+//   
+//genvar i;
+//generate
+//for(i=1;i<16;i=i+1)
+//  begin : shifter
+//  //Allowed since i is constant when the loop is unrolled
+//  assign array[i] = {zero[127:i*8], Din[127:127-i*8+1]};
+//  end
+//    endgenerate
+//   assign array[0] = Din;
+//   
+//
+//
+////muxes to select shifted value, first round of muxes
+//mux4_128$ mux1 (mux_array[0],array[0],array[1],array[2],array[3],amnt[0],amnt[1]);
+//mux4_128$ mux2 (mux_array[1],array[4],array[5],array[6],array[7],amnt[0],amnt[1]);
+//mux4_128$ mux3 (mux_array[2],array[8],array[9],array[10],array[11],amnt[0],amnt[1]);
+//mux4_128$ mux4 (mux_array[3],array[12],array[13],array[14],array[15],amnt[0],amnt[1]);
+//
+////last round of muxes
+//mux4_128$ mux5 (Dout,mux_array[0],mux_array[1],mux_array[2],mux_array[3],amnt[2],amnt[3]);
 	
+   wire [127:0] ind0, ind1, ind2, ind3, ind4, ind5;
+
+   mux2$
+     mux0[127:0] (ind0, Din, {64'b0, {Din[127:64]}}, amnt[3]),
+     mux1[127:0] (ind1, ind0, {32'b0, {ind0[127:32]}}, amnt[2]),
+     mux2[127:0] (ind2, ind1, {16'b0, {ind1[127:16]}}, amnt[1]),
+     mux3[127:0] (ind3, ind2, {8'b0, {ind2[127:8]}}, amnt[0]),
+     mux4[127:0] (ind4, ind3, {4'b0, {ind3[127:4]}}, 1'b0),
+     mux5[127:0] (ind5, ind4, {2'b0, {ind4[127:2]}}, 1'b0),
+     mux6[127:0] (Dout, ind4, {1'b0, {ind5[127:1]}}, 1'b0);
+
 
 endmodule
