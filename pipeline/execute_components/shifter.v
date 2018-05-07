@@ -28,8 +28,9 @@ module shifter32(
 	shift_arithmetic_right_w_flags u_SAR(right_result, right_flags, a, b, datasize);
 
 	mux32_2way mux_results(shift_result, left_result, right_result, EX_de_shift_dir_wb);
-	mux32_2way mux_flags(shift_flags, left_flags, right_flags, EX_de_shift_dir_wb);
+	mux32_2way mux_flags(calculated_flags, left_flags, right_flags, EX_de_shift_dir_wb);
 
+	
 	equal_to_zero u_equal_to_zeroB(b_eq_0, b);
 	mux32_2way u_mux_final_flags(shift_flags, calculated_flags, flags_dataforwarded, b_eq_0);	
 

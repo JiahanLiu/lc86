@@ -807,7 +807,7 @@ module TOP;
               check_data1 = tb_data1; 
               correct_data1 = u_pipeline.WB_Final_data1;
             end
-            if(1'b1 === tb_data1) begin
+            if(1'b1 === `if_check_data1) begin
               if(correct_data1 !== check_data1) begin 
                 $display("Error: WB_Final_data1 is: %h, but needs to be: %h", correct_data1, check_data1);
                 error <= 1;
