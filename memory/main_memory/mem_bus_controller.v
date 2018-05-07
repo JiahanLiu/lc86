@@ -45,13 +45,18 @@ module mem_bus_controller(//interface with bus
    wire 		    DEST_IN;
    or3$ any_dest_in(DEST_IN, DEST_IC, DEST_DC, DEST_DMA);
    ctrler_gen_n_state gen_n_state_u(next_state, current_state,PENDING_BR, BG, ACK_IN, RW, DEST_IN, DONE);
+   
 
 
 
    //GENERATE CTRL SIGNALS
-   gen_ctrl_bus gen_ctrl_bus_u(current_state, CTRL_TRI_EN, D_TRI_EN, ACK_OUT, BR_STATE, SIZE_DECR, RD_BUS_CTRL);
+   gen_ctrl_bus gen_ctrl_bus_u(current_state, CTRL_TRI_EN, D_TRI_EN, ACK_OUT_BAR, BR_STATE, SIZE_DECR, RD_BUS_CTRL);
    //PEND_BR will be signalling well before we are in BR state
    wire 		    PEND_BR;
+   //TRI_EN is active low!
+   inv1$ DEST_DRIVER (DEST_OUT, CTRL_TRI_EN);
+   inv1$ ACK_DRIVER (ACK_OUT, ACK_OUT_BAR);
+   
    or2$ BR_DRIVER(BR, BR_STATE, PEND_BR);
    wire [2:0] 		    amnt_decr;
    wire [15:0] 		    current_size, current_size_in, next_size;
@@ -164,8 +169,8 @@ module mem_bus_controller(//interface with bus
       tristate_bus_driver32$ IO_HIGH [3:0] (RW_OUT, write_data_shifted, MEM_INOUT[255:128]);
 
    //DRIVING THE DESTINATION WIRE
-   and2$ IC_DEST_DRIVER(DEST_OUT_IC, CTRL_TRI_EN, RD_SRC[0] );
-   and2$ DC_DEST_DRIVER(DEST_OUT_DC, CTRL_TRI_EN, RD_SRC[1] );
+   and2$ IC_DEST_DRIVER(DEST_OUT_IC, DEST_OUT, RD_SRC[0] );
+   and2$ DC_DEST_DRIVER(DEST_OUT_DC, DEST_OUT, RD_SRC[1] );
    
 
    

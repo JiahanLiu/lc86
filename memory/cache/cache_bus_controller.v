@@ -43,11 +43,24 @@ module cache_bus_controller(//interface with bus
 
 
    //GENERATE CTRL SIGNALS
-   gen_ctrl_bus gen_ctrl_bus_u(current_state, CTRL_TRI_EN, D_TRI_EN, ACK_OUT, BR, SIZE_DECR, RD_BUS_CTRL);
+   gen_ctrl_bus gen_ctrl_bus_u(current_state, CTRL_TRI_EN, D_TRI_EN, ACK_OUT_BAR, BR, SIZE_DECR, RD_BUS_CTRL);
    //TRI_EN is active low!
-   inv1$ (DEST_OUT, CTRL_TRI_EN);   
+   inv1$ DEST_DRIVER (DEST_OUT, CTRL_TRI_EN);
+   inv1$ ACK_DRIVER (ACK_OUT, ACK_OUT_BAR);
+   
    wire 		    DONE;
-   ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MOD_EN, BG, ACK_IN, RW, DEST_IN, DONE);
+
+   //pending read latch
+   wire 		    UPD_EN;
+   wire 		    MOD_MASK_OUT, MOD_EN_MASK;
+   wire [6:0] 		    filler;
+   //updating the pending write latch when request initiated, and when writing/reading
+   or3$ UPD_EN_DRIVER(UPD_EN, current_state[2], current_state[3], current_state[5]);
+   
+   mux2$ MASK_SEL(MASK_IN, MOD_MASK_OUT, current_state[2], UPD_EN);   
+   ioreg8$ MASK_REG(BUS_CLK, {7'b0,MASK_IN},{filler, MOD_MASK_OUT}, {filler,MOD_EN_MASK},RST,SET);
+   and2$ MASKED_MOD_EN(MASKED_EN, MOD_EN_MASK, MOD_EN);
+   ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MASKED_EN, BG, ACK_IN, RW, DEST_IN, DONE);
    wire [2:0] 		    amnt_decr;
    wire [15:0] 		    current_size, current_size_in, next_size;
    assign next_size[15:12] = 0;

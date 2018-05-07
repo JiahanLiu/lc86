@@ -13,7 +13,7 @@ module arbitrator(input BUS_CLK,
    assign next_state[7:2] = 0;
    dff8$ state_reg(BUS_CLK, next_state, current_state, , CLR, PRE);
 
-   wire                        REQ, DONE;
+   wire                        REQ;
 
    or1_6way req_u(REQ, BR[0], BR[1], BR[2], BR[3], BR[4], BR[5]);
 
@@ -28,29 +28,33 @@ module arbitrator(input BUS_CLK,
 
      //GENERATE CONTROL SIGNALS
    wire                        switch_master;
-
    wire                        clr_master;
-
-   wire [7:0] 		       new_master;
-
    wire                        busy_switch, idle_2busy;
-
+   wire 		       DONE;
+   //generating if current master is done
+   wire [5:0]		       BR_BG_MASK;
+   wire 		       low_match, high_match;
+   and2$ masker [5:0] (BR_BG_MASK, BR, BG);
+   or3$ low_u(low_match, BR_BG_MASK[0], BR_BG_MASK[1], BR_BG_MASK[2]);
+   or3$ high_u(high_match, BR_BG_MASK[3], BR_BG_MASK[4], BR_BG_MASK[5]);
+   or2$ DONE_U(DONE, high_match, low_match);
+   
+   
+   //picking new master signals
    and3$ busy_u(busy_switch, current_state[1], REQ, DONE);
 
-   and2$ idle_u(idle_2busy, current_state[0], REQ_BAR);
+   and2$ idle_u(idle_2busy, current_state[0], REQ);
 
    or2$ switch_u(switch_master, busy_switch, idle_2busy);
 
    assign clr_master = REQ_BAR;
 
-      //TODO actually generate new_master value
-
 
       //REGISTERS FOR THE ARBITRATOR
-   wire [7:0] 		       current_master, next_master;
+   wire [7:0] 		       current_master, next_master, new_master;
 
    wire 		       mstr_clr;
-   pick_master(next_master, BR);
+   pick_master pick_master_u(new_master, BR);
    
    and2$ clr_u(mstr_clr, clr_master, CLR);
 
