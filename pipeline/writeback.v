@@ -73,7 +73,7 @@ module writeback (
    //internal wires
    wire CLK_NOT; 
    //operand_select_wb
-   wire [31:0] data1, saved_count; 
+   wire [31:0] data1; 
    //conditional_support_wb
    wire mux_not_taken_eip, wb_ld_gpr2;
    //validate_signals_wb
