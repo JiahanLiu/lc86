@@ -10,7 +10,7 @@ module arbitrator(input BUS_CLK,
    parameter IDLE = 8'b0000_0001, BUSY = 8'b0000_0010;
 
    wire [7:0] 		       current_state, next_state;
-
+   assign next_state[7:2] = 0;
    dff8$ state_reg(BUS_CLK, next_state, current_state, , CLR, PRE);
 
    wire                        REQ, DONE;
@@ -21,7 +21,7 @@ module arbitrator(input BUS_CLK,
 
    assign next_state[1] = REQ;
 
-   nor3$ idle_state(next_state[0], REQ, current_state[0], current_state[1]);
+   nor2$ idle_state(next_state[0], REQ, current_state[1]);
  
 
 

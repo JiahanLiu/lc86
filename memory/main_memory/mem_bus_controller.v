@@ -40,7 +40,12 @@ module mem_bus_controller(//interface with bus
 		  ST_RD = 8'b0010_0000;
    wire 		    BUS_CLK_DEL;
    assign #(0.5) BUS_CLK_DEL = BUS_CLK;
-   
+   //TODO: double check PENDING_BR
+   wire 		    PENDING_BR;
+   wire 		    DEST_IN;
+   or3$ any_dest_in(DEST_IN, DEST_IC, DEST_DC, DEST_DMA);
+   ctrler_gen_n_state gen_n_state_u(next_state, current_state,PENDING_BR, BG, ACK_IN, RW, DEST_IN, DONE);
+
 
 
    //GENERATE CTRL SIGNALS
@@ -48,12 +53,6 @@ module mem_bus_controller(//interface with bus
    //PEND_BR will be signalling well before we are in BR state
    wire 		    PEND_BR;
    or2$ BR_DRIVER(BR, BR_STATE, PEND_BR);
-   wire 		    DONE;
-   wire 		    DEST_IN;
-   and3$ any_dest_in(DEST_IN, DEST_IC, DEST_DC, DEST_DMA);
-	//TODO: double check PENDING_BR
-	wire PENDING_BR;
-	ctrler_gen_n_state gen_n_state_u(next_state, current_state,PENDING_BR, BG, ACK_IN, RW, DEST_IN, DONE);
    wire [2:0] 		    amnt_decr;
    wire [15:0] 		    current_size, current_size_in, next_size;
    assign next_size[15:12] = 0;
@@ -100,6 +99,9 @@ module mem_bus_controller(//interface with bus
    wire [15:0] 			    WR_A, WR_A_IN, RD_A, RD_A_IN;
    wire 			    UPD_WR_A, UPD_RD_A;
    //TODO: drive UPD values
+   assign UPD_WR_A = DONE;
+   assign UPD_RD_A = DONE;
+   
    mux16_2way WR_A_SEL(WR_A_IN, WR_A, A, UPD_WR_A);   
    ioreg16$ WR_ADDRESS(BUS_CLK, WR_A_IN, WR_A, , RST, SET);
    mux16_2way RD_A_SEL(RD_A_IN, RD_A, WR_A, UPD_RD_A);   
@@ -112,8 +114,9 @@ module mem_bus_controller(//interface with bus
    wire 			    UPD_WR_SRC, UPD_RD_SRC;
    wire [3:0]			    BUS_SRC;
    assign BUS_SRC = {1'b0, DEST_DMA, DEST_DC,  DEST_IC};
-   
-   //TODO: drive updates, and bus_src
+   assign UPD_WR_SRC = DONE;
+   assign UPD_RD_SRC = DONE;
+   //TODO: improve update logic   
    mux2$ WR_SRC_SEL [3:0] (WR_SRC_IN, WR_SRC, BUS_SRC, UPD_WR_SRC);
    mux2$ RD_SRC_SEL [3:0] (RD_SRC_IN, RD_SRC, WR_SRC, UPD_RD_SRC);
    ioreg8$ SRC_REG(BUS_CLK, {WR_SRC_IN, RD_SRC_IN},
@@ -128,7 +131,11 @@ module mem_bus_controller(//interface with bus
    mux4$ RD_SEL (RW_IN, RW_OUT, RW_OUT, 1'b0, 1'b1, UPD_RW, RW);
    wire 			    PEND_BR_IN;
    wire 			    UPD_PEND_BR;
-   assign UPD_PEND_BR = 0;//TODO: drive this value
+   assign UPD_PEND_BR = DONE;//TODO: drive this value
+   assign UPD_RW = DONE;
+   assign UPD_WR_SIZE = DONE;
+   assign UPD_RD_SIZE = DONE;
+   
    inv1$ PENDING_READ(PEND_RD, RW_OUT);
    mux2$ PEND_BR_SEL (PEND_BR_IN, PEND_BR, PEND_RD, UPD_PEND_BR);
    mux2$ WR_SIZE_SEL [2:0] (WR_SIZE_IN, WR_SIZE, BUS_SIZE, UPD_WR_SIZE);
@@ -234,8 +241,8 @@ ioreg16$ ioreg13 (CLK, DIN[223:208], Q_OUT[223:208], , CLR, PRE);
 ioreg16$ ioreg14 (CLK, DIN[239:224], Q_OUT[239:224], , CLR, PRE);
 ioreg16$ ioreg15 (CLK, DIN[255:240], Q_OUT[255:240], , CLR, PRE);
 
-shiftleft u_shifterleft1 (BUF_OUT[127:0], Q_OUT[127:0], shift_amount);
-shiftleft u_shifterleft2 (BUF_OUT[255:128], Q_OUT[255:128], shift_amount);
+//shiftleft u_shifterleft1 (BUF_OUT[127:0], Q_OUT[127:0], shift_amount);
+//shiftleft u_shifterleft2 (BUF_OUT[255:128], Q_OUT[255:128], shift_amount);
 
 // Connect DIO to buffer for read
 // in is buffer out and out is DATA_BUF

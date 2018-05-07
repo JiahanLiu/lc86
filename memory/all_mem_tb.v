@@ -69,6 +69,10 @@ module TOP;
     initial begin
        DC_EN = 1'b0;
        DC_A = 16'hB000;
+       DC_WR = 1'b0;
+       IC_EN = 1'b0;
+       IC_A = 16'hA000;
+       IC_WR = 1'b0;
        clk = 1'b0;
        rst = 1'b0;
        set = 1'b1;
@@ -78,7 +82,10 @@ module TOP;
         //u_bus_cntrl.state_reg.Q = 16'h0001;
         rst = 1'b1;
 
-  //     #(half_cycle-2)
+
+       #(clk_cycle -2)
+       DC_EN = 1'b1;
+         //     #(half_cycle-2)
     //    wr_size = 1'b1;
       //  size = 3'd4;
 

@@ -55,7 +55,8 @@ module  FULL_MEMORY(//lines between dcache bus controller and dcache
    wire       DMA_to_INTR, KBD_to_INTR;
    //Caches writing to IO
    wire       DC_to_DMA, DC_to_KBD;
-
+   assign DMA_to_MEM = 0;
+      
    //the arbitrator!
    assign BR[5:3] = 0;
    assign ACK_OUT[5:3] =0;
