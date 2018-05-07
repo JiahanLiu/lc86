@@ -65,11 +65,13 @@ module segment_limit_check (
    mag_comp32 mag_comp32_eip (EIP, {12'h000, `CS_LIMIT_REGISTER}, mag_comp32_eip_out, , );
    and2$ and_eip (and_eip_out, V, mag_comp32_eip_out);
 
-   wire [31:0] mux_cmps_limit_out;
+   wire [31:0] mux_cmps_limit_out, add_cmps_limit_out;
    mux8_32 mux_cmps_limit (mux_cmps_limit_out, {12'h000, `ES_LIMIT_REGISTER}, {12'h000, `CS_LIMIT_REGISTER}, 32'hFFFFFFFF, {12'h000, `DS_LIMIT_REGISTER}, {12'h000, `FS_LIMIT_REGISTER}, {12'h000, `GS_LIMIT_REGISTER}, 32'hFFFFFFFF, 32'hFFFFFFFF, CMPS_SEGID);
 
+   adder32_w_carry_in add_cmps_limit (add_cmps_limit_out, , mux_cmps_limit_out, mux_data_size_out, 1'b0);
+   
    wire cmps_exc_out, and_cmps_out;
-   mag_comp32 mag_comp32_cmps (CMPS_OFFSET, mux_cmps_limit_out, cmps_exc_out, , );
+   mag_comp32 mag_comp32_cmps (CMPS_OFFSET, add_cmps_limit_out, cmps_exc_out, , );
    and3$ and_cmps (and_cmps_out, cmps_exc_out, V, REPNE_V);
 
    or3$ or_exc (EXC, and_exc_out, and_eip_out, and_cmps_out);

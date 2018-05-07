@@ -65,7 +65,10 @@ module agen_stage2 (
    assign NCS_OUT = NCS;
    assign CONTROL_STORE_OUT = CONTROL_STORE;
 
-   assign A_OUT = A;
+   wire [31:0] mux_repne_base_out;
+   
+   mux2_32 mux_a_out (A_OUT, A, mux_repne_base_out, D2_REPNE_WB);
+   // assign A_OUT = A;
 
    wire [31:0] mux_b_out;
    mux2_32 mux_b (mux_b_out, B, 32'b1, CS_MUX_IMM1_AG);
@@ -93,7 +96,7 @@ module agen_stage2 (
 
    mux4_4 mux_neg_size (mux_neg_size_out, 4'b1111, 4'b1110, 4'b1100, , D2_MEM_SIZE_WB[0], D2_MEM_SIZE_WB[1]);
    mux4_4 mux_pos_size (mux_pos_size_out, 4'b0001, 4'b0010, 4'b0100, , D2_MEM_SIZE_WB[0], D2_MEM_SIZE_WB[1]);
-   mux2_32 mux_cmps_size (mux_cmps_size_out, {28'b0, mux_pos_size_out}, {28'b1, mux_neg_size_out}, EFLAGS_DF);
+   mux2_32 mux_cmps_size (mux_cmps_size_out, {28'b0, mux_pos_size_out}, {28'hFFF_FFFF, mux_neg_size_out}, EFLAGS_DF);
 
    wire [31:0] Qcmps_esi_addr, Qcmps_edi_addr;
    wire [31:0] add_esi_addr_out, add_edi_addr_out, mux_cmps_save_esi_addr_out, mux_cmps_save_edi_addr_out;
@@ -136,6 +139,10 @@ module agen_stage2 (
    assign cmps_src1_seg = Qcmps_src1_seg[2:0];
    assign cmps_src2_seg = Qcmps_src2_seg[2:0];
 
+//   wire [3:0] mux_a_size_out;
+//   mux4_4 mux_a_size (mux_a_size_out, 4'b0000, 4'b0001, 4'b0011, , D2_MEM_SIZE_WB[0], D2_MEM_SIZE_WB[1]);
+   
+//   adder32_w_carry_in add_a (add_a_out, , A, {28'b0, mux_a_size_out}, 1'b0);
    adder32_w_carry_in add_a (add_a_out, , A, mux_cmps_size_out, 1'b0);
 
    adder32_w_carry_in add_next_esi (add_next_esi_out, , Qcmps_esi, mux_cmps_size_out, 1'b0);
@@ -149,18 +156,20 @@ module agen_stage2 (
    reg32e$ reg_save_edi (CLK, mux_edi_out, Qcmps_edi, , RST, SET, CS_IS_CMPS_SECOND_UOP_ALL);
    reg32e$ reg_save_src2_segid (CLK, {29'b0, SEG1}, Qcmps_src2_seg, , RST, SET, CS_IS_CMPS_SECOND_UOP_ALL);
 
-   mux2_32 mux_cmps_base (mux_cmps_base_out, mux_esi_out, mux_edi_out, CS_IS_CMPS_SECOND_UOP_ALL);
+   mux2_32 mux_cmps_base (mux_cmps_base_out, Qcmps_esi, Qcmps_edi, CS_IS_CMPS_SECOND_UOP_ALL);
    mux2_3 mux_cmps_seg (mux_cmps_seg_out, cmps_src1_seg, cmps_src2_seg, CS_IS_CMPS_SECOND_UOP_ALL);
+   
+   mux2_32 mux_repne_base (mux_repne_base_out, A, mux_cmps_base_out, CS_REPNE_STEADY_STATE);
    mux2_3 mux_repne_seg (mux_repne_seg_out, SEG1, mux_cmps_seg_out, CS_REPNE_STEADY_STATE);
 
-   wire seg_limit_v_in;
-   inv1$ inv_exc_en_v (exc_en_v_bar, EXC_EN_V);
-   and2$ and_seg_limit_v_in(seg_limit_v_in, V, exc_en_v_bar);
+//   wire seg_limit_v_in;
+//   inv1$ inv_exc_en_v (exc_en_v_bar, EXC_EN_V);
+//   and2$ and_seg_limit_v_in(seg_limit_v_in, V, exc_en_v_bar);
 
    segment_limit_check u_seg_limit_check (
-      seg_limit_v_in, D2_MEM_RD_ME, D2_MEM_WR_WB, CS_MUX_MEM_RD_ADDR_AG, CS_MUX_MEM_WR_ADDR_AG,
+      V, D2_MEM_RD_ME, D2_MEM_WR_WB, CS_MUX_MEM_RD_ADDR_AG, CS_MUX_MEM_WR_ADDR_AG,
       SEG1, D2_MEM_SIZE_WB, ADD_BASE_DISP, SIB_SI_DATA, EIP,
-      D2_REPNE_WB, mux_cmps_base_out, mux_repne_seg_out,
+      D2_REPNE_WB, mux_repne_base_out, mux_repne_seg_out,
 
       SEG_LIMIT_EXC_EXIST_OUT
    );
