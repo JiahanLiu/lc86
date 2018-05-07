@@ -11,7 +11,7 @@ module operand_select_wb(
 	output [31:0] data1,
 	output [31:0] WB_Final_EIP,
 	output [15:0] WB_Final_CS,
-	output [31:0] count,
+	output [31:0] saved_count,
 	input CLK, 
 	input PRE,
 	input CLR,
@@ -42,6 +42,8 @@ module operand_select_wb(
 	wire [31:0] temp_cs_reg_out;
 	reg32e$ u_temp_ncs (CLK, {16'h0000,WB_NCS}, temp_cs_reg_out, , CLR, PRE, CS_SAVE_NCS_WB);
 	assign temp_ncs = temp_cs_reg_out[15:0];
+
+	reg32e$ u_save_count(CLK, WB_RESULTS_C, saved_count, ,CLR, PRE, CS_IS_CMPS_FIRST_UOP_ALL);
 
 	wire [31:0] post_mux1_data1; 
 	mux32_2way u_mux1_data1_pre(post_mux1_data1, WB_RESULT_A, current_flags, CS_PUSH_FLAGS_WB);

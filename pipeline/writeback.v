@@ -63,7 +63,7 @@ module writeback (
    output wb_v_branch_taken,
    
    output [31:0] flags_dataforwarded,
-   output [31:0] count_dataforwarded
+   output [31:0] saved_count
    );
 
   //control signals
@@ -73,7 +73,7 @@ module writeback (
    //internal wires
    wire CLK_NOT; 
    //operand_select_wb
-   wire [31:0] data1, count; 
+   wire [31:0] data1, saved_count; 
    //conditional_support_wb
    wire mux_not_taken_eip, wb_ld_gpr2;
    //validate_signals_wb
@@ -89,7 +89,7 @@ module writeback (
    wire In_write_ready_not;
 
    inv1$ not_clk(CLK_NOT, CLK);
-   operand_select_wb u_operand_select_wb(data1, WB_Final_EIP, WB_Final_CS, count, CLK, PRE, CLR,
+   operand_select_wb u_operand_select_wb(data1, WB_Final_EIP, WB_Final_CS, saved_count, CLK, PRE, CLR,
       CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_CMPS_SECOND_UOP_ALL, CS_SAVE_NEIP_WB, CS_SAVE_NCS_WB,
       CS_PUSH_FLAGS_WB, CS_USE_TEMP_NEIP_WB, mux_not_taken_eip, CS_USE_TEMP_NCS_WB, WB_RESULT_A, WB_RESULT_C, WB_NEIP,
       WB_NEIP_NOT_TAKEN, WB_NCS, final_out_flags);
@@ -152,7 +152,6 @@ module writeback (
    and2$ u_wb_v_branch_taken(wb_v_branch_taken, wb_branch_taken, WB_V);
    //dataforward
    assign flags_dataforwarded = final_out_flags;
-   assign count_dataforwarded = count;
 
    assign WB_Final_DR3_datasize = 2'b10; 
 

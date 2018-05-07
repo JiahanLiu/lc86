@@ -16,8 +16,10 @@
 `define macro_check_pointer_length 2'b10 
 
 `define default_mem_Value 64'h0000_0000_0000_0092
+`define default_mem_Value2 64'h0000_0000_0000_0093
 `define default_reg_base_macro 32'h02
 `define default_reg_EAX_32 ((`default_reg_base_macro) + ((`default_reg_base_macro) << 8) + ((`default_reg_base_macro ) << 16) + ((`default_reg_base_macro) << 24)) 
+`define default_reg_ECX_32 ((`default_reg_base_macro + 3'b001) + ((`default_reg_base_macro + 3'b001) << 8) + ((`default_reg_base_macro + 3'b001) << 16) + ((`default_reg_base_macro + 3'b001) << 24)) 
 `define default_reg_ESI_32 ((`default_reg_base_macro + 3'b110) + ((`default_reg_base_macro + 3'b110) << 8) + ((`default_reg_base_macro + 3'b110) << 16) + ((`default_reg_base_macro + 3'b110) << 24)) 
 `define default_reg_EDI_32 ((`default_reg_base_macro + 3'b111) + ((`default_reg_base_macro + 3'b111) << 8) + ((`default_reg_base_macro + 3'b111) << 16) + ((`default_reg_base_macro + 3'b111) << 24)) 
 `define default_reg_EX_B_32 ((`default_reg_base_macro + `default_modrm_reg_opcode) + ((`default_reg_base_macro + `default_modrm_reg_opcode) << 8) + ((`default_reg_base_macro + `default_modrm_reg_opcode) << 16) + ((`default_reg_base_macro + `default_modrm_reg_opcode) << 24)) 
@@ -40,42 +42,42 @@
 
 `define if_check_op_a 1'b1
 `define if_check_op_b 1'b1
-`define if_check_op_c 1'b0
+`define if_check_op_c 1'b1
 `define if_check_aluk 1'b1
 `define check_opA_uop1 (`default_mem_Value) //check values
 `define check_opB_uop1 (`default_reg_ESI_32) 
-`define check_opA_uop2 (`default_mem_Value)
+`define check_opA_uop2 (`default_mem_Value2)
 `define check_opB_uop2 (`default_reg_EDI_32)
 `define check_internal_b (`default_mem_Value)
-`define check_opC (`default_reg_EX_B_32)
+`define check_opC (`default_reg_ECX_32)
 `define check_aluk 3'b110
 `define alu_result (check_opB - check_opA)
 
 `define if_check_data1 1'b1
 `define if_check_data2 1'b1
-`define if_check_data3 1'b0
+`define if_check_data3 1'b1
 `define if_check_dr1 1'b1
 `define if_check_dr2 1'b1
-`define if_check_dr3 1'b0
+`define if_check_dr3 1'b1
 `define if_check_flags 1'b1
 `define if_check_datasize 1'b1 
 `define check_ld_gpr1 1'b1 //check values
 `define check_ld_gpr2 1'b1
-`define check_ld_gpr3 1'b0
+`define check_ld_gpr3 1'b1
 `define check_data1 (`default_reg_ESI_32 + 1)
 `define check_data2 (`default_reg_EDI_32 + 1)
-`define check_data3 32'h0
+`define check_data3 (`default_reg_ECX_32 - 1)
 `define check_dr1 3'b110
 `define check_dr2 3'b111
-`define check_dr3 3'b000
-`define produced_flags 32'h055
+`define check_dr3 3'b001
+`define produced_flags 32'h084
 `define check_datasize `macro_check_length
 
 `define if_check_mm_data 1'b0
 `define which_check_eip 1'b0 //0 for eip + instr length, 1 for other
 `define if_check_cs 1'b0
 `define check_ld_mm 1'b0 //check values
-`define check_ld_eip 1'b1
+`define check_ld_eip 1'b0
 `define check_ld_cs 1'b0
 `define check_ld_seg 1'b0
 `define check_mm_data 64'h0
@@ -699,6 +701,7 @@ module TOP;
 /*************************** UOP1EX/UOP2ME2 ******************************/
             #(clk_cycle-1);
             #1;    // Allow for setup time
+            u_pipeline.debug_memory = `default_mem_Value2;
 
             tb_opA = `check_opA_uop1; 
             if(2'b00 === `macro_check_length) begin

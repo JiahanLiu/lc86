@@ -52,7 +52,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
     wire wb_stall;
     wire wb_branch_taken;
     //Dataforwarded, currently for daa
-    wire [31:0] flags_dataforwarded, count_dataforwarded;
+    wire [31:0] flags_dataforwarded, saved_count;
    //debug
    reg [63:0] debug_memory; 
     reg [15:0] debug_cs_in;
@@ -1346,7 +1346,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
         wb_repne_terminate_all,
 
         flags_dataforwarded,
-        count_dataforwarded,
+        saved_count,
 
         WB_V_next,
         WB_NEIP_next, 
@@ -1559,7 +1559,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
         wb_branch_taken, 
 
         flags_dataforwarded,
-        count_dataforwarded
+        saved_count
     );
 
 endmodule

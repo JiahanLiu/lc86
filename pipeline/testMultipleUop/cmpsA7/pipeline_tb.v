@@ -942,6 +942,8 @@ module TOP;
               $display("Error: alu32_result is: %h, but needs to be: %h at time: %d", tb_alu_result, `alu_result, $time);
               error <= 1;
             end
+            $display("Force: alu32_result is: %h, but needs to be: %h at time: %d", tb_alu_result, `alu_result, $time);
+              
 
 
 /*************************** UOP2WB ******************************/
