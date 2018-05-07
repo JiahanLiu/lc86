@@ -14,8 +14,8 @@ module TOP;
 //the clk cycle used to drive the entire system
    reg clk, clr, pre;
    reg [127:0] IR;
-   integer clk_cycle = 20;
-   integer half_cycle = 10;
+   integer clk_cycle = 12;
+   integer half_cycle = 6;
 
    // Signals for testbench loop
    integer file, char, retval, lineno, cntErrors;
@@ -312,10 +312,10 @@ module TOP;
         $readmemh("./ram_list/dcache.list", u_pipeline.u_dcache.data_u.data_line3.ram9.mem);
         $readmemh("./ram_list/dcache.list", u_pipeline.u_dcache.data_u.data_line3.ram10.mem);
         $readmemh("./ram_list/dcache.list", u_pipeline.u_dcache.data_u.data_line3.ram11.mem);
-        $readmemh("./ram_list/dcache.list", u_pipeline.u_dcache.data_u.data_line3.ram12.mem);
-        $readmemh("./ram_list/dcache.list", u_pipeline.u_dcache.data_u.data_line3.ram13.mem);
-        $readmemh("./ram_list/dcache.list", u_pipeline.u_dcache.data_u.data_line3.ram14.mem);
-        $readmemh("./ram_list/dcache.list", u_pipeline.u_dcache.data_u.data_line3.ram15.mem);
+        $readmemh("./ram_list/dcache1.list", u_pipeline.u_dcache.data_u.data_line3.ram12.mem);
+        $readmemh("./ram_list/dcache2.list", u_pipeline.u_dcache.data_u.data_line3.ram13.mem);
+        $readmemh("./ram_list/dcache3.list", u_pipeline.u_dcache.data_u.data_line3.ram14.mem);
+        $readmemh("./ram_list/dcache4.list", u_pipeline.u_dcache.data_u.data_line3.ram15.mem);
 
         $readmemh("./ram_list/tag_ram1.list", u_pipeline.u_dcache.tagstore_u.u_tag_ram0.mem);
         $readmemh("./ram_list/tag_ram2.list", u_pipeline.u_dcache.tagstore_u.u_tag_ram1.mem);

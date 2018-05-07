@@ -58,7 +58,9 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire WB_EXC_V_OUT;
    wire WB_FLUSH_PIPELINE_BAR;
    wire INTERRUPT_SIGNAL = 1'b0; // TODO where does it come from
- 
+   wire INTERRUPT_SIGNAL_BAR; 
+   inv1$ inv_int_signal (INTERRUPT_SIGNAL_BAR, INTERRUPT_SIGNAL);
+
    wire WB_GEN_PROT_EXC_EXIST_V, WB_PAGE_FAULT_EXC_EXIST_V;
 
    wire JMP_FLUSH, JMP_FLUSH_BAR;
@@ -1639,6 +1641,8 @@ module PIPELINE(CLK, CLR, PRE, IR);
 	EX_JMP_STALL_OUT, EX_V_LD_DF_OUT // nelson added
     );
 
+   wire wb_mispredict_taken_all_out;
+
    // ADDRESSES FOR WRITING BACK TO MEMORY -- Nelson added
    // TODO: LD_WB = !MEM_WR_STALL
    wire LD_WB;
@@ -1648,7 +1652,18 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire or_wb_exc_out, and_wb_exc_v_out, nor_wb_v_out;
    wire EX_OUT_WB_V_IN;
    wire WB_PS_PAGE_FAULT_EXC_EXIST, WB_PS_GPROT_EXC_EXIST, WB_PS_EXC_EN_V;
-   
+
+   wire [31:0] Qwb_halt_all;
+   wire mux_halt_all_out;
+
+   wire clr_halt;
+   and2$ and_halt_clr (clr_halt, CLR, INTERRUPT_SIGNAL_BAR);
+
+   reg32e$ reg_halt (CLK, {31'b0, wb_halt_all}, Qwb_halt_all, , clr_halt, PRE, wb_halt_all);
+   mux2$ mux_halt_all (mux_halt_all_out, wb_halt_all, Qwb_halt_all[0], Qwb_halt_all[0]);
+
+   or2$ or_halt (wb_mispredict_taken_all, wb_mispredict_taken_all_out, mux_halt_all_out);
+
    // wb_repne_terminate_all = WB_V && termination_conditions && IS_SECOND_UOP && wb_repne
    or2$ or_wb_exc (or_wb_exc_out, WB_PS_PAGE_FAULT_EXC_EXIST, WB_PS_GPROT_EXC_EXIST);
    and2$ and_wb_ints_v (and_wb_exc_v_out, WB_V, or_wb_exc_out);
@@ -1839,7 +1854,7 @@ module PIPELINE(CLK, CLR, PRE, IR);
         wb_halt_all,
         wb_repne_terminate_all,
         WB_stall,
-	wb_mispredict_taken_all,
+	wb_mispredict_taken_all_out,
 
         flags_dataforwarded,
         count_dataforwarded
