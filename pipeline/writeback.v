@@ -71,6 +71,7 @@ module writeback (
   `include "./control_store/control_store_signals.v"
 
    //internal wires
+   wire CLK_NOT; 
    //operand_select_wb
    wire [31:0] data1, count; 
    //conditional_support_wb
@@ -86,6 +87,8 @@ module writeback (
    wire [63:0] data1_64; //64 because dcache data-in port is 64 bits incase the input is mm 
    //stall
    wire In_write_ready_not;
+
+   inv1$ not_clk(CLK_NOT, CLK);
    operand_select_wb u_operand_select_wb(data1, WB_Final_EIP, WB_Final_CS, count, CLK, PRE, CLR,
       CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_CMPS_SECOND_UOP_ALL, CS_SAVE_NEIP_WB, CS_SAVE_NCS_WB,
       CS_PUSH_FLAGS_WB, CS_USE_TEMP_NEIP_WB, mux_not_taken_eip, CS_USE_TEMP_NCS_WB, WB_RESULT_A, WB_RESULT_C, WB_NEIP,
@@ -110,7 +113,7 @@ module writeback (
    repne_halt_wb u_repne_halt_wb(wb_halt_all, wb_repne_terminate_all, WB_V, CS_IS_HALT_WB, CS_IS_CMPS_SECOND_UOP_ALL,
       WB_d2_repne_wb, final_out_flags, WB_RESULT_C);
 
-   flags_wb u_flags_wb(final_out_flags, CLK, v_cs_ld_flags, CS_POP_FLAGS_WB, 
+   flags_wb u_flags_wb(final_out_flags, CLK_NOT, CLR, PRE, v_cs_ld_flags, CS_POP_FLAGS_WB, 
       CS_FLAGS_AFFECTED_WB, WB_FLAGS, WB_RESULT_A);
 
    dr_select_wb u_dr_select_wb(WB_Final_DR1, WB_Final_DR2, CS_IS_CMPS_SECOND_UOP_ALL, 

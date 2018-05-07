@@ -8,3 +8,7 @@ sarD2
 Error: WB_Final_Dcache_Data is: 00000000000000fd, but needs to be: 00000000000000bd
 sarD3
 Error: WB_Final_Dcache_Data is: 00000000f21579bd, but needs to be: 00000000121579bd
+xchg86
+Error: WB_Final_data1 is: 00000092, but needs to be: 00000000
+xchg87
+Error: WB_Final_data1 is: 92929292, but needs to be: 00000000

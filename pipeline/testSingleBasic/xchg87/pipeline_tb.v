@@ -43,7 +43,7 @@
 `define check_opB (`default_reg_EX_B_32)
 `define check_aluk 3'b000
 
-`define if_check_data1 1'b1
+`define if_check_data1 1'b0
 `define if_check_data2 1'b1
 `define if_check_data3 1'b0
 `define if_check_dr1 1'b0
@@ -54,7 +54,7 @@
 `define check_ld_gpr1 1'b0 //check values
 `define check_ld_gpr2 1'b1
 `define check_ld_gpr3 1'b0
-`define check_data1 32'h0
+`define check_data1 `check_opB
 `define check_data2 `check_opA
 `define check_data3 32'h0
 `define check_dr1 3'b000

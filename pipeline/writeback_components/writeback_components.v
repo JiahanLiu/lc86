@@ -205,15 +205,15 @@ endmodule // repne_halt_wb
 //
 module flags_wb(
 	output [31:0] final_out_flags,
-	input CLK, 
+	input CLK_NOT,
+	input CLR,
+	input PRE,  
 	input v_cs_ld_flags_wb,
 	input CS_POP_FLAGS_WB,
 	input [6:0] CS_FLAGS_AFFECTED_WB,
 	input [31:0] WB_FLAGS,
 	input [31:0] WB_RESULT_A
 	);
-
-	reg overwrite_ld_flags;
 
 	wire [31:0] prev_flags, calculated_flags, interrupt_flags, final_flags; 
 	wire [31:0] and_flags_top, and_flags_bottom;
@@ -224,7 +224,7 @@ module flags_wb(
 	or32_2way u_or_flags(interrupt_flags, and_flags_top, and_flags_bottom);
 
 	//store previous flags
-	reg32e$ u_flags_register(.CLK(CLK), .Din(final_flags), .Q(prev_flags), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(overwrite_ld_flags));
+	reg32e$ u_flags_register(.CLK(CLK_NOT), .Din(final_flags), .Q(prev_flags), .QBAR(), .CLR(CLR), .PRE(PRE), .en(v_cs_ld_flags_wb));
 	//reg32e$ u_flags_register(.CLK(CLK), .Din(internal_current_flags), .Q(prev_flags), .QBAR(), .CLR(1'b1), .PRE(1'b1), .en(v_cs_ld_flags_wb));
 	//module reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
 
