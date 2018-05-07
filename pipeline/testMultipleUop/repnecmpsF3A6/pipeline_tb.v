@@ -767,6 +767,39 @@ module TOP;
               end
             end
 
+            tb_opC = `check_opC; 
+            if(2'b00 === `macro_check_length) begin
+              check_opC[7:0] = tb_opC[7:0];
+              correct_opC[7:0] = u_pipeline.EX_C[7:0];
+              if(1'b1 === `macro_sign_extend) begin
+                check_opC[31:8] = {24{tb_opC[7]}};
+                correct_opC[31:8] = u_pipeline.EX_C[31:8];
+              end else begin 
+                check_opC[31:8] = 0;
+                correct_opC[31:8] = 0;
+              end
+            end else if(2'b01 === `macro_check_length) begin
+              check_opC[15:0] = tb_opC[15:0];
+              correct_opC[15:0] = u_pipeline.EX_C[15:0];
+              if(1'b1 === `macro_sign_extend) begin
+                check_opC[31:16] = {16{tb_opC[15]}};
+                correct_opC[31:16] = u_pipeline.EX_C[31:16];
+              end else begin
+                check_opC[31:16] = 0;
+                correct_opC[31:16] = 0;
+              end 
+            end else if(2'b10 === `macro_check_length) begin
+              check_opC = tb_opC; 
+              correct_opC = u_pipeline.EX_C;
+            end
+            if(1'b1 === `if_check_op_c) begin
+              if(correct_opC !== check_opC) begin 
+                $display("Error: EX_C is: %h, but needs to be: %h at time: %d", correct_opC, check_opC, $time);
+                error <= 1;
+              end
+            end
+
+
           
 /*************************** UOP1WB/UOP2EX ******************************/
             #(clk_cycle-1);
@@ -867,40 +900,6 @@ module TOP;
                 error <= 1;
               end
             end       
-
-            tb_opC = `check_opC; 
-            if(2'b00 === `macro_check_length) begin
-              check_opC[7:0] = tb_opC[7:0];
-              correct_opC[7:0] = u_pipeline.EX_C[7:0];
-              if(1'b1 === `macro_sign_extend) begin
-                check_opC[31:8] = {24{tb_opC[7]}};
-                correct_opC[31:8] = u_pipeline.EX_C[31:8];
-              end else begin 
-                check_opC[31:8] = 0;
-                correct_opC[31:8] = 0;
-              end
-            end else if(2'b01 === `macro_check_length) begin
-              check_opC[15:0] = tb_opC[15:0];
-              correct_opC[15:0] = u_pipeline.EX_C[15:0];
-              if(1'b1 === `macro_sign_extend) begin
-                check_opC[31:16] = {16{tb_opC[15]}};
-                correct_opC[31:16] = u_pipeline.EX_C[31:16];
-              end else begin
-                check_opC[31:16] = 0;
-                correct_opC[31:16] = 0;
-              end 
-            end else if(2'b10 === `macro_check_length) begin
-              check_opC = tb_opC; 
-              correct_opC = u_pipeline.EX_C;
-            end
-            if(1'b1 === `if_check_op_c) begin
-              if(correct_opC !== check_opC) begin 
-                $display("Error: EX_C is: %h, but needs to be: %h at time: %d", correct_opC, check_opC, $time);
-                error <= 1;
-              end
-            end
-
-
            
             if(1'b1 === `if_check_aluk) begin
               if(u_pipeline.EX_d2_aluk_ex !== `check_aluk) begin 
