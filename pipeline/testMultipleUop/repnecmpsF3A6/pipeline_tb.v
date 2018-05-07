@@ -344,6 +344,13 @@ module TOP;
                j = j-1;
            end
 
+          if(prefix1 == 16'hF3) begin
+               prefix_present = 1;
+               prefix_size = 1;
+               IR[8*j +: 8] = prefix1;
+               j = j-1;
+           end
+
            if(opcode[15:8] == 8'h0F) begin
                j= j-1;
                IR[8*j +: 16] = opcode;
