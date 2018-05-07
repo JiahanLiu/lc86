@@ -12,7 +12,7 @@
 `define flags_affected ({`OF_affected, `DF_affected, 2'b0, `SF_affected, `ZF_affected, 1'b0, `AF_affected, 1'b0, `PF_affected, 1'b0, `CF_affected})
 
 `define macro_sign_extend 1'b0
-`define macro_check_length 2'b10 
+`define macro_check_length 2'b11 
 `define macro_check_pointer_length 2'b10 
 
 `define default_mem_Value 64'h0000_0055_0000_0FD0
@@ -23,7 +23,7 @@
 `define default_reg_EDI_32 ((`default_reg_base_macro + 3'b111) + ((`default_reg_base_macro + 3'b111) << 8) + ((`default_reg_base_macro + 3'b111) << 16) + ((`default_reg_base_macro + 3'b111) << 24)) 
 `define default_reg_EX_B_32 ((`default_reg_base_macro + `default_modrm_reg_opcode) + ((`default_reg_base_macro + `default_modrm_reg_opcode) << 8) + ((`default_reg_base_macro + `default_modrm_reg_opcode) << 16) + ((`default_reg_base_macro + `default_modrm_reg_opcode) << 24)) 
 `define default_reg_base_32 ((`default_reg_base_macro + `default_modrm_rm) + ((`default_reg_base_macro + `default_modrm_rm) << 8) + ((`default_reg_base_macro + `default_modrm_rm) << 16) + ((`default_reg_base_macro + `default_modrm_rm) << 24))
-`define default_eip 32'h1 
+`define default_eip 32'h81 
 `define default_cs 32'h22 
 `define default_ss ((`default_reg_base_macro + 3'b010) + ((`default_reg_base_macro + 3'b010) << 8))
 `define default_flags 32'h004
@@ -41,7 +41,7 @@
 
 `define if_check_op_a_uop1 1'b0
 `define if_check_op_b_uop1 1'b0
-`define if_check_op_a_uop2 1'b1
+`define if_check_op_a_uop2 1'b0
 `define if_check_op_b_uop2 1'b0
 `define if_check_op_c 1'b1
 `define if_check_aluk 1'b0
@@ -49,7 +49,7 @@
 `define check_opB_uop1 (`default_reg_ESI_32) 
 `define check_opA_uop2 (`default_mem_Value)
 `define check_opB_uop2 (`default_reg_EDI_32)
-`define check_opC (`default_reg_ESP_32 + 8)
+`define check_opC (`default_reg_ESP_32 - 12)
 `define check_aluk 3'b110
 `define alu_result (check_opB - check_opA)
 
@@ -59,14 +59,14 @@
 `define if_check_dr1 1'b0
 `define if_check_dr2 1'b0
 `define if_check_dr3 1'b1
-`define if_check_flags 1'b1
+`define if_check_flags 1'b0
 `define if_check_datasize 1'b1 
 `define check_ld_gpr1 1'b0 //check values
 `define check_ld_gpr2 1'b0
 `define check_ld_gpr3 1'b1
 `define check_data1 (`default_reg_ESI_32 + 4)
 `define check_data2 (`default_reg_EDI_32 + 4)
-`define check_data3 (`default_reg_ESP_32 + 12)
+`define check_data3 (`default_reg_ESP_32 - 12)
 `define check_dr1 3'b110
 `define check_dr2 3'b111
 `define check_dr3 3'b100
@@ -80,15 +80,15 @@
 `define check_ld_eip 1'b1
 `define check_ld_cs 1'b1
 `define check_ld_seg 1'b0
-`define check_mm_data 64'h0
+`define check_mm_data 64'h0000_0022_0000_0081
 `define taken_eip 32'h0FD0
 `define check_cs 16'h55
 
-`define if_check_dcachedata 1'b0
-`define if_check_address 1'b0
-`define check_ld_dcache 1'b0 //check values
-`define check_dcache_data (`check_opC)
-`define check_address ((`default_ss << 16) + (`default_reg_base_32 + `default_big_endian_dis))
+`define if_check_dcachedata 1'b1
+`define if_check_address 1'b1
+`define check_ld_dcache 1'b1 //check values
+`define check_dcache_data (64'h0000_0022_0000_0081)
+`define check_address ((`default_ss << 16) + (`default_reg_ESP_32 - 12))
 
 module TOP;
 //this module is used to debug the basic functionality of the simulator
@@ -1128,7 +1128,9 @@ module TOP;
                 $display("Error: WB_Final_Dcache_Data is: %h, but needs to be: %h at time: %d", correct_dcache_data, check_dcache_data, $time);
                 error <= 1;
               end
-            end       
+            end  
+            $display("Force: WB_Final_Dcache_Data is: %h, but needs to be: %h at time: %d", correct_dcache_data, check_dcache_data, $time);
+                     
 
             if(1'b1 === `if_check_address) begin
               if(u_pipeline.WB_Final_Dcache_Address !== `check_address) begin 
@@ -1143,7 +1145,7 @@ module TOP;
             if(u_pipeline.WB_Final_Dcache_Write !== `check_ld_dcache) begin 
               $display("Error: WB_Final_Dcache_Write is: %h, but needs to be: %h at time: %d", u_pipeline.WB_Final_Dcache_Write, `check_ld_dcache, $time);
               error <= 1;
-            end
+            end    
 
             #5
             if(1'b1 === `if_check_flags) begin
