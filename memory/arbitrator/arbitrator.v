@@ -21,7 +21,8 @@ module arbitrator(input BUS_CLK,
 
    assign next_state[1] = REQ;
 
-   assign next_state[0] = REQ_BAR;
+   nor3$ idle_state(next_state[0], REQ, current_state[0], current_state[1]);
+ 
 
 
 
@@ -49,13 +50,15 @@ module arbitrator(input BUS_CLK,
    wire [7:0] 		       current_master, next_master;
 
    wire 		       mstr_clr;
-
+   pick_master(next_master, BR);
+   
    and2$ clr_u(mstr_clr, clr_master, CLR);
 
    mux2_8$ mstr_sel(next_master, current_master, new_master, switch_master);
 
    dff8$ current_mstr(BUS_CLK, next_master, current_master, , CLR, PRE);
-
+   assign BG = current_master[5:0];
+   
    //EASY TASK UNIFYING ALL REQUESTS
    or1_6way ACK_UNIFIER(BUS_ACK, CNTRLR_ACK[0], CNTRLR_ACK[1], CNTRLR_ACK[2],
      CNTRLR_ACK[3], CNTRLR_ACK[4], CNTRLR_ACK[5]);
@@ -63,6 +66,25 @@ module arbitrator(input BUS_CLK,
 
 
    endmodule // arbitrator
+//priority of requests
+//MEM is most impt
+//Then DCACHE
+//THen ICACHE
+//then KBD
+//then DMA
+module  pick_master(output [7:0] next_master,
+		    input [5:0] bus_reqs);
+   assign next_master[7:3] = 0;
+   wire [5:0] 			bus_reqs_bar;
+   inv1$ bus_reqs_bar_u [5:0] (bus_reqs_bar, bus_reqs);
+   assign next_master[2] = bus_reqs[2];
+   and2$ dcache_g(next_master[1], bus_reqs[1], bus_reqs_bar[2]);
+   and3$ icache_g(next_master[0], bus_reqs[0], bus_reqs_bar[1], bus_reqs_bar[2]);
+   
+   
+
+
+endmodule // pick_master
 
 
 

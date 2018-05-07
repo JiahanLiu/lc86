@@ -8,13 +8,18 @@
 ../pipeline/common/basic_components/equality.v
 ../pipeline/common/basic_components/muxes.v
 ../pipeline/common/basic_components/logic_gates.v
+../pipeline/common/basic_components/decoder.v
+../pipeline/common/functional_units/shift_components.v
 ../pipeline/common.v
 ./bus/bus_controller.v
 ./arbitrator/arbitrator.v
 ./cache/cache_bus_controller.v
 ./main_memory/mem_bus_controller.v
+./main_memory/main_memory.v
 ./DMA/dma_bus_controller.v
 ./keyboard/kbd_bus_controller.v
 ./interrupt/intr_bus_controller.v
 ./all_mem.v
+./all_mem_tb.v
+
 

@@ -127,7 +127,7 @@ module bus_controller(//interface with bus
    assign RW_TRI_IN = MOD_WR;
    assign ACK_TRI_IN = 1'b1;
    tristate_bus_driver1$ RW_TRI(RW_TRI_EN, RW_TRI_IN, RW);
-   tristate_bus_driver1$ ACK_TRI(ACK_TRI_EN, ACK_TRI_IN, ACK);
+   //tristate_bus_driver1$ ACK_TRI(ACK_TRI_EN, ACK_TRI_IN, ACK);
    
 
 endmodule // bus_controller
@@ -185,8 +185,9 @@ module ctrler_gen_n_state(
 
 	and2$ u_s4_RW1(s4_RW, current_state[4], RW);
 	and2$ u_s5_DONEnot(s5_DONEnot, current_state[5], DONE_not);
-
-	or1_5way u_s0(next_state[0], s4_RWnot, s3_DONE, s2_ACK_RWnot, s0_ENnot, s5_Done);
+   wire      idle_temp;
+   
+	or1_5way u_s0(idle_temp, s4_RWnot, s3_DONE, s2_ACK_RWnot, s0_ENnot, s5_Done);
 	or2$ u_s1(next_state[1], s0_EN_destusnot, s1_BGnot_destusnot);
 	or2$ u_s2(next_state[2], s1_BG, s2_ACKnot);
 	or2$ u_s3(next_state[3], s2_ACK_RW, s3_DONEnot);
@@ -194,6 +195,14 @@ module ctrler_gen_n_state(
 	or2$ u_s5(next_state[5], s4_RW, s5_DONEnot);
    assign next_state[6] = 0;
    assign next_state[7] = 0;
+   //if we are at all 0, then we will go to idle
+   wire      temp_or;
+   or3$ any_state (temp_or, next_state[5], next_state[4], next_state[3]);
+   nor3$ any_state_again(next_state[0], temp_or, next_state[2], next_state[1]);
+
+
+   
+   
    
 
 

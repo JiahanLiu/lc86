@@ -57,6 +57,8 @@ module  FULL_MEMORY(//lines between dcache bus controller and dcache
    wire       DC_to_DMA, DC_to_KBD;
 
    //the arbitrator!
+   assign BR[5:3] = 0;
+   assign ACK_OUT[5:3] =0;
    arbitrator arbitrator_u(BUS_CLK,
 		  RST, SET,
 		  BR,
@@ -76,8 +78,8 @@ module  FULL_MEMORY(//lines between dcache bus controller and dcache
 				    ACK_OUT[0],
 				    ACK_IN,
 				    //NEED TO MAKE MODULE HAVE DEST LOGIC
-				    DEST_OUT,
-				    DEST_IN,
+				    DC_to_MEM,
+				    MEM_to_DC,
 				    IC_EN,
 				    IC_WR,
 				    IC_A,
@@ -98,8 +100,8 @@ module  FULL_MEMORY(//lines between dcache bus controller and dcache
 				    ACK_OUT[1],
 				    ACK_IN,
 				    //NEED TO MAKE MODULE HAVE DEST LOGIC
-				    DEST_OUT,
-				    DEST_IN,
+				    IC_to_MEM,
+				    MEM_to_IC,
 				    DC_EN,
 				    DC_WR,
 				    DC_A,
@@ -128,11 +130,11 @@ module  FULL_MEMORY(//lines between dcache bus controller and dcache
 		      BG[2],
 		      ACK_OUT[2],
 		      ACK_IN,
-		      DEST_OUT_IC,
-		      DEST_OUT_DC,
-		      DEST_IC,
-		      DEST_DC,
-		      DEST_DMA,
+		      MEM_to_IC,
+		      MEM_to_DC,
+		      IC_to_MEM,
+		      DC_to_MEM,
+		      DMA_to_MEM,
 		      //interface with work unit
 			  MEM_A,
 			  MEM_WR, MEM_EN,

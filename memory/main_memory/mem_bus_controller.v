@@ -20,18 +20,11 @@ module mem_bus_controller(//interface with bus
 			  input DEST_DC,
 			  input DEST_DMA,
 		      //interface with work unit
-			  output [14:0] ADDR,
+			  output [14:0] MEM_ADDR,
 			  output MEM_WR, MEM_EN,
 			  output [2:0] WRITE_SIZE,
 			  inout [255:0] MEM_INOUT
 		      );
-
-   //TODO: logic for selecting which buffer to write too
-   //TODO: logic for done is more complex
-   //TODO: logic for initiating a write after read
-   //TODO: registers for saving address and size for each source
-
-
 
    
    //CURRENT STATE REG
@@ -51,31 +44,38 @@ module mem_bus_controller(//interface with bus
 
 
    //GENERATE CTRL SIGNALS
-   gen_ctrl_bus gen_ctrl_bus_u(current_state, CTRL_TRI_EN, D_TRI_EN, ACK_TRI_EN, BR_EN, SIZE_DECR, RD_BUS_CTRL);
+   gen_ctrl_bus gen_ctrl_bus_u(current_state, CTRL_TRI_EN, D_TRI_EN, ACK_OUT, BR_STATE, SIZE_DECR, RD_BUS_CTRL);
+   //PEND_BR will be signalling well before we are in BR state
+   wire 		    PEND_BR;
+   or2$ BR_DRIVER(BR, BR_STATE, PEND_BR);
    wire 		    DONE;
-   ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MOD_EN, BG, ACK_IN, RW, DEST_IN, DONE);
+   wire 		    DEST_IN;
+   and3$ any_dest_in(DEST_IN, DEST_IC, DEST_DC, DEST_DMA);
+	//TODO: double check PENDING_BR
+	wire PENDING_BR;
+	ctrler_gen_n_state gen_n_state_u(next_state, current_state,PENDING_BR, BG, ACK_IN, RW, DEST_IN, DONE);
    wire [2:0] 		    amnt_decr;
    wire [15:0] 		    current_size, current_size_in, next_size;
    assign next_size[15:12] = 0;
    size_decrement size_decrement_u(next_size[11:0], amnt_decr, DONE, current_size[11:0], A);
 
-
-   //REGISTERS FOR THE CONTROLLER
+   ////////////////////////////////
+   //REGISTERS FOR THE CONTROLLER//
+   ///////////////////////////////
+	
    //SIZE REGISTER: muxed between the decremented value or 16
    mux2_16$ mux_size_u(current_size_in, 16'h0010, next_size, SIZE_DECR);
    ioreg16$ size_reg(BUS_CLK, current_size_in, current_size, , RST, SET);
-
-   //DATA BUFFERS
    
    //WRITE DATA BUFFER
    wire [127:0] 		    data_buffer_bus, data_buffer_in, data_buffer_out;
    wire [3:0]			    SIZE_SELECT;
    wire [1:0] 			    next_size_bar;
+   wire [3:0] 			    RD_BUS;
    //as size goes down, buffer location goes up
    inv1$ siz_bar_u_0(next_size_bar[0], next_size[2]);
    inv1$ siz_bar_u_1(next_size_bar[1], next_size[3]);
    decoder2_4$ size_decode(next_size_bar, SIZE_SELECT, );
-   wire [3:0] 			    RD_BUS;
    and2$ rd_0(RD_BUS[0], SIZE_SELECT[0], RD_BUS_CTRL);
    and2$ rd_1(RD_BUS[1], SIZE_SELECT[1], RD_BUS_CTRL);
    and2$ rd_2(RD_BUS[2], SIZE_SELECT[2], RD_BUS_CTRL);
@@ -86,28 +86,87 @@ module mem_bus_controller(//interface with bus
    mux32_2way mux_u_2(data_buffer_in[95:64],data_buffer_out[95:64] , D, RD_BUS[2]);
    mux32_2way mux_u_3(data_buffer_in[127:96],data_buffer_out[127:96] , D, RD_BUS[3]);
    ioreg128$ write_data_buffer(BUS_CLK, data_buffer_in, data_buffer_out, , RST, SET);
-   assign MOD_READ_DATA = data_buffer_out;
    
    //READ DATA BUFFER
    wire [127:0] 		    rd_data_buffer_in, rd_data_buffer_out;
-   //READ BUFFER CAN TAKE LOW OF HIGH HALVE OF MEM_INOUT
-   //OR STAY THE SAME
+   wire 			    RD_BUF_EN;
+   //TODO: assign RD_BUF_EN
+   wire [14:0] 			    rd_address;
+   //TODO: assign rd_address
    mux4_128 rd_buf_sel(rd_data_buffer_in, rd_data_buffer_out, rd_data_buffer_out, MEM_INOUT[127:0], MEM_INOUT[127:0], RD_BUF_EN, rd_address[5]);
    ioreg128$ read_data_buffer(BUS_CLK, rd_data_buffer_in, rd_data_buffer_out, , RST, SET);
    
+   //addresses
+   wire [15:0] 			    WR_A, WR_A_IN, RD_A, RD_A_IN;
+   wire 			    UPD_WR_A, UPD_RD_A;
+   //TODO: drive UPD values
+   mux16_2way WR_A_SEL(WR_A_IN, WR_A, A, UPD_WR_A);   
+   ioreg16$ WR_ADDRESS(BUS_CLK, WR_A_IN, WR_A, , RST, SET);
+   mux16_2way RD_A_SEL(RD_A_IN, RD_A, WR_A, UPD_RD_A);   
+   ioreg16$ RD_ADDRESS(BUS_CLK, RD_A_IN, RD_A, , RST, SET);
+   assign MEM_ADDR = WR_A[14:0];
+   
 
+   //source registers
+   wire [3:0] 			    WR_SRC, WR_SRC_IN, RD_SRC, RD_SRC_IN;
+   wire 			    UPD_WR_SRC, UPD_RD_SRC;
+   wire [3:0]			    BUS_SRC;
+   assign BUS_SRC = {1'b0, DEST_DMA, DEST_DC,  DEST_IC};
+   
+   //TODO: drive updates, and bus_src
+   mux2$ WR_SRC_SEL [3:0] (WR_SRC_IN, WR_SRC, BUS_SRC, UPD_WR_SRC);
+   mux2$ RD_SRC_SEL [3:0] (RD_SRC_IN, RD_SRC, WR_SRC, UPD_RD_SRC);
+   ioreg8$ SRC_REG(BUS_CLK, {WR_SRC_IN, RD_SRC_IN},
+		   {WR_SRC, RD_SRC},, RST, SET);
 
-   //DONE BUFFER FOR MAIN UNIT
-   wire [7:0] 			    MOD_DONE_IN, MOD_DONE_OUT;
-   mux2_8$ READY_SEL(MOD_DONE_IN, 8'b0, 8'HFF, DONE);
-   assign 		       MOD_R = MOD_DONE_OUT[0];
-   ioreg8$ READY_REG(BUS_CLK, MOD_DONE_IN, MOD_DONE_OUT, , RST, SET);
+   //size, reading, and pending_write here
+   wire [2:0] 			    WR_SIZE, WR_SIZE_IN, RD_SIZE, RD_SIZE_IN;
+   wire 			    UPD_WR_SIZE, UPD_RD_SIZE;
+   wire [2:0]			    BUS_SIZE;
+   wire  			    RD_IN, RW_OUT;
+   wire 			    UPD_RW;
+   mux4$ RD_SEL (RW_IN, RW_OUT, RW_OUT, 1'b0, 1'b1, UPD_RW, RW);
+   wire 			    PEND_BR_IN;
+   wire 			    UPD_PEND_BR;
+   assign UPD_PEND_BR = 0;//TODO: drive this value
+   inv1$ PENDING_READ(PEND_RD, RW_OUT);
+   mux2$ PEND_BR_SEL (PEND_BR_IN, PEND_BR, PEND_RD, UPD_PEND_BR);
+   mux2$ WR_SIZE_SEL [2:0] (WR_SIZE_IN, WR_SIZE, BUS_SIZE, UPD_WR_SIZE);
+   mux2$ RD_SIZE_SEL [2:0] (RD_SIZE_IN, RD_SIZE, WR_SIZE, UPD_RD_SIZE);
+   ioreg8$ SIZE_RD_REG (BUS_CLK,{WR_SIZE_IN, RW_IN, PEND_BR_IN, RD_SIZE_IN},
+			{WR_SIZE, RW_OUT, PEND_BR, RD_SIZE}, , RST, SET);
+   assign WRITE__SIZE = WR_SIZE;
+   
+   
+   //TIMER FOR MEMORY
+   //each clock cycle will increase the number of 1 bits in the done register
+   wire [7:0] 			    MEM_DONE_IN, MEM_DONE_OUT;
+   wire 			    TIMER_RESET;
+      mux2_8$ MEM_DONE_SEL(MEM_DONE_IN, 8'b01, {MEM_DONE_OUT[6:0], 1'b1}, DONE);
+   ioreg8$ MEM_DONE_REG(BUS_CLK, MEM_DONE_IN, MEM_DONE_OUT, , RST, SET);
+   wire 			    BUSY;
+   inv1$ BUSY_DRIVER(BUSY, MEM_DONE_OUT[4]);
+   and2$ MEM_WR_EN(MEM_WR, MEM_DONE_OUT[2],RW_OUT);
+   assign MEM_EN = MEM_DONE_OUT[1];
+   and2$ NXT_STE_DRIVER(PENDING_BR, MEM_DONE_OUT[4], PEND_BR);
 
+   //TRISTATE BUFFER FOR MEMORY
+   //TODO: shift the data!
+   wire [127:0] 		    write_data_shifted;
+   tristate_bus_driver32$ IO_LOW [3:0] (RW_OUT, write_data_shifted, MEM_INOUT[127:0]);
+      tristate_bus_driver32$ IO_HIGH [3:0] (RW_OUT, write_data_shifted, MEM_INOUT[255:128]);
+
+   //DRIVING THE DESTINATION WIRE
+   and2$ IC_DEST_DRIVER(DEST_OUT_IC, CTRL_TRI_EN, RD_SRC[0] );
+   and2$ DC_DEST_DRIVER(DEST_OUT_DC, CTRL_TRI_EN, RD_SRC[1] );
+   
+
+   
       
    //TRISTATE BUFFERS FOR THE BUS
    wire [31:0] 			    D_TRI_IN;
-   mux4_32 D_DRIV_SEL(D_TRI_IN, MOD_WRITE_DATA[31:0], MOD_WRITE_DATA[63:32],
-	    MOD_WRITE_DATA[95:64], MOD_WRITE_DATA[127:96],
+   mux4_32 D_DRIV_SEL(D_TRI_IN, rd_data_buffer_in[31:0], rd_data_buffer_in[63:32],
+	    rd_data_buffer_in[95:64], rd_data_buffer_in[127:96],
 	    next_size_bar[0], next_size_bar[1]);
    tristate_bus_driver32$ D_TRI(D_TRI_EN, D_TRI_IN, D);
    wire [11:0] 		    SIZE_TRI_IN;
@@ -125,7 +184,7 @@ module mem_bus_controller(//interface with bus
    assign RW_TRI_IN = 1'b1;//MEMORY NEVER INITIATES A READ
    assign ACK_TRI_IN = 1'b1;
    tristate_bus_driver1$ RW_TRI(RW_TRI_EN, RW_TRI_IN, RW);
-   tristate_bus_driver1$ ACK_TRI(ACK_TRI_EN, ACK_TRI_IN, ACK);
+   //tristate_bus_driver1$ ACK_TRI(ACK_TRI_EN, ACK_TRI_IN, ACK);
    
 
 endmodule // bus_controller
