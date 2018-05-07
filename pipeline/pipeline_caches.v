@@ -225,12 +225,18 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire [31:0] ME2_RD_ADDR1_LSU_IN, ME2_RD_ADDR2_LSU_IN;
    wire [3:0] ME2_RD_SIZE1_LSU_IN, ME2_RD_SIZE2_LSU_IN;
  
+   wire v_wb_wr_addr1_v_lsu_in, v_wb_wr_addr2_v_lsu_in;
    wire v_mem_wr_lsu_in;
    assign WB_MEM_WR_LSU_IN = WB_Final_Dcache_Write;
    and2$ and_v_mem_wr_lsu_in (v_mem_wr_lsu_in, WB_V_LSU_IN, WB_MEM_WR_LSU_IN);
+   and2$ and_v_wr_addr1 (v_wb_wr_addr1_v_lsu_in, WB_V_LSU_IN, WB_WR_ADDR1_V_LSU_IN);
+   and2$ and_v_wr_addr2 (v_wb_wr_addr2_v_lsu_in, WB_V_LSU_IN, WB_WR_ADDR2_V_LSU_IN);
 
+   wire v_me2_rd_addr1_v_lsu_in, v_me2_rd_addr2_v_lsu_in;
    wire v_mem_rd_lsu_in;
    and2$ and_v_mem_rd_lsu_in (v_mem_rd_lsu_in, ME2_V_LSU_IN, ME2_MEM_RD_LSU_IN);
+   and2$ and_v_rd_addr1 (v_me2_rd_addr1_v_lsu_in, ME2_V_LSU_IN, ME2_RD_ADDR1_V_LSU_IN);
+   and2$ and_v_rd_addr2 (v_me2_rd_addr2_v_lsu_in, ME2_V_LSU_IN, ME2_RD_ADDR2_V_LSU_IN);
 
    inv1$ inv_lsu_rd_stall (LSU_OUT_RD_STALL_BAR, LSU_OUT_RD_STALL);
    inv1$ inv_lsu_wr_stall (LSU_OUT_WR_STALL_BAR, LSU_OUT_WR_STALL);
@@ -240,11 +246,11 @@ module PIPELINE(CLK, CLR, PRE, IR);
    lsu_controller u_lsu_controller (
       CLK, CLR, PRE,
       v_mem_rd_lsu_in, 
-      ME2_RD_ADDR1_LSU_IN, ME2_RD_SIZE1_LSU_IN, ME2_RD_ADDR1_V_LSU_IN,
-      ME2_RD_ADDR2_LSU_IN, ME2_RD_SIZE2_LSU_IN, ME2_RD_ADDR2_V_LSU_IN,
+      ME2_RD_ADDR1_LSU_IN, ME2_RD_SIZE1_LSU_IN, v_me2_rd_addr1_v_lsu_in,
+      ME2_RD_ADDR2_LSU_IN, ME2_RD_SIZE2_LSU_IN, v_me2_rd_addr2_v_lsu_in,
       v_mem_wr_lsu_in,
-      WB_WR_ADDR1_LSU_IN, WB_WR_SIZE1_LSU_IN, WB_WR_ADDR1_V_LSU_IN,
-      WB_WR_ADDR2_LSU_IN, WB_WR_SIZE2_LSU_IN, WB_WR_ADDR2_V_LSU_IN,
+      WB_WR_ADDR1_LSU_IN, WB_WR_SIZE1_LSU_IN, v_wb_wr_addr1_v_lsu_in,
+      WB_WR_ADDR2_LSU_IN, WB_WR_SIZE2_LSU_IN, v_wb_wr_addr2_v_lsu_in,
       WB_Final_Dcache_Data,
 
       DCACHE_RD_DATA_OUT_LSU_IN, DCACHE_READY_LSU_IN,

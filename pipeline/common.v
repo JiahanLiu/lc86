@@ -36,7 +36,7 @@ Virtual Page    Physical Page   Valid   Present R/W PCD
 //  TLB ENTRY        VPN        RPN        V     PRE   R/W   PCD
 `define TLB_ENTRY_0 {20'h00000, 20'h00000, 1'b1, 1'b1, 1'b0, 1'b0}
 `define TLB_ENTRY_1 {20'h02000, 20'h00002, 1'b1, 1'b1, 1'b1, 1'b0}
-`define TLB_ENTRY_2 {20'h04000, 20'h00005, 1'b1, 1'b1, 1'b0, 1'b0}
+`define TLB_ENTRY_2 {20'h04000, 20'h00005, 1'b1, 1'b1, 1'b1, 1'b0}
 `define TLB_ENTRY_3 {20'h0b000, 20'h00004, 1'b1, 1'b1, 1'b1, 1'b0}
 `define TLB_ENTRY_4 {20'h0c000, 20'h00007, 1'b1, 1'b1, 1'b1, 1'b0}
 `define TLB_ENTRY_5 {20'h0a000, 20'h00005, 1'b1, 1'b1, 1'b1, 1'b0}

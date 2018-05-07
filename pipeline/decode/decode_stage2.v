@@ -299,8 +299,12 @@ module decode_stage2 (
 
    comp16 comp_0FB0 (DE_CMPXCHG_AG, , {opcode[15:1], 1'b0}, 16'h0FB0); // set for cmpxchg
 
+   wire [31:0] add_eip_out;
+   wire or_exc_en_out;
+
    // Increment the EIP with proper length
-   adder32_w_carry_in add_rel (EIP_OUT, , EIP, {28'b0, instr_length_updt}, 1'b0);
+   adder32_w_carry_in add_rel (add_eip_out, , EIP, {28'b0, instr_length_updt}, 1'b0);
+   mux2_32 mux_eip_out (EIP_OUT, add_eip_out, EIP, or_exc_en_out);
 
    // TODO: check exception address with incremented EIP
    assign PAGE_FAULT_EXC_EXIST_OUT = PAGE_FAULT_EXC_EXIST;

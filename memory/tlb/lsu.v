@@ -72,13 +72,14 @@ WR.OP2 = (DCACHE.R&!RD.OP1&!RD.OP2&!WR.OP2&WR.V&WR.ADDR1.V&WR.ADDR2.V) | (
         rd_op1, rd_op2, wr_op1, wr_op2,
         rd_op1_bar, rd_op2_bar, wr_op1_bar, wr_op2_bar;
 
+   assign state[31:4] = 28'b0;
    assign state[3:0] = {Drd_op1, Drd_op2, Dwr_op1, Dwr_op2};
    assign {rd_op1, rd_op2, wr_op1, wr_op2} = stateQ[3:0];
    assign {rd_op1_bar, rd_op2_bar, wr_op1_bar, wr_op2_bar} = stateQBAR[3:0];
 
-   always @(*) begin
-      $strobe("state %h @ %0t", stateQ[3:0], $time);
-   end
+//   always @(*) begin
+//      $strobe("state %h @ %0t", stateQ[3:0], $time);
+//   end
 
    reg32e$ u_lsu_state (CLK, state, stateQ, stateQBAR, CLR, PRE, 1'b1);
 
@@ -152,20 +153,21 @@ WR.OP2 = (DCACHE.R&!RD.OP1&!RD.OP2&!WR.OP2&WR.V&WR.ADDR1.V&WR.ADDR2.V) | (
    wire [31:0] mux_rd_addr_out, mux_wr_addr_out;
    wire [3:0] mux_rd_size_out, mux_wr_size_out;
 
-   wire nor_rd_op1_2_out;
+   wire nor_rd_op1_2_out, dcache_rw_out;
 
    mux2_32
       mux_rd_addr (mux_rd_addr_out, RA_RD_ADDR1, RA_RD_ADDR2, rd_op2),
       mux_wr_addr (mux_wr_addr_out, RA_WR_ADDR1, RA_WR_ADDR2, wr_op2),
-      mux_rw_addr (DCACHE_ADDR_OUT, mux_rd_addr_out, mux_wr_addr_out, nor_rd_op1_2_out);
+      mux_rw_addr (DCACHE_ADDR_OUT, mux_rd_addr_out, mux_wr_addr_out, dcache_rw_out);
 
    mux2_4
       mux_rd_size (mux_rd_size_out, RA_RD_SIZE1, RA_RD_SIZE2, rd_op2),
       mux_wr_size (mux_wr_size_out, RA_WR_SIZE1, RA_WR_SIZE2, wr_op2),
-      mux_rw_size (DCACHE_SIZE_OUT, mux_rd_size_out, mux_wr_size_out, nor_rd_op1_2_out);
+      mux_rw_size (DCACHE_SIZE_OUT, mux_rd_size_out, mux_wr_size_out, dcache_rw_out);
 
    nor2$ nor_rd_op1_2 (nor_rd_op1_2_out, rd_op1, rd_op2);
-   and2$ and_dcache_rw (DCACHE_RW_OUT, V_MEM_WR, nor_rd_op1_2_out);
+   and2$ and_dcache_rw (dcache_rw_out, V_MEM_WR, nor_rd_op1_2_out);
+   assign DCACHE_RW_OUT = dcache_rw_out;
    // assign DCACHE_RW_OUT = V_MEM_WR;
 
    or2$ or3 (DCACHE_EN, V_MEM_RD, V_MEM_WR);
@@ -206,7 +208,8 @@ WR.OP2 = (DCACHE.R&!RD.OP1&!RD.OP2&!WR.OP2&WR.V&WR.ADDR1.V&WR.ADDR2.V) | (
 
    wire or4_out, or5_out;
 
-   or4$ or4 (or4_out, Drd_op1, Drd_op2, Dwr_op1, Dwr_op2);
+//   or4$ or4 (or4_out, Drd_op1, Drd_op2, Dwr_op1, Dwr_op2);
+   or3$ or4 (or4_out, Drd_op1, Drd_op2, V_MEM_WR);
    and2$ and_rd_stall (DCACHE_RD_STALL, V_MEM_RD, or4_out);
 
    or4$ or5 (or5_out, rd_op1, rd_op2, Dwr_op1, Dwr_op2);
@@ -287,16 +290,16 @@ module lsu (
       u_cross_size_detector_rd (LA_RD_ADDR[3:0], LA_RD_SIZE[1:0], rd_addr1_cross_size, rd_addr2_cross_size),
       u_cross_size_detector_wr (LA_WR_ADDR[3:0], LA_WR_SIZE[1:0], wr_addr1_cross_size, wr_addr2_cross_size);
  
-   initial
-      begin
+//   initial
+//      begin
 //         $monitor("LA_RD_ADDR:%h LA_WR_ADDR:%h rd_entry:%h rd_entry2:%h wr_entry:%h wr_entry2:%h rd_match:%h rd_end_match:%h wr_match:%h wr_end_match:%h @ %0t", LA_RD_ADDR, LA_WR_ADDR, rd_addr1_entry, rd_addr2_entry, wr_addr1_entry, wr_addr2_entry, rd_addr1_match, rd_addr2_match, wr_addr1_match, wr_addr2_match, $time);
-	 $monitor("LA_RD_ADDR:%h size:%d cross page:%d cross cache line:%d @ %0t", LA_RD_ADDR, LA_RD_SIZE, rd_addr_cross_page, rd_addr_cross_cl, $time);
-      end  
+//	 $monitor("LA_RD_ADDR:%h size:%d cross page:%d cross cache line:%d @ %0t", LA_RD_ADDR, LA_RD_SIZE, rd_addr_cross_page, rd_addr_cross_cl, $time);
+//      end  
 
-   always @(*)
-     begin
-	$strobe("cross size:%d cross next: %d @ %0t", rd_addr1_cross_size, rd_addr2_cross_size, $time);
-     end
+//   always @(*)
+//     begin
+//	$strobe("cross size:%d cross next: %d @ %0t", rd_addr1_cross_size, rd_addr2_cross_size, $time);
+//     end
    
    wire [3:0] mux_rd_data_size_out, mux_wr_data_size_out,
               mux_rd_cross_size_out, mux_wr_cross_size_out;

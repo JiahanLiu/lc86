@@ -137,20 +137,25 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
 //   or2$ or_dep_stall (dep_stall, REG_DEP_STALL, MEM_DEP_STALL);
 //   nor2$ nor_dep_stall (dep_stall_bar, REG_DEP_STALL, MEM_DEP_STALL);
 
+   wire or_rst_flush_out;
+   or3$ or_rst_flush (or_rst_flush_out, rst_state, flush_state, INT_EXIST_DE_IN);
+
    nor3$ nor_v_fetch (nor_v_fetch_out, full_state, flush, exc_state);
    assign IFU_V_FETCH_IN = nor_v_fetch_out;
 
-   wire or_read_ptr_en_out, and_read_ptr_en_out;
+   wire or_read_ptr_en_out, and_read_ptr_en_out, or_read_ptr_en_rst_out;
 
    nor2$ nor_read_ptr_en (nor_read_ptr_en_out, dep_stall, buf_empty);
    or2$ or_read_ptr_en (or_read_ptr_en_out, fill_state, full_state);
    and2$ and_read_ptr_en (and_read_ptr_en_out, nor_read_ptr_en_out, or_read_ptr_en_out);
-   assign read_ptr_en = and_read_ptr_en_out;
+   or2$ or_read_ptr_en_rst (or_read_ptr_en_rst_out, and_read_ptr_en_out, or_rst_flush_out);
+   assign read_ptr_en = or_read_ptr_en_rst_out;
 
-   wire and_buf_ptr_en_out;
+   wire and_buf_ptr_en_out, or_buf_ptr_en_rst_out;
    nor2$ nor_buf_ptr_en (nor_buf_ptr_en_out, buf_full, IFU_ICACHE_RD_STALL_OUT); 
    and2$ and_buf_ptr_en (and_buf_ptr_en_out, nor_buf_ptr_en_out, Dfill_state);
-   assign buf_ptr_en = and_buf_ptr_en_out;
+   or2$ or_buf_ptr_en_rst (or_buf_ptr_en_rst_out, and_buf_ptr_en_out, or_rst_flush_out);
+   assign buf_ptr_en = or_buf_ptr_en_rst_out;
 
    xor2$ xor_inc_buf_ptr1 (xor_inc_buf_ptr_out, buf_ptr[1], buf_ptr[0]);
    assign inc_buf_ptr[1] = xor_inc_buf_ptr_out;
@@ -208,13 +213,15 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
    mux2_16$ mux_next_read_ptr (mux_next_read_ptr_out, {10'b0, add_read_ptr_out[5:0]}, {10'b0, read_ptr}, dep_stall);
    assign next_read_ptr = mux_next_read_ptr_out[5:0];
 
-   assign Dread_ptr[31:6] = 26'b0;
-   assign Dread_ptr[5:0] = mux_next_read_ptr_out[5:0];
+   assign Dread_ptr[31:8] = 24'b0;
+   // assign Dread_ptr[5:0] = mux_next_read_ptr_out[5:0];
+   mux2_8$ mux_read_ptr_rst (Dread_ptr[7:0], {2'b00, mux_next_read_ptr_out[5:0]}, 8'h00, or_rst_flush_out);
    // asynchronous reset okay ok flush?
    inv1$ inv0 (reset_bar, reset);
    nor2$ nor_reset (nor_reset_out, reset_bar, flush);
 
-   assign read_ptr_rst = nor_reset_out;
+   assign read_ptr_rst = reset;
+   //assign read_ptr_rst = nor_reset_out;
    assign read_ptr_set = set;
    reg32e$ reg_read_ptr (CLK, Dread_ptr, Qread_ptr, QBARread_ptr, read_ptr_rst, read_ptr_set, read_ptr_en);
    assign read_ptr = Qread_ptr[5:0];
@@ -241,9 +248,6 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
 
    wire [31:0] IFU_FETCH_POINTER_IN;
 
-   wire or_rst_flush_out;
-   or3$ or_rst_flush (or_rst_flush_out, rst_state, flush_state, INT_EXIST_DE_IN);
-
    adder32_w_carry_in add_fetch_ptr (add_fetch_ptr_out, , fetch_ptr, 32'h10, 1'b0);
    adder32_w_carry_in add_eip_cs (add_eip_cs_out, , EIP, {CS, 16'b0}, 1'b0);
    //adder32_w_carry_in add_eip_cs_2 (add_eip_cs_2_out, , add_eip_cs_out, 32'h10, 1'b0);
@@ -252,17 +256,20 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
    assign Dfetch_ptr = mux_fetch_ptr_out;
    assign fetch_ptr = Qfetch_ptr;
 
-   mux2_32 mux_ifu_addr (mux_ifu_addr_out, fetch_ptr, add_eip_cs_out, or_rst_flush_out);
+   mux2_32 mux_ifu_addr (mux_ifu_addr_out, fetch_ptr, add_eip_cs_out, rst_state);
    assign IFU_FETCH_POINTER_IN = mux_ifu_addr_out;
 
-   assign fetch_ptr_rst = buf_ptr_rst;
+   assign fetch_ptr_rst = reset;
    assign fetch_ptr_set = set;
    or2$ or_fetch_ptr_en (fetch_ptr_en, buf_ptr_en, or_rst_flush_out);
    reg32e$ reg_fetch_ptr (CLK, Dfetch_ptr, Qfetch_ptr, QBARfetch_ptr, fetch_ptr_rst, fetch_ptr_set, fetch_ptr_en);
 
+   // wire buf_ptr_en_rst;
    assign Dbuf_ptr[31:2] = 30'b0;
-   assign Dbuf_ptr[1:0] = next_buf_ptr;
-   assign buf_ptr_rst = nor_reset_out;
+   // assign Dbuf_ptr[1:0] = next_buf_ptr;
+   mux2_2 mux_buf_ptr_rst (Dbuf_ptr[1:0], next_buf_ptr, 2'b00, or_rst_flush_out);
+   // mux2$ mux_buf_ptr_en_rst (buf_ptr_en_rst, buf_ptr_en, 1'b1, or_rst_flush_out);
+   assign buf_ptr_rst = reset;
    assign buf_ptr_set = set;
    reg32e$ reg_buf_ptr (CLK, Dbuf_ptr, Qbuf_ptr, QBARbuf_ptr, buf_ptr_rst, buf_ptr_set, buf_ptr_en);
    assign buf_ptr = Qbuf_ptr[1:0];
@@ -274,7 +281,7 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
 
    assign EIP_OUT = mux_temp_eip_out;
 
-   assign temp_eip_rst = buf_ptr_rst;
+   assign temp_eip_rst = reset;
    assign temp_eip_set = set;
    or2$ or_temp_eip_en (temp_eip_en, read_ptr_en, or_rst_flush_out);
    reg32e$ reg_temp_eip (CLK, Dtemp_eip, Qtemp_eip, QBARtemp_eip, temp_eip_rst, temp_eip_set, temp_eip_en);
@@ -283,9 +290,10 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
    // mux2_16$ mux_temp_cs (mux_temp_cs_out, temp_cs, CS, rst_state);
    // reg32e$ reg_temp_cs (CLK, Dtemp_cs, Qtemp_cs, QBARtemp_cs, temp_cs_rst, temp_cs_set, temp_cs_en);
    assign Dtemp_instr_len[31:4] = 28'b0;
-   assign Dtemp_instr_len[3:0] = instr_length_updt;
+   mux2_4 mux_instr_len_rst (Dtemp_instr_len[3:0], instr_length_updt, 4'h0, or_rst_flush_out);
+   // assign Dtemp_instr_len[3:0] = instr_length_updt;
    assign prev_instr_len = Qtemp_instr_len[3:0];
-   assign temp_instr_len_rst = buf_ptr_rst;
+   assign temp_instr_len_rst = reset;
    assign temp_instr_len_set = set;
    assign temp_instr_len_en = read_ptr_en;
    reg32e$ reg_temp_instr_len (CLK, Dtemp_instr_len, Qtemp_instr_len, QBARtemp_instr_len, temp_instr_len_rst, temp_instr_len_set, temp_instr_len_en);
