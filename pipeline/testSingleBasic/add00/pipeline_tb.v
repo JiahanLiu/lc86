@@ -23,7 +23,7 @@
 `define default_eip 32'h1 
 `define default_cs 32'h22 
 `define default_ss ((`default_reg_base_macro + 3'b010) + ((`default_reg_base_macro + 3'b010) << 8))
-`define default_flags 32'hFFF
+`define default_flags 32'h000
 `define default_imm 32'h8765_4321
 `define default_big_endian_imm8 8'h21
 `define default_big_endian_imm16 32'h2143
@@ -281,7 +281,7 @@ module TOP;
         u_pipeline.debug_cs_in = `default_cs;
         u_pipeline.u_register_file.eflags.Q = `default_flags;
         u_pipeline.u_writeback.u_flags_wb.u_flags_register.Q = `default_flags; //internal flags register
-         
+        u_pipeline.u_writeback.u_flags_wb.u_flags_register = 1'b0;
         u_pipeline.debug_memory = `default_mem_Value;
         
      end 

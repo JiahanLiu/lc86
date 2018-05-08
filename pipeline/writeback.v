@@ -111,7 +111,7 @@ module writeback (
    assign DEP_v_wb_dcache_write = v_ex_dcache_write;
 
    repne_halt_wb u_repne_halt_wb(wb_halt_all, wb_repne_terminate_all, WB_V, CS_IS_HALT_WB, CS_IS_CMPS_SECOND_UOP_ALL,
-      WB_d2_repne_wb, final_out_flags, WB_RESULT_C);
+      WB_d2_repne_wb, final_out_flags, internal_saved_count);
 
    flags_wb u_flags_wb(final_out_flags, CLK_NOT, CLR, PRE, v_cs_ld_flags, CS_POP_FLAGS_WB, 
       CS_FLAGS_AFFECTED_WB, WB_FLAGS, WB_RESULT_A);
