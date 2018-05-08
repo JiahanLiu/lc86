@@ -18,10 +18,15 @@ module TOP;
         repeat(2) #clk_cycle //wait 2 clock cycles
         clr = 1;
         forever #(half_cycle)  clk = ~clk;
+    end
+
+    initial begin
+        repeat(2) #clk_cycle;
+        #half_cycle;
         forever #(clk_cycle) bus_clk = ~bus_clk;
     end
     
-     initial #2500 $finish;
+     initial #25000 $finish;
 
      always @(posedge clk) begin
          $strobe ("at time %0d, IR = %h", $time, u_full_simulator.u_pipeline.u_fetch.CURRENT_IR);
