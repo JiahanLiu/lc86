@@ -55,8 +55,8 @@ module memory_stage1 (
    output MEM_DEP_STALL_OUT,
    output JMP_STALL_OUT, V_LD_DF_OUT
 );
-`include "./control_store/control_store_wires.v"
-`include "./control_store/control_store_signals.v"
+`include "../pipeline/control_store/control_store_wires.v"
+`include "../pipeline/control_store/control_store_signals.v"
 
    wire v_mem_rd, v_mem_wr;
    wire lsu_rd_addr1_v_out, lsu_rd_addr2_v_out,

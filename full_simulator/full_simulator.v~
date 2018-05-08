@@ -1,0 +1,41 @@
+`timescale 1ns/1ps
+
+module FULL_SIMULATOR(input CLK,
+		      input BUS_CLK,
+		      input RST, SET);
+   
+
+
+
+endmodule // FULL_SIMULATOR
+
+
+module  FULL_MEMORY(//lines between dcache bus controller and dcache
+		    input DC_EN, //simple signal saying we have a request
+		    input DC_WR,
+		    input [15:0] DC_A,
+		    input [127:0] DC_WRITE_DATA,
+		    output [127:0] DC_READ_DATA,
+		    output DC_R,//Note this is a signal telling the DC
+		               //that the Bus is ready
+
+		    //lintes between icache bus controller and icache
+		    input IC_EN, //simple signal saying we have a request
+		    input IC_WR,
+		    input [15:0] IC_A,
+		    input [127:0] IC_WRITE_DATA,
+		    output [127:0] IC_READ_DATA,
+		    output IC_R,
+
+		    //lines between interrupt controller and processor
+		    input INTR_EN, //simple signal saying we have a request
+		    input INTR_WR,
+		    input [15:0] INTR_A,
+		    input [127:0] INTR_WRITE_DATA,
+		    output [127:0] INTR_READ_DATA,
+		    output INTR_R,
+
+
+		    //The Bus clock and other signals
+		    input BUS_CLK,
+		    input RST, SET);

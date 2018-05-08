@@ -1,7 +1,22 @@
-module PIPELINE(CLK, CLR, PRE, IR);
+module PIPELINE(input CLK, CLR, PRE,
+		//TODO: IR should not be used anymore
+		input [127:0] IR,
+
+		//interface between ICACHE and MEM
+		output ICACHE_BUS_WR_OUT, ICACHE_BUS_EN_OUT,
+		output [15:0] ICACHE_BUS_ADDR_OUT,
+		output [127:0] ICACHE_BUS_WRITE_OUT,
+		input ICACHE_BUS_READY,
+		input [127:0] ICACHE_BUS_READ_DATA,
+
+		//interface between DCACHE and MEM
+		output DCACHE_BUS_WR_OUT, DCACHE_BUS_EN_OUT,
+		output [15:0] DCACHE_BUS_ADDR_OUT,
+		output [127:0] DCACHE_BUS_WRITE_OUT,
+		input DCACHE_BUS_READY,
+		input [127:0] DCACHE_BUS_READ_DATA
+		);
    //connect this to simulator
-    input CLK, CLR, PRE;
-    input [127:0] IR;
     assign EN = 1;//placeholder until stalls are working correctly
    
     //signals for EX generate WB bubbles or stalling
@@ -172,16 +187,19 @@ module PIPELINE(CLK, CLR, PRE, IR);
    wire FE_ICACHE_EN_OUT, ICACHE_READY;	//ICACHE_EN_OUT needs to be included
    wire [4:0] FE_ICACHE_RD_SIZE_OUT;
 
-   wire ICACHE_BUS_WR_OUT, ICACHE_BUS_EN_OUT;
-   wire [15:0] ICACHE_BUS_ADDR_OUT;
-   wire [127:0] ICACHE_BUS_WRITE_OUT;
+
+
+
 
    wire BUS_READY;
    wire [127:0] BUS_READ_DATA;
-
+   //STEVEN: since Icache always fetches a full cache line, hardcoding the
+   //RD SIZE
+   assign FE_ICACHE_RD_SIZE_OUT = 0;
+   
    cache u_icache (
       CLK, PRE, CLR, ,
-      1'b0, FE_ICACHE_EN_OUT, FE_ICACHE_PADDR_OUT[15:0], FE_ICACHE_RD_SIZE_OUT,
+      1'b0, FE_ICACHE_EN_OUT, FE_ICACHE_PADDR_OUT[15:0], FE_ICACHE_RD_SIZE_OUT[3:0],
       ICACHE_DOUT, ICACHE_READY,
       // bus signals
       ICACHE_BUS_WR_OUT, ICACHE_BUS_EN_OUT, ICACHE_BUS_ADDR_OUT, ICACHE_BUS_WRITE_OUT,
@@ -190,9 +208,9 @@ module PIPELINE(CLK, CLR, PRE, IR);
 
    wire [127:0]  DCACHE_RD_DATA_OUT_LSU_IN;
    wire DCACHE_READY_LSU_IN;
-   wire DCACHE_BUS_WR_OUT, DCACHE_BUS_EN_OUT;
-   wire [15:0] DCACHE_BUS_ADDR_OUT;
-   wire [127:0] DCACHE_BUS_WRITE_OUT;
+
+
+
 
    wire [31:0] 	 LSU_OUT_DCACHE_ADDR_IN;
    wire [3:0] 	 LSU_OUT_DCACHE_SIZE_IN;

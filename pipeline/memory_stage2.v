@@ -41,8 +41,8 @@ module memory_stage2 (
    output D2_MEM_WR_WB_OUT, D2_LD_GPR1_WB_OUT, D2_LD_MM_WB_OUT,
    output JMP_STALL_OUT, V_LD_DF_OUT
 );
-`include "./control_store/control_store_wires.v"
-`include "./control_store/control_store_signals.v"
+`include "../pipeline/control_store/control_store_wires.v"
+`include "../pipeline/control_store/control_store_signals.v"
 
    wire [15:0] mux_imm_out;
    wire [63:0] buf_mem_out;

@@ -54,8 +54,8 @@ module agen_stage2 (
    output JMP_STALL_OUT, V_LD_DF_OUT
 );
 //`include "ag_control_store.v"
-`include "./control_store/control_store_wires.v"
-`include "./control_store/control_store_signals.v"
+`include "../pipeline/control_store/control_store_wires.v"
+`include "../pipeline/control_store/control_store_signals.v"
 
    assign D2_DR1_SIZE_WB_OUT = D2_DR1_SIZE_WB;
    assign D2_DR2_SIZE_WB_OUT = D2_DR2_SIZE_WB;

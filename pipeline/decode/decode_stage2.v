@@ -56,8 +56,8 @@ module decode_stage2 (
 
    output D2_JMP_STALL_OUT
 );
-`include "./control_store/control_store_wires.v"
-`include "./control_store/control_store_signals.v"
+`include "../pipeline/control_store/control_store_wires.v"
+`include "../pipeline/control_store/control_store_signals.v"
    wire [2:0] mux_base_reg_id_out;
    wire op_0F7F, op_0F7F_bar, and_ld_mm_out, and_sr1_needed_out;
 

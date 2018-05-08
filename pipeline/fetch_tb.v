@@ -1,4 +1,4 @@
-`include "constants.v"
+`include "../pipeline/constants.v"
 `timescale 1ns/1ps
 `define EOF = 32'hFFFF_FFFF
 `define NULL 0
@@ -82,7 +82,8 @@ module TOP;
         reg_array_seg[7] = 63'h0F;
     end
 
-
+   //STEVEN: this is out of date
+   //PIPELINE now includes in and out for the caches
    PIPELINE u_pipeline(clk, clr, pre, IR);
 
     initial begin

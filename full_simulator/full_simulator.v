@@ -1,0 +1,81 @@
+`timescale 1ns/1ps
+
+module FULL_SIMULATOR(input CLK,
+		      input BUS_CLK,
+		      input RST, SET);
+
+   //DCACHE WIRES
+   wire 		    DC_EN; 
+   wire 		    DC_WR;
+   wire [15:0] 		    DC_A;
+   wire [127:0] 	    DC_WRITE_DATA;
+   wire [127:0] 	    DC_READ_DATA;
+   wire 		    DC_R;
+
+
+   //ICACHE WIRES
+   wire 		    IC_EN; 
+   wire 		    IC_WR;
+   wire [15:0] 		    IC_A;
+   wire [127:0] 	    IC_WRITE_DATA;
+   wire [127:0] 	    IC_READ_DATA;
+   wire 		    IC_R;
+
+   //INTERRUPT WIRES
+   wire 		    INTR_EN; 
+   wire 		    INTR_WR;
+   wire [15:0] 		    INTR_A;
+   wire [127:0] 	    INTR_WRITE_DATA;
+   wire [127:0] 	    INTR_READ_DATA;
+   wire 		    INTR_R;
+
+   //THE FULL MEMORY MODULE
+   FULL_MEMORY FULL_MEMORY_U(
+			     DC_EN,
+			     DC_WR,
+			     DC_A,
+			     DC_WRITE_DATA,
+			     DC_READ_DATA,
+			     DC_R,
+		             
+			     IC_EN,
+			     IC_WR,
+			     IC_A,
+			     IC_WRITE_DATA,
+			     IC_READ_DATA,
+			     IC_R,
+			     
+			     INTR_EN, 
+			     INTR_WR,
+			     INTR_A,
+			     INTR_WRITE_DATA,
+			     INTR_READ_DATA,
+			     INTR_R,
+
+			     BUS_CLK,
+			     RST, SET);
+
+
+   //TODO: verify IR does not do anything
+   //TODO: add wiring for interrupts
+   wire [127:0] 	    IR;
+   assign IR = 0;
+   //THE FULL PIPELINE MODULE
+PIPELINE PIPELINE_U( CLK, RST, SET,
+		     IR,
+
+		     IC_WR, IC_EN,
+		     IC_A,
+		     IC_WRITE_DATA,
+		     IC_R,
+		     IC_READ_DATA,
+
+		     DC_WR, DC_EN,
+		     DC_A,
+		     DC_WRITE_DATA,
+		     DC_R,
+		     DC_READ_DATA);
+
+
+
+endmodule // FULL_SIMULATOR
