@@ -252,7 +252,7 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
    adder32_w_carry_in add_eip_cs (add_eip_cs_out, , EIP, {CS, 16'b0}, 1'b0);
    //adder32_w_carry_in add_eip_cs_2 (add_eip_cs_2_out, , add_eip_cs_out, 32'h10, 1'b0);
    //mux2_32 mux_fetch_ptr (mux_fetch_ptr_out, add_fetch_ptr_out, add_eip_cs_2_out, or_rst_flush_out);
-   mux2_32 mux_fetch_ptr (mux_fetch_ptr_out, add_fetch_ptr_out, add_eip_cs_out, or_rst_flush_out);
+   mux3_32 mux_fetch_ptr (mux_fetch_ptr_out, fetch_ptr, add_fetch_ptr_out, add_eip_cs_out, buf_ptr_en, or_rst_flush_out);
    assign Dfetch_ptr = mux_fetch_ptr_out;
    assign fetch_ptr = Qfetch_ptr;
 
@@ -261,7 +261,9 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
 
    assign fetch_ptr_rst = reset;
    assign fetch_ptr_set = set;
-   or2$ or_fetch_ptr_en (fetch_ptr_en, buf_ptr_en, or_rst_flush_out);
+   assign fetch_ptr_en = buf_ptr_en;
+//   or2$ or_fetch_ptr_en (fetch_ptr_en, buf_ptr_en, or_rst_flush_out);
+
    reg32e$ reg_fetch_ptr (CLK, Dfetch_ptr, Qfetch_ptr, QBARfetch_ptr, fetch_ptr_rst, fetch_ptr_set, fetch_ptr_en);
 
    // wire buf_ptr_en_rst;
@@ -283,7 +285,8 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
 
    assign temp_eip_rst = reset;
    assign temp_eip_set = set;
-   or2$ or_temp_eip_en (temp_eip_en, read_ptr_en, or_rst_flush_out);
+//   or2$ or_temp_eip_en (temp_eip_en, read_ptr_en, or_rst_flush_out);
+   assign temp_eip_en = read_ptr_en;
    reg32e$ reg_temp_eip (CLK, Dtemp_eip, Qtemp_eip, QBARtemp_eip, temp_eip_rst, temp_eip_set, temp_eip_en);
    assign temp_eip = Qtemp_eip;
 

@@ -365,6 +365,18 @@ module mux4_4 (Y, IN0, IN1, IN2, IN3, S0, S1);
 
 endmodule // mux4_4
 
+module mux3_32 (Y, IN0, IN1, IN2, S0, S1);
+   output [31:0] Y;
+
+   input [31:0] IN0, IN1, IN2;
+   input S0, S1;
+
+   mux3_16$
+      muxhi (Y[31:16], IN0[31:16], IN1[31:16], IN2[31:16], S0, S1),
+      muxlo (Y[15:0], IN0[15:0], IN1[15:0], IN2[15:0], S0, S1);
+
+endmodule // mux3_32
+
 module mux4_32 (Y, IN0, IN1, IN2, IN3, S0, S1);
    output [31:0] Y;
 

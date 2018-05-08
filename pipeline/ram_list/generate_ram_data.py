@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
 
 import getopt, sys
 
@@ -16,10 +17,11 @@ def generate_memory(filename):
         ramfilelist.append(ramfilelist0)
 
     with open(filename, 'r') as lstfile:
-        memory = []    
+        memory = []
+        global_address = 0 
+        first_addr_flag = 1
         for line in lstfile:
             row = line.split()
-            address = 0
             # print row
             for entry in row:
                 # print entry
@@ -28,16 +30,19 @@ def generate_memory(filename):
                 elif entry.endswith(':'):
                     address = entry.replace(':', '')
                     address = int(address, 16)
+                    if first_addr_flag:
+                        global_address = address
+                        first_addr_flag = 0
                 else:
-                    memory.append((address, entry))
-                    address += 1
+                    memory.append((global_address, entry))
+                    global_address += 1
         
-        # print memory
+        print memory
         ramsetnumlist = []
         cachesetnumlist = []
         cachesetnumlist1 = []
         cachesetnumlist2 = []
-        for (address, data) in sorted(memory):
+        for (address, data) in sorted(memory, key=lambda x:x[0]):
             ram_set_num = address / 128
             if ram_set_num not in ramsetnumlist:
                 ramsetnumlist.append(ram_set_num)
