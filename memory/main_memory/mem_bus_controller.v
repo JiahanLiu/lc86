@@ -99,15 +99,18 @@ module mem_bus_controller(//interface with bus
    
    //READ DATA BUFFER
    wire [127:0] 		    rd_data_buffer_in, rd_data_buffer_out,
-				    rd_from_mem;
+				    non_mem_val;
    wire [15:0]			    RD_A;
    
    //TODO: debug the PEND_RD signal
    //READ DATA CAN BE UPDATED FROM READING
-   mux4_128 rd_buf_sel(rd_from_mem, rd_data_buffer_out, rd_data_buffer_out, MEM_INOUT[127:0], MEM_INOUT[255:128], PEND_RD, RD_A[5]);
-   //OR FROM THE WRITE LATCHES
-   mux2_128 rd_buf_upd(rd_data_buffer_in, rd_from_mem, data_buffer_out,
+   mux2_128 rd_buf_upd(non_mem_val, rd_data_buffer_out, data_buffer_out,
 		       LD_RD_LATCHES);
+   
+   mux4_128 rd_buf_sel(rd_data_buffer_in, non_mem_val, non_mem_val,
+		       MEM_INOUT[127:0], MEM_INOUT[255:128],
+		       PEND_RD, RD_A[5]);
+   //OR FROM THE WRITE LATCHES
    ioreg128$ read_data_buffer(BUS_CLK, rd_data_buffer_in, rd_data_buffer_out, , RST, SET);
    
    //addresses
@@ -182,15 +185,22 @@ module mem_bus_controller(//interface with bus
    and2$ PEND_RD_DRIV (PEND_RD, RD_RD, RD_V_OUT);
    and2$ PEND_WR_DRIV (PEND_WR, RD_RW_OUT, RD_V_OUT);
 
-   
-   and2$ LD_WR_DRIV (LD_WR_LATCHES, WR_V_BAR, ACK_OUT);
+   //We load the WR latches on Ack if a read
+   //We load the WR latches on Done if a write
+   inv1$ BUS_RW_INV (RW_BAR, RW);
+   and3$ LD_WR_DRIV_RD (LD_WR_LATCHES_RD, WR_V_BAR,
+			ACK_OUT, RW_BAR);
+   and3$ LD_WR_DRIV_WR (LD_WR_LATCHES_WR, WR_V_BAR,
+			current_state[5], DONE);
+   or2$ LD_WR_DRIV (LD_WR_LATCHES, LD_WR_LATCHES_RD, LD_WR_LATCHES_WR);
+//   and2$ LD_WR_DRIV (LD_WR_LATCHES, ACK_OUT, WR_V_BAR);
    assign CLR_WR_LATCHES = LD_RD_LATCHES;
    or2$ RD_EMPTY (RD_EMP, RD_V_BAR, CLR_RD_LATCHES);
    and2$ LD_RD_DRIV (LD_RD_LATCHES, WR_V_OUT, RD_EMP);
    //Clearing RD latches when either a write finishes accessing memory
    //or when we have taken control of the bus (Returning read data)
    and2$ WR_DONE_DRIVER (WR_DONE, PEND_WR, MEM_DONE_OUT[6]);
-   and2$ RD_DONE_DRIVER (RD_DONE, PEND_RD, current_state[2]); //bit two is for master state
+   and3$ RD_DONE_DRIVER (RD_DONE, PEND_RD, DONE, current_state[3]); //bit two is for master state
    or2$ CLR_RD_DRIVER(CLR_RD_LATCHES, WR_DONE, RD_DONE);
    
    
@@ -198,9 +208,9 @@ module mem_bus_controller(//interface with bus
    
    wire [127:0] 		    write_data_shifted;
    shiftleft leftshifter_u(write_data_shifted, rd_data_buffer_out, RD_A[3:0]);
-     
-   tristate_bus_driver32$ IO_LOW [3:0] (RD_RW_OUT, write_data_shifted, MEM_INOUT[127:0]);
-      tristate_bus_driver32$ IO_HIGH [3:0] (RD_RW_OUT, write_data_shifted, MEM_INOUT[255:128]);
+   
+   tristate_bus_driver32$ IO_LOW [3:0] (RD_RD, write_data_shifted, MEM_INOUT[127:0]);
+      tristate_bus_driver32$ IO_HIGH [3:0] (RD_RD, write_data_shifted, MEM_INOUT[255:128]);
    assign MEM_ADDR = RD_A[14:0];
    assign WRITE_SIZE = RD_SIZE;
    and2$ MEM_WR_EN(MEM_WR, MEM_DONE_OUT[2],RD_RW_OUT);

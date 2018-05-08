@@ -298,10 +298,17 @@ module size_decrement(output [11:0] next_size,
    wire 			   OFFSET = A[1:0];
    wire 			   SIZE_OFFSET = current_size[1:0];
    wire 			   done_temp;
-   equal_to_zero done_t_checker(DONE, {22'h000000, next_size[11:2]});
    assign amnt_decr = 3'b100;//always remove 4 bytes from the access
    assign next_size = current_size - amnt_decr;
+   or1_6way low_size(low_bits, next_size[5], next_size[4],
+		     next_size[3], next_size[2],
+		     next_size[1], next_size[0]);
+   or1_6way high_size(high_bits, next_size[11], next_size[10],
+		     next_size[9], next_size[8],
+		     next_size[7], next_size[6]);
+   nor2$ DONE_DRIVER(DONE, low_bits, high_bits);
    
+
    
    
    //calculating offset stuff

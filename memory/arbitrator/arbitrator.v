@@ -21,7 +21,7 @@ module arbitrator(input BUS_CLK,
 
    assign next_state[1] = REQ;
 
-   nor2$ idle_state(next_state[0], REQ, current_state[1]);
+   nor2$ idle_state(next_state[0], REQ, next_state[1]);
  
 
 
@@ -32,9 +32,10 @@ module arbitrator(input BUS_CLK,
    wire                        busy_switch, idle_2busy;
    wire 		       DONE;
    //generating if current master is done
-   wire [5:0]		       BR_BG_MASK;
+   wire [5:0]		       BR_BG_MASK, BR_INV;
+   inv1$ inver [5:0] (BR_INV, BR);
    wire 		       low_match, high_match;
-   and2$ masker [5:0] (BR_BG_MASK, BR, BG);
+   and2$ masker [5:0] (BR_BG_MASK, BR_INV, BG);
    or3$ low_u(low_match, BR_BG_MASK[0], BR_BG_MASK[1], BR_BG_MASK[2]);
    or3$ high_u(high_match, BR_BG_MASK[3], BR_BG_MASK[4], BR_BG_MASK[5]);
    or2$ DONE_U(DONE, high_match, low_match);

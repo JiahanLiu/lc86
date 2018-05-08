@@ -1,6 +1,6 @@
 
-//IMPORTANT: This module is the template bus controller
-//EACH Memory module has a slightly specialized version of this controller
+
+//Cache bus controller closely follows the template
 module cache_bus_controller(//interface with bus
 		      input BUS_CLK,
 		      input RST, SET,
@@ -93,10 +93,8 @@ module cache_bus_controller(//interface with bus
    ioreg128$ data_buffer(BUS_CLK, data_buffer_in, data_buffer_out, , RST, SET);
    assign MOD_READ_DATA = data_buffer_out;
    //DONE BUFFER FOR MAIN UNIT
-   wire [7:0] 			    MOD_DONE_IN, MOD_DONE_OUT;
-   mux2_8$ READY_SEL(MOD_DONE_IN, 8'b0, 8'HFF, DONE);
-   assign 		       MOD_R = MOD_DONE_OUT[0];
-   ioreg8$ READY_REG(BUS_CLK, MOD_DONE_IN, MOD_DONE_OUT, , RST, SET);
+   wire [6:0] 			    filler1;
+   ioreg8$ READY_REG(BUS_CLK, {7'b0, DONE}, {filler1,MOD_R}, , RST, SET);
    
       
    //TRISTATE BUFFERS FOR THE BUS
