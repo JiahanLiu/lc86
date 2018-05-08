@@ -83,10 +83,12 @@ module execute (
   //functional_units
   wire [31:0] alu32_result, alu32_flags, shift_result, shift_flags, count_minus_one, stack_pointer_pop; 
   wire [63:0] alu64_result; 
+  //repne support
+  wire [31:0] repne_count; 
   //result_select_ex
   wire [31:0] ex_flags; 
 
-  assign WB_V_next = EX_V;
+  //assign WB_V_next = EX_V;
   assign WB_NEIP_next = EX_NEIP; 
   assign WB_NCS_next = EX_NCS; 
   assign WB_CONTROL_STORE_next = CONTROL_STORE;
@@ -107,11 +109,13 @@ module execute (
   functional_unit_ex u_functional_unit_ex(alu32_result, alu32_flags, alu64_result, shift_result,
     shift_flags, count_minus_one, stack_pointer_pop, cmps_pointer_updated, EX_d2_aluk_ex, EX_d2_datasize_all, 
     EX_A, EX_B, b, EX_C, count, flags_dataforwarded, CS_ALUK_D2, EX_MM_A, EX_MM_B);
+
+  repne_support u_repne_support(repne_count, count, count_minus_one);
   
   result_select_ex u_result_select_ex(WB_RESULT_A_next, WB_RESULT_B_next, WB_RESULT_C_next, WB_FLAGS_next, 
     WB_RESULT_MM_next, CS_IS_ALU32_EX, CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_XCHG_EX, CS_PASS_A_EX,
     CS_IS_CMPXCHG_EX, CS_IS_CMPS_SECOND_UOP_ALL, CS_MUX_SP_POP_EX, CS_IS_ALU32_FLAGS_EX, CS_ALU_TO_B_EX, CS_MUX_CMPS_POINTER_EX,
-    shift_result, EX_C, EX_A, EX_B, alu32_result, stack_pointer_pop, cmps_pointer_updated, count_minus_one, shift_flags,
+    shift_result, EX_C, EX_A, EX_B, alu32_result, stack_pointer_pop, cmps_pointer_updated, repne_count, shift_flags,
     alu32_flags, alu64_result);
 
   assign WB_FLAGS_next = ex_flags; 

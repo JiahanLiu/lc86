@@ -119,7 +119,7 @@ module writeback (
    dr_select_wb u_dr_select_wb(WB_Final_DR1, WB_Final_DR2, CS_IS_CMPS_SECOND_UOP_ALL, 
       WB_DR1, WB_DR2, CS_DR1_D2, CS_DR2_D2);
    
-   results_select_wb(WB_Final_data3, WB_Final_Dcache_Data, CS_IS_CMPS_SECOND_UOP_ALL, CS_MM_MEM_WB, WB_RESULT_C, internal_saved_count,
+   results_select_wb u_results_select_wb(WB_Final_data3, WB_Final_Dcache_Data, CS_IS_CMPS_SECOND_UOP_ALL, CS_MM_MEM_WB, WB_RESULT_C, internal_saved_count,
                       data1, WB_RESULT_MM);
 
    //regfile32

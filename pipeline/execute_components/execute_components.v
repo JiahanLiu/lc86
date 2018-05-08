@@ -150,6 +150,39 @@ module functional_unit_ex(
 
 endmodule // functional_unit_ex
 
+module stall_and_bubble_ex(
+	output WB_ld_latches,
+	output WB_V_next,
+	input WB_Stall,
+	input WB_de_repne_all,
+	input EX_V,
+	input wb_repne_terminate_all
+	);
+
+	inv1$ not_wb_stall(WB_ld_latches, WB_Stall);
+
+	wire wb_repne_terminate_all_not;
+	wire valid_terminate_not;
+	
+	inv1$ not_wb_repne_terminate_all(wb_repne_terminate_all_not, wb_repne_terminate_all);
+	and2$ and_terminate(valid_terminate_not, EX_V, wb_repne_terminate_all_not);
+	mux2$ u_mux_wb_valid(WB_V_next, EX_V, valid_terminate_not, WB_de_repne_all);
+
+endmodule // stall_and_bubble_ex
+
+module repne_support(
+	output [31:0] repne_count,
+	input [31:0] count,
+	input [31:0] count_minus_one
+	);
+
+	wire repne_zero_terminate;
+
+	equal_to_zero u_zero_count(repne_zero_terminate, count);
+	mux32_2way u_mux_repne_count(repne_count, count_minus_one, count, repne_zero_terminate);
+
+endmodule // repne_support
+
 //-------------------------------------------------------------------------------------
 //
 // 								 result_select_ex
@@ -215,21 +248,4 @@ module result_select_ex(
 	assign WB_RESULT_MM_next = alu64_result;
 
 endmodule // result_select_ex
-
-module stall_and_bubble_ex(
-	output WB_ld_latches,
-	output WB_V_next,
-	input WB_Stall,
-	input WB_de_repne_all,
-	input EX_V,
-	input wb_repne_terminate_all
-	);
-
-	inv1$ not_wb_stall(WB_ld_latches, WB_Stall);
-
-	wire valid_terminate;
-	and2$ and_terminate(valid_terminate, EX_V, wb_repne_terminate_all);
-	mux2$ u_mux_wb_valid(WB_V_next, EX_V, valid_terminate, WB_de_repne_all);
-
-endmodule // stall_and_bubble_ex
 
