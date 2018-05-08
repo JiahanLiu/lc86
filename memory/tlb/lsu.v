@@ -4,20 +4,20 @@ module lsu_controller (
    input V_MEM_RD,
    input [31:0] RA_RD_ADDR1,
    input [3:0] RA_RD_SIZE1,
-   input RD_ADDR1_V,
+   input RD_ADDR1_V, RD_ADDR1_PCD,
 
    input [31:0] RA_RD_ADDR2,
    input [3:0] RA_RD_SIZE2,
-   input RD_ADDR2_V,
+   input RD_ADDR2_V, RD_ADDR2_PCD,
 
    input V_MEM_WR,
    input [31:0] RA_WR_ADDR1,
    input [3:0] RA_WR_SIZE1,
-   input WR_ADDR1_V,
+   input WR_ADDR1_V, WR_ADDR1_PCD,
 
    input [31:0] RA_WR_ADDR2,
    input [3:0] RA_WR_SIZE2,
-   input WR_ADDR2_V,
+   input WR_ADDR2_V, WR_ADDR2_PCD,
 
    input [63:0] WR_DATA,
 
@@ -29,6 +29,7 @@ module lsu_controller (
    output [31:0] DCACHE_ADDR_OUT,
    output [3:0] DCACHE_SIZE_OUT,
    output DCACHE_RW_OUT,
+   output DCACHE_PCD_FLAG_OUT,
    output DCACHE_EN,
 
    output [63:0] DCACHE_WR_DATA_OUT,
@@ -152,6 +153,7 @@ WR.OP2 = (DCACHE.R&!RD.OP1&!RD.OP2&!WR.OP2&WR.V&WR.ADDR1.V&WR.ADDR2.V) | (
 
    wire [31:0] mux_rd_addr_out, mux_wr_addr_out;
    wire [3:0] mux_rd_size_out, mux_wr_size_out;
+   wire mux_rd_pcd_out, mux_wr_pcd_out;
 
    wire nor_rd_op1_2_out, dcache_rw_out;
 
@@ -164,6 +166,11 @@ WR.OP2 = (DCACHE.R&!RD.OP1&!RD.OP2&!WR.OP2&WR.V&WR.ADDR1.V&WR.ADDR2.V) | (
       mux_rd_size (mux_rd_size_out, RA_RD_SIZE1, RA_RD_SIZE2, rd_op2),
       mux_wr_size (mux_wr_size_out, RA_WR_SIZE1, RA_WR_SIZE2, wr_op2),
       mux_rw_size (DCACHE_SIZE_OUT, mux_rd_size_out, mux_wr_size_out, dcache_rw_out);
+
+   mux2$
+      mux_rd_pcd (mux_rd_pcd_out, RD_ADDR1_PCD, RD_ADDR2_PCD, rd_op2),
+      mux_wr_pcd (mux_wr_pcd_out, WR_ADDR1_PCD, WR_ADDR2_PCD, wr_op2),
+      mux_rw_pcd (DCACHE_PCD_FLAG_OUT, mux_rd_pcd_out, mux_wr_pcd_out, dcache_rw_out);
 
    nor2$ nor_rd_op1_2 (nor_rd_op1_2_out, rd_op1, rd_op2);
    and2$ and_dcache_rw (dcache_rw_out, V_MEM_WR, nor_rd_op1_2_out);
@@ -233,18 +240,22 @@ module lsu (
 //   input [63:0] WR_DATA,
 
    output RD_ADDR1_V_OUT,
+   output RD_ADDR1_PCD_OUT,
    output [31:0] RA_RD_ADDR1_OUT,
    output [3:0] RA_RD_SIZE1_OUT,
 
    output RD_ADDR2_V_OUT,
+   output RD_ADDR2_PCD_OUT,
    output [31:0] RA_RD_ADDR2_OUT,
    output [3:0] RA_RD_SIZE2_OUT,
 
    output WR_ADDR1_V_OUT,
+   output WR_ADDR1_PCD_OUT,
    output [31:0] RA_WR_ADDR1_OUT,
    output [3:0] RA_WR_SIZE1_OUT,
 
    output WR_ADDR2_V_OUT,
+   output WR_ADDR2_PCD_OUT,
    output [31:0] RA_WR_ADDR2_OUT,
    output [3:0] RA_WR_SIZE2_OUT,
 
@@ -418,17 +429,27 @@ module lsu (
       mux_rd_addr2 (mux_rd_addr2_out, {rd_addr1_entry[23:4], add_rd_cl_out[7:0], 4'b0}, {rd_addr2_entry[23:4], 12'b0}, rd_addr_cross_page),
       mux_wr_addr2 (mux_wr_addr2_out, {wr_addr1_entry[23:4], add_wr_cl_out[7:0], 4'b0}, {wr_addr2_entry[23:4], 12'b0}, wr_addr_cross_page);
 
+   wire mux_rd_addr2_pcd_out, mux_wr_addr2_pcd_out;
+
+   mux2$
+      mux_rd_addr2_pcd (mux_rd_addr2_pcd_out, rd_addr1_entry[`PTE_PCD], rd_addr2_entry[`PTE_PCD], rd_addr_cross_page),
+      mux_wr_addr2_pcd (mux_wr_addr2_pcd_out, wr_addr1_entry[`PTE_PCD], wr_addr2_entry[`PTE_PCD], wr_addr_cross_page);
+
    and2$ and_v_rd_addr1_v (RD_ADDR1_V_OUT, V_MEM_RD, rd_addr1_v);
+   assign RD_ADDR1_PCD_OUT = rd_addr1_entry[`PTE_PCD];
    assign RA_RD_ADDR1_OUT = {rd_addr1_entry[23:4], LA_RD_ADDR[11:0]};
    assign RA_RD_SIZE1_OUT = mux_rd_cross_size_out;
    and2$ and_v_rd_addr2_v (RD_ADDR2_V_OUT, V_MEM_RD, rd_addr2_v);
+   assign RD_ADDR2_PCD_OUT = mux_rd_addr2_pcd_out;
    assign RA_RD_ADDR2_OUT = mux_rd_addr2_out;
    assign RA_RD_SIZE2_OUT = rd_addr2_cross_size;
 
    and2$ and_v_wr_addr1_v (WR_ADDR1_V_OUT, V_MEM_WR, wr_addr1_v);
+   assign WR_ADDR1_PCD_OUT = wr_addr1_entry[`PTE_PCD];
    assign RA_WR_ADDR1_OUT = {wr_addr1_entry[23:4], LA_WR_ADDR[11:0]};
    assign RA_WR_SIZE1_OUT = mux_wr_cross_size_out;
    and2$ and_v_wr_addr2_v (WR_ADDR2_V_OUT, V_MEM_WR, wr_addr2_v);
+   assign WR_ADDR2_PCD_OUT = mux_wr_addr2_pcd_out;
    assign RA_WR_ADDR2_OUT = mux_wr_addr2_out;
    assign RA_WR_SIZE2_OUT = wr_addr2_cross_size;
 

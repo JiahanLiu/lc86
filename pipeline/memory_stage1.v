@@ -34,19 +34,19 @@ module memory_stage1 (
 
    output D2_MEM_WR_WB_OUT,
 
-   output RD_ADDR1_V_OUT,
+   output RD_ADDR1_V_OUT, RD_ADDR1_PCD_OUT,
    output [31:0] RA_RD_ADDR1_OUT,
    output [3:0] RA_RD_SIZE1_OUT,
 
-   output RD_ADDR2_V_OUT,
+   output RD_ADDR2_V_OUT, RD_ADDR2_PCD_OUT,
    output [31:0] RA_RD_ADDR2_OUT,
    output [3:0] RA_RD_SIZE2_OUT,
 
-   output WR_ADDR1_V_OUT,
+   output WR_ADDR1_V_OUT, WR_ADDR1_PCD_OUT,
    output [31:0] RA_WR_ADDR1_OUT,
    output [3:0] RA_WR_SIZE1_OUT,
 
-   output WR_ADDR2_V_OUT,
+   output WR_ADDR2_V_OUT, WR_ADDR2_PCD_OUT,
    output [31:0] RA_WR_ADDR2_OUT,
    output [3:0] RA_WR_SIZE2_OUT,
 
@@ -75,11 +75,11 @@ module memory_stage1 (
    lsu u_lsu (v_mem_rd, MEM_RD_ADDR, D2_MEM_SIZE_WB,
               v_mem_wr, MEM_WR_ADDR, D2_MEM_SIZE_WB,
 
-              lsu_rd_addr1_v_out, lsu_ra_rd_addr1_out, lsu_ra_rd_size1_out,
-              lsu_rd_addr2_v_out, lsu_ra_rd_addr2_out, lsu_ra_rd_size2_out,
+              lsu_rd_addr1_v_out, RD_ADDR1_PCD_OUT, lsu_ra_rd_addr1_out, lsu_ra_rd_size1_out,
+              lsu_rd_addr2_v_out, RD_ADDR2_PCD_OUT, lsu_ra_rd_addr2_out, lsu_ra_rd_size2_out,
 
-              lsu_wr_addr1_v_out, lsu_ra_wr_addr1_out, lsu_ra_wr_size1_out,
-              lsu_wr_addr2_v_out, lsu_ra_wr_addr2_out, lsu_ra_wr_size2_out,
+              lsu_wr_addr1_v_out, WR_ADDR1_PCD_OUT, lsu_ra_wr_addr1_out, lsu_ra_wr_size1_out,
+              lsu_wr_addr2_v_out, WR_ADDR2_PCD_OUT, lsu_ra_wr_addr2_out, lsu_ra_wr_size2_out,
 
               lsu_rd_page_fault_exc_out, lsu_wr_page_fault_exc_out,
               lsu_gprot_exc_out);
