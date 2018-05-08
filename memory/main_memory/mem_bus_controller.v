@@ -109,7 +109,7 @@ module mem_bus_controller(//interface with bus
    
    mux4_128 rd_buf_sel(rd_data_buffer_in, non_mem_val, non_mem_val,
 		       MEM_INOUT[127:0], MEM_INOUT[255:128],
-		       PEND_RD, RD_A[5]);
+		       RD_A[5], PEND_RD);
    //OR FROM THE WRITE LATCHES
    ioreg128$ read_data_buffer(BUS_CLK, rd_data_buffer_in, rd_data_buffer_out, , RST, SET);
    
