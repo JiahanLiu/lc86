@@ -30,7 +30,7 @@ module FULL_SIMULATOR(input CLK,
    wire 		    INTR_R;
 
    //THE FULL MEMORY MODULE
-   FULL_MEMORY FULL_MEMORY_U(
+   FULL_MEMORY u_full_memory (
 			     DC_EN,
 			     DC_WR,
 			     DC_A,
@@ -61,7 +61,7 @@ module FULL_SIMULATOR(input CLK,
    wire [127:0] 	    IR;
    assign IR = 0;
    //THE FULL PIPELINE MODULE
-PIPELINE PIPELINE_U( CLK, RST, SET,
+PIPELINE u_pipeline ( CLK, RST, SET,
 		     IR,
 
 		     IC_WR, IC_EN,
