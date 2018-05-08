@@ -1,10 +1,10 @@
 # Begin_DVE_Session_Save_Info
 # DVE view(Wave.1 ) session
-# Saved on Mon May 7 12:08:55 2018
+# Saved on Mon May 7 15:53:54 2018
 # Toplevel windows open: 2
 # 	TopLevel.1
 # 	TopLevel.2
-#   Wave.1: 24 signals
+#   Wave.1: 25 signals
 # End_DVE_Session_Save_Info
 
 # DVE version: K-2015.09-SP1_Full64
@@ -22,8 +22,8 @@ gui_set_time_units 1ps
 
 # Begin_DVE_Session_Save_Info (Wave.1)
 # DVE wave signals session
-# Saved on Mon May 7 12:08:55 2018
-# 24 signals
+# Saved on Mon May 7 15:53:54 2018
+# 25 signals
 # End_DVE_Session_Save_Info
 
 # DVE version: K-2015.09-SP1_Full64
@@ -87,6 +87,14 @@ if {[gui_sg_is_group -name "$_wave_session_group_6"]} {
 set Group6 "$_wave_session_group_6"
 
 gui_sg_addsignal -group "$_wave_session_group_6" { {V1:TOP.full_memory_u.main_memory_u.ADDR} {V1:TOP.full_memory_u.main_memory_u.WR} {V1:TOP.full_memory_u.main_memory_u.EN} {V1:TOP.full_memory_u.main_memory_u.WRITE_SIZE} {V1:TOP.full_memory_u.main_memory_u.DATA_BUF} }
+
+set _wave_session_group_7 Icache
+if {[gui_sg_is_group -name "$_wave_session_group_7"]} {
+    set _wave_session_group_7 [gui_sg_generate_new_name]
+}
+set Group7 "$_wave_session_group_7"
+
+gui_sg_addsignal -group "$_wave_session_group_7" { {V1:TOP.full_memory_u.ICACHE_PORT.current_state} }
 if {![info exists useOldWindow]} { 
 	set useOldWindow true
 }
@@ -114,11 +122,13 @@ gui_list_add_group -id ${Wave.1} -after {New Group} [list ${Group3}]
 gui_list_add_group -id ${Wave.1} -after {New Group} [list ${Group4}]
 gui_list_add_group -id ${Wave.1} -after {New Group} [list ${Group5}]
 gui_list_add_group -id ${Wave.1} -after {New Group} [list ${Group6}]
+gui_list_add_group -id ${Wave.1} -after {New Group} [list ${Group7}]
 gui_list_collapse -id ${Wave.1} ${Group1}
 gui_list_collapse -id ${Wave.1} ${Group3}
 gui_list_collapse -id ${Wave.1} ${Group4}
 gui_list_collapse -id ${Wave.1} ${Group5}
 gui_list_collapse -id ${Wave.1} ${Group6}
+gui_list_collapse -id ${Wave.1} ${Group7}
 gui_seek_criteria -id ${Wave.1} {Any Edge}
 
 gui_list_alias -id ${Wave.1} -group ${Group3} -index 0 -signal V1:TOP.full_memory_u.DCACHE_PORT.current_state -add State 
@@ -126,6 +136,7 @@ gui_list_alias -id ${Wave.1} -group ${Group3} -index 0 -signal V1:TOP.full_memor
 gui_list_alias -id ${Wave.1} -group ${Group3} -index 0 -signal V1:TOP.full_memory_u.DCACHE_PORT.data_buffer_out -add DATA_BUF 
 gui_list_alias -id ${Wave.1} -group ${Group4} -index 0 -signal V1:TOP.full_memory_u.arbitrator_u.current_state -add ARB_STATE 
 gui_list_alias -id ${Wave.1} -group ${Group5} -index 0 -signal V1:TOP.full_memory_u.mem_bus_controller_u.current_state -add MEM_State 
+gui_list_alias -id ${Wave.1} -group ${Group7} -index 0 -signal V1:TOP.full_memory_u.ICACHE_PORT.current_state -add IC_State 
 
 gui_set_pref_value -category Wave -key exclusiveSG -value $groupExD
 gui_list_set_height -id Wave -height $origWaveHeight
@@ -137,7 +148,7 @@ if { $groupExD } {
 }
 gui_list_set_filter -id ${Wave.1} -list { {Buffer 1} {Input 1} {Others 1} {Linkage 1} {Output 1} {Parameter 1} {All 1} {Aggregate 1} {LibBaseMember 1} {Event 1} {Assertion 1} {Constant 1} {Interface 1} {BaseMembers 1} {Signal 1} {$unit 1} {Inout 1} {Variable 1} }
 gui_list_set_filter -id ${Wave.1} -text {*}
-gui_list_set_insertion_bar  -id ${Wave.1} -group ${Group5}  -position in
+gui_list_set_insertion_bar  -id ${Wave.1} -group ${Group3}  -position in
 
 gui_marker_move -id ${Wave.1} {C1} 48320
 gui_view_scroll -id ${Wave.1} -vertical -set 0
