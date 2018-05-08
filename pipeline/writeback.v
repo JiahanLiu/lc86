@@ -83,13 +83,13 @@ module writeback (
    wire ZF; 
    //flags_wb
    wire [31:0] final_out_flags; 
-   //outputs
-   wire [63:0] data1_64; //64 because dcache data-in port is 64 bits incase the input is mm 
+   //result_select
+   wire [31:0] internal_saved_count; 
    //stall
    wire In_write_ready_not;
 
    inv1$ not_clk(CLK_NOT, CLK);
-   operand_select_wb u_operand_select_wb(data1, WB_Final_EIP, WB_Final_CS, saved_count, CLK, PRE, CLR,
+   operand_select_wb u_operand_select_wb(data1, WB_Final_EIP, WB_Final_CS, internal_saved_count, CLK, PRE, CLR,
       CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_CMPS_SECOND_UOP_ALL, CS_SAVE_NEIP_WB, CS_SAVE_NCS_WB,
       CS_PUSH_FLAGS_WB, CS_USE_TEMP_NEIP_WB, mux_not_taken_eip, CS_USE_TEMP_NCS_WB, WB_RESULT_A, WB_RESULT_C, WB_NEIP,
       WB_NEIP_NOT_TAKEN, WB_NCS, final_out_flags);
@@ -119,11 +119,13 @@ module writeback (
    dr_select_wb u_dr_select_wb(WB_Final_DR1, WB_Final_DR2, CS_IS_CMPS_SECOND_UOP_ALL, 
       WB_DR1, WB_DR2, CS_DR1_D2, CS_DR2_D2);
    
+   results_select_wb(WB_Final_data3, WB_Final_Dcache_Data, CS_IS_CMPS_SECOND_UOP_ALL, CS_MM_MEM_WB, WB_RESULT_C, internal_saved_count,
+                      data1, WB_RESULT_MM);
+
    //regfile32
    assign WB_Final_DR3 = CS_DR3_WB; 
    assign WB_Final_data1 = data1;
    assign WB_Final_data2 = WB_RESULT_B;
-   assign WB_Final_data3 = WB_RESULT_C;
    assign WB_Final_ld_gpr1 = v_wb_ld_gpr1; 
    assign WB_Final_ld_gpr2 = v_ex_ld_gpr2;
    assign WB_Final_ld_gpr3 = v_cs_ld_gpr3; 
@@ -141,8 +143,6 @@ module writeback (
    assign WB_Final_Flags = final_out_flags;
    assign WB_Final_ld_flags = v_cs_ld_flags;
    //DCACHE outputs
-   assign data1_64 = {{32{1'b0}}, data1};
-   mux64_2way u_dache_data_in(WB_Final_Dcache_Data, data1_64, WB_RESULT_MM, CS_MM_MEM_WB);
    assign WB_Final_Dcache_Address = WB_ADDRESS; 
    assign WB_Final_Dcache_Write = v_ex_dcache_write;
 
@@ -152,7 +152,8 @@ module writeback (
    and2$ u_wb_v_branch_taken(wb_v_branch_taken, wb_branch_taken, WB_V);
    //dataforward
    assign flags_dataforwarded = final_out_flags;
-
+   assign saved_count = internal_saved_count;
+   //hard coded
    assign WB_Final_DR3_datasize = 2'b10; 
 
 endmodule
