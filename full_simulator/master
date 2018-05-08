@@ -78,3 +78,4 @@
 ../pipeline/writeback.v
 ../pipeline/pipeline_caches.v
 ./full_simulator.v
+./full_sim_tb.v

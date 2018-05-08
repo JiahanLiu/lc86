@@ -19,3 +19,4 @@ simv.daidir
 *.vpd.*
 *.old
 *.png
+memory/main_memory/sram_list/*

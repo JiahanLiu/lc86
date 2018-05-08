@@ -16,8 +16,6 @@ module cache( //interface with the processor
     input [127:0] BUS_READ
 );
 
-    // PLCAEHOLDER
-    assign BUS_R = 1'b0;
     wire [15:0] addr1, addr2, addr3, addr4, address;
     bufferH1024$ buf1 [15:0] (addr1, addr);
     bufferH1024$ buf2 [15:0] (addr2, addr1);
@@ -306,7 +304,7 @@ module gen_n_state(
 	and3$ u_s5_HITnot_EV(s5_HITnot_EV, current_state[5], HIT_not, EV);
 	and2$ u_s8_BUSRnot(s8_BUSRnot, current_state[8], BUS_R_not);
 
-	or3$ u_s0(next_state[0], current_state[6], current_state[2], s0_ENnot);
+	or3$ u_s0(next_state0_1, current_state[6], current_state[2], s0_ENnot);
 	and3$ u_s1(next_state[1], current_state[0], enable, RW_not); 
 	or2$ u_s2(next_state[2], s1_HIT, s3_BUSR);
 	or3$ u_s3(next_state[3], s1_HITnot_EVnot, s4_BUSR, s3_BUSRnot);
@@ -314,7 +312,15 @@ module gen_n_state(
 	and3$ u_s5(next_state[5], current_state[0], enable, RW);
 	or2$ u_s6(next_state[6], s5_HIT, s7_BUSR);
 	or3$ u_s7(next_state[7], s5_HITnot_EVnot, s7_BUSRnot, s8_BUSR);
-	or2$ u_s8(next_state[8], s5_HITnot_EV, s8_BUSRnot);	
+	or2$ u_s8(next_state[8], s5_HITnot_EV, s8_BUSRnot);
+
+   wire      temp_or;
+   or1_6way any_state (temp_or,  next_state[6], next_state[7], next_state[8],
+		       next_state[5], next_state[4], next_state[3]);
+   nor3$ any_state_again(next_state0_2, temp_or, next_state[2], next_state[1]);
+   or2$ u_s0_mask(next_state[0], next_state0_1, next_state0_2);
+   
+   
 
 endmodule // gen_n_state
 
