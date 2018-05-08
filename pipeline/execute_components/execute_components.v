@@ -205,8 +205,10 @@ module result_select_ex(
 	mux32_2way u_mux_resultB(WB_RESULT_B_next, post_stage2_b, cmps_pointer_updated, CS_MUX_CMPS_POINTER_EX);
 	//WB_RESULT_C
 	wire [31:0] post_stack_pointer;
+	wire pass_count_minus_one; 
+	or2$ u_or_pass_count_minus_one(pass_count_minus_one, CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_CMPS_SECOND_UOP_ALL);
 	mux32_2way u_mux_increment_size(post_stack_pointer, EX_C, stack_pointer_pop, CS_MUX_SP_POP_EX);
-	mux32_2way u_mux_resultC(WB_RESULT_C_next, post_stack_pointer, count_minus_one, CS_IS_CMPS_FIRST_UOP_ALL);
+	mux32_2way u_mux_resultC(WB_RESULT_C_next, post_stack_pointer, count_minus_one, pass_count_minus_one);
 
 	mux32_2way u_mux_flags(WB_FLAGS_next, shift_flags, alu32_flags, CS_IS_ALU32_FLAGS_EX);
 

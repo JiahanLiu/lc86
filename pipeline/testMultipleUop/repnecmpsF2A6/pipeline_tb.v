@@ -344,7 +344,7 @@ module TOP;
                j = j-1;
            end
 
-          if(prefix1 == 16'hF3) begin
+          if(prefix1 == 16'hF2) begin
                prefix_present = 1;
                prefix_size = 1;
                IR[8*j +: 8] = prefix1;
@@ -552,7 +552,7 @@ module TOP;
 //               $stop;
            end
 
-           if(u_pipeline.DE_RE_PRE_OUT !== 0) begin
+           if(u_pipeline.DE_RE_PRE_OUT !== 1) begin
                $display("time: %0d DE_RE_PRE_OUT error!! %h", $time, u_pipeline.DE_RE_PRE_OUT);
 //               $stop;
            end
@@ -775,7 +775,7 @@ module TOP;
             end
 
             tb_opC = `check_opC; 
-            if(2'b00 === `macro_check_length) begin
+            if(2'b00 === `macro_check_pointer_length) begin
               check_opC[7:0] = tb_opC[7:0];
               correct_opC[7:0] = u_pipeline.EX_C[7:0];
               if(1'b1 === `macro_sign_extend) begin
@@ -785,7 +785,7 @@ module TOP;
                 check_opC[31:8] = 0;
                 correct_opC[31:8] = 0;
               end
-            end else if(2'b01 === `macro_check_length) begin
+            end else if(2'b01 === `macro_check_pointer_length) begin
               check_opC[15:0] = tb_opC[15:0];
               correct_opC[15:0] = u_pipeline.EX_C[15:0];
               if(1'b1 === `macro_sign_extend) begin
@@ -795,7 +795,7 @@ module TOP;
                 check_opC[31:16] = 0;
                 correct_opC[31:16] = 0;
               end 
-            end else if(2'b10 === `macro_check_length) begin
+            end else if(2'b10 === `macro_check_pointer_length) begin
               check_opC = tb_opC; 
               correct_opC = u_pipeline.EX_C;
             end
@@ -805,6 +805,8 @@ module TOP;
                 error <= 1;
               end
             end
+            $display("Force: EX_C is: %h, but needs to be: %h at time: %d", correct_opC, check_opC, $time);
+               
 
 
           

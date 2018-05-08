@@ -273,3 +273,24 @@ module dr_select_wb(
 	
 endmodule // DR_select
 
+module results_select_wb(
+	output [31:0] WB_Final_data3,
+	output [63:0] WB_Final_Dcache_Data,
+	input CS_IS_CMPS_SECOND_UOP_ALL,
+	input CS_MM_MEM_WB,
+	input [31:0] WB_RESULT_C,
+	input [31:0] saved_count,
+	input [31:0] data1,
+	input [63:0] WB_RESULT_MM
+	);
+
+	
+   	wire [63:0] data1_64; //64 because dcache data-in port is 64 bits incase the input is mm 
+
+	mux32_2way u_mux_data3(WB_Final_data3, WB_RESULT_C, saved_count, CS_IS_CMPS_SECOND_UOP_ALL);
+
+	assign data1_64 = {{32{1'b0}}, data1};
+	mux64_2way u_dache_data_in(WB_Final_Dcache_Data, data1_64, WB_RESULT_MM, CS_MM_MEM_WB);
+
+endmodule // results_select_wb
+
