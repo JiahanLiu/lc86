@@ -40,7 +40,7 @@ module mem_bus_controller(//interface with bus
 		  ST_RD = 8'b0010_0000;
    wire 		    BUS_CLK_DEL;
    assign #(0.5) BUS_CLK_DEL = BUS_CLK;
-   //TODO: double check PENDING_BR
+   //TODO debug Pending BR
    //PENDING BR IS A TIME DELAYED PEND_RD
    wire 		    PENDING_BR;
    wire 		    DEST_IN;
@@ -150,12 +150,11 @@ module mem_bus_controller(//interface with bus
    wire 			    WR_RW_IN, WR_RW_OUT;
    wire  			    RD_RW_IN, RD_RW_OUT;
    wire 			    UPD_WR_RW, UPD_RD_RW;
-   //TODO: double check that RW is getting selected correctly
-   //TODO: drive PEND_RD from new latches
+   assign BUS_SIZE = SIZE[2:0];
    assign UPD_WR_RW = LD_WR_LATCHES;
    assign UPD_RD_RW = LD_RD_LATCHES;
-   assign UPD_WR_SIZE = current_state[4];
-   assign UPD_RD_SIZE = current_state[4];
+   assign UPD_WR_SIZE = LD_WR_LATCHES;
+   assign UPD_RD_SIZE = LD_RD_LATCHES;
 
    mux2$ WR_RW_SEL (WR_RW_IN, WR_RW_OUT, RW , UPD_WR_RW);
    mux2$ RD_RW_SEL (RD_RW_IN, RD_RW_OUT, WR_RW_OUT, UPD_RD_RW);
@@ -196,10 +195,10 @@ module mem_bus_controller(//interface with bus
    
    
    //DRIVING THE MAIN MEMORY
-   //TODO: shift the data!
-   wire [127:0] 		    write_data_shifted;
-   assign write_data_shifted = rd_data_buffer_out;
    
+   wire [127:0] 		    write_data_shifted;
+   shiftleft leftshifter_u(write_data_shifted, rd_data_buffer_out, RD_A[3:0]);
+     
    tristate_bus_driver32$ IO_LOW [3:0] (RD_RW_OUT, write_data_shifted, MEM_INOUT[127:0]);
       tristate_bus_driver32$ IO_HIGH [3:0] (RD_RW_OUT, write_data_shifted, MEM_INOUT[255:128]);
    assign MEM_ADDR = RD_A[14:0];

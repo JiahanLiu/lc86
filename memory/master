@@ -13,6 +13,7 @@
 ../pipeline/common.v
 ./bus/bus_controller.v
 ./arbitrator/arbitrator.v
+./cache/cache.v
 ./cache/cache_bus_controller.v
 ./main_memory/mem_bus_controller.v
 ./main_memory/main_memory.v
