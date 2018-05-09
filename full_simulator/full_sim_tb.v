@@ -34,7 +34,55 @@ module TOP;
          $strobe ("at time %0d, instr_length_updt = %h", $time, u_full_simulator.u_pipeline.u_fetch.instr_length_updt);
          $strobe ("at time %0d, Opcode = %h", $time, u_full_simulator.u_pipeline.u_fetch.opcode);
 
-    end
+         if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_gpr1 === 1'b1) begin 
+          $strobe ("at time %0d, GPR b%b = h%h | datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR1, 
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_data1, u_full_simulator.u_pipeline.u_writeback.WB_Final_datasize);
+         end
+
+        if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_gpr2 === 1'b1) begin 
+          $strobe ("at time %0d, GPR b%b = h%h | datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR2, 
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_data2, u_full_simulator.u_pipeline.u_writeback.WB_Final_datasize);
+         end
+
+        if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_gpr3 === 1'b1) begin 
+          $strobe ("at time %0d, GPR b%b = h%h | datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR3, 
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_data3, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR3_datasize);
+         end
+
+         if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_seg === 1'b1) begin 
+          $strobe ("at time %0d, SEGR b%b = h%h | datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR1, 
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_data1, 2'b01);
+         end
+
+         if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_mm === 1'b1) begin 
+          $strobe ("at time %0d, MM b%b = h%h | datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR1, 
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_MM_Data, 2'b11);
+         end
+
+        if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_eip === 1'b1) begin 
+          $strobe ("at time %0d, EIP = h%h | datasize = b%b", $time,
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_EIP, 2'b10);
+         end
+
+        if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_cs === 1'b1) begin 
+          $strobe ("at time %0d, CS = h%h| datasize = b%b", $time, 
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_CS, 2'b01);
+         end
+
+        if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_flags === 1'b1) begin 
+          $strobe ("at time %0d, Flags = h%h| datasize = b%b", $time, 
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_Flags, 2'b10);
+        end
+
+        if(u_full_simulator.u_pipeline.u_writeback.WB_Final_Dcache_Write === 1'b1) begin 
+          $strobe ("at time %0d, Dcache Address: h%h = h%h| datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_Dcache_Address,
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_Dcache_Data, u_full_simulator.u_pipeline.u_writeback.WB_Final_Dcache_Data);
+        end
+
+
+     end
+
+
 
 //  TLB ENTRY        VPN        RPN        V     PRE   R/W   PCD
 `define TLB_ENTRY_0 {20'h00000, 20'h00000, 1'b1, 1'b1, 1'b0, 1'b0}

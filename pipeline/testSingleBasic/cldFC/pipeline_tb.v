@@ -12,7 +12,7 @@
 `define flags_affected ({`OF_affected, `DF_affected, 2'b0, `SF_affected, `ZF_affected, 1'b0, `AF_affected, 1'b0, `PF_affected, 1'b0, `CF_affected})
 
 `define macro_sign_extend 1'b0
-`define macro_check_length 2'b10 
+`define macro_check_length 2'b10
 
 `define default_mem_Value 64'h1234_5678_90AB_CDEF
 `define default_reg_base_macro 32'h90

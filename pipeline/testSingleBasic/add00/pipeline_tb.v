@@ -276,7 +276,6 @@ module TOP;
         u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[6] = 8'h6;
         u_pipeline.u_register_file.mmr.regfilelo.regfilelo.regfilelo.mem_array[7] = 8'h7;
 
-
         u_pipeline.debug_eip_in = `default_eip;
         u_pipeline.debug_cs_in = `default_cs;
         u_pipeline.u_register_file.eflags.Q = `default_flags;

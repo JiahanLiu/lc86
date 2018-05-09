@@ -342,11 +342,11 @@ endmodule // gen_n_state
 //	       WRMISS = 16'b0000_0000_1000_0000,
 //	       WREVICT = 16'b0000_0001_0000_0000;
 module  gen_ctrl(input [15:0] current_state,
-		  output OE, D_WR, BUS_WR, BUS_EN, TS_WR, R, D_MUX);
+	 output OE, D_WR, BUS_WR, BUS_EN, TS_WR, R, D_MUX);
    wire IDLE = current_state[0];
    wire RD = current_state[1];
    wire RDHIT = current_state[2];
-   wire   RDMISS = current_state[3];
+   wire RDMISS = current_state[3];
    wire RDEVICT = current_state[4];
    wire WR = current_state[5];
    wire WRHIT = current_state[6];
