@@ -80,22 +80,28 @@ module shift_arithmetic_right_w_carry(
 	wire [31:0] post_shift_1, post_shift_2, post_shift_4, post_shift_8, post_shift_16;
 	wire [31:0] post_mux_1, post_mux_2, post_mux_4, post_mux_8;
 	wire CF_size_32, CF_size_16, CF_size_8;  
+	wire [31:0] size8_extend, size16_extend;
+	wire [31:0] new_a_in; 
 
-	SAR32_by_1 u_sar32_by_1(post_shift_1, a);
+	assign size8_extend = {{24{a[7]}}, a[7:0]};
+	assign size16_extend = {{16{a[15]}}, a[15:0]};
+	mux32_3way u_mux32_3way(new_a_in, size8_extend, size16_extend, a, datasize);
+
+	SAR32_by_1 u_sar32_by_1(post_shift_1, new_a_in);
 	SAR32_by_2 u_sar32_by_2(post_shift_2, post_mux_1);
 	SAR32_by_4 u_sar32_by_4(post_shift_4, post_mux_2);
 	SAR32_by_8 u_sar32_by_8(post_shift_8, post_mux_4);
 	SAR32_by_16 u_sar32_by_16(post_shift_16, post_mux_8);
 
-	mux32_2way u_mux_1(post_mux_1, a, post_shift_1, b[0]);
+	mux32_2way u_mux_1(post_mux_1, new_a_in, post_shift_1, b[0]);
 	mux32_2way u_mux_2(post_mux_2, post_mux_1, post_shift_2, b[1]);
 	mux32_2way u_mux_4(post_mux_4, post_mux_2, post_shift_4, b[2]);
 	mux32_2way u_mux_8(post_mux_8, post_mux_4, post_shift_8, b[3]);
 	mux32_2way u_mux_16(sar_result, post_mux_8, post_shift_16, b[4]);
 
-	CF_flag_shift_right u_CF_flag_shift_right32(CF_size_32, a, b[4:0]); 
-	CF_flag_shift_right u_CF_flag_shift_right16(CF_size_16, a, b[4:0]); 
-	CF_flag_shift_right u_CF_flag_shift_right8(CF_size_8, a, b[4:0]); 
+	CF_flag_shift_right u_CF_flag_shift_right32(CF_size_32, new_a_in, b[4:0]); 
+	CF_flag_shift_right u_CF_flag_shift_right16(CF_size_16, new_a_in, b[4:0]); 
+	CF_flag_shift_right u_CF_flag_shift_right8(CF_size_8, new_a_in, b[4:0]); 
 
 	mux3$ u_mux_CF(carry_out, CF_size_8, CF_size_16, CF_size_32, datasize[0], datasize[1]);
 	
