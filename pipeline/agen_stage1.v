@@ -134,9 +134,22 @@ module agen_stage1 (
    assign D2_MEM_SIZE_WB_OUT = D2_MEM_SIZE_WB;
 
    assign EIP_OUT = EIP; // for segment limit check
+
+   wire [31:0] buf_eip_out;
    
+   bufferH64$ buf_eip [31:0] (buf_eip_out, OFFSET[31:0]);
+   
+   wire [31:0] eip_sext8, eip_sext16;
+
+   assign eip_sext8 = {{24{buf_eip_out[7]}}, {buf_eip_out[7:0]}};
+   assign eip_sext16 = {{16{buf_eip_out[15]}}, {buf_eip_out[15:0]}};
+
+   wire [31:0] mux_sext_eip_out;
+
+   mux4_32 mux_mem (mux_sext_eip_out, eip_sext8, eip_sext16, buf_eip_out[31:0], , D2_MEM_SIZE_WB[0], D2_MEM_SIZE_WB[1]);
+     
    // Generate next EIP value
-   mux2_32 mux_rel (mux_rel_out, 32'b0, OFFSET[31:0], CS_MUX_EIP_JMP_REL_AG);
+   mux2_32 mux_rel (mux_rel_out, 32'b0, mux_sext_eip_out, CS_MUX_EIP_JMP_REL_AG);
    adder32_w_carry_in add_rel (add_rel_out, , EIP, mux_rel_out, 1'b0);
    mux2_32 mux_eip (NEIP_OUT, add_rel_out, OFFSET[31:0], CS_MUX_NEXT_EIP_AG);
 
