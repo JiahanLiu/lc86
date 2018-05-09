@@ -40,37 +40,37 @@ module TOP;
 
          if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_gpr1 === 1'b1) begin 
           if(u_full_simulator.u_pipeline.u_writeback.WB_Final_datasize == 2'b00) begin
-            $strobe ("at time %0d, GPR8 b%b = h%h | datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR1, 
+            $strobe ("at time %0d, GPR8 b%b = h%h", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR1, 
             u_full_simulator.u_pipeline.u_writeback.WB_Final_data1);
           end
           if(u_full_simulator.u_pipeline.u_writeback.WB_Final_datasize == 2'b01) begin
-            $strobe ("at time %0d, GPR16 b%b = h%h | datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR1, 
+            $strobe ("at time %0d, GPR16 b%b = h%h", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR1, 
             u_full_simulator.u_pipeline.u_writeback.WB_Final_data1);
           end 
           if(u_full_simulator.u_pipeline.u_writeback.WB_Final_datasize == 2'b10) begin
-            $strobe ("at time %0d, GPR32 b%b = h%h | datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR1, 
+            $strobe ("at time %0d, GPR32 b%b = h%h", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR1, 
             u_full_simulator.u_pipeline.u_writeback.WB_Final_data1);
           end   
          end
 
         if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_gpr2 === 1'b1) begin 
           if(u_full_simulator.u_pipeline.u_writeback.WB_Final_datasize == 2'b00) begin
-              $strobe ("at time %0d, GPR8 b%b = h%h | datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR2, 
+              $strobe ("at time %0d, GPR8 b%b = h%h", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR2, 
                 u_full_simulator.u_pipeline.u_writeback.WB_Final_data2);
           end
             if(u_full_simulator.u_pipeline.u_writeback.WB_Final_datasize == 2'b01) begin
-              $strobe ("at time %0d, GPR16 b%b = h%h | datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR2, 
+              $strobe ("at time %0d, GPR16 b%b = h%h", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR2, 
                 u_full_simulator.u_pipeline.u_writeback.WB_Final_data2);
           end 
             if(u_full_simulator.u_pipeline.u_writeback.WB_Final_datasize == 2'b10) begin
-              $strobe ("at time %0d, GPR32 b%b = h%h | datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR2, 
+              $strobe ("at time %0d, GPR32 b%b = h%h", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR2, 
                 u_full_simulator.u_pipeline.u_writeback.WB_Final_data2);
           end  
          end
 
         if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_gpr3 === 1'b1) begin 
-          $strobe ("at time %0d, GPR32 b%b = h%h | datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR3, 
-            u_full_simulator.u_pipeline.u_writeback.WB_Final_data3, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR3_datasize);
+          $strobe ("at time %0d, GPR32 b%b = h%h", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR3, 
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_data3);
          end
 
          if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_seg === 1'b1) begin 
