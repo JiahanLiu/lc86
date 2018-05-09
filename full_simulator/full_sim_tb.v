@@ -76,7 +76,7 @@ module TOP;
 
         if(u_full_simulator.u_pipeline.u_writeback.WB_Final_Dcache_Write === 1'b1) begin 
           $strobe ("at time %0d, Dcache Address: h%h = h%h| datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_Dcache_Address,
-            u_full_simulator.u_pipeline.u_writeback.WB_Final_Dcache_Data, u_full_simulator.u_pipeline.u_writeback.WB_Final_Dcache_Data);
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_Dcache_Data, u_full_simulator.u_pipeline.u_writeback.WB_Final_datasize);
         end
 
 
