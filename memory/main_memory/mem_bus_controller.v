@@ -186,7 +186,7 @@ module mem_bus_controller(//interface with bus
    //Driving control signals
    inv1$ WR_V_INV(WR_V_BAR, WR_V_OUT);
    inv1$ RD_RD_DRIV(RD_RD, RD_RW_OUT);   
-   and2$ NXT_STE_DRIVER(PENDING_BR, MEM_DONE_OUT[4], PEND_RD);
+   and2$ NXT_STE_DRIVER(PENDING_BR, MEM_DONE_OUT[2], PEND_RD);
    and3$ PEND_RD_DRIV (PEND_RD, RD_RD, RD_V_OUT, MEM_DONE_OUT[1]);
    and2$ PEND_WR_DRIV (PEND_WR, RD_RW_OUT, RD_V_OUT);
 
@@ -219,10 +219,10 @@ module mem_bus_controller(//interface with bus
    
    tristate_bus_driver32$ IO_LOW [3:0] (RD_RD, write_data_shifted, MEM_INOUT[127:0]);
       tristate_bus_driver32$ IO_HIGH [3:0] (RD_RD, write_data_shifted, MEM_INOUT[255:128]);
-   assign MEM_ADDR = RD_A[14:0];
+   assign #(2)MEM_ADDR = RD_A[14:0];
    assign WRITE_SIZE = RD_SIZE;
-   and2$ MEM_WR_EN(MEM_WR, MEM_DONE_OUT[2],RD_RW_OUT);
-   assign MEM_EN = MEM_DONE_OUT[3];
+   and2$ MEM_WR_EN(MEM_WR, MEM_DONE_OUT[1],RD_RW_OUT);
+   assign MEM_EN = MEM_DONE_OUT[2];
 
    
    //DRIVING THE DESTINATION WIRE
