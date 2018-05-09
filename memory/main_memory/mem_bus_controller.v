@@ -193,9 +193,12 @@ module mem_bus_controller(//interface with bus
    //We load the WR latches on Ack if a read
    //We load the WR latches on Done if a write
    inv1$ BUS_RW_INV (RW_BAR, RW);
-   and3$ LD_WR_DRIV_RD (LD_WR_LATCHES_RD, WR_V_BAR,
+   or2$ WR_LATCHES_OPEN(WR_V_OPEN, WR_V_BAR, CLR_WR_LATCHES);
+   
+   //STEVEN: removed WR_BAR as 
+   and3$ LD_WR_DRIV_RD (LD_WR_LATCHES_RD, WR_V_OPEN,
 			ACK_OUT, RW_BAR);
-   and3$ LD_WR_DRIV_WR (LD_WR_LATCHES_WR, WR_V_BAR,
+   and3$ LD_WR_DRIV_WR (LD_WR_LATCHES_WR, WR_V_OPEN,
 			current_state[5], DONE);
    or2$ LD_WR_DRIV (LD_WR_LATCHES, LD_WR_LATCHES_RD, LD_WR_LATCHES_WR);
 //   and2$ LD_WR_DRIV (LD_WR_LATCHES, ACK_OUT, WR_V_BAR);

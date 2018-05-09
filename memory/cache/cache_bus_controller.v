@@ -55,10 +55,10 @@ module cache_bus_controller(//interface with bus
    wire 		    MOD_MASK_OUT, MOD_EN_MASK;
    wire [6:0] 		    filler;
    //updating the pending write latch when request initiated, and when writing/reading
-   or3$ UPD_EN_DRIVER(UPD_EN, current_state[2], current_state[3], current_state[5]);
+   or3$ UPD_EN_DRIVER(UPD_EN, current_state[2], current_state[3], current_state[4]);
    
    mux2$ MASK_SEL(MASK_IN, MOD_MASK_OUT, current_state[2], UPD_EN);   
-   ioreg8$ MASK_REG(BUS_CLK, {7'b0,MASK_IN},{filler, MOD_MASK_OUT}, {filler,MOD_EN_MASK},RST,SET);
+   dff8$ MASK_REG(BUS_CLK, {7'b0,MASK_IN},{filler, MOD_MASK_OUT}, {filler,MOD_EN_MASK},RST,SET);
    and2$ MASKED_MOD_EN(MASKED_EN, MOD_EN_MASK, MOD_EN);
    ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MASKED_EN, BG, ACK_IN, RW, DEST_IN, DONE);
    wire [2:0] 		    amnt_decr;
