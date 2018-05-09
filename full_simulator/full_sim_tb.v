@@ -29,10 +29,10 @@ module TOP;
      initial #6000 $finish;
 
      always @(posedge clk) begin
-         $strobe ("at time %0d, IR = %h", $time, u_full_simulator.u_pipeline.u_fetch.CURRENT_IR);
-         $strobe ("at time %0d, read_ptr = %h", $time, u_full_simulator.u_pipeline.u_fetch.read_ptr);
-         $strobe ("at time %0d, instr_length_updt = %h", $time, u_full_simulator.u_pipeline.u_fetch.instr_length_updt);
-         $strobe ("at time %0d, Opcode = %h", $time, u_full_simulator.u_pipeline.u_fetch.opcode);
+         //$strobe ("at time %0d, IR = %h", $time, u_full_simulator.u_pipeline.u_fetch.CURRENT_IR);
+         //$strobe ("at time %0d, read_ptr = %h", $time, u_full_simulator.u_pipeline.u_fetch.read_ptr);
+         //$strobe ("at time %0d, instr_length_updt = %h", $time, u_full_simulator.u_pipeline.u_fetch.instr_length_updt);
+         //$strobe ("at time %0d, Opcode = %h", $time, u_full_simulator.u_pipeline.u_fetch.opcode);
 
          if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_gpr1 === 1'b1) begin 
           $strobe ("at time %0d, GPR b%b = h%h | datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR1, 
@@ -57,11 +57,6 @@ module TOP;
          if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_mm === 1'b1) begin 
           $strobe ("at time %0d, MM b%b = h%h | datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_DR1, 
             u_full_simulator.u_pipeline.u_writeback.WB_Final_MM_Data, 2'b11);
-         end
-
-        if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_eip === 1'b1) begin 
-          $strobe ("\nat time %0d, EIP = h%h | datasize = b%b", $time,
-            u_full_simulator.u_pipeline.u_writeback.WB_Final_EIP, 2'b10);
          end
 
         if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_cs === 1'b1) begin 
@@ -92,6 +87,11 @@ module TOP;
           $strobe ("at time %0d, Dcache Address: h%h = h%h| datasize = b%b", $time, u_full_simulator.u_pipeline.u_writeback.WB_Final_Dcache_Address,
             u_full_simulator.u_pipeline.u_writeback.WB_Final_Dcache_Data, u_full_simulator.u_pipeline.u_writeback.WB_Final_datasize);
         end
+
+        if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_eip === 1'b1) begin 
+          $strobe ("\nat time %0d, EIP = h%h | datasize = b%b", $time,
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_EIP, 2'b10);
+         end
 
 
      end
