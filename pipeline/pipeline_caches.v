@@ -1,6 +1,4 @@
 module PIPELINE(input CLK, CLR, PRE,
-		//TODO: IR should not be used anymore
-		input [127:0] IR,
 
 		//interface between ICACHE and MEM
 		output ICACHE_BUS_WR_OUT, ICACHE_BUS_EN_OUT,
