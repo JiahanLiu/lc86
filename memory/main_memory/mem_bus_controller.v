@@ -99,17 +99,22 @@ module mem_bus_controller(//interface with bus
    
    //READ DATA BUFFER
    wire [127:0] 		    rd_data_buffer_in, rd_data_buffer_out,
-				    non_mem_val;
+				    mem_val, non_mem_val;
    wire [15:0]			    RD_A;
    
    //TODO: debug the PEND_RD signal
    //READ DATA CAN BE UPDATED FROM READING
-   mux2_128 rd_buf_upd(non_mem_val, rd_data_buffer_out, data_buffer_out,
-		       LD_RD_LATCHES);
-   
-   mux4_128 rd_buf_sel(rd_data_buffer_in, non_mem_val, non_mem_val,
-		       MEM_INOUT[127:0], MEM_INOUT[255:128],
-		       RD_A[4], PEND_RD);
+   //mux2_128 rd_buf_upd(non_mem_val, rd_data_buffer_out, data_buffer_out,
+   //LD_RD_LATCHES);
+   mux2_128 mem_select(mem_val, MEM_INOUT[127:0], MEM_INOUT[255:128],
+		       RD_A[4]);
+
+   mux4_128 rd_buf_sel(rd_data_buffer_in, rd_data_buffer_out, mem_val,
+		       data_buffer_out, data_buffer_out,
+		       PEND_RD, LD_RD_LATCHES);
+   //   mux4_128 rd_buf_sel(rd_data_buffer_in, non_mem_val, non_mem_val,
+//		       MEM_INOUT[127:0], MEM_INOUT[255:128],
+//		       RD_A[4], PEND_RD);
    //OR FROM THE WRITE LATCHES
    ioreg128$ read_data_buffer(BUS_CLK, rd_data_buffer_in, rd_data_buffer_out, , RST, SET);
    
@@ -182,7 +187,7 @@ module mem_bus_controller(//interface with bus
    inv1$ WR_V_INV(WR_V_BAR, WR_V_OUT);
    inv1$ RD_RD_DRIV(RD_RD, RD_RW_OUT);   
    and2$ NXT_STE_DRIVER(PENDING_BR, MEM_DONE_OUT[4], PEND_RD);
-   and2$ PEND_RD_DRIV (PEND_RD, RD_RD, RD_V_OUT);
+   and3$ PEND_RD_DRIV (PEND_RD, RD_RD, RD_V_OUT, MEM_DONE_OUT[1]);
    and2$ PEND_WR_DRIV (PEND_WR, RD_RW_OUT, RD_V_OUT);
 
    //We load the WR latches on Ack if a read
