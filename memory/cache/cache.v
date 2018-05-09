@@ -36,9 +36,19 @@ module cache( //interface with the processor
    dff16$ state (CLK, next_state, current_state, , RST, SET);
    
    //GENERATING NEXT STATE SIGNAL
+   //SIGNALS to delay state transition for miss after evict
+   wire 	     BUS_R_OLD_IN, BUS_R_OLD_OUT_BAR, BUS_R_CHANGE;
+   wire [6:0] 	     filler;
+   dff8$ old_bus_ready(CLK, {7'b0,BUS_R}, ,
+		       {filler,BUS_R_OLD_OUT_BAR} , RST, SET);
+   and2$ rising_edge(BUS_R_CHANGE, BUS_R_OLD_OUT_BAR, BUS_R);
+
    wire 	     evict;
    gen_n_state gen_n_state_u(next_state, current_state, enable, RW, HIT,
-			     BUS_R, evict);
+			     BUS_R_CHANGE, evict);
+   
+   
+   
 
    //LATCH FOR THE ADDRESS
    //Only updating during the idle state
