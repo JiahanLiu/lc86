@@ -5,7 +5,7 @@ import getopt, sys
 
 file_str = 'blk_line%d_sram%d.list'
 
-def generate_memory(filename):
+def generate_memory(filename, last_instruction_address):
     ramfilelist = []
     for i in xrange(0, 8):
         ramfilelist0 = []
@@ -34,7 +34,12 @@ def generate_memory(filename):
                 else:
                     memory.append((global_address, entry))
                     global_address += 1
-        
+
+        last_instruction_address += 1
+        for i in xrange(0, 64):
+            memory.append((last_instruction_address, '00'))
+            last_instruction_address += 1
+
         # print memory
         for (address, data) in sorted(memory, key=lambda x:x[0]):
             blk_line = (address >> 12) & 0x7 # address[14:12]
@@ -82,7 +87,8 @@ def main():
         else:
             assert False, "unhandled option"
 
-    generate_memory(filename)
+    last_instruction_address = 0x34
+    generate_memory(filename, last_instruction_address)
 
 if __name__ == "__main__":
     main()
