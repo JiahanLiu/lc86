@@ -321,7 +321,9 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
    wire and0_out, and1_out, or0_out,
         and2_out, and3_out, and4_out, or1_out;
 
-   assign Dflush_state = flush;
+   and2$ andDflush_state0 (and_Dflush_state0_out, flush_state, IFU_ICACHE_RD_STALL_OUT);
+   or2$ orDflush_state (Dflush_state, and_Dflush_state0_out, flush);
+   //assign Dflush_state = flush;
 
    inv1$
       inv1 (ifu_icache_rd_stall_out_bar, IFU_ICACHE_RD_STALL_OUT),
@@ -406,7 +408,7 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
       or_empty1 (or_empty1_out, and_empty12_out, and_empty15_out);
 
    wire and_empty_flush_out;
-   and2$ and_empty_flush (and_empty_flush_out, flush_state, flush_bar);
+   and3$ and_empty_flush (and_empty_flush_out, flush_state, flush_bar, ifu_icache_rd_stall_out_bar);
    or3$
       or_empty2 (or_empty2_out, or_empty0_out, or_empty1_out, and_empty_flush_out);
    assign Dempty_state = or_empty2_out;
