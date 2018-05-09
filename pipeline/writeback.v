@@ -63,7 +63,9 @@ module writeback (
    output wb_v_branch_taken,
    
    output [31:0] flags_dataforwarded,
-   output [31:0] saved_count
+   output [31:0] saved_count,
+
+   output JMP_STALL_OUT
    );
 
   //control signals
@@ -156,4 +158,8 @@ module writeback (
    //hard coded
    assign WB_Final_DR3_datasize = 2'b10; 
 
+   wire or_jmp_stall_out;
+   or3$ or_jmp_stall (or_jmp_stall_out, CS_JMP_STALL_DE, CS_IS_NEAR_RET_M2, CS_IS_FAR_RET_M2);
+   and2$ and_jmp_stall (JMP_STALL_OUT, WB_V, or_jmp_stall_out);
 endmodule
+
