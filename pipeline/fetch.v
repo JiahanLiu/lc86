@@ -404,8 +404,11 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
    or3$ or_empty0 (or_empty0_out, and_empty2_out, and_empty6_out, and_empty9_out);
    or2$
       or_empty1 (or_empty1_out, and_empty12_out, and_empty15_out);
+
+   wire and_empty_flush_out;
+   and2$ and_empty_flush (and_empty_flush_out, flush_state, flush_bar);
    or3$
-      or_empty2 (or_empty2_out, or_empty0_out, or_empty1_out, flush_state);
+      or_empty2 (or_empty2_out, or_empty0_out, or_empty1_out, and_empty_flush_out);
    assign Dempty_state = or_empty2_out;
 
    wire and_full0_out, and_full1_out, and_full2_out, and_full3_out,
