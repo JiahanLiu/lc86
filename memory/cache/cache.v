@@ -122,7 +122,7 @@ module cache( //interface with the processor
    //DRIVING THE BUS WIRES
    or2$ evicting(evict_sel, current_state[8],current_state[4]);
    
-   mux2_16$(BUS_ADDR, {address[15:4], 4'b0}, {tagstore_tag,address[8:4] ,4'b0}, evict_sel);
+   mux2_16$ eviction_sel(BUS_ADDR, {address[15:4], 4'b0}, {tagstore_tag,address[8:4] ,4'b0}, evict_sel);
    //assign BUS_ADDR = {address[15:4], 4'b0000};
    assign BUS_WRITE = data_read;
 endmodule

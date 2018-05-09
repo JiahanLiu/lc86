@@ -75,8 +75,12 @@ module DMA_bus_controller(//interface with bus
 
 
    //REGISTERS FOR THE CONTROLLER
-   //SIZE REGISTER: muxed between the decremented value or 16
-   mux2_16$ mux_size_u(current_size_in, 16'h0010, next_size, SIZE_DECR);
+   //The size can either decrement, or it can be loaded from the bus, otherwise stay the same
+//   mux4_16$ mux_size_u(current_size_in, opt0, opt1,
+//		       opt2, opt3,
+//		       sel0, sel1);
+   
+   mux2_16$ mux_size_u(current_size_in, D[15:0], next_size, SIZE_DECR);
    ioreg16$ size_reg(BUS_CLK, current_size_in, current_size, , RST, SET);
 
    //DATA BUFFER
