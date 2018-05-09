@@ -60,7 +60,7 @@ module TOP;
          end
 
         if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_eip === 1'b1) begin 
-          $strobe ("at time %0d, EIP = h%h | datasize = b%b", $time,
+          $strobe ("\nat time %0d, EIP = h%h | datasize = b%b", $time,
             u_full_simulator.u_pipeline.u_writeback.WB_Final_EIP, 2'b10);
          end
 
@@ -70,8 +70,22 @@ module TOP;
          end
 
         if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_flags === 1'b1) begin 
-          $strobe ("at time %0d, Flags = h%h| datasize = b%b", $time, 
-            u_full_simulator.u_pipeline.u_writeback.WB_Final_Flags, 2'b10);
+          
+          $strobe ("at time %0d, OF = %b", $time, 
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_Flags[11]);
+          $strobe ("at time %0d, DF = %b", $time, 
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_Flags[10]);
+          $strobe ("at time %0d, SF = %b", $time, 
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_Flags[7]);
+          $strobe ("at time %0d, ZF = %b", $time, 
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_Flags[6]);
+          $strobe ("at time %0d, AF = %b", $time, 
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_Flags[4]);
+          $strobe ("at time %0d, PF = %b", $time, 
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_Flags[2]);
+          $strobe ("at time %0d, CF = %b", $time, 
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_Flags[0]);
+
         end
 
         if(u_full_simulator.u_pipeline.u_writeback.WB_Final_Dcache_Write === 1'b1) begin 
