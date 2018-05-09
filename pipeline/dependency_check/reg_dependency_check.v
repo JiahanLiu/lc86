@@ -30,7 +30,7 @@ module reg_dependency_check (
 );
 
    wire [23:0] and0_out, and3_out, and6_out, and9_out;
-   wire [7:0] and1_out, and2_out, and4_out, and5_out, and8_out, and11_out;
+   wire [7:0] and1_out, and2_out, and4_out, and5_out, and7_out, and8_out, and10_out, and11_out;
 
    wire [23:0] or0_out;
    wire [7:0] or1_out, or2_out;

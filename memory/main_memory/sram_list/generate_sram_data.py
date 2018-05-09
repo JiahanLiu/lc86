@@ -35,10 +35,10 @@ def generate_memory(filename, last_instruction_address):
                     memory.append((global_address, entry))
                     global_address += 1
 
-        last_instruction_address += 1
-        for i in xrange(0, 64):
-            memory.append((last_instruction_address, '00'))
-            last_instruction_address += 1
+##        last_instruction_address += 1
+##        for i in xrange(0, 64):
+##            memory.append((last_instruction_address, '00'))
+##            last_instruction_address += 1
 
         # print memory
         for (address, data) in sorted(memory, key=lambda x:x[0]):

@@ -171,6 +171,10 @@ wire [7:0] write_hh_en1, write_hh_en2, write_hh_en3;
 wire [7:0] write_hl_en1, write_hl_en2, write_hl_en3;
 wire [7:0] write_lh_en1, write_lh_en2, write_lh_en3;
 wire [7:0] write_ll_en1, write_ll_en2, write_ll_en3;
+wire [7:0] write_hh_en1_up, write_hh_en2_up, write_hh_en3_up;
+wire [7:0] write_hl_en1_up, write_hl_en2_up, write_hl_en3_up;
+wire [7:0] write_lh_en1_up, write_lh_en2_up, write_lh_en3_up;
+wire [7:0] write_ll_en1_up, write_ll_en2_up, write_ll_en3_up;
 wire [7:0] write_hh_en1_b, write_hh_en2_b, write_hh_en3_b;
 wire [7:0] write_hl_en1_b, write_hl_en2_b, write_hl_en3_b;
 wire [7:0] write_lh_en1_b, write_lh_en2_b, write_lh_en3_b;
@@ -273,37 +277,68 @@ or3$ or4[7:0] (out4a, outw4, outw8, outw12);
 // s1 = (!d1 &!d2 &d3);
 // s0 = (!d1 &d2 &!d3);
 
-inv1$ inv1[7:0] (write_hh_en1_b, write_hh_en1);
-inv1$ inv2[7:0] (write_hh_en2_b, write_hh_en2);
-inv1$ inv3[7:0] (write_hh_en3_b, write_hh_en3);
+inv1$ inv1[7:0] (write_hh_en1_b, write_hh_en1_up);
+inv1$ inv2[7:0] (write_hh_en2_b, write_hh_en2_up);
+inv1$ inv3[7:0] (write_hh_en3_b, write_hh_en3_up);
 
-inv1$ inv4[7:0] (write_hl_en1_b, write_hl_en1);
-inv1$ inv5[7:0] (write_hl_en2_b, write_hl_en2);
-inv1$ inv6[7:0] (write_hl_en3_b, write_hl_en3);
+inv1$ inv4[7:0] (write_hl_en1_b, write_hl_en1_up);
+inv1$ inv5[7:0] (write_hl_en2_b, write_hl_en2_up);
+inv1$ inv6[7:0] (write_hl_en3_b, write_hl_en3_up);
 
-inv1$ inv7[7:0] (write_lh_en1_b, write_lh_en1);
-inv1$ inv8[7:0] (write_lh_en2_b, write_lh_en2);
-inv1$ inv9[7:0] (write_lh_en3_b, write_lh_en3);
+inv1$ inv7[7:0] (write_lh_en1_b, write_lh_en1_up);
+inv1$ inv8[7:0] (write_lh_en2_b, write_lh_en2_up);
+inv1$ inv9[7:0] (write_lh_en3_b, write_lh_en3_up);
 
-inv1$ inv10[7:0] (write_ll_en1_b, write_ll_en1);
-inv1$ inv11[7:0] (write_ll_en2_b, write_ll_en2);
-inv1$ inv12[7:0] (write_ll_en3_b, write_ll_en3);
+inv1$ inv10[7:0] (write_ll_en1_b, write_ll_en1_up);
+inv1$ inv11[7:0] (write_ll_en2_b, write_ll_en2_up);
+inv1$ inv12[7:0] (write_ll_en3_b, write_ll_en3_up);
 inv1$ inv_clk (clk_n, clk);
 
+and2$ andup1[7:0] (write_hh_en1_up, write_DR1_buf, write_hh_en1);
+and2$ andup2[7:0] (write_hh_en2_up, write_DR2_buf, write_hh_en2);
+and2$ andup3[7:0] (write_hh_en3_up, write_DR3_buf, write_hh_en3);
+
+and2$ andup4[7:0] (write_hl_en1_up, write_DR1_buf, write_hl_en1);
+and2$ andup5[7:0] (write_hl_en2_up, write_DR2_buf, write_hl_en2);
+and2$ andup6[7:0] (write_hl_en3_up, write_DR3_buf, write_hl_en3);
+
+and2$ andup7[7:0] (write_lh_en1_up, write_DR1_buf, write_lh_en1);
+and2$ andup8[7:0] (write_lh_en2_up, write_DR2_buf, write_lh_en2);
+and2$ andup9[7:0] (write_lh_en3_up, write_DR3_buf, write_lh_en3);
+
+and2$ andup10[7:0] (write_ll_en1_up, write_DR1_buf, write_ll_en1);
+and2$ andup11[7:0] (write_ll_en2_up, write_DR2_buf, write_ll_en2);
+and2$ andup12[7:0] (write_ll_en3_up, write_DR3_buf, write_ll_en3);
+
+
 // Write the correct data
-and3$ and2[7:0] (r_sel1_hh, write_hh_en1_b, write_hh_en2_b, write_hh_en3);
-and3$ and3[7:0] (r_sel0_hh, write_hh_en1_b, write_hh_en2, write_hh_en3_b);
+//and3$ and2[7:0] (r_sel1_hh, write_hh_en1_b, write_hh_en2_b, write_hh_en3);
+//and3$ and3[7:0] (r_sel0_hh, write_hh_en1_b, write_hh_en2, write_hh_en3_b);
+//
+//and3$ and4[7:0] (r_sel1_hl, write_hl_en1_b, write_hl_en2_b, write_hl_en3);
+//and3$ and5[7:0] (r_sel0_hl, write_hl_en1_b, write_hl_en2, write_hl_en3_b);
+//
+//and3$ and6[7:0] (r_sel1_lh, write_lh_en1_b, write_lh_en2_b, write_lh_en3);
+//and3$ and7[7:0] (r_sel0_lh, write_lh_en1_b, write_lh_en2, write_lh_en3_b);
+//
+//and3$ and8[7:0] (r_sel1_ll, write_ll_en1_b, write_ll_en2_b, write_ll_en3);
+//and3$ and9[7:0] (r_sel0_ll, write_ll_en1_b, write_ll_en2, write_ll_en3_b);
 
-and3$ and4[7:0] (r_sel1_hl, write_hl_en1_b, write_hl_en2_b, write_hl_en3);
-and3$ and5[7:0] (r_sel0_hl, write_hl_en1_b, write_hl_en2, write_hl_en3_b);
+and3$ and2[7:0] (r_sel1_hh, write_hh_en1_b, write_hh_en2_b, write_hh_en3_up);
+and3$ and3[7:0] (r_sel0_hh, write_hh_en1_b, write_hh_en2_up, write_hh_en3_b);
 
-and3$ and6[7:0] (r_sel1_lh, write_lh_en1_b, write_lh_en2_b, write_lh_en3);
-and3$ and7[7:0] (r_sel0_lh, write_lh_en1_b, write_lh_en2, write_lh_en3_b);
+and3$ and4[7:0] (r_sel1_hl, write_hl_en1_b, write_hl_en2_b, write_hl_en3_up);
+and3$ and5[7:0] (r_sel0_hl, write_hl_en1_b, write_hl_en2_up, write_hl_en3_b);
 
-and3$ and8[7:0] (r_sel1_ll, write_ll_en1_b, write_ll_en2_b, write_ll_en3);
-and3$ and9[7:0] (r_sel0_ll, write_ll_en1_b, write_ll_en2, write_ll_en3_b);
+and3$ and6[7:0] (r_sel1_lh, write_lh_en1_b, write_lh_en2_b, write_lh_en3_up);
+and3$ and7[7:0] (r_sel0_lh, write_lh_en1_b, write_lh_en2_up, write_lh_en3_b);
 
- 
+and3$ and8[7:0] (r_sel1_ll, write_ll_en1_b, write_ll_en2_b, write_ll_en3_up);
+and3$ and9[7:0] (r_sel0_ll, write_ll_en1_b, write_ll_en2_up, write_ll_en3_b);
+
+
+
+
 
 
 mux4_8$ mux0_hh[3:0] (write_data0_hh, result1_m, result2_m, result3_m, , r_sel0_hh[0], r_sel1_hh[0]);
