@@ -64,4 +64,4 @@ dependency_check/mem_dependency_check.v
 ./execute.v
 ./writeback.v
 ./pipeline.v
-./pipeline_tb.v
+./pipeline_tb2.v
