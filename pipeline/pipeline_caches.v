@@ -1,6 +1,4 @@
 module PIPELINE(input CLK, CLR, PRE,
-		//TODO: IR should not be used anymore
-		input [127:0] IR,
 
 		//interface between ICACHE and MEM
 		output ICACHE_BUS_WR_OUT, ICACHE_BUS_EN_OUT,
@@ -1619,7 +1617,7 @@ module PIPELINE(input CLK, CLR, PRE,
         EX_d2_datasize_all,
         EX_d2_aluk_ex, 
         EX_d2_ld_gpr1_ex,
-	EX_d2_ld_mm_ex,
+	      EX_d2_ld_mm_ex,
         EX_d2_dcache_write_ex, 
         EX_d2_repne_wb, 
 
@@ -1648,7 +1646,7 @@ module PIPELINE(input CLK, CLR, PRE,
         WB_de_datasize_all_next,
         WB_ex_ld_gpr1_wb_next,
         WB_ex_ld_gpr2_wb_next,
-	WB_d2_ld_mm_wb_next,
+	      WB_d2_ld_mm_wb_next,
         WB_ex_dcache_write_wb_next, 
         WB_de_repne_wb_next, 
 
@@ -1671,7 +1669,7 @@ module PIPELINE(input CLK, CLR, PRE,
 
         WB_ld_latches,
 
-	EX_JMP_STALL_OUT, EX_V_LD_DF_OUT // nelson added
+	      EX_JMP_STALL_OUT, EX_V_LD_DF_OUT // nelson added
     );
 
    wire wb_mispredict_taken_all_out;
@@ -1842,7 +1840,7 @@ module PIPELINE(input CLK, CLR, PRE,
         WB_de_datasize_all,
         WB_ex_ld_gpr1_wb,
         WB_ex_ld_gpr2_wb,
-	WB_d2_ld_mm_wb,
+	      WB_d2_ld_mm_wb,
         WB_ex_dcache_write_wb,
         WB_de_repne_wb, 
 
@@ -1892,7 +1890,7 @@ module PIPELINE(input CLK, CLR, PRE,
         wb_halt_all,
         wb_repne_terminate_all,
         WB_stall,
-	wb_mispredict_taken_all_out,
+	      wb_mispredict_taken_all_out,
 
         flags_dataforwarded,
         count_dataforwarded,

@@ -170,7 +170,7 @@ module repne_halt_wb(
 	input CS_IS_CMPS_SECOND_UOP_ALL,
 	input WB_d2_repne_wb,
 	input [31:0] current_flags,
-	input [31:0] WB_RESULT_C
+	input [31:0] internal_saved_count
 	);
 
 	wire ZF;
@@ -178,7 +178,7 @@ module repne_halt_wb(
 	
 	wire zero_count, second_uop_of_repne, repne_termination_conditions;
 
-	equal_to_zero u_zero_count(zero_count, WB_RESULT_C);
+	equal_to_zero u_zero_count(zero_count, internal_saved_count);
 	or2$ u_repne_terminate(repne_termination_conditions, ZF, zero_count);
 	and2$ u_second_uop_repne(second_uop_of_repne, CS_IS_CMPS_SECOND_UOP_ALL, WB_d2_repne_wb);
 	and3$ u_terminate_repne(wb_repne_terminate_all, WB_V, repne_termination_conditions, second_uop_of_repne); 

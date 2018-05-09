@@ -56,14 +56,9 @@ module FULL_SIMULATOR(input CLK,
 			     RST, SET);
 
 
-   //TODO: verify IR does not do anything
    //TODO: add wiring for interrupts
-   wire [127:0] 	    IR;
-   assign IR = 0;
    //THE FULL PIPELINE MODULE
 PIPELINE u_pipeline ( CLK, RST, SET,
-		     IR,
-
 		     IC_WR, IC_EN,
 		     IC_A,
 		     IC_WRITE_DATA,
