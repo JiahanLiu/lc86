@@ -466,17 +466,17 @@ module PIPELINE(input CLK, CLR, PRE,
    nor4$ nor1_de_v_exc (nor1_de_v_exc_out, ME2_EXC_EN_V_OUT, EX_EXC_EN_V_OUT, D2_JMP_STALL_OUT, AG_JMP_STALL_OUT);
    nor4$ nor2_de_v_exc (nor2_de_v_exc_out, AG2_JMP_STALL_OUT, ME_JMP_STALL_OUT, ME2_JMP_STALL_OUT, EX_JMP_STALL_OUT);
 
-   wire WB_JMP_STALL_OUT;
+   wire WB_JMP_STALL_OUT, WB_EXC_EN_V;
    wire wb_mispredict_taken_all_bar, nor4_de_v_exc_out;
 
    inv1$ inv_wb_mispredict_taken_bar (wb_mispredict_taken_all_bar, wb_mispredict_taken_all);
-   nor2$ nor4_de_v_exc (nor4_de_v_exc_out, wb_mispredict_taken_all, WB_JMP_STALL_OUT);
+   nor3$ nor4_de_v_exc (nor4_de_v_exc_out, wb_mispredict_taken_all, WB_JMP_STALL_OUT, WB_EXC_EN_V);
    //nand4$ nand0_jmp_flush (JMP_FLUSH, nor0_de_v_exc_out, nor1_de_v_exc_out, nor2_de_v_exc_out, wb_mispredict_taken_all_bar);
    nand4$ nand0_jmp_flush (JMP_FLUSH, nor0_de_v_exc_out, nor1_de_v_exc_out, nor2_de_v_exc_out, nor4_de_v_exc_out);
    inv1$ inv0_jmp_flush (JMP_FLUSH_BAR, JMP_FLUSH);
 
    wire nor3_de_v_exc_out;
-   nor3$ nor3_de_v_exc (nor3_de_v_exc_out, FETCH_STALL_OUT, wb_mispredict_taken_all, WB_JMP_STALL_OUT);
+   nor4$ nor3_de_v_exc (nor3_de_v_exc_out, FETCH_STALL_OUT, wb_mispredict_taken_all, WB_JMP_STALL_OUT, WB_EXC_EN_V);
 //   nor4$ nor2_de_v_jmp (nor2_de_v_jmp_out, D2
    and4$ and0_de_v (and0_de_v_out, nor0_de_v_exc_out, nor1_de_v_exc_out, nor2_de_v_exc_out, nor3_de_v_exc_out);
    or3$ or0_de_v (DE_V_IN, and0_de_v_out, INT_EXIST_DE_IN, wb_repne_terminate_all);
@@ -1745,6 +1745,8 @@ module PIPELINE(input CLK, CLR, PRE,
    assign WB_WR_ADDR2_PCD_LSU_IN = WB_PS_WR_ADDR2_PCD;
    assign WB_WR_ADDR2_LSU_IN = WB_PS_RA_WR_ADDR2;
    assign WB_WR_SIZE2_LSU_IN = WB_PS_RA_WR_SIZE2;
+
+   assign WB_EXC_EN_V = WB_PS_EXC_EN_V;
    //========================================================
    
    // WB_V_next = EX_V
