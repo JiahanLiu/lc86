@@ -26,7 +26,11 @@ module TOP;
         forever #(clk_cycle) bus_clk = ~bus_clk;
     end
     
-     initial #6000 $finish;
+     initial begin
+        @(posedge  u_full_simulator.u_pipeline.Qwb_halt_all) begin
+            $finish;
+        end 
+    end 
 
      always @(posedge clk) begin
          //$strobe ("at time %0d, IR = %h", $time, u_full_simulator.u_pipeline.u_fetch.CURRENT_IR);
