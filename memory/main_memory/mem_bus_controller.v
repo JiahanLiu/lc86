@@ -208,7 +208,7 @@ module mem_bus_controller(//interface with bus
    //Clearing RD latches when either a write finishes accessing memory
    //or when we have taken control of the bus (Returning read data)
    and2$ WR_DONE_DRIVER (WR_DONE, PEND_WR, MEM_DONE_OUT[4]);
-   and3$ RD_DONE_DRIVER (RD_DONE, PEND_RD, DONE, current_state[4]); //bit two is for master state
+   and2$ RD_DONE_DRIVER (RD_DONE, PEND_RD, current_state[4]); //bit two is for master state
    or2$ CLR_RD_DRIVER(CLR_RD_LATCHES, WR_DONE, RD_DONE);
    
    
