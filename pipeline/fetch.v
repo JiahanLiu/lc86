@@ -161,7 +161,10 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
    assign inc_buf_ptr[1] = xor_inc_buf_ptr_out;
    assign inc_buf_ptr[0] = buf_ptr_bar[0];
 
-   mux2_2 mux_next_buf_ptr (mux_next_buf_ptr_out, inc_buf_ptr, buf_ptr, IFU_ICACHE_RD_STALL_OUT);
+   wire or_next_buf_ptr0_out;
+   or2$ or_next_buf_ptr0 (or_next_buf_ptr0_out, flush_state, IFU_ICACHE_RD_STALL_OUT);
+   //mux2_2 mux_next_buf_ptr (mux_next_buf_ptr_out, inc_buf_ptr, buf_ptr, IFU_ICACHE_RD_STALL_OUT);
+   mux2_2 mux_next_buf_ptr (mux_next_buf_ptr_out, inc_buf_ptr, buf_ptr, or_next_buf_ptr0_out);
    assign next_buf_ptr = mux_next_buf_ptr_out;
    inv1$ inv_next_buf_ptr [1:0] (next_buf_ptr_bar, next_buf_ptr);
 
@@ -366,7 +369,8 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
 
    or3$ or_fill0 (or_fill0_out, and_fill3_out, and_fill7_out, and_fill10_out);
    or2$
-      or_fill1 (or_fill1_out, and_fill14_out, and_fill17_out),
+//      or_fill1 (or_fill1_out, and_fill14_out, and_fill17_out),
+      or_fill1 (or_fill1_out, 1'b0, and_fill17_out),
       or_fill2 (or_fill2_out, or_fill0_out, or_fill1_out);
    assign Dfill_state = or_fill2_out;
 
@@ -399,8 +403,9 @@ next_read_ptr = if (dep_stall) ? Read_ptr : (read_ptr + length)
    and2$ and_empty15 (and_empty15_out, and_empty13_out, and_empty14_out);
    or3$ or_empty0 (or_empty0_out, and_empty2_out, and_empty6_out, and_empty9_out);
    or2$
-      or_empty1 (or_empty1_out, and_empty12_out, and_empty15_out),
-      or_empty2 (or_empty2_out, or_empty0_out, or_empty1_out);
+      or_empty1 (or_empty1_out, and_empty12_out, and_empty15_out);
+   or3$
+      or_empty2 (or_empty2_out, or_empty0_out, or_empty1_out, flush_state);
    assign Dempty_state = or_empty2_out;
 
    wire and_full0_out, and_full1_out, and_full2_out, and_full3_out,
