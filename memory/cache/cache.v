@@ -3,7 +3,7 @@ module cache( //interface with the processor
     input [127:0] data_write,
     input RW,
     input enable,
-    input [15:0] addr,
+    input [15:0] addr_raw,
     input [3:0] size,
     output [127:0] data_read_out,
     output ready,
@@ -15,8 +15,8 @@ module cache( //interface with the processor
     input BUS_R,
     input [127:0] BUS_READ
 );
-
-    wire [15:0] addr1, addr2, addr3, addr4, address;
+   wire [15:0]	  addr;
+   wire [15:0] 	  addr1, addr2, addr3, addr4, address;
     bufferH1024$ buf1 [15:0] (addr1, addr);
     bufferH1024$ buf2 [15:0] (addr2, addr1);
     bufferH1024$ buf3 [15:0] (addr3, addr2);
@@ -39,6 +39,12 @@ module cache( //interface with the processor
    wire 	     evict;
    gen_n_state gen_n_state_u(next_state, current_state, enable, RW, HIT,
 			     BUS_R, evict);
+
+   //LATCH FOR THE ADDRESS
+   //Only updating during the idle state
+   wire [15:0] 	     addr_next;
+   mux2_16$ address_sel(addr_next, addr, addr_raw, current_state[0]);
+   dff16$ address_reg(CLK, addr_next, addr, , RST, SET);
    
 
    
