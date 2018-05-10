@@ -613,7 +613,7 @@ module PIPELINE(input CLK, CLR, PRE,
       D2_PS_NMI_INT_EN, D2_PS_GEN_PROT_EXC_EN, D2_PS_PAGE_FAULT_EXC_EN,
       D2_PS_PAGE_FAULT_EXC_EXIST,
 
-      INT_EXIST_DE_IN, wb_repne_terminate_all,
+      INT_EXIST_DE_IN, wb_repne_terminate_all, wb_mispredict_taken_all,
 
       D2_EIP_OUT, 
       D2_CS_OUT,

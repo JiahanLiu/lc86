@@ -26,7 +26,7 @@ module decode_stage2 (
    input PAGE_FAULT_EXC_EN,
    input PAGE_FAULT_EXC_EXIST,
 
-   input INT_EXIST, WB_REPNE_TERMINATE_ALL,
+   input INT_EXIST, WB_REPNE_TERMINATE_ALL, WB_MISPREDICT_TAKEN_ALL,
 
    output [31:0] EIP_OUT, 
    output [15:0] CS_OUT,
@@ -127,7 +127,7 @@ module decode_stage2 (
     wire sel_uop;
 
     wire and_sel_uop_out, nor_int_exist_bar;
-    nor2$ nor_int_exist (nor_int_exist_bar, INT_EXIST, WB_REPNE_TERMINATE_ALL);
+    nor3$ nor_int_exist (nor_int_exist_bar, INT_EXIST, WB_REPNE_TERMINATE_ALL, WB_MISPREDICT_TAKEN_ALL);
     and3$ and_sel_uop (and_sel_uop_out, D2_V, CS_UOP_STALL_DE, nor_int_exist_bar);
     assign Dsel_uop = {31'b0, and_sel_uop_out};
     //reg32e$ reg_save_sel_uop (clk, Dsel_uop, Qsel_uop, , reset, set, 1'b1);
@@ -135,7 +135,7 @@ module decode_stage2 (
     wire ag_stall_out_ld_d2_in_bar, or_ld_sel_out;
 
     inv1$ inv_ag_stall_out (ag_stall_out_ld_d2_in_bar, AG_STALL_OUT_LD_D2_IN);
-    or3$ or_ld_sel (or_ld_sel_out, AG_STALL_OUT_LD_D2_IN, INT_EXIST, WB_REPNE_TERMINATE_ALL);
+    or4$ or_ld_sel (or_ld_sel_out, AG_STALL_OUT_LD_D2_IN, INT_EXIST, WB_REPNE_TERMINATE_ALL, WB_MISPREDICT_TAKEN_ALL);
     reg32e$ reg_save_sel_uop (clk, Dsel_uop, Qsel_uop, , reset, set, or_ld_sel_out);
     assign sel_uop = Qsel_uop[0];
      //assign sel_uop = 1'b0; //TODO temporary

@@ -159,8 +159,8 @@ module agen_stage2 (
    mux2_32 mux_edi (mux_edi_out, add_a_out, add_next_edi_out, CS_REPNE_STEADY_STATE);
 
    reg32e$ reg_save_esi (CLK, mux_esi_out, Qcmps_esi, , RST, SET, and_first_uop_out);
-   reg32e$ reg_save_src1_segid (CLK, {29'b0, SEG1}, Qcmps_src1_seg, , RST, SET, and_second_uop_out);
-   reg32e$ reg_save_edi (CLK, mux_edi_out, Qcmps_edi, , RST, SET, and_first_uop_out);
+   reg32e$ reg_save_src1_segid (CLK, {29'b0, SEG1}, Qcmps_src1_seg, , RST, SET, and_first_uop_out);
+   reg32e$ reg_save_edi (CLK, mux_edi_out, Qcmps_edi, , RST, SET, and_second_uop_out);
    reg32e$ reg_save_src2_segid (CLK, {29'b0, SEG1}, Qcmps_src2_seg, , RST, SET, and_second_uop_out);
 
    mux2_32 mux_cmps_base (mux_cmps_base_out, Qcmps_esi, Qcmps_edi, CS_IS_CMPS_SECOND_UOP_ALL);
