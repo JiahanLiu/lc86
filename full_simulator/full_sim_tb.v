@@ -32,7 +32,7 @@ module TOP;
  //       end 
  //   end 
 
-        initial #35000 $finish;
+        initial #350000 $finish;
 
      always @(posedge clk) begin
          //$strobe ("at time %0d, IR = %h", $time, u_full_simulator.u_pipeline.u_fetch.CURRENT_IR);

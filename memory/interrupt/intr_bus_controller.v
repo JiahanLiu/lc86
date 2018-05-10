@@ -2,36 +2,36 @@
 
 //Cache bus controller closely follows the template
 module intr_bus_controller(//interface with bus
-		      input BUS_CLK,
-		      input RST, SET,
-		      inout [31:0] D,
-		      inout [15:0] A,
-		      inout [11:0] SIZE,
-		      inout RW,
+			   input BUS_CLK,
+			   input RST, SET,
+			   inout [31:0] D,
+			   inout [15:0] A,
+			   inout [11:0] SIZE,
+			   inout RW,
 
-		      //interface with arbitrator and other controllers
-		      output BR,
-		      input BG,
-		      output ACK_OUT,
-		      input ACK_IN,
+			   //interface with arbitrator and other controllers
+			   output BR,
+			   input BG,
+			   output ACK_OUT,
+			   input ACK_IN,
 			   output DEST_OUT_DMA,//wire goes directly to RAM
 			   output DEST_OUT_KBD,
 			   input DEST_IN_DMA,
 			   input DEST_IN_KBD,
 
-		      //interface with work unit
-		      input MOD_EN, //simple signal saying we have a request
-		      input MOD_WR,
-		      input [15:0] MOD_A,
-		      input [127:0] MOD_WRITE_DATA,
-		      output [127:0] MOD_READ_DATA,
-		      output MOD_R,
+			   //interface with work unit
+			   input MOD_EN, //simple signal saying we have a request
+			   input MOD_WR,
+			   input [15:0] MOD_A,
+			   input [127:0] MOD_WRITE_DATA,
+			   output [127:0] MOD_READ_DATA,
+			   output MOD_R,
 			   output INTERRUPT
 		      );
    //CURRENT STATE REG
    wire [7:0] 		    current_state, next_state;
    dff8$ state_reg(BUS_CLK, next_state, current_state, , RST, SET);
-
+   
    //GENERATE NEXT STATE
       parameter IDLE  = 8'b0000_0001,
 		  ST_BR  = 8'b0000_0010,
@@ -43,7 +43,7 @@ module intr_bus_controller(//interface with bus
    assign #(0.5) BUS_CLK_DEL = BUS_CLK;
    
 
-
+   
    //GENERATE CTRL SIGNALS
    gen_ctrl_bus gen_ctrl_bus_u(current_state, CTRL_TRI_EN, D_TRI_EN, ACK_OUT_BAR, BR, SIZE_DECR, RD_BUS_CTRL);
    //TRI_EN is active low!
@@ -64,7 +64,22 @@ module intr_bus_controller(//interface with bus
    and2$ MASKED_MOD_EN(MASKED_EN, MOD_EN_MASK, MOD_EN);
 
    or2$ ANY_DEST_IN(DEST_IN, DEST_IN_DMA, DEST_IN_KBD);
-      
+
+   //THERE IS AN INTERRUPT IF WE ARE THE DEST WHILE NOT WAITING FOR READ
+   //or2$ INTERRUPT_DRIVER (INTERRUPT, DEST_IN, MOD_MASK_OUT);
+   reg 			    INTERRUPT;
+   
+   initial
+     begin
+	INTERRUPT = 1'b0;
+	#100000
+	  INTERRUPT = 1'b1;
+	#14
+	  INTERRUPT = 1'b0;
+
+     end
+   
+   
    ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MASKED_EN, BG, ACK_IN, RW, DEST_IN, DONE);
    wire [2:0] 		    amnt_decr;
    wire [15:0] 		    current_size, current_size_in, next_size;
@@ -74,7 +89,7 @@ module intr_bus_controller(//interface with bus
 
    //REGISTERS FOR THE CONTROLLER
    //SIZE REGISTER: muxed between the decremented value or 16
-   mux2_16$ mux_size_u(current_size_in, 16'h0010, next_size, SIZE_DECR);
+   mux2_16$ mux_size_u(current_size_in, 16'h0004, next_size, SIZE_DECR);
    ioreg16$ size_reg(BUS_CLK, current_size_in, current_size, , RST, SET);
 
    //DATA BUFFER
@@ -108,21 +123,6 @@ module intr_bus_controller(//interface with bus
 	    MOD_WRITE_DATA[95:64], MOD_WRITE_DATA[127:96],
 	    next_size_bar[0], next_size_bar[1]);
    tristate_bus_driver32$ D_TRI(D_TRI_EN, D_TRI_IN, D);
-
-
-
-//DEST, ACK, and MASTER IS NO LONGER USED, NOW USING DIRECT CONNECTIONS
-/*   wire [2:0] 		    DEST_TRI_IN, MASTER_TRI_IN;
-   wire 		    DEST_TRI_EN, MASTER_TRI_EN;
-   assign MASTER_TRI_IN = MY_ID;
-   assign DEST_TRI_EN = CTRL_TRI_EN;
-   assign MASTER_TRI_EN = CTRL_TRI_EN;
-   tristate_bus_driver1$ DEST2_TRI(DEST_TRI_EN, DEST_TRI_IN[2], DEST[2]);
-   tristate_bus_driver1$ DEST1_TRI(DEST_TRI_EN, DEST_TRI_IN[1], DEST[1]);
-   tristate_bus_driver1$ DEST0_TRI(DEST_TRI_EN, DEST_TRI_IN[0], DEST[0]);
-   tristate_bus_driver1$ MAS2_TRI(MASTER_TRI_EN, MASTER_TRI_IN[2], MASTER[2]);
-   tristate_bus_driver1$ MAS1_TRI(MASTER_TRI_EN, MASTER_TRI_IN[1], MASTER[1]);
-   tristate_bus_driver1$ MAS0_TRI(MASTER_TRI_EN, MASTER_TRI_IN[0], MASTER[0]);*/
    
     wire 		    A_TRI_EN;
    assign A_TRI_EN = CTRL_TRI_EN;
@@ -145,9 +145,6 @@ module intr_bus_controller(//interface with bus
    assign RW_TRI_IN = MOD_WR;
    assign ACK_TRI_IN = 1'b1;
    tristate_bus_driver1$ RW_TRI(RW_TRI_EN, RW_TRI_IN, RW);
-   //tristate_bus_driver1$ ACK_TRI(ACK_TRI_EN, ACK_TRI_IN, ACK);
-
-
 
    //DRIVING the destination wires
    wire 		    ADDR_KBD, ADDR_KBD_BAR;
