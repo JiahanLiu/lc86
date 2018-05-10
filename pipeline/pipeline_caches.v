@@ -589,7 +589,7 @@ module PIPELINE(input CLK, CLR, PRE,
 //*******DECODE STAGE 2*******//
    decode_stage2 u_decode_stage2(
       CLK, PRE, CLR,
-      d2_ps_v_stage_in,
+      d2_ps_v_stage_in, LD_D2,
       IR_OUT, 
       DE_EIP_OUT,
       DE_CS_OUT,

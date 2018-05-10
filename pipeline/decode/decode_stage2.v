@@ -1,6 +1,6 @@
 module decode_stage2 (
    input clk, set, reset,
-   input D2_V,
+   input D2_V, LD_D2,
    input [127:0] IR, 
    input [31:0] EIP,
    input [15:0] CS,
@@ -116,8 +116,11 @@ module decode_stage2 (
     wire [31:0] Dnext_micro_addr, Qnext_micro_addr;
     wire [7:0] next_micro_op_address;
 
+    wire and_d2_v_ld_out;
+    and2$ and_d2_v_ld (and_d2_v_ld_out, D2_V, LD_D2);
+
     assign Dnext_micro_addr = {25'b0, CS_NEXT_MICRO_ADDRESS_DE};
-    reg32e$ reg_save_next_uaddr (clk, Dnext_micro_addr, Qnext_micro_addr, , reset, set, D2_V);
+    reg32e$ reg_save_next_uaddr (clk, Dnext_micro_addr, Qnext_micro_addr, , reset, set, and_d2_v_ld_out);
     assign next_micro_op_address = {1'b0, Qnext_micro_addr[6:0]};
 
     wire [31:0] Dsel_uop, Qsel_uop;
