@@ -203,12 +203,12 @@ module mem_bus_controller(//interface with bus
    or2$ LD_WR_DRIV (LD_WR_LATCHES, LD_WR_LATCHES_RD, LD_WR_LATCHES_WR);
 //   and2$ LD_WR_DRIV (LD_WR_LATCHES, ACK_OUT, WR_V_BAR);
    assign CLR_WR_LATCHES = LD_RD_LATCHES;
-   or2$ RD_EMPTY (RD_EMP, RD_V_BAR, CLR_RD_LATCHES);
-   and2$ LD_RD_DRIV (LD_RD_LATCHES, WR_V_OUT, RD_EMP);
+   //or2$ RD_EMPTY (RD_EMP, RD_V_BAR, CLR_RD_LATCHES);
+   and2$ LD_RD_DRIV (LD_RD_LATCHES, WR_V_OUT, RD_V_BAR);
    //Clearing RD latches when either a write finishes accessing memory
    //or when we have taken control of the bus (Returning read data)
    and2$ WR_DONE_DRIVER (WR_DONE, PEND_WR, MEM_DONE_OUT[4]);
-   and2$ RD_DONE_DRIVER (RD_DONE, PEND_RD, current_state[4]); //bit two is for master state
+   and3$ RD_DONE_DRIVER (RD_DONE, PEND_RD, DONE, current_state[3]); //bit two is for master state
    or2$ CLR_RD_DRIVER(CLR_RD_LATCHES, WR_DONE, RD_DONE);
    
    

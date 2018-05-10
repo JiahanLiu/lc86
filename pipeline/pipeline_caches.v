@@ -1602,7 +1602,7 @@ module PIPELINE(input CLK, CLR, PRE,
 
     wire [7:0] EX_control_address_debug;
     wire [31:0] EX_control_address_debug_out;
-    reg32e$ u_ME2_control_address_debug (CLK, {24'b0, ME2_control_address_debug}, EX_control_address_debug_out, ,CLR,PRE,LD_EX);
+    reg32e$ u_EX_control_address_debug (CLK, {24'b0, ME2_control_address_debug}, EX_control_address_debug_out, ,CLR,PRE,LD_EX);
     assign EX_control_address_debug = EX_control_address_debug_out[7:0];
 
     //******************************************************************************//

@@ -138,7 +138,7 @@ module decode_stage2 (
     // ucontrol_store u_ucontrol_store1 (.opcode(decode_address), .opcode_size(opcode_size), .control_signal(CONTROL_STORE[127:64]));
 
     wire [7:0] control_store_address;
-    assign D2_control_address_debug = control_address;
+    assign D2_control_address_debug = control_store_address;
     wire control_store_op_size;
 
     mux2_8$ muxl_cntrl_addr (control_store_address, decode_address, next_micro_op_address, sel_uop);
