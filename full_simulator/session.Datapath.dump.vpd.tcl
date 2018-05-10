@@ -1,8 +1,8 @@
 # Begin_DVE_Session_Save_Info
 # DVE full session
-# Saved on Thu May 10 00:41:08 2018
+# Saved on Thu May 10 16:31:41 2018
 # Designs open: 1
-#   V1: pipeline.dump.vpd
+#   V1: full_simulator/pipeline.dump.vpd
 # Toplevel windows open: 2
 # 	TopLevel.1
 # 	TopLevel.2
@@ -81,7 +81,7 @@ if {![gui_exist_window -window TopLevel.1]} {
 } else { 
     set TopLevel.1 TopLevel.1
 }
-gui_show_window -window ${TopLevel.1} -show_state normal -rect {{99 84} {1492 938}}
+gui_show_window -window ${TopLevel.1} -show_state normal -rect {{52 43} {1431 840}}
 
 # ToolBar settings
 gui_set_toolbar_attributes -toolbar {TimeOperations} -dock_state top
@@ -122,17 +122,17 @@ gui_hide_toolbar -toolbar {Testbench}
 # End ToolBar settings
 
 # Docked window settings
-set HSPane.1 [gui_create_window -type HSPane -parent ${TopLevel.1} -dock_state left -dock_on_new_line true -dock_extent 421]
+set HSPane.1 [gui_create_window -type HSPane -parent ${TopLevel.1} -dock_state left -dock_on_new_line true -dock_extent 420]
 catch { set Hier.1 [gui_share_window -id ${HSPane.1} -type Hier] }
-gui_set_window_pref_key -window ${HSPane.1} -key dock_width -value_type integer -value 421
+gui_set_window_pref_key -window ${HSPane.1} -key dock_width -value_type integer -value 420
 gui_set_window_pref_key -window ${HSPane.1} -key dock_height -value_type integer -value 559
 gui_set_window_pref_key -window ${HSPane.1} -key dock_offset -value_type integer -value 0
-gui_update_layout -id ${HSPane.1} {{left 0} {top 0} {width 420} {height 562} {dock_state left} {dock_on_new_line true} {child_hier_colhier 235} {child_hier_coltype 195} {child_hier_colpd 0} {child_hier_col1 0} {child_hier_col2 1} {child_hier_col3 -1}}
-set Console.1 [gui_create_window -type Console -parent ${TopLevel.1} -dock_state bottom -dock_on_new_line true -dock_extent 179]
+gui_update_layout -id ${HSPane.1} {{left 0} {top 0} {width 419} {height 506} {dock_state left} {dock_on_new_line true} {child_hier_colhier 235} {child_hier_coltype 195} {child_hier_colpd 0} {child_hier_col1 0} {child_hier_col2 1} {child_hier_col3 -1}}
+set Console.1 [gui_create_window -type Console -parent ${TopLevel.1} -dock_state bottom -dock_on_new_line true -dock_extent 178]
 gui_set_window_pref_key -window ${Console.1} -key dock_width -value_type integer -value 307
-gui_set_window_pref_key -window ${Console.1} -key dock_height -value_type integer -value 179
+gui_set_window_pref_key -window ${Console.1} -key dock_height -value_type integer -value 178
 gui_set_window_pref_key -window ${Console.1} -key dock_offset -value_type integer -value 0
-gui_update_layout -id ${Console.1} {{left 0} {top 0} {width 1393} {height 178} {dock_state bottom} {dock_on_new_line true}}
+gui_update_layout -id ${Console.1} {{left 0} {top 0} {width 1379} {height 177} {dock_state bottom} {dock_on_new_line true}}
 #### Start - Readjusting docked view's offset / size
 set dockAreaList { top left right bottom }
 foreach dockArea $dockAreaList {
@@ -155,8 +155,17 @@ gui_sync_global -id ${TopLevel.1} -option true
 
 # MDI window settings
 set Source.1 [gui_create_window -type {Source}  -parent ${TopLevel.1}]
-gui_show_window -window ${Source.1} -show_state maximized
-gui_update_layout -id ${Source.1} {{show_state maximized} {dock_state undocked} {dock_on_new_line false}}
+gui_show_window -window ${Source.1} -show_state normal -rect {{0 0} {678 456}}
+gui_update_layout -id ${Source.1} {{left 279} {top 0} {width 683} {height 483} {show_state normal} {dock_state undocked} {dock_on_new_line false}}
+set DLPane.1 [gui_create_window -type {DLPane}  -parent ${TopLevel.1}]
+if {[gui_get_shared_view -id ${DLPane.1} -type Data] == {}} {
+        set Data.1 [gui_share_window -id ${DLPane.1} -type Data]
+} else {
+        set Data.1  [gui_get_shared_view -id ${DLPane.1} -type Data]
+}
+
+gui_show_window -window ${DLPane.1} -show_state normal -rect {{0 0} {279 455}}
+gui_update_layout -id ${DLPane.1} {{left 2} {top 2} {width 284} {height 482} {show_state normal} {dock_state undocked} {dock_on_new_line false} {child_data_colvariable 191} {child_data_colvalue 10} {child_data_coltype 60} {child_data_col1 0} {child_data_col2 1} {child_data_col3 2}}
 
 # End MDI window settings
 
@@ -169,7 +178,7 @@ if {![gui_exist_window -window TopLevel.2]} {
 } else { 
     set TopLevel.2 TopLevel.2
 }
-gui_show_window -window ${TopLevel.2} -show_state normal -rect {{274 22} {1667 876}}
+gui_show_window -window ${TopLevel.2} -show_state normal -rect {{102 77} {1481 874}}
 
 # ToolBar settings
 gui_set_toolbar_attributes -toolbar {TimeOperations} -dock_state top
@@ -217,7 +226,7 @@ gui_sync_global -id ${TopLevel.2} -option true
 # MDI window settings
 set Wave.1 [gui_create_window -type {Wave}  -parent ${TopLevel.2}]
 gui_show_window -window ${Wave.1} -show_state maximized
-gui_update_layout -id ${Wave.1} {{show_state maximized} {dock_state undocked} {dock_on_new_line false} {child_wave_left 404} {child_wave_right 984} {child_wave_colname 200} {child_wave_colvalue 200} {child_wave_col1 0} {child_wave_col2 1}}
+gui_update_layout -id ${Wave.1} {{show_state maximized} {dock_state undocked} {dock_on_new_line false} {child_wave_left 400} {child_wave_right 974} {child_wave_colname 198} {child_wave_colvalue 198} {child_wave_col1 0} {child_wave_col2 1}}
 
 # End MDI window settings
 
@@ -237,8 +246,8 @@ gui_update_statusbar_target_frame ${TopLevel.2}
 
 # DVE Open design session: 
 
-if { ![gui_is_db_opened -db {pipeline.dump.vpd}] } {
-	gui_open_db -design V1 -file pipeline.dump.vpd -nosource
+if { ![gui_is_db_opened -db {full_simulator/pipeline.dump.vpd}] } {
+	gui_open_db -design V1 -file full_simulator/pipeline.dump.vpd -nosource
 }
 gui_set_precision 1ps
 gui_set_time_units 1ns
@@ -256,13 +265,20 @@ gui_set_time_units 1ns
 # Global: Signal Compare
 
 # Global: Signal Groups
+gui_load_child_values {TOP.u_full_simulator.u_pipeline.u_memory_stage1}
+gui_load_child_values {TOP.u_full_simulator.u_pipeline.u_writeback}
+gui_load_child_values {TOP.u_full_simulator.u_pipeline.u_agen_stage1}
 gui_load_child_values {TOP.u_full_simulator.u_pipeline.u_agen_stage2}
 gui_load_child_values {TOP.u_full_simulator.u_full_memory.main_memory_u}
+gui_load_child_values {TOP.u_full_simulator.u_pipeline.u_execute}
 gui_load_child_values {TOP.u_full_simulator.u_pipeline.u_icache}
 gui_load_child_values {TOP.u_full_simulator.u_full_memory}
+gui_load_child_values {TOP.u_full_simulator.u_pipeline.u_decode_stage2}
 gui_load_child_values {TOP.u_full_simulator.u_full_memory.ICACHE_PORT}
 gui_load_child_values {TOP.u_full_simulator}
 gui_load_child_values {TOP.u_full_simulator.u_pipeline.u_dcache.data_u}
+gui_load_child_values {TOP.u_full_simulator.u_pipeline}
+gui_load_child_values {TOP}
 gui_load_child_values {TOP.u_full_simulator.u_full_memory.DCACHE_PORT}
 gui_load_child_values {TOP.u_full_simulator.u_pipeline.u_dcache}
 
@@ -280,20 +296,20 @@ set {$ to BUS INTERFACE} "$_session_group_2"
 gui_sg_addsignal -group "$_session_group_2" { }
 
 set _session_group_3 $_session_group_2|
-append _session_group_3 DCACHE
+append _session_group_3 ICACHE
 gui_sg_create "$_session_group_3"
-set {$ to BUS INTERFACE|DCACHE} "$_session_group_3"
+set {$ to BUS INTERFACE|ICACHE} "$_session_group_3"
 
-gui_sg_addsignal -group "$_session_group_3" { TOP.u_full_simulator.DC_EN TOP.u_full_simulator.DC_WRITE_DATA TOP.u_full_simulator.DC_READ_DATA TOP.u_full_simulator.DC_WR TOP.u_full_simulator.DC_R TOP.u_full_simulator.DC_A }
-
-gui_sg_move "$_session_group_3" -after "$_session_group_2" -pos 1 
+gui_sg_addsignal -group "$_session_group_3" { TOP.u_full_simulator.IC_EN TOP.u_full_simulator.IC_WRITE_DATA TOP.u_full_simulator.IC_READ_DATA TOP.u_full_simulator.IC_WR TOP.u_full_simulator.u_full_memory.IC_R }
 
 set _session_group_4 $_session_group_2|
-append _session_group_4 ICACHE
+append _session_group_4 DCACHE
 gui_sg_create "$_session_group_4"
-set {$ to BUS INTERFACE|ICACHE} "$_session_group_4"
+set {$ to BUS INTERFACE|DCACHE} "$_session_group_4"
 
-gui_sg_addsignal -group "$_session_group_4" { TOP.u_full_simulator.IC_EN TOP.u_full_simulator.IC_WRITE_DATA TOP.u_full_simulator.IC_READ_DATA TOP.u_full_simulator.IC_WR TOP.u_full_simulator.u_full_memory.IC_R }
+gui_sg_addsignal -group "$_session_group_4" { TOP.u_full_simulator.DC_EN TOP.u_full_simulator.DC_WRITE_DATA TOP.u_full_simulator.DC_READ_DATA TOP.u_full_simulator.DC_WR TOP.u_full_simulator.DC_R TOP.u_full_simulator.DC_A }
+
+gui_sg_move "$_session_group_4" -after "$_session_group_2" -pos 1 
 
 set _session_group_5 {FULL MEMORY}
 gui_sg_create "$_session_group_5"
@@ -302,13 +318,13 @@ set {FULL MEMORY} "$_session_group_5"
 gui_sg_addsignal -group "$_session_group_5" { TOP.u_full_simulator.u_full_memory.D TOP.u_full_simulator.u_full_memory.A TOP.u_full_simulator.u_full_memory.SIZE TOP.u_full_simulator.u_full_memory.RW }
 
 set _session_group_6 $_session_group_5|
-append _session_group_6 {IC PORT}
+append _session_group_6 {Main Memory}
 gui_sg_create "$_session_group_6"
-set {FULL MEMORY|IC PORT} "$_session_group_6"
+set {FULL MEMORY|Main Memory} "$_session_group_6"
 
-gui_sg_addsignal -group "$_session_group_6" { TOP.u_full_simulator.u_full_memory.ICACHE_PORT.current_state }
+gui_sg_addsignal -group "$_session_group_6" { TOP.u_full_simulator.u_full_memory.main_memory_u.ADDR TOP.u_full_simulator.u_full_memory.main_memory_u.WR TOP.u_full_simulator.u_full_memory.main_memory_u.EN TOP.u_full_simulator.u_full_memory.main_memory_u.WRITE_SIZE TOP.u_full_simulator.u_full_memory.main_memory_u.DATA_BUF }
 
-gui_sg_move "$_session_group_6" -after "$_session_group_5" -pos 6 
+gui_sg_move "$_session_group_6" -after "$_session_group_5" -pos 4 
 
 set _session_group_7 $_session_group_5|
 append _session_group_7 {DC PORT}
@@ -320,13 +336,13 @@ gui_sg_addsignal -group "$_session_group_7" { TOP.u_full_simulator.u_full_memory
 gui_sg_move "$_session_group_7" -after "$_session_group_5" -pos 5 
 
 set _session_group_8 $_session_group_5|
-append _session_group_8 {Main Memory}
+append _session_group_8 {IC PORT}
 gui_sg_create "$_session_group_8"
-set {FULL MEMORY|Main Memory} "$_session_group_8"
+set {FULL MEMORY|IC PORT} "$_session_group_8"
 
-gui_sg_addsignal -group "$_session_group_8" { TOP.u_full_simulator.u_full_memory.main_memory_u.ADDR TOP.u_full_simulator.u_full_memory.main_memory_u.WR TOP.u_full_simulator.u_full_memory.main_memory_u.EN TOP.u_full_simulator.u_full_memory.main_memory_u.WRITE_SIZE TOP.u_full_simulator.u_full_memory.main_memory_u.DATA_BUF }
+gui_sg_addsignal -group "$_session_group_8" { TOP.u_full_simulator.u_full_memory.ICACHE_PORT.current_state }
 
-gui_sg_move "$_session_group_8" -after "$_session_group_5" -pos 4 
+gui_sg_move "$_session_group_8" -after "$_session_group_5" -pos 6 
 
 set _session_group_9 PIPELINE
 gui_sg_create "$_session_group_9"
@@ -437,13 +453,13 @@ catch {gui_list_expand -id ${Hier.1} TOP}
 catch {gui_list_expand -id ${Hier.1} TOP.u_full_simulator}
 catch {gui_list_expand -id ${Hier.1} TOP.u_full_simulator.u_pipeline}
 catch {gui_list_select -id ${Hier.1} {TOP.u_full_simulator.u_pipeline.u_memory_stage2}}
-gui_view_scroll -id ${Hier.1} -vertical -set 286
+gui_view_scroll -id ${Hier.1} -vertical -set 0
 gui_view_scroll -id ${Hier.1} -horizontal -set 0
 
 # Source 'Source.1'
 gui_src_value_annotate -id ${Source.1} -switch false
 gui_set_env TOGGLE::VALUEANNOTATE 0
-gui_open_source -id ${Source.1}  -replace -active TOP.u_full_simulator.u_pipeline.u_memory_stage2 ../pipeline/memory_stage2.v
+gui_open_source -id ${Source.1}  -replace -active TOP.u_full_simulator.u_pipeline.u_memory_stage2 pipeline/memory_stage2.v
 gui_view_scroll -id ${Source.1} -vertical -set 42
 gui_src_set_reusable -id ${Source.1}
 
@@ -456,7 +472,7 @@ gui_list_set_height -id Wave -height 25
 set origGroupCreationState [gui_list_create_group_when_add -wave]
 gui_list_create_group_when_add -wave -disable
 gui_marker_set_ref -id ${Wave.1}  C1
-gui_wv_zoom_timerange -id ${Wave.1} 3450.605 5728.95
+gui_wv_zoom_timerange -id ${Wave.1} 3450.952 5729.297
 gui_list_add_group -id ${Wave.1} -after {New Group} {Clocks}
 gui_list_add_group -id ${Wave.1} -after {New Group} {{$ to BUS INTERFACE}}
 gui_list_add_group -id ${Wave.1}  -after {$ to BUS INTERFACE} {{$ to BUS INTERFACE|ICACHE}}
@@ -480,7 +496,7 @@ gui_list_collapse -id ${Wave.1} {$ to BUS INTERFACE}
 gui_list_collapse -id ${Wave.1} {FULL MEMORY|Main Memory}
 gui_list_collapse -id ${Wave.1} ICACHE
 gui_list_collapse -id ${Wave.1} DCACHE
-gui_list_select -id ${Wave.1} {TOP.u_full_simulator.u_pipeline.u_memory_stage2.A_OUT TOP.u_full_simulator.u_pipeline.u_memory_stage2.B_OUT TOP.u_full_simulator.u_pipeline.u_memory_stage2.MEM_RD_ADDR }
+gui_list_select -id ${Wave.1} {TOP.u_full_simulator.u_pipeline.u_writeback.WB_V }
 gui_seek_criteria -id ${Wave.1} {Any Edge}
 
 gui_list_alias -id ${Wave.1} -group ${FULL MEMORY|DC PORT} -index 0 -signal V1:TOP.u_full_simulator.u_full_memory.DCACHE_PORT.current_state -add DC_PORT_STATE 
@@ -501,17 +517,26 @@ gui_list_set_filter -id ${Wave.1} -text {*}
 gui_list_set_insertion_bar  -id ${Wave.1} -group {ME2 Stage}  -item {TOP.u_full_simulator.u_pipeline.u_memory_stage2.MEM_RD_ADDR[31:0]} -position below
 
 gui_marker_move -id ${Wave.1} {C1} 4151.025
-gui_view_scroll -id ${Wave.1} -vertical -set 605
+gui_view_scroll -id ${Wave.1} -vertical -set 0
 gui_show_grid -id ${Wave.1} -enable false
+
+# Data 'Data.1'
+gui_list_set_filter -id ${Data.1} -list { {Buffer 1} {Input 1} {Others 1} {Linkage 1} {Output 1} {LowPower 1} {Parameter 1} {All 1} {Aggregate 1} {LibBaseMember 1} {Event 1} {Assertion 1} {Constant 1} {Interface 1} {BaseMembers 1} {Signal 1} {$unit 1} {Inout 1} {Variable 1} }
+gui_list_set_filter -id ${Data.1} -text {*}
+gui_list_show_data -id ${Data.1} {TOP.u_full_simulator.u_pipeline.u_memory_stage2}
+gui_view_scroll -id ${Data.1} -vertical -set 0
+gui_view_scroll -id ${Data.1} -horizontal -set 0
+gui_view_scroll -id ${Hier.1} -vertical -set 0
+gui_view_scroll -id ${Hier.1} -horizontal -set 0
 # Restore toplevel window zorder
 # The toplevel window could be closed if it has no view/pane
-if {[gui_exist_window -window ${TopLevel.1}]} {
-	gui_set_active_window -window ${TopLevel.1}
-	gui_set_active_window -window ${Source.1}
-}
 if {[gui_exist_window -window ${TopLevel.2}]} {
 	gui_set_active_window -window ${TopLevel.2}
 	gui_set_active_window -window ${Wave.1}
+}
+if {[gui_exist_window -window ${TopLevel.1}]} {
+	gui_set_active_window -window ${TopLevel.1}
+	gui_set_active_window -window ${Source.1}
 }
 #</Session>
 
