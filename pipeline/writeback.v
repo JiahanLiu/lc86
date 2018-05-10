@@ -92,7 +92,7 @@ module writeback (
    operand_select_wb u_operand_select_wb(data1, WB_Final_EIP, WB_Final_CS, internal_saved_count, CLK, PRE, CLR,
       CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_CMPS_SECOND_UOP_ALL, CS_SAVE_NEIP_WB, CS_SAVE_NCS_WB,
       CS_PUSH_FLAGS_WB, CS_USE_TEMP_NEIP_WB, mux_not_taken_eip, CS_USE_TEMP_NCS_WB, WB_RESULT_A, WB_RESULT_C, WB_NEIP,
-      WB_NEIP_NOT_TAKEN, WB_NCS, final_out_flags);
+      WB_NEIP_NOT_TAKEN, WB_NCS, final_out_flags, WB_V);
 
    conditional_support_wb u_conditional_support_wb(mux_not_taken_eip, wb_ld_gpr2, wb_branch_taken, CS_IS_JNBE_WB,  CS_IS_JNE_WB, final_out_flags, 
        CS_IS_CMOVC_WB, WB_ex_ld_gpr2_wb);

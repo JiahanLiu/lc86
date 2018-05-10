@@ -28,7 +28,8 @@ module operand_select_wb(
 	input [31:0] WB_NEIP,
 	input [31:0] WB_NEIP_NOT_TAKEN,
 	input [15:0] WB_NCS,
-	input [31:0] current_flags
+	input [31:0] current_flags,
+	input WB_V
 	);
 
 	wire [31:0] cmps_first_pointer; 
@@ -43,7 +44,9 @@ module operand_select_wb(
 	reg32e$ u_temp_ncs (CLK, {16'h0000,WB_NCS}, temp_cs_reg_out, , CLR, PRE, CS_SAVE_NCS_WB);
 	assign temp_ncs = temp_cs_reg_out[15:0];
 
-	reg32e$ u_save_count(CLK, WB_RESULT_C, saved_count, ,CLR, PRE, CS_IS_CMPS_FIRST_UOP_ALL);
+	wire v_CS_IS_CMPS_FIRST_UOP_ALL;
+	and2$ u_v_CS_IS_CMPS_FIRST_UOP_ALL(v_CS_IS_CMPS_FIRST_UOP_ALL, WB_V, CS_IS_CMPS_FIRST_UOP_ALL);
+	reg32e$ u_save_count(CLK, WB_RESULT_C, saved_count, ,CLR, PRE, v_CS_IS_CMPS_FIRST_UOP_ALL);
 
 	wire [31:0] post_mux1_data1; 
 	mux32_2way u_mux1_data1_pre(post_mux1_data1, WB_RESULT_A, current_flags, CS_PUSH_FLAGS_WB);
