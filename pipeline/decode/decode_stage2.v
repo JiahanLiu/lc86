@@ -135,7 +135,7 @@ module decode_stage2 (
     wire ag_stall_out_ld_d2_in_bar, or_ld_sel_out;
 
     inv1$ inv_ag_stall_out (ag_stall_out_ld_d2_in_bar, AG_STALL_OUT_LD_D2_IN);
-    or3$ or_ld_sel (or_ld_sel_out, ag_stall_out_ld_d2_in_bar, INT_EXIST, WB_REPNE_TERMINATE_ALL);
+    or3$ or_ld_sel (or_ld_sel_out, AG_STALL_OUT_LD_D2_IN, INT_EXIST, WB_REPNE_TERMINATE_ALL);
     reg32e$ reg_save_sel_uop (clk, Dsel_uop, Qsel_uop, , reset, set, or_ld_sel_out);
     assign sel_uop = Qsel_uop[0];
      //assign sel_uop = 1'b0; //TODO temporary
