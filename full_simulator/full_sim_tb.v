@@ -115,8 +115,8 @@ module TOP;
         end
 
         if(u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_eip === 1'b1) begin 
-          $strobe ("\nat time %0d, EIP = h%h | datasize = b%b", $time,
-            u_full_simulator.u_pipeline.u_writeback.WB_Final_EIP, 2'b10);
+          $strobe ("\nat time %0d, EIP = h%h", $time,
+            u_full_simulator.u_pipeline.u_writeback.WB_Final_EIP);
          end
 
 
