@@ -1732,7 +1732,9 @@ module PIPELINE(input CLK, CLR, PRE,
    // wb_repne_terminate_all = WB_V && termination_conditions && IS_SECOND_UOP && wb_repne
    or2$ or_wb_exc (or_wb_exc_out, WB_PS_PAGE_FAULT_EXC_EXIST, WB_PS_GPROT_EXC_EXIST);
    and2$ and_wb_ints_v (and_wb_exc_v_out, WB_V, or_wb_exc_out);
-   nor4$ nor_wb_v (nor_wb_v_out, and_wb_exc_v_out, wb_repne_terminate_all, INTERRUPT_SIGNAL, wb_mispredict_taken_all);
+
+   or4$ or_halt (wb_mispredict_taken_all, wb_mispredict_taken_all_out, mux_halt_all_out, and_wb_exc_v_out, INTERRUPT_SIGNAL);
+//   nor4$ nor_wb_v (nor_wb_v_out, and_wb_exc_v_out, wb_repne_terminate_all, INTERRUPT_SIGNAL, wb_mispredict_taken_all);
    and2$ and_wb_v (EX_OUT_WB_V_IN, EX_V, nor_wb_v_out);
    assign WB_EXC_V_OUT = and_wb_exc_v_out;
    assign WB_FLUSH_PIPELINE_BAR = nor_wb_v_out;
