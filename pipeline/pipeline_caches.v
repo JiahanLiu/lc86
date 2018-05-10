@@ -1016,9 +1016,11 @@ module PIPELINE(input CLK, CLR, PRE,
    // agen_stage1 dependency check input
    assign AG2_PS_V_OUT_AG_IN = ag2_ps_v_stage_in;
    //==================================
-   
+
+   wire LD_ME;
+
    agen_stage2 u_agen_stage2 (
-      CLK, CLR, PRE, ag2_ps_v_stage_in, LD_AG2,
+      CLK, CLR, PRE, ag2_ps_v_stage_in, LD_ME,
 
       AG2_PS_EIP, AG2_PS_NEIP, AG2_PS_NCS,
       AG2_PS_CONTROL_STORE,
@@ -1100,7 +1102,8 @@ module PIPELINE(input CLK, CLR, PRE,
    
    wire [31:0] AG2_OUT1_ME_PS, ME_PS_IN1;
 
-   wire LD_ME, AG2_ME_V_OUT;
+//   wire LD_ME, 
+   wire AG2_ME_V_OUT;
 
 //   nor4$ nor_me_v (nor_me_v_out, WB_EXC_V_OUT, wb_repne_terminate_all, INTERRUPT_SIGNAL);
    and2$ and_me_v (AG2_ME_V_OUT, AG2_PS_V, WB_FLUSH_PIPELINE_BAR);
