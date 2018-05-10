@@ -54,7 +54,8 @@ module decode_stage2 (
    output NMI_INT_EN_OUT, GEN_PROT_EXC_EN_OUT, PAGE_FAULT_EXC_EN_OUT,
    output D2_REPNE_WB, D2_UOP_STALL_OUT, D2_EXC_EN_V_OUT,
 
-   output D2_JMP_STALL_OUT
+   output D2_JMP_STALL_OUT,
+   output [7:0] D2_control_address_debug
 );
 `include "../pipeline/control_store/control_store_wires.v"
 `include "../pipeline/control_store/control_store_signals.v"
@@ -137,6 +138,7 @@ module decode_stage2 (
     // ucontrol_store u_ucontrol_store1 (.opcode(decode_address), .opcode_size(opcode_size), .control_signal(CONTROL_STORE[127:64]));
 
     wire [7:0] control_store_address;
+    assign D2_control_address_debug = control_address;
     wire control_store_op_size;
 
     mux2_8$ muxl_cntrl_addr (control_store_address, decode_address, next_micro_op_address, sel_uop);

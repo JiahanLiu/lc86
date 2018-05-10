@@ -565,6 +565,7 @@ module PIPELINE(input CLK, CLR, PRE,
    wire D2_PAGE_FAULT_EXC_EXIST_OUT;
    wire D2_NMI_INT_EN_OUT, D2_GEN_PROT_EXC_EN_OUT, D2_PAGE_FAULT_EXC_EN_OUT;
    wire D2_REPNE_WB_OUT;
+   wire [7:0] D2_control_address_debug;
 
    // save interrupt status
    wire [31:0] D2_PS_SAVE_INT_STATUS;
@@ -639,7 +640,8 @@ module PIPELINE(input CLK, CLR, PRE,
       D2_PAGE_FAULT_EXC_EXIST_OUT,
       D2_NMI_INT_EN_OUT, D2_GEN_PROT_EXC_EN_OUT, D2_PAGE_FAULT_EXC_EN_OUT,
       D2_REPNE_WB_OUT, D2_UOP_STALL_OUT, D2_EXC_EN_V_OUT,
-      D2_JMP_STALL_OUT
+      D2_JMP_STALL_OUT,
+      D2_control_address_debug
    );
 
    wire [31:0] AG_PS_EIP;
@@ -783,6 +785,7 @@ module PIPELINE(input CLK, CLR, PRE,
                                    D2_DR1_SIZE_WB_OUT, D2_DR2_SIZE_WB_OUT,
                                    D2_MEM_SIZE_WB_OUT,
 				   D2_NMI_INT_EN_OUT, D2_GEN_PROT_EXC_EN_OUT, D2_PAGE_FAULT_EXC_EN_OUT };
+
    reg32e$
       u_reg_ag_ps_in2 (CLK, D2_OUT2_AG_PS, AG_PS_IN2, , CLR, PRE, LD_AG);
 
@@ -792,6 +795,12 @@ module PIPELINE(input CLK, CLR, PRE,
             AG_PS_D2_DR1_SIZE_WB, AG_PS_D2_DR2_SIZE_WB,
             AG_PS_D2_MEM_SIZE_WB,
 	    AG_PS_NMI_INT_EN, AG_PS_GEN_PROT_EXC_EN, AG_PS_PAGE_FAULT_EXC_EN } = AG_PS_IN2[31:12];
+
+
+  wire [7:0] AG_control_address_debug;
+  wire [31:0] AG_control_address_debug_out;
+  reg32e$ u_AG_control_address_debug (CLK, {24'b0, D2_control_address_debug}, AG_control_address_debug_out, ,CLR,PRE,LD_AG);
+  assign AG_control_address_debug = AG_control_address_debug_out[7:0];
 
    wire ag_ps_page_fault_exc_exist_bar, ag_ps_v_stage_in;
    inv1$ inv_ag_ps_page_fault_exc_exist (ag_ps_page_fault_exc_exist_bar, AG_PS_PAGE_FAULT_EXC_EXIST);
@@ -990,6 +999,11 @@ module PIPELINE(input CLK, CLR, PRE,
             AG2_PS_D2_MEM_SIZE_WB, AG2_PS_PAGE_FAULT_EXC_EXIST, AG2_PS_REPNE_WB } = AG2_PS_IN1[31:6];
    reg32e$ u_reg_ag2_ps_in1 (CLK, AG_OUT1_AG2_PS, AG2_PS_IN1, , CLR, PRE, LD_AG2);
 
+    wire [7:0] AG2_control_address_debug;
+    wire [31:0] AG2_control_address_debug_out;
+    reg32e$ u_AG2_control_address_debug (CLK, {24'b0, AG_control_address_debug}, AG2_control_address_debug_out, ,CLR,PRE,LD_AG2);
+    assign AG2_control_address_debug = AG2_control_address_debug_out[7:0];
+
    and2$ and_ag2_exc_en_v (AG2_EXC_EN_V_OUT, AG2_PS_V, AG2_PS_EXC_EN_V);
 
    // TODO forwarded?
@@ -1145,6 +1159,12 @@ module PIPELINE(input CLK, CLR, PRE,
             ME_PS_D2_DR1_SIZE_WB, ME_PS_D2_DR2_SIZE_WB,
             ME_PS_D2_MEM_SIZE_WB, ME_PS_D2_REPNE_WB } = ME_PS_IN1[31:8];
 
+    wire [7:0] ME_control_address_debug;
+    wire [31:0] ME_control_address_debug_out;
+    reg32e$ u_ME_control_address_debug (CLK, {24'b0, AG2_control_address_debug}, ME_control_address_debug_out, ,CLR,PRE,LD_ME);
+    assign ME_control_address_debug = ME_control_address_debug_out[7:0];
+
+
    wire nor_me_exc_exist_out, me_ps_v_stage_in;
    nor2$ nor_me_exc_exist (nor_me_exc_exist_out, ME_PS_GPROT_EXC_EXIST, ME_PS_PAGE_FAULT_EXC_EXIST);
    and2$ and_me_ps_v_stage_in (me_ps_v_stage_in, ME_PS_V, nor_me_exc_exist_out);
@@ -1295,9 +1315,15 @@ module PIPELINE(input CLK, CLR, PRE,
            ME2_PS_WR_ADDR1_V, ME2_PS_RA_WR_SIZE1, ME2_PS_WR_ADDR2_V, ME2_PS_RA_WR_SIZE2,
            ME2_PS_PAGE_FAULT_EXC_EXIST, ME2_PS_GPROT_EXC_EXIST, ME2_PS_EXC_EN_V} = ME2_PS_SAVE_MEM[31:5];
 
+
    and2$ and_me2_exc_en (ME2_EXC_EN_V_OUT, ME2_PS_V, ME2_PS_EXC_EN_V);
 
    reg32e$ u_reg_me2_ps_save_mem (CLK, me2_ps_save_mem, ME2_PS_SAVE_MEM, , CLR, PRE, LD_ME2);
+
+    wire [7:0] ME2_control_address_debug;
+    wire [31:0] ME2_control_address_debug_out;
+    reg32e$ u_ME2_control_address_debug (CLK, {24'b0, ME_control_address_debug}, ME2_control_address_debug_out, ,CLR,PRE,LD_ME2);
+    assign ME2_control_address_debug = ME2_control_address_debug_out[7:0];
 
    wire nor_me2_exc_exist_out, me2_ps_v_stage_in;
    nor2$ nor_me2_exc_exist (nor_me2_exc_exist_out, ME2_PS_PAGE_FAULT_EXC_EXIST, ME2_PS_GPROT_EXC_EXIST);
@@ -1574,6 +1600,11 @@ module PIPELINE(input CLK, CLR, PRE,
     wire [31:0] EX_ADDRESS;
     reg32e$ u_EX_address_latch(CLK, EX_ADDRESS_next, EX_ADDRESS, ,CLR,PRE,LD_EX);
 
+    wire [7:0] EX_control_address_debug;
+    wire [31:0] EX_control_address_debug_out;
+    reg32e$ u_ME2_control_address_debug (CLK, {24'b0, ME2_control_address_debug}, EX_control_address_debug_out, ,CLR,PRE,LD_EX);
+    assign EX_control_address_debug = EX_control_address_debug_out[7:0];
+
     //******************************************************************************//
     //*
     //*                                Execute STAGE
@@ -1823,6 +1854,12 @@ module PIPELINE(input CLK, CLR, PRE,
 
     wire [31:0] WB_ADDRESS; 
     reg32e$ u_WB_ADDRESS_latch(CLK, WB_ADDRESS_next, WB_ADDRESS, ,CLR,PRE,LD_WB);
+
+    wire [7:0] WB_control_address_debug;
+    wire [31:0] WB_control_address_debug_out;
+    reg32e$ u_WB_control_address_debug (CLK, {24'b0, EX_control_address_debug}, WB_control_address_debug_out, ,CLR,PRE,LD_WB);
+    assign WB_control_address_debug = WB_control_address_debug_out[7:0];
+
 
     //******************************************************************************//
     //*
