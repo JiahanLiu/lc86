@@ -39,7 +39,9 @@ Virtual Page    Physical Page   Valid   Present R/W PCD
 `define TLB_ENTRY_1 {20'h02000, 20'h00002, 1'b1, 1'b1, 1'b1, 1'b0}
 `define TLB_ENTRY_2 {20'h04000, 20'h00005, 1'b1, 1'b1, 1'b1, 1'b0}
 `define TLB_ENTRY_3 {20'h0b000, 20'h00004, 1'b1, 1'b1, 1'b1, 1'b0}
-`define TLB_ENTRY_4 {20'h0b001, 20'h00007, 1'b1, 1'b1, 1'b1, 1'b0}
+// for MMIO
+`define TLB_ENTRY_4 {20'h0c000, 20'h00007, 1'b1, 1'b0, 1'b1, 1'b1}
+//`define TLB_ENTRY_4 {20'h0b001, 20'h00007, 1'b1, 1'b1, 1'b1, 1'b0}
 `define TLB_ENTRY_5 {20'h0a000, 20'h00005, 1'b1, 1'b1, 1'b1, 1'b0}
 `define TLB_ENTRY_6 {20'h10000, 20'h10000, 1'b1, 1'b0, 1'b1, 1'b1}
 `define TLB_ENTRY_7 {20'h02001, 20'h2FFFF, 1'b1, 1'b0, 1'b1, 1'b1}

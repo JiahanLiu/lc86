@@ -12,7 +12,9 @@ module PIPELINE(input CLK, CLR, PRE,
 		output [15:0] DCACHE_BUS_ADDR_OUT,
 		output [127:0] DCACHE_BUS_WRITE_OUT,
 		input DCACHE_BUS_READY,
-		input [127:0] DCACHE_BUS_READ_DATA
+		input [127:0] DCACHE_BUS_READ_DATA,
+
+		input INTERRUPT_SIGNAL_IN
 		);
    //connect this to simulator
     assign EN = 1;//placeholder until stalls are working correctly
@@ -70,7 +72,7 @@ module PIPELINE(input CLK, CLR, PRE,
    
    wire WB_EXC_V_OUT;
    wire WB_FLUSH_PIPELINE_BAR;
-   wire INTERRUPT_SIGNAL = 1'b0; // TODO where does it come from
+   wire INTERRUPT_SIGNAL = INTERRUPT_SIGNAL_IN; // TODO where does it come from
    wire INTERRUPT_SIGNAL_BAR; 
    inv1$ inv_int_signal (INTERRUPT_SIGNAL_BAR, INTERRUPT_SIGNAL);
 
@@ -1727,14 +1729,14 @@ module PIPELINE(input CLK, CLR, PRE,
    reg32e$ reg_halt (CLK, {31'b0, wb_halt_all}, Qwb_halt_all, , clr_halt, PRE, wb_halt_all);
    mux2$ mux_halt_all (mux_halt_all_out, wb_halt_all, Qwb_halt_all[0], Qwb_halt_all[0]);
 
-   or3$ or_halt (wb_mispredict_taken_all, wb_mispredict_taken_all_out, mux_halt_all_out, and_wb_exc_v_out);
+   //or3$ or_halt (wb_mispredict_taken_all, wb_mispredict_taken_all_out, mux_halt_all_out, and_wb_exc_v_out);
+   or4$ or_halt (wb_mispredict_taken_all, wb_mispredict_taken_all_out, mux_halt_all_out, and_wb_exc_v_out, INTERRUPT_SIGNAL);
 
    // wb_repne_terminate_all = WB_V && termination_conditions && IS_SECOND_UOP && wb_repne
    or2$ or_wb_exc (or_wb_exc_out, WB_PS_PAGE_FAULT_EXC_EXIST, WB_PS_GPROT_EXC_EXIST);
    and2$ and_wb_ints_v (and_wb_exc_v_out, WB_V, or_wb_exc_out);
 
-   or4$ or_halt (wb_mispredict_taken_all, wb_mispredict_taken_all_out, mux_halt_all_out, and_wb_exc_v_out, INTERRUPT_SIGNAL);
-//   nor4$ nor_wb_v (nor_wb_v_out, and_wb_exc_v_out, wb_repne_terminate_all, INTERRUPT_SIGNAL, wb_mispredict_taken_all);
+   nor4$ nor_wb_v (nor_wb_v_out, and_wb_exc_v_out, wb_repne_terminate_all, INTERRUPT_SIGNAL, wb_mispredict_taken_all);
    and2$ and_wb_v (EX_OUT_WB_V_IN, EX_V, nor_wb_v_out);
    assign WB_EXC_V_OUT = and_wb_exc_v_out;
    assign WB_FLUSH_PIPELINE_BAR = nor_wb_v_out;
