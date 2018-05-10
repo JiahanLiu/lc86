@@ -1,7 +1,7 @@
 //DMA has extre logic for the buffers
 module DMA_bus_controller(//interface with bus
 			    input BUS_CLK,
-			    input RST, SET,
+			  input RST, SET,
 			    inout [31:0] D,
 			    inout [15:0] A,
 			    inout [11:0] SIZE,
@@ -12,24 +12,17 @@ module DMA_bus_controller(//interface with bus
 			    input BG,
 			    output ACK_OUT,
 			    input ACK_IN,
-			    output DEST_OUT,//wire goes directly to RAM
-			    input DEST_IN,
-			    //interface with work unit
-			    //needs to be modifed for each unit
-			    input MOD_EN, //simple signal saying we have a request
-			    input MOD_WR,
-			    input [15:0] MOD_A,
-			    input [127:0] MOD_WRITE_DATA,
-			    output [127:0] MOD_READ_DATA,
-			    output MOD_R,
+			    output DEST_MEM,
+			  output DEST_INTR,
+			  input DEST_IN,//always the INTERRUPT port
 			  
-			  input [31:0] addr, 
+			  output [31:0] addr, 
 			    // Size is from 0 to (2^12)-1
-			    input [11:0] size,  
-			    input DISK_RST,
-			    input WE,
-			    input EN, 
-			    output [32767:0] data_out
+			    output [11:0] size,  
+			    output DISK_RST,
+			    output WE,
+			    output EN, 
+			    input [32767:0] data_out
 
 			    
 		      );
@@ -62,12 +55,10 @@ module DMA_bus_controller(//interface with bus
    wire 		    MOD_MASK_OUT, MOD_EN_MASK;
    wire [6:0] 		    filler;
    //updating the pending write latch when request initiated, and when writing/reading
-   or3$ UPD_EN_DRIVER(UPD_EN, current_state[2], current_state[3], current_state[5]);
-   
-   mux2$ MASK_SEL(MASK_IN, MOD_MASK_OUT, current_state[2], UPD_EN);   
-   ioreg8$ MASK_REG(BUS_CLK, {7'b0,MASK_IN},{filler, MOD_MASK_OUT}, {filler,MOD_EN_MASK},RST,SET);
-   and2$ MASKED_MOD_EN(MASKED_EN, MOD_EN_MASK, MOD_EN);
-   ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MASKED_EN, BG, ACK_IN, RW, DEST_IN, DONE);
+   //TODO: drive this signal!
+   wire 		    MOD_EN;
+   assign MOD_EN = 0;
+   ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MOD_EN, BG, ACK_IN, RW, DEST_IN, DONE);
    wire [2:0] 		    amnt_decr;
    wire [15:0] 		    current_size, current_size_in, next_size;
    assign next_size[15:12] = 0;
@@ -107,36 +98,32 @@ module DMA_bus_controller(//interface with bus
    wire [6:0] 			    filler1;
    ioreg8$ READY_REG(BUS_CLK, {7'b0, DONE}, {filler1,MOD_R}, , RST, SET);
    
-      
+   
+
+   //REGISTERS FOR THE DMA UNIT ITSELF
+
+
+
+   
    //TRISTATE BUFFERS FOR THE BUS
    wire [31:0] 			    D_TRI_IN;
-   mux4_32 D_DRIV_SEL(D_TRI_IN, MOD_WRITE_DATA[31:0], MOD_WRITE_DATA[63:32],
-	    MOD_WRITE_DATA[95:64], MOD_WRITE_DATA[127:96],
-	    next_size_bar[0], next_size_bar[1]);
+   
+
+
+
    tristate_bus_driver32$ D_TRI(D_TRI_EN, D_TRI_IN, D);
-
-
-
-//DEST, ACK, and MASTER IS NO LONGER USED, NOW USING DIRECT CONNECTIONS
-/*   wire [2:0] 		    DEST_TRI_IN, MASTER_TRI_IN;
-   wire 		    DEST_TRI_EN, MASTER_TRI_EN;
-   assign MASTER_TRI_IN = MY_ID;
-   assign DEST_TRI_EN = CTRL_TRI_EN;
-   assign MASTER_TRI_EN = CTRL_TRI_EN;
-   tristate_bus_driver1$ DEST2_TRI(DEST_TRI_EN, DEST_TRI_IN[2], DEST[2]);
-   tristate_bus_driver1$ DEST1_TRI(DEST_TRI_EN, DEST_TRI_IN[1], DEST[1]);
-   tristate_bus_driver1$ DEST0_TRI(DEST_TRI_EN, DEST_TRI_IN[0], DEST[0]);
-   tristate_bus_driver1$ MAS2_TRI(MASTER_TRI_EN, MASTER_TRI_IN[2], MASTER[2]);
-   tristate_bus_driver1$ MAS1_TRI(MASTER_TRI_EN, MASTER_TRI_IN[1], MASTER[1]);
-   tristate_bus_driver1$ MAS0_TRI(MASTER_TRI_EN, MASTER_TRI_IN[0], MASTER[0]);*/
    
     wire 		    A_TRI_EN;
    assign A_TRI_EN = CTRL_TRI_EN;
+   wire [15:0] 		    MOD_A;
+   
+	       //TODO: drive this signa1!
    tristate_bus_driver16$ A_TRI(A_TRI_EN, MOD_A, A);
    
 
    wire [11:0] 		    SIZE_TRI_IN;
    assign SIZE_TRI_IN = 12'h010; //Always sending 16 bytes on the bus
+   //at a single time
    wire 		    SIZE_TRI_EN;
    assign SIZE_TRI_EN = CTRL_TRI_EN;
    tristate_bus_driver8$ SIZE8_TRI(SIZE_TRI_EN, SIZE_TRI_IN[11:4], SIZE[11:4]);
@@ -148,12 +135,18 @@ module DMA_bus_controller(//interface with bus
    wire 		    RW_TRI_IN, ACK_TRI_IN;
    wire 		    RW_TRI_EN;
    assign RW_TRI_EN = CTRL_TRI_EN;
-   assign RW_TRI_IN = MOD_WR;
+   assign RW_TRI_IN = 1'b1;//the DMA always writes
    assign ACK_TRI_IN = 1'b1;
    tristate_bus_driver1$ RW_TRI(RW_TRI_EN, RW_TRI_IN, RW);
    //tristate_bus_driver1$ ACK_TRI(ACK_TRI_EN, ACK_TRI_IN, ACK);
    
+   //Driving the dest out logic
+   //TODO: drive this with real values
+   and2$ DEST_MEM_DRIVER(DEST_MEM, DEST_OUT, 1'b0);
+   and2$ DEST_INTR_DRIVER(DEST_INTR, DEST_OUT, 1'b0);
+      
 
-endmodule // bus_controller
+endmodule // DMA_bus_controller
+
 
 

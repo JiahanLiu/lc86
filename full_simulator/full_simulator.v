@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+ `timescale 1ns/1ps
 
 module FULL_SIMULATOR(input CLK,
 		      input BUS_CLK,
@@ -28,7 +28,9 @@ module FULL_SIMULATOR(input CLK,
    wire [127:0] 	    INTR_WRITE_DATA;
    wire [127:0] 	    INTR_READ_DATA;
    wire 		    INTR_R;
-
+   wire 		    INTERRUPT;
+   assign INTR_EN = 0;
+      
    //THE FULL MEMORY MODULE
    FULL_MEMORY u_full_memory (
 			     DC_EN,
@@ -51,6 +53,7 @@ module FULL_SIMULATOR(input CLK,
 			     INTR_WRITE_DATA,
 			     INTR_READ_DATA,
 			     INTR_R,
+			      INTERRUPT,
 
 			     BUS_CLK,
 			     RST, SET);
@@ -69,7 +72,8 @@ PIPELINE u_pipeline ( CLK, RST, SET,
 		     DC_A,
 		     DC_WRITE_DATA,
 		     DC_R,
-		     DC_READ_DATA);
+		     DC_READ_DATA,
+		      INTERRUPT);
 
 
 

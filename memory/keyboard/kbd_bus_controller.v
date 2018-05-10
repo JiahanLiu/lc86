@@ -1,5 +1,5 @@
 
-
+//I believe this works
 //Cache bus controller closely follows the template
 module kbd_bus_controller(//interface with bus
 		      input BUS_CLK,
@@ -15,16 +15,7 @@ module kbd_bus_controller(//interface with bus
 		      output ACK_OUT,
 		      input ACK_IN,
 		      output DEST_OUT,//wire goes directly to RAM
-		      input DEST_IN,
-		      //interface with work unit
-		      //needs to be modifed for each unit
-		      input MOD_EN, //simple signal saying we have a request
-		      input MOD_WR,
-		      input [15:0] MOD_A,
-		      input [127:0] MOD_WRITE_DATA,
-		      output [127:0] MOD_READ_DATA,
-		      output MOD_R
-
+		      input DEST_IN
 		      );
    //CURRENT STATE REG
    wire [7:0] 		    current_state, next_state;
@@ -56,11 +47,11 @@ module kbd_bus_controller(//interface with bus
    wire [6:0] 		    filler;
    //updating the pending write latch when request initiated, and when writing/reading
    or3$ UPD_EN_DRIVER(UPD_EN, current_state[2], current_state[3], current_state[5]);
-   
-   mux2$ MASK_SEL(MASK_IN, MOD_MASK_OUT, current_state[2], UPD_EN);   
-   ioreg8$ MASK_REG(BUS_CLK, {7'b0,MASK_IN},{filler, MOD_MASK_OUT}, {filler,MOD_EN_MASK},RST,SET);
-   and2$ MASKED_MOD_EN(MASKED_EN, MOD_EN_MASK, MOD_EN);
-   ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MASKED_EN, BG, ACK_IN, RW, DEST_IN, DONE);
+
+   //TODO: switch to behavioral for interrupt test case
+   wire 		    MOD_EN;
+   assign MOD_EN = 0;
+   ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MOD_EN, BG, ACK_IN, RW, DEST_IN, DONE);
    wire [2:0] 		    amnt_decr;
    wire [15:0] 		    current_size, current_size_in, next_size;
    assign next_size[15:12] = 0;
@@ -69,11 +60,12 @@ module kbd_bus_controller(//interface with bus
 
    //REGISTERS FOR THE CONTROLLER
    //SIZE REGISTER: muxed between the decremented value or 16
-   mux2_16$ mux_size_u(current_size_in, 16'h0010, next_size, SIZE_DECR);
+   mux2_16$ mux_size_u(current_size_in, 16'h0004, next_size, SIZE_DECR);
    ioreg16$ size_reg(BUS_CLK, current_size_in, current_size, , RST, SET);
 
    //DATA BUFFER
-   wire [127:0] 		    data_buffer_bus, data_buffer_in, data_buffer_out;
+   //NOT NEEDED FOR THE KEYBOARD
+
    wire [3:0]			    SIZE_SELECT;
    wire [1:0] 			    next_size_bar;
    //as size goes down, buffer location goes up
@@ -86,12 +78,7 @@ module kbd_bus_controller(//interface with bus
    and2$ rd_2(RD_BUS[2], SIZE_SELECT[2], RD_BUS_CTRL);
    and2$ rd_3(RD_BUS[3], SIZE_SELECT[3], RD_BUS_CTRL);
    //muxes select between updating reading from bus or staying same
-   mux32_2way mux_u_0(data_buffer_in[31:0],data_buffer_out[31:0] , D, RD_BUS[0]);
-   mux32_2way mux_u_1(data_buffer_in[63:32],data_buffer_out[63:32] , D, RD_BUS[1]);
-   mux32_2way mux_u_2(data_buffer_in[95:64],data_buffer_out[95:64] , D, RD_BUS[2]);
-   mux32_2way mux_u_3(data_buffer_in[127:96],data_buffer_out[127:96] , D, RD_BUS[3]);
-   ioreg128$ data_buffer(BUS_CLK, data_buffer_in, data_buffer_out, , RST, SET);
-   assign MOD_READ_DATA = data_buffer_out;
+
    //DONE BUFFER FOR MAIN UNIT
    wire [6:0] 			    filler1;
    ioreg8$ READY_REG(BUS_CLK, {7'b0, DONE}, {filler1,MOD_R}, , RST, SET);
@@ -99,28 +86,15 @@ module kbd_bus_controller(//interface with bus
       
    //TRISTATE BUFFERS FOR THE BUS
    wire [31:0] 			    D_TRI_IN;
-   mux4_32 D_DRIV_SEL(D_TRI_IN, MOD_WRITE_DATA[31:0], MOD_WRITE_DATA[63:32],
-	    MOD_WRITE_DATA[95:64], MOD_WRITE_DATA[127:96],
-	    next_size_bar[0], next_size_bar[1]);
+   //TODO: drive this with an ascii characher
+   assign D_TR_IN = 32'hFEEDBEEF;
    tristate_bus_driver32$ D_TRI(D_TRI_EN, D_TRI_IN, D);
-
-
-
-//DEST, ACK, and MASTER IS NO LONGER USED, NOW USING DIRECT CONNECTIONS
-/*   wire [2:0] 		    DEST_TRI_IN, MASTER_TRI_IN;
-   wire 		    DEST_TRI_EN, MASTER_TRI_EN;
-   assign MASTER_TRI_IN = MY_ID;
-   assign DEST_TRI_EN = CTRL_TRI_EN;
-   assign MASTER_TRI_EN = CTRL_TRI_EN;
-   tristate_bus_driver1$ DEST2_TRI(DEST_TRI_EN, DEST_TRI_IN[2], DEST[2]);
-   tristate_bus_driver1$ DEST1_TRI(DEST_TRI_EN, DEST_TRI_IN[1], DEST[1]);
-   tristate_bus_driver1$ DEST0_TRI(DEST_TRI_EN, DEST_TRI_IN[0], DEST[0]);
-   tristate_bus_driver1$ MAS2_TRI(MASTER_TRI_EN, MASTER_TRI_IN[2], MASTER[2]);
-   tristate_bus_driver1$ MAS1_TRI(MASTER_TRI_EN, MASTER_TRI_IN[1], MASTER[1]);
-   tristate_bus_driver1$ MAS0_TRI(MASTER_TRI_EN, MASTER_TRI_IN[0], MASTER[0]);*/
    
     wire 		    A_TRI_EN;
    assign A_TRI_EN = CTRL_TRI_EN;
+   wire [15:0] 		    MOD_A;
+   assign MOD_A = 0;
+   //NOT SURE WHAT TO DO WITH THE ADDRESS WHEN TALKING TO INTERRUPT
    tristate_bus_driver16$ A_TRI(A_TRI_EN, MOD_A, A);
    
 
@@ -137,7 +111,7 @@ module kbd_bus_controller(//interface with bus
    wire 		    RW_TRI_IN, ACK_TRI_IN;
    wire 		    RW_TRI_EN;
    assign RW_TRI_EN = CTRL_TRI_EN;
-   assign RW_TRI_IN = MOD_WR;
+   assign RW_TRI_IN = 1'b1;
    assign ACK_TRI_IN = 1'b1;
    tristate_bus_driver1$ RW_TRI(RW_TRI_EN, RW_TRI_IN, RW);
    //tristate_bus_driver1$ ACK_TRI(ACK_TRI_EN, ACK_TRI_IN, ACK);

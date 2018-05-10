@@ -31,6 +31,7 @@
 ../memory/keyboard/kbd_bus_controller.v
 ../memory/interrupt/intr_bus_controller.v
 ../memory/main_memory/main_memory.v
+../disk/disk.v
 ../memory/all_mem.v
 
 ../pipeline/fetch.v

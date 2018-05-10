@@ -24,6 +24,7 @@ module  FULL_MEMORY(//lines between dcache bus controller and dcache
 		    input [127:0] INTR_WRITE_DATA,
 		    output [127:0] INTR_READ_DATA,
 		    output INTR_R,
+		    output INTERRUPT,
 
 
 		    //The Bus clock and other signals
@@ -50,16 +51,16 @@ module  FULL_MEMORY(//lines between dcache bus controller and dcache
    wire       DC_to_MEM, IC_to_MEM;
    wire       MEM_to_DC, MEM_to_IC;
    //IO to mem
-   wire       DMA_to_MEM, KBD_to_MEM;
+   wire       DMA_to_MEM;
+   
    //Interrupt stuff
    wire       DMA_to_INTR, KBD_to_INTR;
-   //Caches writing to IO
-   wire       DC_to_DMA, DC_to_KBD;
-   assign DMA_to_MEM = 0;
+   wire       INTR_to_DMA, INTR_to_KBD;
+   //assign DMA_to_MEM = 0;
       
    //the arbitrator!
-   assign BR[5:3] = 0;
-   assign ACK_OUT[5:3] =0;
+//   assign BR[5:3] = 0;
+//   assign ACK_OUT[5:3] =0;
    arbitrator arbitrator_u(BUS_CLK,
 		  RST, SET,
 		  BR,
@@ -150,19 +151,94 @@ module  FULL_MEMORY(//lines between dcache bus controller and dcache
     MEM_WR_SIZE,
     MEM_INOUT
 );
-
-
    
-
 
    //KBD controller
-   //will insert when confident ports are correct
+   kbd_bus_controller KBD_CTRLR_U(
+		      BUS_CLK,
+		      RST, SET,
+		      D,
+		      A,
+		      SIZE,
+		      RW,
+
+		      BR[3],
+		      BG[3],
+		      ACK_OUT[3],
+		      ACK_IN,
+		      KBD_to_INTR,
+		      INTR_to_KBD
+		      );
+
+
    
    //DMA controller
-   //Will insert when confident ports are correct
+   wire [31:0] DISK_ADDR;
+   wire [11:0] DISK_SIZE;
+   wire        DISK_RST, DISK_EN, DISK_WE;
+   wire [32767:0] DISK_DATA;
+   DMA_bus_controller DMA_CTRLR_U(
+				  BUS_CLK,
+				  RST, SET,
+				  D,
+				  A,
+				  SIZE,
+				  RW,
+
+				  BR[4],
+				  BG[4],
+				  ACK_OUT[4],
+				  ACK_IN,
+				  DMA_to_MEM,
+				  DMA_to_INTR,
+				  INTR_to_DMA,//always the INTERRUPT port
+			  
+			  DISK_ADDR, 
+			    // Size is from 0 to (2^12)-1
+			    DISK_SIZE,  
+			    DISK_RST,
+			    DISK_WE,
+			    DISK_EN, 
+			    DISK_DATA);
+   //DISK itself
+   disk  DISK_U(
+    BUS_CLK,
+    DISK_ADDR, 
+    DISK_SIZE,  
+    DISK_RST,
+    DISK_WE,
+    DISK_EN, 
+    DISK_DATA);
+
+
 
    //Interrupt Bus port
-   //Will insert when confident ports are correct
+   intr_bus_controller INTR_CTRLR_U(
+				    BUS_CLK,
+				    RST, SET,
+				    D,
+				    A,
+				    SIZE,
+				    RW,
+
+				    BR[5],
+				    BG[5],
+				    ACK_OUT[5],
+				    ACK_IN,
+				    INTR_to_DMA,
+				    INTR_to_KBD,
+				    DMA_to_INTR,
+				    KBD_to_INTR,
+
+				    INTR_EN,
+				    INTR_WR,
+				    INTR_A,
+				    INTR_WRITE_DATA,
+				    INTR_READ_DATA,
+				    INTR_R,
+				    INTERRUPT
+		       );
+
 
 
 endmodule
