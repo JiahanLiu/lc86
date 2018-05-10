@@ -15,7 +15,7 @@ module operand_select_ex(
 	input CLR,
 	input CS_IS_CMPS_FIRST_UOP_ALL,
 	input CS_IS_CMPS_SECOND_UOP_ALL,
-	input CS_REPNE_STEADY_STATE_EX,
+	input CS_REPNE_INTERNAL_COUNT_WB,
 	input [31:0] EX_A,
 	input [31:0] EX_B,
 	input [31:0] EX_C,
@@ -29,7 +29,7 @@ module operand_select_ex(
 
 	mux32_2way u_mux_b(b, EX_B, cmps_first_mem, CS_IS_CMPS_SECOND_UOP_ALL);
 
-	mux32_2way u_mux_count(count, EX_C, saved_count, CS_REPNE_STEADY_STATE_EX);
+	mux32_2way u_mux_count(count, EX_C, saved_count, CS_REPNE_INTERNAL_COUNT_WB);
 
 endmodule // operand_select_ex
 

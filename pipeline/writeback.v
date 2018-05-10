@@ -80,9 +80,7 @@ module writeback (
    wire mux_not_taken_eip, wb_ld_gpr2;
    //validate_signals_wb
    wire v_wb_ld_gpr1, v_ex_ld_gpr2, v_cs_ld_gpr3, v_cs_ld_seg, v_d2_ld_mm, 
-      v_ex_dcache_write, v_cs_ld_flags, v_cs_ld_eip, v_cs_ld_cs;
-   //repne_halt_wb
-   wire ZF; 
+      v_ex_dcache_write, v_cs_ld_flags, v_cs_ld_eip, v_cs_ld_cs; 
    //flags_wb
    wire [31:0] final_out_flags; 
    //result_select

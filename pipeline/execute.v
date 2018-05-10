@@ -94,7 +94,7 @@ module execute (
   assign WB_CONTROL_STORE_next = CONTROL_STORE;
 
   operand_select_ex u_operand_select_ex(b, count, CLK, PRE, CLR, CS_IS_CMPS_FIRST_UOP_ALL, 
-    CS_IS_CMPS_SECOND_UOP_ALL, CS_REPNE_STEADY_STATE, EX_A, EX_B, EX_C, saved_count);
+    CS_IS_CMPS_SECOND_UOP_ALL, CS_REPNE_INTERNAL_COUNT_WB, EX_A, EX_B, EX_C, saved_count);
   
   cmpxchg_decision_ex u_cmpxchg_decision_ex(ex_ld_gpr1, ex_ld_gpr2, ex_dcache_write, 
     CS_IS_CMPXCHG_EX, EX_d2_ld_gpr1_ex, CS_LD_GPR2_EX, EX_d2_dcache_write_ex, alu32_flags);
