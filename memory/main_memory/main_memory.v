@@ -53,7 +53,7 @@ mux32_4way mux4_write (write_out, write_mask3, bit_lines, write_mask1, write_mas
 
 nor3$ or_all (write_all, WRITE_SIZE[0], WRITE_SIZE[1], WRITE_SIZE[2]);
    //STEVEN: write all should write 16bytes, not 32bytes
-mux32_4way mux2_write (write_out_final, write_out, write_out, 32'h0000_FFFF, 32'hFFFF_0000, {write_all, ADDR[14]});
+mux32_4way mux2_write (write_out_final, write_out, write_out, 32'h0000_FFFF, 32'hFFFF_0000, {write_all, ADDR[4]});
 inv1$ inv1_wr[31:0] (write_out_b, write_out_final);
 
 // write is active low for sram
