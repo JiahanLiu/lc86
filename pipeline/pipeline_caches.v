@@ -1727,7 +1727,7 @@ module PIPELINE(input CLK, CLR, PRE,
    reg32e$ reg_halt (CLK, {31'b0, wb_halt_all}, Qwb_halt_all, , clr_halt, PRE, wb_halt_all);
    mux2$ mux_halt_all (mux_halt_all_out, wb_halt_all, Qwb_halt_all[0], Qwb_halt_all[0]);
 
-   or2$ or_halt (wb_mispredict_taken_all, wb_mispredict_taken_all_out, mux_halt_all_out);
+   or3$ or_halt (wb_mispredict_taken_all, wb_mispredict_taken_all_out, mux_halt_all_out, and_wb_exc_v_out);
 
    // wb_repne_terminate_all = WB_V && termination_conditions && IS_SECOND_UOP && wb_repne
    or2$ or_wb_exc (or_wb_exc_out, WB_PS_PAGE_FAULT_EXC_EXIST, WB_PS_GPROT_EXC_EXIST);
