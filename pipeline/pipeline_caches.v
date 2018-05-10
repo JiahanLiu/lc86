@@ -1018,7 +1018,7 @@ module PIPELINE(input CLK, CLR, PRE,
    //==================================
    
    agen_stage2 u_agen_stage2 (
-      CLK, CLR, PRE, ag2_ps_v_stage_in,
+      CLK, CLR, PRE, ag2_ps_v_stage_in, LD_AG2,
 
       AG2_PS_EIP, AG2_PS_NEIP, AG2_PS_NCS,
       AG2_PS_CONTROL_STORE,

@@ -1,5 +1,5 @@
 module agen_stage2 (
-   input CLK, RST, SET, V,
+   input CLK, RST, SET, V, LD_ME,
 
    // Signals to be saved in pipeline latches
    input [31:0] EIP, // for segment limit check
@@ -107,8 +107,15 @@ module agen_stage2 (
    mux2_32 mux_cmps_save_esi_addr (mux_cmps_save_esi_addr_out, add_cmps_seg1_out, add_esi_addr_out, CS_REPNE_STEADY_STATE);
    mux2_32 mux_cmps_save_edi_addr (mux_cmps_save_edi_addr_out, add_cmps_seg1_out, add_edi_addr_out, CS_REPNE_STEADY_STATE);
 
-   reg32e$ reg_cmps_save_esi_addr (CLK, mux_cmps_save_esi_addr_out, Qcmps_esi_addr, , RST, SET, CS_IS_CMPS_FIRST_UOP_ALL);
-   reg32e$ reg_cmps_save_edi_addr (CLK, mux_cmps_save_edi_addr_out, Qcmps_edi_addr, , RST, SET, CS_IS_CMPS_SECOND_UOP_ALL);
+   wire and_first_uop_out, and_second_uop_out;
+
+   and2$ and_first_uop (and_first_uop_out, CS_IS_CMPS_FIRST_UOP_ALL, LD_ME);
+   and2$ and_second_uop (and_second_uop_out, CS_IS_CMPS_SECOND_UOP_ALL, LD_ME);
+
+//   reg32e$ reg_cmps_save_esi_addr (CLK, mux_cmps_save_esi_addr_out, Qcmps_esi_addr, , RST, SET, CS_IS_CMPS_FIRST_UOP_ALL);
+//   reg32e$ reg_cmps_save_edi_addr (CLK, mux_cmps_save_edi_addr_out, Qcmps_edi_addr, , RST, SET, CS_IS_CMPS_SECOND_UOP_ALL);
+   reg32e$ reg_cmps_save_esi_addr (CLK, mux_cmps_save_esi_addr_out, Qcmps_esi_addr, , RST, SET, and_first_uop_out);
+   reg32e$ reg_cmps_save_edi_addr (CLK, mux_cmps_save_edi_addr_out, Qcmps_edi_addr, , RST, SET, and_second_uop_out);
  
    mux2_32 mux_cmps_rd_addr (mux_cmps_rd_addr_out, mux_cmps_save_esi_addr_out, mux_cmps_save_edi_addr_out, CS_IS_CMPS_SECOND_UOP_ALL);
 
