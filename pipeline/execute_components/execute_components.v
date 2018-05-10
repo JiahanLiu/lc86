@@ -19,12 +19,15 @@ module operand_select_ex(
 	input [31:0] EX_A,
 	input [31:0] EX_B,
 	input [31:0] EX_C,
-	input [31:0] saved_count
+	input [31:0] saved_count,
+	input WB_V
 	);
 
 	wire [31:0] cmps_first_mem;
 
-	reg32e$ u_cmps_temp_mememory (CLK, EX_A, cmps_first_mem, , CLR, PRE, CS_IS_CMPS_FIRST_UOP_ALL);
+	wire v_CS_IS_CMPS_FIRST_UOP_ALL; 
+	and2$ u_v_CS_IS_CMPS_FIRST_UOP_ALL(v_CS_IS_CMPS_FIRST_UOP_ALL, EX_V, CS_IS_CMPS_FIRST_UOP_ALL)
+	reg32e$ u_cmps_temp_mememory (CLK, EX_A, cmps_first_mem, , CLR, PRE, v_CS_IS_CMPS_FIRST_UOP_ALL);
 	//module reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
 
 	mux32_2way u_mux_b(b, EX_B, cmps_first_mem, CS_IS_CMPS_SECOND_UOP_ALL);

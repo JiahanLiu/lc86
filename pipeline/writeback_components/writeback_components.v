@@ -33,19 +33,23 @@ module operand_select_wb(
 	);
 
 	wire [31:0] cmps_first_pointer; 
-	reg32e$ u_cmps_temp_mem (CLK, WB_RESULT_A, cmps_first_pointer, , CLR, PRE, CS_IS_CMPS_FIRST_UOP_ALL);
+	wire v_CS_IS_CMPS_FIRST_UOP_ALL; 
+	and2$ u_v_CS_IS_CMPS_FIRST_UOP_ALL(v_CS_IS_CMPS_FIRST_UOP_ALL, WB_V, CS_IS_CMPS_FIRST_UOP_ALL)
+	reg32e$ u_cmps_temp_mem (CLK, WB_RESULT_A, cmps_first_pointer, , CLR, PRE, v_CS_IS_CMPS_FIRST_UOP_ALL);
 	//module reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
 	
 	wire [31:0] temp_neip;
-	reg32e$ u_temp_neip(CLK, WB_NEIP, temp_neip, , CLR, PRE, CS_SAVE_NEIP_WB);
+	wire v_CS_SAVE_NEIP_WB;
+	and2$ u_v_CS_SAVE_NEIP_WB(v_CS_SAVE_NEIP_WB, WB_V, CS_SAVE_NEIP_WB)
+	reg32e$ u_temp_neip(CLK, WB_NEIP, temp_neip, , CLR, PRE, v_CS_SAVE_NEIP_WB);
 
 	wire [15:0] temp_ncs;
 	wire [31:0] temp_cs_reg_out;
-	reg32e$ u_temp_ncs (CLK, {16'h0000,WB_NCS}, temp_cs_reg_out, , CLR, PRE, CS_SAVE_NCS_WB);
+	wire v_CS_SAVE_NCS_WB;
+	and2$ u_v_CS_SAVE_NCS_WB(v_CS_SAVE_NCS_WB, WB_V, CS_SAVE_NCS_WB);
+	reg32e$ u_temp_ncs (CLK, {16'h0000,WB_NCS}, temp_cs_reg_out, , CLR, PRE, v_CS_SAVE_NCS_WB);
 	assign temp_ncs = temp_cs_reg_out[15:0];
 
-	wire v_CS_IS_CMPS_FIRST_UOP_ALL;
-	and2$ u_v_CS_IS_CMPS_FIRST_UOP_ALL(v_CS_IS_CMPS_FIRST_UOP_ALL, WB_V, CS_IS_CMPS_FIRST_UOP_ALL);
 	reg32e$ u_save_count(CLK, WB_RESULT_C, saved_count, ,CLR, PRE, v_CS_IS_CMPS_FIRST_UOP_ALL);
 
 	wire [31:0] post_mux1_data1; 
