@@ -1,6 +1,6 @@
 module decode_stage2 (
    input clk, set, reset,
-   input D2_V, LD_D2,
+   input D2_V, AG_STALL_OUT_LD_D2_IN,
    input [127:0] IR, 
    input [31:0] EIP,
    input [15:0] CS,
@@ -117,7 +117,7 @@ module decode_stage2 (
     wire [7:0] next_micro_op_address;
 
     wire and_d2_v_ld_out;
-    and2$ and_d2_v_ld (and_d2_v_ld_out, D2_V, LD_D2);
+    and2$ and_d2_v_ld (and_d2_v_ld_out, D2_V, AG_STALL_OUT_LD_D2_IN);
 
     assign Dnext_micro_addr = {25'b0, CS_NEXT_MICRO_ADDRESS_DE};
     reg32e$ reg_save_next_uaddr (clk, Dnext_micro_addr, Qnext_micro_addr, , reset, set, and_d2_v_ld_out);
@@ -130,7 +130,13 @@ module decode_stage2 (
     nor2$ nor_int_exist (nor_int_exist_bar, INT_EXIST, WB_REPNE_TERMINATE_ALL);
     and3$ and_sel_uop (and_sel_uop_out, D2_V, CS_UOP_STALL_DE, nor_int_exist_bar);
     assign Dsel_uop = {31'b0, and_sel_uop_out};
-    reg32e$ reg_save_sel_uop (clk, Dsel_uop, Qsel_uop, , reset, set, 1'b1);
+    //reg32e$ reg_save_sel_uop (clk, Dsel_uop, Qsel_uop, , reset, set, 1'b1);
+
+    wire ag_stall_out_ld_d2_in_bar, or_ld_sel_out;
+
+    inv1$ inv_ag_stall_out (ag_stall_out_ld_d2_in_bar, AG_STALL_OUT_LD_D2_IN);
+    or3$ or_ld_sel (or_ld_sel_out, AG_STALL_OUT_LD_D2_IN, INT_EXIST, WB_REPNE_TERMINATE_ALL);
+    reg32e$ reg_save_sel_uop (clk, Dsel_uop, Qsel_uop, , reset, set, or_ld_sel_out);
     assign sel_uop = Qsel_uop[0];
      //assign sel_uop = 1'b0; //TODO temporary
 

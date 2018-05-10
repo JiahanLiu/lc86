@@ -1,5 +1,5 @@
 module agen_stage2 (
-   input CLK, RST, SET, V,
+   input CLK, RST, SET, V, LD_ME,
 
    // Signals to be saved in pipeline latches
    input [31:0] EIP, // for segment limit check
@@ -107,8 +107,15 @@ module agen_stage2 (
    mux2_32 mux_cmps_save_esi_addr (mux_cmps_save_esi_addr_out, add_cmps_seg1_out, add_esi_addr_out, CS_REPNE_STEADY_STATE);
    mux2_32 mux_cmps_save_edi_addr (mux_cmps_save_edi_addr_out, add_cmps_seg1_out, add_edi_addr_out, CS_REPNE_STEADY_STATE);
 
-   reg32e$ reg_cmps_save_esi_addr (CLK, mux_cmps_save_esi_addr_out, Qcmps_esi_addr, , RST, SET, CS_IS_CMPS_FIRST_UOP_ALL);
-   reg32e$ reg_cmps_save_edi_addr (CLK, mux_cmps_save_edi_addr_out, Qcmps_edi_addr, , RST, SET, CS_IS_CMPS_SECOND_UOP_ALL);
+   wire and_first_uop_out, and_second_uop_out;
+
+   and2$ and_first_uop (and_first_uop_out, CS_IS_CMPS_FIRST_UOP_ALL, LD_ME);
+   and2$ and_second_uop (and_second_uop_out, CS_IS_CMPS_SECOND_UOP_ALL, LD_ME);
+
+//   reg32e$ reg_cmps_save_esi_addr (CLK, mux_cmps_save_esi_addr_out, Qcmps_esi_addr, , RST, SET, CS_IS_CMPS_FIRST_UOP_ALL);
+//   reg32e$ reg_cmps_save_edi_addr (CLK, mux_cmps_save_edi_addr_out, Qcmps_edi_addr, , RST, SET, CS_IS_CMPS_SECOND_UOP_ALL);
+   reg32e$ reg_cmps_save_esi_addr (CLK, mux_cmps_save_esi_addr_out, Qcmps_esi_addr, , RST, SET, and_first_uop_out);
+   reg32e$ reg_cmps_save_edi_addr (CLK, mux_cmps_save_edi_addr_out, Qcmps_edi_addr, , RST, SET, and_second_uop_out);
  
    mux2_32 mux_cmps_rd_addr (mux_cmps_rd_addr_out, mux_cmps_save_esi_addr_out, mux_cmps_save_edi_addr_out, CS_IS_CMPS_SECOND_UOP_ALL);
 
@@ -151,10 +158,10 @@ module agen_stage2 (
    mux2_32 mux_esi (mux_esi_out, add_a_out, add_next_esi_out, CS_REPNE_STEADY_STATE);
    mux2_32 mux_edi (mux_edi_out, add_a_out, add_next_edi_out, CS_REPNE_STEADY_STATE);
 
-   reg32e$ reg_save_esi (CLK, mux_esi_out, Qcmps_esi, , RST, SET, CS_IS_CMPS_FIRST_UOP_ALL);
-   reg32e$ reg_save_src1_segid (CLK, {29'b0, SEG1}, Qcmps_src1_seg, , RST, SET, CS_IS_CMPS_FIRST_UOP_ALL);
-   reg32e$ reg_save_edi (CLK, mux_edi_out, Qcmps_edi, , RST, SET, CS_IS_CMPS_SECOND_UOP_ALL);
-   reg32e$ reg_save_src2_segid (CLK, {29'b0, SEG1}, Qcmps_src2_seg, , RST, SET, CS_IS_CMPS_SECOND_UOP_ALL);
+   reg32e$ reg_save_esi (CLK, mux_esi_out, Qcmps_esi, , RST, SET, and_first_uop_out);
+   reg32e$ reg_save_src1_segid (CLK, {29'b0, SEG1}, Qcmps_src1_seg, , RST, SET, and_second_uop_out);
+   reg32e$ reg_save_edi (CLK, mux_edi_out, Qcmps_edi, , RST, SET, and_first_uop_out);
+   reg32e$ reg_save_src2_segid (CLK, {29'b0, SEG1}, Qcmps_src2_seg, , RST, SET, and_second_uop_out);
 
    mux2_32 mux_cmps_base (mux_cmps_base_out, Qcmps_esi, Qcmps_edi, CS_IS_CMPS_SECOND_UOP_ALL);
    mux2_3 mux_cmps_seg (mux_cmps_seg_out, cmps_src1_seg, cmps_src2_seg, CS_IS_CMPS_SECOND_UOP_ALL);
