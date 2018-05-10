@@ -1,18 +1,18 @@
 # Begin_DVE_Session_Save_Info
 # DVE full session
-# Saved on Wed May 9 23:57:15 2018
+# Saved on Thu May 10 00:49:06 2018
 # Designs open: 1
 #   V1: pipeline.dump.vpd
 # Toplevel windows open: 2
 # 	TopLevel.1
 # 	TopLevel.2
-#   Source.1: TOP.u_full_simulator.u_pipeline
-#   Wave.1: 71 signals
+#   Source.1: TOP.u_full_simulator.u_pipeline.u_lsu_controller
+#   Wave.1: 82 signals
 #   Group count = 6
-#   Group Group1 signal count = 17
-#   Group u_repne_support signal count = 14
+#   Group Group1 signal count = 16
+#   Group u_repne_support signal count = 13
 #   Group Group2 signal count = 16
-#   Group Group3 signal count = 9
+#   Group Group3 signal count = 21
 # End_DVE_Session_Save_Info
 
 # DVE version: K-2015.09-SP1_Full64
@@ -257,52 +257,50 @@ gui_set_time_units 1ns
 # Global: Signal Compare
 
 # Global: Signal Groups
-gui_load_child_values {TOP.u_full_simulator.u_pipeline.u_memory_stage2}
 gui_load_child_values {TOP.u_full_simulator.u_pipeline.u_execute.u_operand_select_ex}
 gui_load_child_values {TOP.u_full_simulator.u_pipeline.u_execute}
 gui_load_child_values {TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb}
 gui_load_child_values {TOP.u_full_simulator.u_pipeline.u_execute.u_repne_support}
 gui_load_child_values {TOP.u_full_simulator.u_pipeline.or_ld_ex}
-gui_load_child_values {TOP.u_full_simulator.u_pipeline.u_lsu_controller}
 
 
-set _session_group_18 Group1
-gui_sg_create "$_session_group_18"
-set Group1 "$_session_group_18"
+set _session_group_30 Group1
+gui_sg_create "$_session_group_30"
+set Group1 "$_session_group_30"
 
-gui_sg_addsignal -group "$_session_group_18" { TOP.u_full_simulator.u_pipeline.AG_control_address_debug TOP.u_full_simulator.u_pipeline.AG2_control_address_debug TOP.u_full_simulator.u_pipeline.ME_control_address_debug_out TOP.u_full_simulator.u_pipeline.ME2_control_address_debug_out TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_DR1 TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_DR2 TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_DR3 TOP.u_full_simulator.u_pipeline.WB_control_address_debug TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_data1 TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_data2 TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_data3 TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_gpr1 TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_gpr2 TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_gpr3 TOP.u_full_simulator.u_pipeline.ME2_control_address_debug_out TOP.u_full_simulator.u_pipeline.u_memory_stage2.MEM_RD_ADDR TOP.u_full_simulator.u_pipeline.u_memory_stage2.MEM_WR_ADDR }
+gui_sg_addsignal -group "$_session_group_30" { TOP.u_full_simulator.u_pipeline.AG_control_address_debug TOP.u_full_simulator.u_pipeline.AG2_control_address_debug TOP.u_full_simulator.u_pipeline.ME_control_address_debug_out TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_DR1 TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_DR2 TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_DR3 TOP.u_full_simulator.u_pipeline.WB_control_address_debug TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_data1 TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_data2 TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_data3 TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_gpr1 TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_gpr2 TOP.u_full_simulator.u_pipeline.u_writeback.WB_Final_ld_gpr3 TOP.u_full_simulator.u_pipeline.ME2_control_address_debug_out TOP.u_full_simulator.u_pipeline.u_memory_stage2.MEM_RD_ADDR TOP.u_full_simulator.u_pipeline.u_memory_stage2.MEM_WR_ADDR }
 
-set _session_group_19 u_repne_support
-gui_sg_create "$_session_group_19"
-set u_repne_support "$_session_group_19"
+set _session_group_31 u_repne_support
+gui_sg_create "$_session_group_31"
+set u_repne_support "$_session_group_31"
 
-gui_sg_addsignal -group "$_session_group_19" { TOP.u_full_simulator.u_pipeline.u_execute.u_repne_support.repne_count TOP.u_full_simulator.u_pipeline.u_execute.u_repne_support.count TOP.u_full_simulator.u_pipeline.u_execute.u_repne_support.count_minus_one TOP.u_full_simulator.u_pipeline.u_execute.u_repne_support.repne_zero_terminate TOP.u_full_simulator.u_pipeline.EX_control_address_debug_out TOP.u_full_simulator.u_pipeline.u_execute.u_operand_select_ex.count TOP.u_full_simulator.u_pipeline.u_execute.u_operand_select_ex.EX_C TOP.u_full_simulator.u_pipeline.u_execute.u_operand_select_ex.saved_count TOP.u_full_simulator.u_pipeline.wb_repne_terminate_all TOP.u_full_simulator.u_pipeline.u_execute.EX_A TOP.u_full_simulator.u_pipeline.u_execute.b TOP.u_full_simulator.u_pipeline.u_execute.count TOP.u_full_simulator.u_pipeline.u_execute.WB_FLAGS_next }
+gui_sg_addsignal -group "$_session_group_31" { TOP.u_full_simulator.u_pipeline.u_execute.u_repne_support.repne_count TOP.u_full_simulator.u_pipeline.u_execute.u_repne_support.count TOP.u_full_simulator.u_pipeline.u_execute.u_repne_support.count_minus_one TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.WB_V TOP.u_full_simulator.u_pipeline.u_execute.u_repne_support.repne_zero_terminate TOP.u_full_simulator.u_pipeline.EX_control_address_debug_out TOP.u_full_simulator.u_pipeline.u_execute.u_operand_select_ex.count TOP.u_full_simulator.u_pipeline.u_execute.u_operand_select_ex.EX_C TOP.u_full_simulator.u_pipeline.u_execute.u_operand_select_ex.saved_count TOP.u_full_simulator.u_pipeline.wb_repne_terminate_all TOP.u_full_simulator.u_pipeline.u_execute.count TOP.u_full_simulator.u_pipeline.u_execute.WB_FLAGS_next }
 
-set _session_group_20 $_session_group_19|
-append _session_group_20 u_repne_halt_wb
-gui_sg_create "$_session_group_20"
-set u_repne_support|u_repne_halt_wb "$_session_group_20"
+set _session_group_32 $_session_group_31|
+append _session_group_32 u_repne_halt_wb
+gui_sg_create "$_session_group_32"
+set u_repne_support|u_repne_halt_wb "$_session_group_32"
 
-gui_sg_addsignal -group "$_session_group_20" { TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.wb_halt_all TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.wb_repne_terminate_all TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.WB_V TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.CS_IS_HALT_WB TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.CS_IS_CMPS_SECOND_UOP_ALL TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.WB_d2_repne_wb TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.current_flags TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.internal_saved_count TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.ZF TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.zero_count TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.second_uop_of_repne TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.repne_termination_conditions }
+gui_sg_addsignal -group "$_session_group_32" { TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.wb_halt_all TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.wb_repne_terminate_all TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.CS_IS_HALT_WB TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.CS_IS_CMPS_SECOND_UOP_ALL TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.WB_d2_repne_wb TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.current_flags TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.internal_saved_count TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.ZF TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.zero_count TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.second_uop_of_repne TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.repne_termination_conditions }
 
-set _session_group_21 Group2
-gui_sg_create "$_session_group_21"
-set Group2 "$_session_group_21"
+set _session_group_33 Group2
+gui_sg_create "$_session_group_33"
+set Group2 "$_session_group_33"
 
-gui_sg_addsignal -group "$_session_group_21" { TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.final_out_flags TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.CLR TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.PRE TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.v_cs_ld_flags_wb TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.CS_POP_FLAGS_WB TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.CS_FLAGS_AFFECTED_WB TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.WB_FLAGS TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.WB_RESULT_A TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.prev_flags TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.calculated_flags TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.interrupt_flags TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.final_flags TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.and_flags_top TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.and_flags_bottom TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.internal_saved_count TOP.u_full_simulator.u_pipeline.u_lsu_controller.DCACHE_RD_STALL }
+gui_sg_addsignal -group "$_session_group_33" { TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.final_out_flags TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.CLR TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.PRE TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.v_cs_ld_flags_wb TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.CS_POP_FLAGS_WB TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.CS_FLAGS_AFFECTED_WB TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.WB_FLAGS TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.WB_RESULT_A TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.prev_flags TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.calculated_flags TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.interrupt_flags TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.final_flags TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.and_flags_top TOP.u_full_simulator.u_pipeline.u_writeback.u_flags_wb.and_flags_bottom TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.internal_saved_count TOP.u_full_simulator.u_pipeline.u_lsu_controller.DCACHE_RD_STALL }
 
-set _session_group_22 Group3
-gui_sg_create "$_session_group_22"
-set Group3 "$_session_group_22"
+set _session_group_34 Group3
+gui_sg_create "$_session_group_34"
+set Group3 "$_session_group_34"
 
-gui_sg_addsignal -group "$_session_group_22" { TOP.u_full_simulator.u_pipeline.LD_D2 TOP.u_full_simulator.u_pipeline.LD_AG TOP.u_full_simulator.u_pipeline.LD_ME TOP.u_full_simulator.u_pipeline.u_execute.CLK TOP.u_full_simulator.u_pipeline.LD_ME2 TOP.u_full_simulator.u_pipeline.u_execute.EX_V TOP.u_full_simulator.u_pipeline.LD_EX TOP.u_full_simulator.u_pipeline.LD_WB }
+gui_sg_addsignal -group "$_session_group_34" { TOP.u_full_simulator.u_pipeline.LD_D2 TOP.u_full_simulator.u_pipeline.LD_AG TOP.u_full_simulator.u_pipeline.LD_ME TOP.u_full_simulator.u_pipeline.u_execute.CLK TOP.u_full_simulator.u_pipeline.u_memory_stage2.V TOP.u_full_simulator.u_pipeline.LD_ME2 TOP.u_full_simulator.u_pipeline.EX_control_address_debug TOP.u_full_simulator.u_pipeline.ME2_control_address_debug_out TOP.u_full_simulator.u_pipeline.u_memory_stage2.MEM_RD_ADDR TOP.u_full_simulator.u_pipeline.u_dcache.data_read_out TOP.u_full_simulator.u_pipeline.u_dcache.ready TOP.u_full_simulator.u_pipeline.LSU_OUT_DCACHE_ADDR_IN TOP.u_full_simulator.u_pipeline.u_memory_stage2.A_OUT TOP.u_full_simulator.u_pipeline.u_lsu_controller.DCACHE_RD_DATA TOP.u_full_simulator.u_pipeline.u_lsu_controller.RD_DATA_OUT TOP.u_full_simulator.u_pipeline.LD_EX TOP.u_full_simulator.u_pipeline.u_execute.EX_V TOP.u_full_simulator.u_pipeline.LD_WB TOP.u_full_simulator.u_pipeline.u_writeback.u_repne_halt_wb.WB_V TOP.u_full_simulator.u_pipeline.u_lsu_controller.DCACHE_RD_STALL }
 
-set _session_group_23 $_session_group_22|
-append _session_group_23 or_ld_ex
-gui_sg_create "$_session_group_23"
-set Group3|or_ld_ex "$_session_group_23"
+set _session_group_35 $_session_group_34|
+append _session_group_35 or_ld_ex
+gui_sg_create "$_session_group_35"
+set Group3|or_ld_ex "$_session_group_35"
 
-gui_sg_addsignal -group "$_session_group_23" { TOP.u_full_simulator.u_pipeline.or_ld_ex.in0 TOP.u_full_simulator.u_pipeline.or_ld_ex.in1 TOP.u_full_simulator.u_pipeline.or_ld_ex.in2 TOP.u_full_simulator.u_pipeline.u_execute.CLK TOP.u_full_simulator.u_pipeline.or_ld_ex.out }
+gui_sg_addsignal -group "$_session_group_35" { TOP.u_full_simulator.u_pipeline.or_ld_ex.in0 TOP.u_full_simulator.u_pipeline.or_ld_ex.in1 TOP.u_full_simulator.u_pipeline.or_ld_ex.in2 TOP.u_full_simulator.u_pipeline.u_execute.CLK TOP.u_full_simulator.u_pipeline.or_ld_ex.out TOP.u_full_simulator.u_pipeline.u_execute.EX_A TOP.u_full_simulator.u_pipeline.u_execute.b }
 
 # Global: Highlighting
 
@@ -312,7 +310,7 @@ gui_change_stack_mode -mode list
 # Post database loading setting...
 
 # Restore C1 time
-gui_set_time -C1_only 22379.62
+gui_set_time -C1_only 22281.67
 
 
 
@@ -339,26 +337,27 @@ gui_hier_list_init -id ${Hier.1}
 gui_change_design -id ${Hier.1} -design V1
 catch {gui_list_expand -id ${Hier.1} TOP}
 catch {gui_list_expand -id ${Hier.1} TOP.u_full_simulator}
-catch {gui_list_select -id ${Hier.1} {TOP.u_full_simulator.u_pipeline}}
-gui_view_scroll -id ${Hier.1} -vertical -set 0
+catch {gui_list_expand -id ${Hier.1} TOP.u_full_simulator.u_pipeline}
+catch {gui_list_select -id ${Hier.1} {TOP.u_full_simulator.u_pipeline.u_lsu_controller}}
+gui_view_scroll -id ${Hier.1} -vertical -set 1580
 gui_view_scroll -id ${Hier.1} -horizontal -set 0
 
 # Data 'Data.1'
 gui_list_set_filter -id ${Data.1} -list { {Buffer 1} {Input 1} {Others 1} {Linkage 1} {Output 1} {LowPower 1} {Parameter 1} {All 1} {Aggregate 1} {LibBaseMember 1} {Event 1} {Assertion 1} {Constant 1} {Interface 1} {BaseMembers 1} {Signal 1} {$unit 1} {Inout 1} {Variable 1} }
-gui_list_set_filter -id ${Data.1} -text {LD_EX}
-gui_list_show_data -id ${Data.1} {TOP.u_full_simulator.u_pipeline}
+gui_list_set_filter -id ${Data.1} -reset
+gui_list_show_data -id ${Data.1} {TOP.u_full_simulator.u_pipeline.u_lsu_controller}
 gui_show_window -window ${Data.1}
-catch { gui_list_select -id ${Data.1} {TOP.u_full_simulator.u_pipeline.LD_EX }}
-gui_view_scroll -id ${Data.1} -vertical -set 0
+catch { gui_list_select -id ${Data.1} {TOP.u_full_simulator.u_pipeline.u_lsu_controller.DCACHE_RD_STALL TOP.u_full_simulator.u_pipeline.u_lsu_controller.DCACHE_WR_STALL }}
+gui_view_scroll -id ${Data.1} -vertical -set 240
 gui_view_scroll -id ${Data.1} -horizontal -set 0
-gui_view_scroll -id ${Hier.1} -vertical -set 0
+gui_view_scroll -id ${Hier.1} -vertical -set 1580
 gui_view_scroll -id ${Hier.1} -horizontal -set 0
 
 # Source 'Source.1'
 gui_src_value_annotate -id ${Source.1} -switch false
 gui_set_env TOGGLE::VALUEANNOTATE 0
-gui_open_source -id ${Source.1}  -replace -active TOP.u_full_simulator.u_pipeline ../pipeline/pipeline_caches.v
-gui_view_scroll -id ${Source.1} -vertical -set 25938
+gui_open_source -id ${Source.1}  -replace -active TOP.u_full_simulator.u_pipeline.u_lsu_controller ../memory/tlb/lsu.v
+gui_view_scroll -id ${Source.1} -vertical -set 216
 gui_src_set_reusable -id ${Source.1}
 
 # View 'Wave.1'
@@ -369,17 +368,16 @@ set origWaveHeight [gui_get_pref_value -category Wave -key waveRowHeight]
 gui_list_set_height -id Wave -height 25
 set origGroupCreationState [gui_list_create_group_when_add -wave]
 gui_list_create_group_when_add -wave -disable
-gui_marker_create -id ${Wave.1} C2 22393.52
-gui_marker_select -id ${Wave.1} {  C2 }
+gui_marker_create -id ${Wave.1} C2 22323.67
 gui_marker_set_ref -id ${Wave.1}  C1
-gui_wv_zoom_timerange -id ${Wave.1} 22011.6 22659.505
+gui_wv_zoom_timerange -id ${Wave.1} 22213.217 22349.937
 gui_list_add_group -id ${Wave.1} -after {New Group} {Group1}
 gui_list_add_group -id ${Wave.1} -after {New Group} {u_repne_support}
 gui_list_add_group -id ${Wave.1}  -after u_repne_support {u_repne_support|u_repne_halt_wb}
 gui_list_add_group -id ${Wave.1} -after {New Group} {Group2}
 gui_list_add_group -id ${Wave.1} -after {New Group} {Group3}
 gui_list_add_group -id ${Wave.1}  -after Group3 {Group3|or_ld_ex}
-gui_list_select -id ${Wave.1} {TOP.u_full_simulator.u_pipeline.u_execute.CLK }
+gui_list_select -id ${Wave.1} {TOP.u_full_simulator.u_pipeline.u_lsu_controller.DCACHE_RD_DATA }
 gui_seek_criteria -id ${Wave.1} {Any Edge}
 
 
@@ -395,10 +393,10 @@ if { $groupExD } {
 }
 gui_list_set_filter -id ${Wave.1} -list { {Buffer 1} {Input 1} {Others 1} {Linkage 1} {Output 1} {Parameter 1} {All 1} {Aggregate 1} {LibBaseMember 1} {Event 1} {Assertion 1} {Constant 1} {Interface 1} {BaseMembers 1} {Signal 1} {$unit 1} {Inout 1} {Variable 1} }
 gui_list_set_filter -id ${Wave.1} -text {*}
-gui_list_set_insertion_bar  -id ${Wave.1} -group Group3  -item TOP.u_full_simulator.u_pipeline.u_execute.CLK -position below
+gui_list_set_insertion_bar  -id ${Wave.1} -group Group3  -item {TOP.u_full_simulator.u_pipeline.u_lsu_controller.RD_DATA_OUT[63:0]} -position below
 
-gui_marker_move -id ${Wave.1} {C1} 22379.62
-gui_view_scroll -id ${Wave.1} -vertical -set 1295
+gui_marker_move -id ${Wave.1} {C1} 22281.67
+gui_view_scroll -id ${Wave.1} -vertical -set 1520
 gui_show_grid -id ${Wave.1} -enable false
 
 # DriverLoad 'DriverLoad.1'
