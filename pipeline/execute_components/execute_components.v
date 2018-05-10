@@ -176,13 +176,19 @@ endmodule // stall_and_bubble_ex
 module repne_support(
 	output [31:0] repne_count,
 	input [31:0] count,
-	input [31:0] count_minus_one
+	input [31:0] count_minus_one,
+	input [31:0] ex_flags
 	);
-
+	
+	wire ZF;
 	wire repne_zero_terminate;
+	wire repene_final_terminate;
+
+	assign ZF = ex_flags[6]; 
 
 	equal_to_zero u_zero_count(repne_zero_terminate, count);
-	mux32_2way u_mux_repne_count(repne_count, count_minus_one, count, repne_zero_terminate);
+	or2$ u_repene_final_terminate(repne_final_terminate, ZF, repne_zero_terminate);
+	mux32_2way u_mux_repne_count(repne_count, count_minus_one, count, repne_final_terminate);
 
 endmodule // repne_support
 

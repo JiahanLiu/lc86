@@ -110,9 +110,9 @@ module execute (
     shift_flags, count_minus_one, stack_pointer_pop, cmps_pointer_updated, EX_d2_aluk_ex, EX_d2_datasize_all, 
     EX_A, EX_B, b, EX_C, count, flags_dataforwarded, CS_ALUK_D2, EX_MM_A, EX_MM_B);
 
-  repne_support u_repne_support(repne_count, count, count_minus_one);
+  repne_support u_repne_support(repne_count, count, count_minus_one, ex_flags);
   
-  result_select_ex u_result_select_ex(WB_RESULT_A_next, WB_RESULT_B_next, WB_RESULT_C_next, WB_FLAGS_next, 
+  result_select_ex u_result_select_ex(WB_RESULT_A_next, WB_RESULT_B_next, WB_RESULT_C_next, ex_flags, 
     WB_RESULT_MM_next, CS_IS_ALU32_EX, CS_IS_CMPS_FIRST_UOP_ALL, CS_IS_XCHG_EX, CS_PASS_A_EX,
     CS_IS_CMPXCHG_EX, CS_IS_CMPS_SECOND_UOP_ALL, CS_MUX_SP_POP_EX, CS_IS_ALU32_FLAGS_EX, CS_ALU_TO_B_EX, CS_MUX_CMPS_POINTER_EX,
     shift_result, EX_C, EX_A, EX_B, alu32_result, stack_pointer_pop, cmps_pointer_updated, repne_count, shift_flags,
