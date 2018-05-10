@@ -34,13 +34,13 @@ module operand_select_wb(
 
 	wire [31:0] cmps_first_pointer; 
 	wire v_CS_IS_CMPS_FIRST_UOP_ALL; 
-	and2$ u_v_CS_IS_CMPS_FIRST_UOP_ALL(v_CS_IS_CMPS_FIRST_UOP_ALL, WB_V, CS_IS_CMPS_FIRST_UOP_ALL)
+	and2$ u_v_CS_IS_CMPS_FIRST_UOP_ALL(v_CS_IS_CMPS_FIRST_UOP_ALL, WB_V, CS_IS_CMPS_FIRST_UOP_ALL);
 	reg32e$ u_cmps_temp_mem (CLK, WB_RESULT_A, cmps_first_pointer, , CLR, PRE, v_CS_IS_CMPS_FIRST_UOP_ALL);
 	//module reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
 	
 	wire [31:0] temp_neip;
 	wire v_CS_SAVE_NEIP_WB;
-	and2$ u_v_CS_SAVE_NEIP_WB(v_CS_SAVE_NEIP_WB, WB_V, CS_SAVE_NEIP_WB)
+	and2$ u_v_CS_SAVE_NEIP_WB(v_CS_SAVE_NEIP_WB, WB_V, CS_SAVE_NEIP_WB);
 	reg32e$ u_temp_neip(CLK, WB_NEIP, temp_neip, , CLR, PRE, v_CS_SAVE_NEIP_WB);
 
 	wire [15:0] temp_ncs;

@@ -20,13 +20,13 @@ module operand_select_ex(
 	input [31:0] EX_B,
 	input [31:0] EX_C,
 	input [31:0] saved_count,
-	input WB_V
+	input EX_V
 	);
 
 	wire [31:0] cmps_first_mem;
 
 	wire v_CS_IS_CMPS_FIRST_UOP_ALL; 
-	and2$ u_v_CS_IS_CMPS_FIRST_UOP_ALL(v_CS_IS_CMPS_FIRST_UOP_ALL, EX_V, CS_IS_CMPS_FIRST_UOP_ALL)
+	and2$ u_v_CS_IS_CMPS_FIRST_UOP_ALL(v_CS_IS_CMPS_FIRST_UOP_ALL, EX_V, CS_IS_CMPS_FIRST_UOP_ALL);
 	reg32e$ u_cmps_temp_mememory (CLK, EX_A, cmps_first_mem, , CLR, PRE, v_CS_IS_CMPS_FIRST_UOP_ALL);
 	//module reg32e$(CLK, Din, Q, QBAR, CLR, PRE,en);
 
