@@ -31,7 +31,7 @@ module FULL_SIMULATOR(input CLK,
    wire 		    INTR_R;
    wire 		    INTERRUPT;
 
-   and3$ MEM_IO(INTR_SEL, DC_STEADY_A[12], DC_STEADY_A[13], DC_STEADY_A[14]);
+   and3$ MEM_IO(INTR_SEL, DC_A[12], DC_A[13], DC_A[14]);
    inv1$ DC_SEL_U(DC_SEL, INTR_SEL);
    and2$ DC_EN_DRIVER(DC_EN, DC_SEL, DC_IO_EN);
    and2$ INTR_EN_DRIVER(INTR_EN, INTR_SEL, DC_IO_EN);
@@ -44,7 +44,6 @@ module FULL_SIMULATOR(input CLK,
 	     INTR_SEL, INTR_SEL);
    or2$ READY_DRIV(DC_IO_R, INTR_R, DC_R);
       
-   assign INTR_EN = 0;
    assign INTR_WR = DC_WR;
    assign INTR_A = DC_A;
    assign INTR_WRITE_DATA = DC_WRITE_DATA;

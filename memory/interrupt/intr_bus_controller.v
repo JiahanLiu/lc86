@@ -57,7 +57,7 @@ module intr_bus_controller(//interface with bus
    wire 		    MOD_MASK_OUT, MOD_EN_MASK;
    wire [6:0] 		    filler, filler1;
    //updating the pending write latch when request initiated, and when writing/reading
-   or3$ UPD_EN_DRIVER(UPD_EN, current_state[2], current_state[3], current_state[4]);
+   or3$ UPD_EN_DRIVER(UPD_EN, current_state[2], current_state[3], current_state[5]);
    
    mux2$ MASK_SEL(MASK_IN, MOD_MASK_OUT, current_state[2], UPD_EN);   
    dff8$ MASK_REG(BUS_CLK, {7'b0,MASK_IN},{filler, MOD_MASK_OUT}, {filler,MOD_EN_MASK},RST,SET);
@@ -68,6 +68,8 @@ module intr_bus_controller(//interface with bus
    //THERE IS AN INTERRUPT IF WE ARE THE DEST WHILE NOT WAITING FOR READ
    wire 		    INTERRUPT_OUT;
    and2$ INTERRUPT_DRIVER (INTERRUPT_NEW, DEST_IN, MOD_EN_MASK);
+   and2$ READY_DRIVER (READY_US, DEST_IN, MOD_MASK_OUT);
+   
    dff8$ INTR_REG(BUS_CLK, {7'b0,INTERRUPT_NEW}, ,{filler1,INTERRUPT_OUT},RST,SET);
    //only want to take interrupt on rising edge
    and2$ INTR_DRIVER(INTERRUPT, INTERRUPT_OUT, INTERRUPT_NEW);
@@ -75,6 +77,7 @@ module intr_bus_controller(//interface with bus
    ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MASKED_EN, BG, ACK_IN, RW, DEST_IN, DONE);
    wire [2:0] 		    amnt_decr;
    wire [15:0] 		    current_size, current_size_in, next_size;
+   
    assign next_size[15:12] = 0;
    or2$ STATE_DONE(DONE, current_state[5], current_state[3]);
    size_decrement size_decrement_u(next_size[11:0], amnt_decr, , current_size[11:0], A);
@@ -105,8 +108,11 @@ module intr_bus_controller(//interface with bus
    mux32_2way mux_u_3(data_buffer_in[127:96],data_buffer_out[127:96] , D, RD_BUS[3]);
    ioreg128$ data_buffer(BUS_CLK, data_buffer_in, data_buffer_out, , RST, SET);
    assign MOD_READ_DATA = data_buffer_out;
+   
    //DONE BUFFER FOR MAIN UNIT
-   ioreg8$ READY_REG(BUS_CLK, {7'b0, DONE}, {filler1,MOD_R}, , RST, SET);
+   and2$ RANDO (TRUE_DONE, DONE, READY_US);
+   
+   ioreg8$ READY_REG(BUS_CLK, {7'b0, TRUE_DONE}, {filler1,MOD_R}, , RST, SET);
    
       
    //TRISTATE BUFFERS FOR THE BUS

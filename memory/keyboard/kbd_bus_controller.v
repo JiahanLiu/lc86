@@ -54,17 +54,24 @@ module kbd_bus_controller(//interface with bus
    initial
      begin
 	MOD_EN = 0;
-	#(1003)
-	MOD_EN = 0;//set to 1 for the keyboard test case
+	#(10003)
+	MOD_EN = 1;//set to 1 for the keyboard test case
 	#(30)
 	MOD_EN = 0;
+	#(3000)
+	MOD_EN = 1;
+	#(30)
+	MOD_EN = 0;
+	
      end
 
    ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MOD_EN, BG, ACK_IN, RW, DEST_IN, DONE);
    wire [2:0] 		    amnt_decr;
    wire [15:0] 		    current_size, current_size_in, next_size;
    assign next_size[15:12] = 0;
-   size_decrement size_decrement_u(next_size[11:0], amnt_decr, DONE, current_size[11:0], A);
+   size_decrement size_decrement_u(next_size[11:0], amnt_decr, , current_size[11:0], A);
+   or2$ DONE_DRIVER(DONE, current_state[3], current_state[5]);
+   
 
 
    //REGISTERS FOR THE CONTROLLER
@@ -96,13 +103,13 @@ module kbd_bus_controller(//interface with bus
    //TRISTATE BUFFERS FOR THE BUS
    wire [31:0] 			    D_TRI_IN;
    //TODO: drive this with an ascii characher
-   assign D_TR_IN = 32'hFEEDBEEF;
+   assign D_TRI_IN = 32'hFEEDBEEF;
    tristate_bus_driver32$ D_TRI(D_TRI_EN, D_TRI_IN, D);
    
     wire 		    A_TRI_EN;
    assign A_TRI_EN = CTRL_TRI_EN;
    wire [15:0] 		    MOD_A;
-   assign MOD_A = 0;
+   assign MOD_A = 16'h7000;
    //NOT SURE WHAT TO DO WITH THE ADDRESS WHEN TALKING TO INTERRUPT
    tristate_bus_driver16$ A_TRI(A_TRI_EN, MOD_A, A);
    

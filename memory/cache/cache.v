@@ -46,12 +46,17 @@ module cache( //interface with the processor
    and2$ rising_edge(BUS_R_CHANGE, BUS_R_OLD_OUT_BAR, BUS_R);
 
    wire 	     evict;
-   nand3$ DC_CHECk (DC_EN, addr_raw[12], addr_raw[13], addr_raw[14]);
+
+
+   //LOGIC FOR IO BYPASSING
+   and3$ DC_CHECk (INTR_EN, addr_raw[12], addr_raw[13], addr_raw[14]);
+   inv1$ INTR_CHECK(DC_EN, INTR_EN);
+   and2$ INTR_EN_DRIV (TRUE_INTR_EN, INTR_EN, enable);
    and2$ EN_DRIV( TRUE_EN, DC_EN, enable);
    gen_n_state gen_n_state_u(next_state, current_state, TRUE_EN, RW, HIT,
 			     BUS_R_CHANGE, evict);
-   
-   
+   dff8$ BYPASS_LATCH(CLK, TRUE_INTR_EN, INTR_REG_EN, , RST, SET);
+      
    
 
    //LATCH FOR THE ADDRESS
@@ -64,9 +69,13 @@ module cache( //interface with the processor
    
    //GENERATING CONTROL SIGNALS BASED ON STATE
    wire 	     OE, CACHE_WR, TS_WR, d_mux;
-   gen_ctrl gen_ctrl_u(current_state, OE, CACHE_WR, BUS_WR, BUS_EN, TS_WR, ready, d_mux);
-   
-   wire [127:0] data_read;
+   gen_ctrl gen_ctrl_u(current_state, OE, CACHE_WR, BUS_WR, BUS_EN_TEMP, TS_WR, ready_temp, d_mux);
+
+   //PASSING READY FROM THE INTERRUPT
+   and2$ IO_READY(PASS_R, current_state[0], BUS_R);
+   or2$ READY(ready, ready_temp, PASS_R);
+   or2$ BUS_EN_DRIV(BUS_EN, BUS_EN_TEMP, INTR_REG_EN);
+   wire [127:0]      data_read;
 
    //ACCESSING THE DATA LINE
    wire [15:0] 	     DC_WR;
