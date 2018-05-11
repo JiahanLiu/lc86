@@ -39,11 +39,13 @@ assign unaligned = (addr_end[29]!=addr[29])?1'b1:1'b0;
 // For Split Access
 wire [31:0] addr_split_end = {addr[31:29], 29'h1FFF_FFFF};
 
+// For DMA test
 initial begin
     mem0[255] = 8'h45;
     mem0[256] = 8'h67;
     mem0[257] = 8'h89;
     mem0[258] = 8'h10;
+    mem0[259] = 8'h23;
 end
 
 initial begin
@@ -105,11 +107,11 @@ always @ (posedge clk) begin : MEM_READ
             case(addr_read_start[31:29])
                 3'b000: begin
                     data[(i-addr_read_start[28:0])*8 +: 8] = mem0[i];
-                    $display("MEM0[%0d]: %h", i, mem0[i] );
+                    //$display("MEM0[%0d]: %h", i, mem0[i] );
                 end
                 3'b001: begin
                     data[(i-addr_read_start[28:0])*8 +: 8] = mem1[i];
-                    $display("MEM1[%0d]: %h", i, mem1[i] );
+                    //$display("MEM1[%0d]: %h", i, mem1[i] );
                 end
                 3'b010: data[(i-addr_read_start[28:0])*8 +: 8] = mem2[i];
                 3'b011: data[(i-addr_read_start[28:0])*8 +: 8] = mem3[i];
