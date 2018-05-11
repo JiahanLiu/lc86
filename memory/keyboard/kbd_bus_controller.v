@@ -49,8 +49,17 @@ module kbd_bus_controller(//interface with bus
    or3$ UPD_EN_DRIVER(UPD_EN, current_state[2], current_state[3], current_state[5]);
 
    //TODO: switch to behavioral for interrupt test case
-   wire 		    MOD_EN;
-   assign MOD_EN = 0;
+   reg 		    MOD_EN;
+
+   initial
+     begin
+	MOD_EN = 0;
+	#(1003)
+	MOD_EN = 1;
+	#(30)
+	MOD_EN = 0;
+     end
+
    ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MOD_EN, BG, ACK_IN, RW, DEST_IN, DONE);
    wire [2:0] 		    amnt_decr;
    wire [15:0] 		    current_size, current_size_in, next_size;

@@ -10,7 +10,7 @@ module PIPELINE(input CLK, CLR, PRE,
 		//interface between DCACHE and MEM
 		output DCACHE_BUS_WR_OUT, DCACHE_BUS_EN_OUT,
 		output [15:0] DCACHE_BUS_ADDR_OUT,
-		output [15:0] DCACHE_STEADY_ADDR,
+		output [15:0] DCACHE_STEADY_ADDR,//this is the new one
 		output [127:0] DCACHE_BUS_WRITE_OUT,
 		input DCACHE_BUS_READY,
 		input [127:0] DCACHE_BUS_READ_DATA,

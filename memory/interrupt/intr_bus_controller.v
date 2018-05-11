@@ -66,11 +66,11 @@ module intr_bus_controller(//interface with bus
    or2$ ANY_DEST_IN(DEST_IN, DEST_IN_DMA, DEST_IN_KBD);
 
    //THERE IS AN INTERRUPT IF WE ARE THE DEST WHILE NOT WAITING FOR READ
-   wire 		    INTERRUPT_IN, INTERRUPT_OUT;
-   or2$ INTERRUPT_DRIVER (INTERRUPT_NEW, DEST_IN, MOD_MASK_OUT);
+   wire 		    INTERRUPT_OUT;
+   and2$ INTERRUPT_DRIVER (INTERRUPT_NEW, DEST_IN, MOD_EN_MASK);
    dff8$ INTR_REG(BUS_CLK, {7'b0,INTERRUPT_NEW}, ,{filler1,INTERRUPT_OUT},RST,SET);
    //only want to take interrupt on rising edge
-   and2$ INTR_DRIVER(INTERRUPT, INTERRUPT_OUT, INTERRUPT_IN);
+   and2$ INTR_DRIVER(INTERRUPT, INTERRUPT_OUT, INTERRUPT_NEW);
    
    ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MASKED_EN, BG, ACK_IN, RW, DEST_IN, DONE);
    wire [2:0] 		    amnt_decr;

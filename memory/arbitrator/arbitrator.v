@@ -79,12 +79,21 @@ module arbitrator(input BUS_CLK,
 //then DMA
 module  pick_master(output [7:0] next_master,
 		    input [5:0] bus_reqs);
-   assign next_master[7:3] = 0;
+   assign next_master[7:6] = 0;
    wire [5:0] 			bus_reqs_bar;
    inv1$ bus_reqs_bar_u [5:0] (bus_reqs_bar, bus_reqs);
    assign next_master[2] = bus_reqs[2];
    and2$ dcache_g(next_master[1], bus_reqs[1], bus_reqs_bar[2]);
    and3$ icache_g(next_master[0], bus_reqs[0], bus_reqs_bar[1], bus_reqs_bar[2]);
+   and3$ reg_emp(reg_empty, bus_reqs_bar[2],
+		 bus_reqs_bar[1], bus_reqs_bar[0]);
+   and2$ kbd_g(next_master[3], bus_reqs[3], reg_empty);
+   and3$ DMA_G(next_master[4], bus_reqs[4],
+	       bus_reqs_bar[3], reg_empty);
+   and4$ INTR_G(next_master[5], bus_reqs[5],
+		bus_reqs_bar[4], bus_reqs_bar[3],
+		reg_empty);
+   
    
    
 
