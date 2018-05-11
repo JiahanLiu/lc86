@@ -76,7 +76,8 @@ module intr_bus_controller(//interface with bus
    wire [2:0] 		    amnt_decr;
    wire [15:0] 		    current_size, current_size_in, next_size;
    assign next_size[15:12] = 0;
-   size_decrement size_decrement_u(next_size[11:0], amnt_decr, DONE, current_size[11:0], A);
+   or2$ STATE_DONE(DONE, current_state[5], current_state[3]);
+   size_decrement size_decrement_u(next_size[11:0], amnt_decr, , current_size[11:0], A);
 
 
    //REGISTERS FOR THE CONTROLLER

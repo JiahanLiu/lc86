@@ -55,7 +55,7 @@ module kbd_bus_controller(//interface with bus
      begin
 	MOD_EN = 0;
 	#(1003)
-	MOD_EN = 1;
+	MOD_EN = 0;//set to 1 for the keyboard test case
 	#(30)
 	MOD_EN = 0;
      end

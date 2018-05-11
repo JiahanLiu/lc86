@@ -32,9 +32,9 @@ module FULL_SIMULATOR(input CLK,
    wire 		    INTERRUPT;
 
    and3$ MEM_IO(INTR_SEL, DC_STEADY_A[12], DC_STEADY_A[13], DC_STEADY_A[14]);
-   inv1$(DC_SEL, INTR_SEL);
-   and2$(DC_EN, DC_SEL, DC_IO_EN);
-   and2$(INTR_EN, INTR_SEL, DC_IO_EN);
+   inv1$ DC_SEL_U(DC_SEL, INTR_SEL);
+   and2$ DC_EN_DRIVER(DC_EN, DC_SEL, DC_IO_EN);
+   and2$ INTR_EN_DRIVER(INTR_EN, INTR_SEL, DC_IO_EN);
 
    //selecting return data based on adress
    wire [127:0] 	    DC_IO_READ_DATA;
@@ -71,7 +71,7 @@ module FULL_SIMULATOR(input CLK,
 			     INTR_WRITE_DATA,
 			     INTR_READ_DATA,
 			     INTR_R,
-			      INTERRUPT,
+			     INTERRUPT,
 
 			     BUS_CLK,
 			     RST, SET);
