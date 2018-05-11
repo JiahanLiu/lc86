@@ -29,7 +29,7 @@ wire [31:0] addr_end;
 reg [31:0] addr_read_start, addr_read_end;
 reg [1:0] STATE, NEXT_STATE;
 reg read;
-integer i, j;
+integer i, j, k;
 reg split;
 
 assign data_out = (EN && !WE) ? (data_updt1 | data_updt2) : 32768'bz;
@@ -38,6 +38,13 @@ assign addr_end = addr+size;
 assign unaligned = (addr_end[29]!=addr[29])?1'b1:1'b0;
 // For Split Access
 wire [31:0] addr_split_end = {addr[31:29], 29'h1FFF_FFFF};
+
+initial begin
+    mem0[255] = 8'h45;
+    mem0[256] = 8'h67;
+    mem0[257] = 8'h89;
+    mem0[258] = 8'h10;
+end
 
 initial begin
     STATE = IDLE;
