@@ -5,9 +5,10 @@ module FULL_SIMULATOR(input CLK,
 		      input RST, SET);
 
    //DCACHE WIRES
-   wire 		    DC_EN; 
+   wire 		    DC_EN, DC_IO_EN; 
    wire 		    DC_WR;
    wire [15:0] 		    DC_A;
+   wire [15:0] 		    DC_STEADY_A;
    wire [127:0] 	    DC_WRITE_DATA;
    wire [127:0] 	    DC_READ_DATA;
    wire 		    DC_R;
@@ -29,7 +30,24 @@ module FULL_SIMULATOR(input CLK,
    wire [127:0] 	    INTR_READ_DATA;
    wire 		    INTR_R;
    wire 		    INTERRUPT;
+
+   and3$ MEM_IO(INTR_SEL, DC_STEADY_A[12], DC_STEADY_A[13], DC_STEADY_A[14]);
+   inv1$(DC_SEL, INTR_SEL);
+   and2$(DC_EN, DC_SEL, DC_IO_EN);
+   and2$(INTR_EN, INTR_SEL, DC_IO_EN);
+
+   //selecting return data based on adress
+   wire [127:0] 	    DC_IO_READ_DATA;
+   mux4_128$ DATA_SEL(DC_IO_READ_DATA,
+	     DC_READ_DATA,DC_READ_DATA,
+	     INTR_READ_DATA, INTR_READ_DATA,
+	     INTR_SEL, INTR_SEL);
+   or2$ READY_DRIV(DC_IO_R, INTR_R, DC_R);
+      
    assign INTR_EN = 0;
+   assign INTR_WR = DC_WR;
+   assign INTR_A = DC_A;
+   assign INTR_WRITE_DATA = DC_WRITE_DATA;
       
    //THE FULL MEMORY MODULE
    FULL_MEMORY u_full_memory (
@@ -68,11 +86,12 @@ PIPELINE u_pipeline ( CLK, RST, SET,
 		     IC_R,
 		     IC_READ_DATA,
 
-		     DC_WR, DC_EN,
+		     DC_WR, DC_IO_EN,
 		     DC_A,
+		      DC_STEADY_A,
 		     DC_WRITE_DATA,
-		     DC_R,
-		     DC_READ_DATA,
+		     DC_IO_R,
+		     DC_IO_READ_DATA,
 		      INTERRUPT);
 
 

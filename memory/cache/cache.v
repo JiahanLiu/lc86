@@ -1,21 +1,23 @@
 module cache( //interface with the processor
-    input CLK, SET, RST,
-    input [127:0] data_write,
-    input RW,
-    input enable,
-    input [15:0] addr_raw,
-    input [3:0] size,
-    output [127:0] data_read_out,
-    output ready,
+	      input CLK, SET, RST,
+	      input [127:0] data_write,
+	      input RW,
+	      input enable,
+	      input [15:0] addr_raw,
+	      input [3:0] size,
+	      output[15:0] addr_cur,
+	      output [127:0] data_read_out,
+	      output ready,
 
-    output BUS_WR,
-    output BUS_EN,
-    output [15:0] BUS_ADDR,
-    output [127:0] BUS_WRITE,
-    input BUS_R,
-    input [127:0] BUS_READ
+	      output BUS_WR,
+	      output BUS_EN,
+	      output [15:0] BUS_ADDR,
+	      output [127:0] BUS_WRITE,
+	      input BUS_R,
+	      input [127:0] BUS_READ
 );
    wire [15:0]	  addr;
+   assign addr_cur = addr;
    wire [15:0] 	  addr1, addr2, addr3, addr4, address;
     bufferH1024$ buf1 [15:0] (addr1, addr);
     bufferH1024$ buf2 [15:0] (addr2, addr1);
@@ -44,7 +46,9 @@ module cache( //interface with the processor
    and2$ rising_edge(BUS_R_CHANGE, BUS_R_OLD_OUT_BAR, BUS_R);
 
    wire 	     evict;
-   gen_n_state gen_n_state_u(next_state, current_state, enable, RW, HIT,
+   nand3$ DC_CHECk (DC_EN, addr_raw[12], addr_raw[13], addr_raw[14]);
+   and2$ EN_DRIV( TRUE_EN, DC_EN, enable);
+   gen_n_state gen_n_state_u(next_state, current_state, TRUE_EN, RW, HIT,
 			     BUS_R_CHANGE, evict);
    
    

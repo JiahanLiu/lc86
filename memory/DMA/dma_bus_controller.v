@@ -56,9 +56,16 @@ module DMA_bus_controller(//interface with bus
    wire [6:0] 		    filler;
    //updating the pending write latch when request initiated, and when writing/reading
    //TODO: drive this signal!
-   wire 		    MOD_EN;
-   assign MOD_EN = 0;
+   reg 		    MOD_EN;
+   initial
+     begin
+	MOD_EN = 0;
+     end
+   
    ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MOD_EN, BG, ACK_IN, RW, DEST_IN, DONE);
+
+
+   
    wire [2:0] 		    amnt_decr;
    wire [15:0] 		    current_size, current_size_in, next_size;
    assign next_size[15:12] = 0;
@@ -101,23 +108,97 @@ module DMA_bus_controller(//interface with bus
    
 
    //REGISTERS FOR THE DMA UNIT ITSELF
+   //NEED A STABLE ADDRESS
+   wire [15:0] 			    A_IN, A_OUT;
+   mux2_16$ A_SEL(A_IN, A_OUT, A, current_state[4]);
+   ioreg16$ A_REG(BUS_CLK, A_IN, A_OUT, , RST, SET);
+   
+   
+   wire [31:0] 			    DISK_A_IN, DISK_A_OUT;
+   wire [31:0] 			    MEM_A_IN, MEM_A_OUT;
+   wire [31:0] 			    SIZE_IN, SIZE_OUT;
+   wire [31:0]			    ENABLE_IN, ENABLE_OUT;
+   wire [7:0] 			    A_DEC, A_DEC_MASK;
+   decoder3_8$ DEST_SEL(A_OUT[4:2], A_DEC, );
+   and3$ MASKING [7:0] (A_DEC_MASK, A_DEC, DONE, current_state[5]);
+   and2$ FINISHED_WRITING(DONE_WR, DONE, current_state[3]);
+      
+   //simple
+   mux32_2way DISK_A_SEL(DISK_A_IN, DISK_A_OUT, data_buffer_out[31:0],
+     A_DEC_MASK[1]);//x7004 disk address
+
+   //needs to increment by 4 each cycle
+   mux32_4way MEM_A_SEL(MEM_A_IN, MEM_A_OUT, data_buffer_out[31:0],
+			MEM_A_OUT +4, MEM_A_OUT+4,
+    {DONE_WR,A_DEC_MASK[2]});//x7008 memaddress
+
+   //needs to decrement by 4 each cycle
+   mux32_4way SIZE_DMA_SEL(SIZE_IN, SIZE_OUT, data_buffer_out[31:0],
+			   SIZE_OUT -4, SIZE_OUT+4,
+     {DONE_WR,A_DEC_MASK[3]});//x700C size
+
+   //needs to reset when the DISK finishes
+   mux32_4way ENABLE_SEL (ENABLE_IN, ENABLE_OUT, data_buffer_out[31:0],
+			  32'b0, 32'b0,
+     {DONE_WR,A_DEC_MASK[4]});//x7010 enable
+      
+   
+   ioreg128$ DMA_REGS(BUS_CLK,
+		      {DISK_A_IN, MEM_A_IN, SIZE_IN, ENABLE_IN},
+		      {DISK_A_OUT, MEM_A_OUT, SIZE_OUT, ENABLE_OUT},
+		       , RST, SET);
 
 
+   //DRIVING THE DISK
+   
 
+   assign DISK_RST = 0;
+   assign WE = 0;
+   assign size = SIZE_OUT[11:0];
+   assign addr = DISK_A_OUT;
+   assign EN = ENABLE_OUT[0];
+   
+   reg [32767:0] 			    data_buf;
+   reg 					    interrupt;
+   always
+	      @(posedge EN)
+     begin
+	#(750)
+	data_buf = data_out;
+	MOD_EN = 1;
+     end
+
+   always
+	  @(posedge DONE)
+     begin
+	if(interrupt)
+	  begin
+	     #5
+	     MOD_EN = 0;
+	     interrupt = 0;
+	  end
+		
+	if(SIZE_OUT == 0)
+	  begin
+	     #5
+	    interrupt = 0;
+	  end
+	
+	#(26)
+	data_buf  =  data_buf >> 128;
+     end
+   
+      
    
    //TRISTATE BUFFERS FOR THE BUS
    wire [31:0] 			    D_TRI_IN;
-   
-
-
-
+   assign D_TRI_IN = data_buf[31:0];
    tristate_bus_driver32$ D_TRI(D_TRI_EN, D_TRI_IN, D);
    
     wire 		    A_TRI_EN;
    assign A_TRI_EN = CTRL_TRI_EN;
    wire [15:0] 		    MOD_A;
-   
-	       //TODO: drive this signa1!
+   assign MOD_A = MEM_A_OUT[15:0];
    tristate_bus_driver16$ A_TRI(A_TRI_EN, MOD_A, A);
    
 

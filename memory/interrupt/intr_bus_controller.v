@@ -55,7 +55,7 @@ module intr_bus_controller(//interface with bus
    //pending read latch
    wire 		    UPD_EN;
    wire 		    MOD_MASK_OUT, MOD_EN_MASK;
-   wire [6:0] 		    filler;
+   wire [6:0] 		    filler, filler1;
    //updating the pending write latch when request initiated, and when writing/reading
    or3$ UPD_EN_DRIVER(UPD_EN, current_state[2], current_state[3], current_state[4]);
    
@@ -66,19 +66,11 @@ module intr_bus_controller(//interface with bus
    or2$ ANY_DEST_IN(DEST_IN, DEST_IN_DMA, DEST_IN_KBD);
 
    //THERE IS AN INTERRUPT IF WE ARE THE DEST WHILE NOT WAITING FOR READ
-   //or2$ INTERRUPT_DRIVER (INTERRUPT, DEST_IN, MOD_MASK_OUT);
-   reg 			    INTERRUPT;
-   
-   initial
-     begin
-	INTERRUPT = 1'b0;
-	#100000
-	  INTERRUPT = 1'b1;
-	#14
-	  INTERRUPT = 1'b0;
-
-     end
-   
+   wire 		    INTERRUPT_IN, INTERRUPT_OUT;
+   or2$ INTERRUPT_DRIVER (INTERRUPT_NEW, DEST_IN, MOD_MASK_OUT);
+   dff8$ INTR_REG(BUS_CLK, {7'b0,INTERRUPT_NEW}, ,{filler1,INTERRUPT_OUT},RST,SET);
+   //only want to take interrupt on rising edge
+   and2$ INTR_DRIVER(INTERRUPT, INTERRUPT_OUT, INTERRUPT_IN);
    
    ctrler_gen_n_state ctrler_gen_n_state_u(next_state, current_state, MASKED_EN, BG, ACK_IN, RW, DEST_IN, DONE);
    wire [2:0] 		    amnt_decr;
@@ -113,7 +105,6 @@ module intr_bus_controller(//interface with bus
    ioreg128$ data_buffer(BUS_CLK, data_buffer_in, data_buffer_out, , RST, SET);
    assign MOD_READ_DATA = data_buffer_out;
    //DONE BUFFER FOR MAIN UNIT
-   wire [6:0] 			    filler1;
    ioreg8$ READY_REG(BUS_CLK, {7'b0, DONE}, {filler1,MOD_R}, , RST, SET);
    
       
