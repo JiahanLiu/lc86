@@ -40,6 +40,7 @@ module cache( //interface with the processor
    //GENERATING NEXT STATE SIGNAL
    //SIGNALS to delay state transition for miss after evict
    wire 	     BUS_R_OLD_IN, BUS_R_OLD_OUT_BAR, BUS_R_CHANGE;
+   wire 	     BUS_R_PASS;
    wire [6:0] 	     filler;
    dff8$ old_bus_ready(CLK, {7'b0,BUS_R}, ,
 		       {filler,BUS_R_OLD_OUT_BAR} , RST, SET);
@@ -72,7 +73,7 @@ module cache( //interface with the processor
    gen_ctrl gen_ctrl_u(current_state, OE, CACHE_WR, BUS_WR, BUS_EN_TEMP, TS_WR, ready_temp, d_mux);
 
    //PASSING READY FROM THE INTERRUPT
-   and2$ IO_READY(PASS_R, current_state[0], BUS_R);
+   and2$ IO_READY(PASS_R, current_state[0], BUS_R_CHANGE);
    or2$ READY(ready, ready_temp, PASS_R);
    or2$ BUS_EN_DRIV(BUS_EN, BUS_EN_TEMP, INTR_REG_EN);
    wire [127:0]      data_read;
@@ -135,9 +136,13 @@ module cache( //interface with the processor
    //DRIVING THE BUS WIRES
    or2$ evicting(evict_sel, current_state[8],current_state[4]);
    
-   mux2_16$ eviction_sel(BUS_ADDR, {address[15:4], 4'b0}, {tagstore_tag,address[8:4] ,4'b0}, evict_sel);
+   mux2_16$ eviction_sel(BUS_ADDR, address[15:0], {tagstore_tag,address[8:4] ,4'b0}, evict_sel);
    //assign BUS_ADDR = {address[15:4], 4'b0000};
-   assign BUS_WRITE = data_read;
+   //NEED TO FORWARD THE DATA
+   mux4_128$(BUS_WRITE, data_read, data_read, data_write, data_write,
+	     current_state[0], current_state[0]);
+   
+   //assign BUS_WRITE = data_read;
 endmodule
 
 //each cacheline is 128 bits (16 cells)

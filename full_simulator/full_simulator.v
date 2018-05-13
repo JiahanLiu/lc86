@@ -47,19 +47,23 @@ module FULL_SIMULATOR(input CLK,
    assign INTR_WR = DC_WR;
    assign INTR_A = DC_A;
    assign INTR_WRITE_DATA = DC_WRITE_DATA;
-      
+   wire [15:0] 		    DC_A_ALIGNED, IC_A_ALIGNED;
+   
+   assign DC_A_ALIGNED = {DC_A[15:4], 4'b0};
+   assign IC_A_ALIGNED = {IC_A[15:4], 4'b0};
+   
    //THE FULL MEMORY MODULE
    FULL_MEMORY u_full_memory (
 			     DC_EN,
 			     DC_WR,
-			     DC_A,
+			     DC_A_ALIGNED,
 			     DC_WRITE_DATA,
 			     DC_READ_DATA,
 			     DC_R,
 		             
 			     IC_EN,
 			     IC_WR,
-			     IC_A,
+			     IC_A_ALIGNED,
 			     IC_WRITE_DATA,
 			     IC_READ_DATA,
 			     IC_R,

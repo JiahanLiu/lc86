@@ -51,7 +51,7 @@ module arbitrator(input BUS_CLK,
    assign clr_master = REQ_BAR;
 
 
-      //REGISTERS FOR THE ARBITRATOR
+   //REGISTERS FOR THE ARBITRATOR
    wire [7:0] 		       current_master, next_master, new_master;
 
    wire 		       mstr_clr;
@@ -59,10 +59,13 @@ module arbitrator(input BUS_CLK,
    
    and2$ clr_u(mstr_clr, clr_master, CLR);
 
-   mux2_8$ mstr_sel(next_master, current_master, new_master, switch_master);
+   mux4_8$ mstr_sel(next_master, current_master, new_master,
+		    8'b0, 8'b0,
+		    switch_master, REQ_BAR);
 
    dff8$ current_mstr(BUS_CLK, next_master, current_master, , CLR, PRE);
    assign BG = current_master[5:0];
+   //and2$ KILL (CLR_ARB, REQ_BAR, CLR);
    
    //EASY TASK UNIFYING ALL REQUESTS
    or1_6way ACK_UNIFIER(BUS_ACK, CNTRLR_ACK[0], CNTRLR_ACK[1], CNTRLR_ACK[2],

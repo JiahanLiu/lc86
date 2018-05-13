@@ -77,8 +77,8 @@ module DMA_bus_controller(//interface with bus
 //   mux4_16$ mux_size_u(current_size_in, opt0, opt1,
 //		       opt2, opt3,
 //		       sel0, sel1);
-   
-   mux2_16$ mux_size_u(current_size_in, D[15:0], next_size, SIZE_DECR);
+   reg 			    interrupt;
+   mux2_16$ mux_size_u(current_size_in, 16'h0010 , next_size, SIZE_DECR);
    ioreg16$ size_reg(BUS_CLK, current_size_in, current_size, , RST, SET);
 
    //DATA BUFFER
@@ -134,7 +134,7 @@ module DMA_bus_controller(//interface with bus
 
    //needs to decrement by 4 each cycle
    mux32_4way SIZE_DMA_SEL(SIZE_IN, SIZE_OUT, data_buffer_out[31:0],
-			   SIZE_OUT -4, SIZE_OUT+4,
+			   SIZE_OUT -4, SIZE_OUT-4,
      {DONE_WR,A_DEC_MASK[3]});//x700C size
 
    //needs to reset when the DISK finishes
@@ -159,11 +159,11 @@ module DMA_bus_controller(//interface with bus
    assign EN = ENABLE_OUT[0];
    
    reg [32767:0] 			    data_buf;
-   reg 					    interrupt;
+
    always
 	      @(posedge EN)
      begin
-	#(750)
+	#(950)
 	data_buf = data_out;
 	MOD_EN = 1;
      end
@@ -178,10 +178,10 @@ module DMA_bus_controller(//interface with bus
 	     interrupt = 0;
 	  end
 		
-	if(SIZE_OUT == 0)
+	if(SIZE_OUT === 0)
 	  begin
-	     #5
-	    interrupt = 0;
+	     #200
+	    interrupt = 1;
 	  end
 	
 	#(26)
@@ -203,7 +203,7 @@ module DMA_bus_controller(//interface with bus
    
 
    wire [11:0] 		    SIZE_TRI_IN;
-   assign SIZE_TRI_IN = 12'h010; //Always sending 16 bytes on the bus
+   assign SIZE_TRI_IN = 12'h0004; //Always sending 16 bytes on the bus
    //at a single time
    wire 		    SIZE_TRI_EN;
    assign SIZE_TRI_EN = CTRL_TRI_EN;
@@ -223,8 +223,8 @@ module DMA_bus_controller(//interface with bus
    
    //Driving the dest out logic
    //TODO: drive this with real values
-   and2$ DEST_MEM_DRIVER(DEST_MEM, DEST_OUT, 1'b0);
-   and2$ DEST_INTR_DRIVER(DEST_INTR, DEST_OUT, 1'b0);
+   and2$ DEST_MEM_DRIVER(DEST_MEM, DEST_OUT, ~interrupt);
+   and2$ DEST_INTR_DRIVER(DEST_INTR, DEST_OUT, interrupt);
       
 
 endmodule // DMA_bus_controller

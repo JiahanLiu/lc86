@@ -55,11 +55,11 @@ module kbd_bus_controller(//interface with bus
      begin
 	MOD_EN = 0;
 	#(10003)
-	MOD_EN = 1;//set to 1 for the keyboard test case
+	MOD_EN = 0;//set to 1 for the keyboard test case
 	#(30)
 	MOD_EN = 0;
 	#(3000)
-	MOD_EN = 1;
+	MOD_EN = 0;//set to one for the read
 	#(30)
 	MOD_EN = 0;
 	

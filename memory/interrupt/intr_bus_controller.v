@@ -68,7 +68,9 @@ module intr_bus_controller(//interface with bus
    //THERE IS AN INTERRUPT IF WE ARE THE DEST WHILE NOT WAITING FOR READ
    wire 		    INTERRUPT_OUT;
    and2$ INTERRUPT_DRIVER (INTERRUPT_NEW, DEST_IN, MOD_EN_MASK);
-   and2$ READY_DRIVER (READY_US, DEST_IN, MOD_MASK_OUT);
+   and2$ READY_DRIVER (READY_US_TEMP, DEST_IN, MOD_MASK_OUT);
+   or2$ READY_DRIVER_TRU(READY_US, READY_US_TEMP, current_state[3]);
+   
    
    dff8$ INTR_REG(BUS_CLK, {7'b0,INTERRUPT_NEW}, ,{filler1,INTERRUPT_OUT},RST,SET);
    //only want to take interrupt on rising edge
@@ -119,7 +121,7 @@ module intr_bus_controller(//interface with bus
    wire [31:0] 			    D_TRI_IN;
    mux4_32 D_DRIV_SEL(D_TRI_IN, MOD_WRITE_DATA[31:0], MOD_WRITE_DATA[63:32],
 	    MOD_WRITE_DATA[95:64], MOD_WRITE_DATA[127:96],
-	    next_size_bar[0], next_size_bar[1]);
+	    1'b0, 1'b0);
    tristate_bus_driver32$ D_TRI(D_TRI_EN, D_TRI_IN, D);
    
     wire 		    A_TRI_EN;
@@ -140,7 +142,8 @@ module intr_bus_controller(//interface with bus
    wire 		    RW_TRI_IN, ACK_TRI_IN;
    wire 		    RW_TRI_EN;
    assign RW_TRI_EN = CTRL_TRI_EN;
-   assign RW_TRI_IN = MOD_WR;
+   assign RW_TRI_IN =  1'b1;
+//MOD_WR;
    assign ACK_TRI_IN = 1'b1;
    tristate_bus_driver1$ RW_TRI(RW_TRI_EN, RW_TRI_IN, RW);
 

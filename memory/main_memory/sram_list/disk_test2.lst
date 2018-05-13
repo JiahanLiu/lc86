@@ -10,16 +10,16 @@
       1a:	8e da                //	mov    %edx,%ds
       1c:	ba 0c 00 00 00       //	mov    $0xc,%edx
       21:	bb 10 00 00 00       //	mov    $0x10,%ebx
-      26:	c7 00 10 30 40 50    //	movl   $0x50403010,(%eax)
-      2c:	c7 01 00 20 00 00    //	movl   $0x2000,(%ecx)
+      26:	c7 00 FF 00 00 00    //	movl   $0x50403010,(%eax)
+      2c:	c7 01 00 40 00 00    //	movl   $0x2000,(%ecx)
       32:	c7 02 10 00 00 00    //	movl   $0x10,(%edx)
-      38:	c7 03 01 00 00 00    //	movl   $0x1,(%ebx)
+      38:	c7 03 FF FF FF FF    //	movl   $0x1,(%ebx)
       3e:	b1 ff                //	mov    $0xff,%cl
 
       40:	80 e1 ff             //	and    $0xff,%cl
       43:	75 fb                //	jne    40 <loop>
       45:	b8 00 00 00 00       //	mov    $0x0,%eax
-      4a:	ba 00 02 00 00       //	mov    $0x200,%edx
+      4a:	ba 00 0b 00 00       //	mov    $0x200,%edx
       4f:	8e da                //	mov    %edx,%ds
       51:	8b 08                //	mov    (%eax),%ecx
       53:	f4                   //	hlt    
