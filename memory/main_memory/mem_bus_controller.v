@@ -219,7 +219,12 @@ module mem_bus_controller(//interface with bus
    
    tristate_bus_driver32$ IO_LOW [3:0] (RD_RD, write_data_shifted, MEM_INOUT[127:0]);
       tristate_bus_driver32$ IO_HIGH [3:0] (RD_RD, write_data_shifted, MEM_INOUT[255:128]);
-   assign #(2)MEM_ADDR = RD_A[14:0];
+
+   wire [14:0] mem_addr1, mem_addr2, mem_addr3;
+   bufferH1024$ bufh_1[14:0] (mem_addr1, RD_A[14:0]);
+   bufferH1024$ bufh_2[14:0] (mem_addr2, mem_addr1);
+   bufferH256$ bufh_3[14:0] (mem_addr3, mem_addr2);
+   bufferH16$ bufh_4[14:0] (MEM_ADDR, mem_addr3);
    assign WRITE_SIZE = RD_SIZE;
    and2$ MEM_WR_EN(MEM_WR, MEM_DONE_OUT[1],RD_RW_OUT);
    assign MEM_EN = MEM_DONE_OUT[2];
