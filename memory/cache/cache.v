@@ -50,13 +50,16 @@ module cache( //interface with the processor
 
 
    //LOGIC FOR IO BYPASSING
+   wire [7:0] INTR_REG_EN32;
+   wire INTR_REG_EN, TRUE_INTR_EN;
    and3$ DC_CHECk (INTR_EN, addr_raw[12], addr_raw[13], addr_raw[14]);
    inv1$ INTR_CHECK(DC_EN, INTR_EN);
    and2$ INTR_EN_DRIV (TRUE_INTR_EN, INTR_EN, enable);
    and2$ EN_DRIV( TRUE_EN, DC_EN, enable);
    gen_n_state gen_n_state_u(next_state, current_state, TRUE_EN, RW, HIT,
 			     BUS_R_CHANGE, evict);
-   dff8$ BYPASS_LATCH(CLK, TRUE_INTR_EN, INTR_REG_EN, , RST, SET);
+   dff8$ BYPASS_LATCH(CLK, {7'b0, TRUE_INTR_EN}, INTR_REG_EN32, , RST, SET);
+   assign INTR_REG_EN = INTR_REG_EN32[0];
       
    
 

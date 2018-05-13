@@ -127,14 +127,18 @@ module DMA_bus_controller(//interface with bus
    mux32_2way DISK_A_SEL(DISK_A_IN, DISK_A_OUT, data_buffer_out[31:0],
      A_DEC_MASK[1]);//x7004 disk address
 
+   wire [31:0] add1_out, add2_out, SIZE_OUT_B;
+   inv1$ inv1_size[31:0] (SIZE_OUT_B, SIZE_OUT);
    //needs to increment by 4 each cycle
+   adder32_w_carry_in add1 (add1_out, , MEM_A_OUT, 32'd4, 1'b0);
+   adder32_w_carry_in add2 (add2_out, , SIZE_OUT_B, 32'd4, 1'b1);
    mux32_4way MEM_A_SEL(MEM_A_IN, MEM_A_OUT, data_buffer_out[31:0],
-			MEM_A_OUT +4, MEM_A_OUT+4,
+			add1_out, add1_out,
     {DONE_WR,A_DEC_MASK[2]});//x7008 memaddress
 
    //needs to decrement by 4 each cycle
    mux32_4way SIZE_DMA_SEL(SIZE_IN, SIZE_OUT, data_buffer_out[31:0],
-			   SIZE_OUT -4, SIZE_OUT-4,
+			   add2_out, add2_out,
      {DONE_WR,A_DEC_MASK[3]});//x700C size
 
    //needs to reset when the DISK finishes
